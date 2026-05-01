@@ -16,9 +16,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
     return (
       <header className="hdr hdr-edit">
         <div className="hdr-row">
-          <button onClick={() => setLang(lang === 'en' ? 'ko' : 'en')} className="icon-btn" aria-label="Language">
-            <Icon name="globe" /><span className="hdr-lang">{lang === 'en' ? 'KO' : 'EN'}</span>
-          </button>
           <button onClick={goFeed} className="wordmark-edit">
             <span className="wm-serif">anatomy</span>
             <span className="wm-dot" />
@@ -67,9 +64,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           />
           {query && <button className="icon-btn sm" onClick={() => setQuery('')}><Icon name="x" size={14} /></button>}
         </div>
-        <button onClick={() => setLang(lang === 'en' ? 'ko' : 'en')} className="icon-btn pill" aria-label="Language">
-          <Icon name="globe" size={16} /><span className="hdr-lang">{lang === 'en' ? 'KO' : 'EN'}</span>
-        </button>
       </div>
       <nav className="hdr-nav">
         <div className="hdr-cats">
