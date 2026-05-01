@@ -1,6 +1,7 @@
 // Insights — editorial feed with full article bodies
 window.Insights = function Insights({ lang, density }) {
   const [selectedPost, setSelectedPost] = useState(null);
+  const [activeTag, setActiveTag] = useState(null);
   const isKo = lang === 'ko';
 
   const POSTS = [
@@ -82,18 +83,25 @@ window.Insights = function Insights({ lang, density }) {
     });
   }
 
+  const filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;
+
   return React.createElement(InsightsFeed, {
-    posts: POSTS,
+    posts: filteredPosts,
+    allPosts: POSTS,
     lang,
     density,
+    activeTag,
+    onTagClick: (tag) => setActiveTag(activeTag === tag ? null : tag),
     onSelectPost: (p) => { setSelectedPost(p); window.scrollTo(0, 0); },
   });
 };
 
 /* ─── Feed ─────────────────────────────────────────────────────────────────── */
 
-function InsightsFeed({ posts, lang, density, onSelectPost }) {
+function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, onSelectPost }) {
   const t = useL(lang);
+  const allTags = [...new Map(allPosts.map(p => [p.tag.en, p])).values()].map(p => ({ en: p.tag.en, color: p.tagColor }));
+
   return (
     <div className={cn('insights', `dens-${density}`)}>
       <header className="ins-hero">
@@ -107,6 +115,26 @@ function InsightsFeed({ posts, lang, density, onSelectPost }) {
           '성분, 포뮬러, 트렌드에 대한 심층 분석.'
         )}</p>
       </header>
+
+      <div style={{ maxWidth: 780, margin: '0 auto 24px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {allTags.map(tag => (
+          <button
+            key={tag.en}
+            onClick={() => onTagClick(tag.en)}
+            style={{
+              padding: '7px 16px',
+              borderRadius: 'var(--radius-pill)',
+              border: `1px solid ${activeTag === tag.en ? tag.color : 'var(--line)'}`,
+              background: activeTag === tag.en ? tag.color : 'var(--cream-card)',
+              color: activeTag === tag.en ? '#fff' : 'var(--ink-soft)',
+              fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              transition: 'all .15s ease',
+            }}
+          >
+            {tag.en}
+          </button>
+        ))}
+      </div>
 
       <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 18 }}>
         {posts.map((post) => (
@@ -132,7 +160,10 @@ function InsightsFeed({ posts, lang, density, onSelectPost }) {
               referrerPolicy="no-referrer"
             />
             <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor }}>
+              <span
+                onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
+                style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer', alignSelf: 'flex-start' }}
+              >
                 {post.tag[lang] || post.tag.en}
               </span>
               <h2 style={{

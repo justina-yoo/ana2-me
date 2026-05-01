@@ -9,7 +9,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
     { id: 'wellness-food', en: 'Wellness', ko: '웰니스', icon: 'apple' },
   ];
 
-  const goFeed = () => { setView('feed'); setQuery(''); };
+  const goFeed = () => { setView('insights'); setQuery(''); };
 
   if (headerStyle === 'editorial') {
     // Editorial: centered wordmark, cats below as underline links
@@ -17,17 +17,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
       <header className="hdr hdr-edit">
         <div className="hdr-row">
           <button onClick={goFeed} className="wordmark-edit">
-            <span className="wm-serif">anatomy</span>
+            <span className="wm-serif">ana2me</span>
             <span className="wm-dot" />
           </button>
-          <div className="hdr-search-mini">
-            <Icon name="search" size={16} />
-            <input
-              value={query}
-              onChange={(e) => { setQuery(e.target.value); setView('feed'); }}
-              placeholder={t('Search anything…', '검색…')}
-            />
-          </div>
         </div>
         <nav className="hdr-catrow">
           {cats.map(c => (
@@ -39,9 +31,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <button onClick={() => setView('insights')} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button onClick={() => setView('analyzer')} className={cn('cat-edit', view === 'analyzer' && 'cat-edit-active')}>
-            {t('Analyzer', '분석기')}
-          </button>
+          <span className="cat-edit" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            {t('Analyzer', '분석기')} <Icon name="lock" size={11} />
+          </span>
         </nav>
       </header>
     );
@@ -53,17 +45,8 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
       <div className="hdr-row">
         <button onClick={goFeed} className="wordmark">
           <span className="wm-mark">A</span>
-          <span className="wm-text">anatomy</span>
+          <span className="wm-text">ana2me</span>
         </button>
-        <div className="hdr-search">
-          <Icon name="search" size={16} />
-          <input
-            value={query}
-            onChange={(e) => { setQuery(e.target.value); setView('feed'); }}
-            placeholder={t('Search products, brands, or ingredients…', '제품·브랜드·성분 검색…')}
-          />
-          {query && <button className="icon-btn sm" onClick={() => setQuery('')}><Icon name="x" size={14} /></button>}
-        </div>
       </div>
       <nav className="hdr-nav">
         <div className="hdr-cats">
@@ -77,9 +60,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <button onClick={() => setView('insights')} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button onClick={() => setView('analyzer')} className={cn('page-tab page-tab-accent', view === 'analyzer' && 'page-tab-active')}>
-            <Icon name="spark" size={14} /> {t('Analyzer', '분석기')}
-          </button>
+          <span className="page-tab" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <Icon name="lock" size={13} /> {t('Analyzer', '분석기')}
+          </span>
         </div>
       </nav>
     </header>

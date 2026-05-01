@@ -175,14 +175,8 @@
               headerStyle={tweaks.headerStyle}
             />
           )}
-          {view === 'feed' && (
-            <Feed lang={lang} category={category} query={query} setView={setView} setProduct={setProduct} density={density} />
-          )}
-          {view === 'detail' && product && (
-            <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />
-          )}
-          {view === 'detail' && !product && (
-            <Feed lang={lang} category={category} query={query} setView={setView} setProduct={setProduct} density={density} />
+          {(view === 'feed' || view === 'detail') && (
+            <Insights lang={lang} density={density} />
           )}
           {view === 'insights' && <Insights lang={lang} density={density} />}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
