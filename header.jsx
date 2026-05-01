@@ -34,13 +34,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
         </div>
         <nav className="hdr-catrow">
           {cats.map(c => (
-            <button
-              key={c.id}
-              onClick={() => { setCategory(c.id); setView('feed'); }}
-              className={cn('cat-edit', category === c.id && view === 'feed' && 'cat-edit-active')}
-            >
-              {t(c.en, c.ko)}
-            </button>
+            <span key={c.id} className="cat-edit" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              {t(c.en, c.ko)} <Icon name="lock" size={11} />
+            </span>
           ))}
           <span className="hdr-pipe" />
           <button onClick={() => setView('insights')} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
@@ -78,11 +74,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
       <nav className="hdr-nav">
         <div className="hdr-cats">
           {cats.map(c => (
-            <Chip key={c.id}
-              active={category === c.id && view === 'feed'}
-              onClick={() => { setCategory(c.id); setView('feed'); }}>
-              {t(c.en, c.ko)}
-            </Chip>
+            <span key={c.id} className="chip" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              {t(c.en, c.ko)} <Icon name="lock" size={11} />
+            </span>
           ))}
         </div>
         <div className="hdr-pages">

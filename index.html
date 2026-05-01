@@ -116,7 +116,7 @@
 
     function App() {
       // Persistent UI state
-      const [view, setView] = window.useLocalState('view', 'feed'); // feed | detail | insights | analyzer
+      const [view, setView] = window.useLocalState('view', 'insights'); // feed | detail | insights | analyzer
       const [category, setCategory] = window.useLocalState('cat', 'skincare');
       const [productId, setProductId] = window.useLocalState('pid', null);
       const [query, setQuery] = window.useLocalState('q', '');
