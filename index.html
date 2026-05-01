@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>anatomy — clean beauty, demystified</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="data.js?v=3"></script>
+  <script type="text/babel" src="primitives.jsx"></script>
+  <script type="text/babel" src="header.jsx"></script>
+  <script type="text/babel" src="feed.jsx"></script>
+  <script type="text/babel" src="detail.jsx"></script>
+  <script type="text/babel" src="insights.jsx"></script>
+  <script type="text/babel" src="analyzer.jsx"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "fontPair": "sourceserif-inter",
+      "headerStyle": "friendly",
+      "density": "cozy",
+      "accent": "forest",
+      "night": false
+    }/*EDITMODE-END*/;
+
+    const FONT_PAIRS = {
+      'sourceserif-inter': { display: "'Source Serif 4', Georgia, serif", text: "'Inter', system-ui, sans-serif", label: 'Source Serif · Inter' },
+      'newsreader-inter':  { display: "'Newsreader', Georgia, serif", text: "'Inter', system-ui, sans-serif", label: 'Newsreader · Inter' },
+      'sourceserif-plex':  { display: "'Source Serif 4', Georgia, serif", text: "'IBM Plex Sans', system-ui, sans-serif", label: 'Source Serif · Plex' },
+    };
+
+    const ACCENTS = {
+      forest:    { hex: '#2d5a3d', label: 'Forest' },
+      clay:      { hex: '#a44a3f', label: 'Clay' },
+      indigo:    { hex: '#2e3d8f', label: 'Indigo' },
+      plum:      { hex: '#6b3a5c', label: 'Plum' },
+      ink:       { hex: '#1a1916', label: 'Ink' },
+    };
+
+    function Tweaks({ tweaks, setTweak, lang, setLang }) {
+      const t = window.useL(lang);
+      return (
+        <aside className="tweaks">
+          <h4>Tweaks <Sticker color="butter" rotate={-4}>live</Sticker></h4>
+
+          <div className="tweak-row">
+            <label>{t('Font pair', '폰트 조합')}</label>
+            <div className="tweak-opts">
+              {Object.entries(FONT_PAIRS).map(([k, v]) => (
+                <button key={k} className={cn('tweak-opt', tweaks.fontPair === k && 'tweak-opt-on')} onClick={() => setTweak('fontPair', k)}>
+                  {v.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <label>{t('Header style', '헤더 스타일')}</label>
+            <div className="tweak-opts">
+              {['friendly', 'editorial'].map(o => (
+                <button key={o} className={cn('tweak-opt', tweaks.headerStyle === o && 'tweak-opt-on')} onClick={() => setTweak('headerStyle', o)}>
+                  {o}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <label>{t('Density', '여백')}</label>
+            <div className="tweak-opts">
+              {['snug', 'cozy', 'airy'].map(o => (
+                <button key={o} className={cn('tweak-opt', tweaks.density === o && 'tweak-opt-on')} onClick={() => setTweak('density', o)}>
+                  {o}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <label>{t('Accent', '강조색')}</label>
+            <div className="tweak-swatch">
+              {Object.entries(ACCENTS).map(([k, v]) => (
+                <button
+                  key={k}
+                  className={cn('tweak-swatch-btn', tweaks.accent === k && 'on')}
+                  style={{ background: v.hex }}
+                  title={v.label}
+                  onClick={() => setTweak('accent', k)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <label>{t('Mode', '모드')}</label>
+            <div className="tweak-opts">
+              <button className={cn('tweak-opt', !tweaks.night && 'tweak-opt-on')} onClick={() => setTweak('night', false)}>day</button>
+              <button className={cn('tweak-opt', tweaks.night && 'tweak-opt-on')} onClick={() => setTweak('night', true)}>night</button>
+            </div>
+          </div>
+        </aside>
+      );
+    }
+
+    function App() {
+      // Persistent UI state
+      const [view, setView] = window.useLocalState('view', 'feed'); // feed | detail | insights | analyzer
+      const [category, setCategory] = window.useLocalState('cat', 'skincare');
+      const [productId, setProductId] = window.useLocalState('pid', null);
+      const [query, setQuery] = window.useLocalState('q', '');
+      const [lang, setLang] = window.useLocalState('lang', 'en');
+
+      const product = productId ? window.PRODUCTS.find(p => p.id === productId) : null;
+      const setProduct = (p) => {
+        setProductId(p ? p.id : null);
+        setView(p ? 'detail' : 'feed');
+      };
+
+      // Tweaks
+      const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+      const [tweaksOpen, setTweaksOpen] = useState(false);
+
+      const setTweak = (k, v) => {
+        const next = { ...tweaks, [k]: v };
+        setTweaks(next);
+        window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
+      };
+
+      // Edit-mode protocol
+      useEffect(() => {
+        const onMsg = (e) => {
+          if (!e.data || typeof e.data !== 'object') return;
+          if (e.data.type === '__activate_edit_mode') setTweaksOpen(true);
+          if (e.data.type === '__deactivate_edit_mode') setTweaksOpen(false);
+        };
+        window.addEventListener('message', onMsg);
+        window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+        return () => window.removeEventListener('message', onMsg);
+      }, []);
+
+      // Apply tweaks to CSS vars
+      useEffect(() => {
+        const fp = FONT_PAIRS[tweaks.fontPair] || FONT_PAIRS['sourceserif-inter'];
+        document.documentElement.style.setProperty('--font-display', fp.display);
+        document.documentElement.style.setProperty('--font-text', fp.text);
+        const accent = ACCENTS[tweaks.accent] || ACCENTS.forest;
+        document.documentElement.style.setProperty('--accent', accent.hex);
+        document.body.classList.toggle('night', !!tweaks.night);
+      }, [tweaks]);
+
+      const showHeader = true;
+      const density = tweaks.density;
+
+      return (
+        <div className="app" data-screen-label={`${view}`}>
+          {showHeader && (
+            <Header
+              lang={lang} setLang={setLang}
+              view={view} setView={setView}
+              category={category} setCategory={setCategory}
+              query={query} setQuery={setQuery}
+              density={density}
+              headerStyle={tweaks.headerStyle}
+            />
+          )}
+          {view === 'feed' && (
+            <Feed lang={lang} category={category} query={query} setView={setView} setProduct={setProduct} density={density} />
+          )}
+          {view === 'detail' && product && (
+            <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />
+          )}
+          {view === 'detail' && !product && (
+            <Feed lang={lang} category={category} query={query} setView={setView} setProduct={setProduct} density={density} />
+          )}
+          {view === 'insights' && <Insights lang={lang} density={density} />}
+          {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
+
+          {tweaksOpen && <Tweaks tweaks={tweaks} setTweak={setTweak} lang={lang} setLang={setLang} />}
+        </div>
+      );
+    }
+
+    // setProduct hook: when called with a product, also navigate to detail.
+    // We patch here by wrapping setProduct... actually simpler to handle inside child via setView.
+    // The Feed/Detail components already call setProduct; ensure view follows.
+    // (Handled via a small effect inside App via wrapping setProduct)
+
+    // Mount
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
