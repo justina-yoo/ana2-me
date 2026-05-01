@@ -86,6 +86,7 @@
   <script type="text/babel" src="detail.jsx"></script>
   <script type="text/babel" src="insights.jsx"></script>
   <script type="text/babel" src="analyzer.jsx"></script>
+  <script type="text/babel" src="about.jsx"></script>
 
   <script type="text/babel">
     const { useState, useEffect } = React;
@@ -243,6 +244,7 @@
           )}
           {view === 'insights' && <Insights lang={lang} density={density} />}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
+          {view === 'about' && <About lang={lang} density={density} />}
 
           {tweaksOpen && <Tweaks tweaks={tweaks} setTweak={setTweak} lang={lang} setLang={setLang} />}
         </div>

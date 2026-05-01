@@ -22,18 +22,12 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </button>
         </div>
         <nav className="hdr-catrow">
-          {cats.map(c => (
-            <span key={c.id} className="cat-edit" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-              {t(c.en, c.ko)} <Icon name="lock" size={11} />
-            </span>
-          ))}
-          <span className="hdr-pipe" />
           <button onClick={() => setView('insights')} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <span className="cat-edit" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-            {t('Analyzer', '분석기')} <Icon name="lock" size={11} />
-          </span>
+          <button onClick={() => setView('about')} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
+            {t('About', '소개')}
+          </button>
         </nav>
       </header>
     );
@@ -49,20 +43,13 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
         </button>
       </div>
       <nav className="hdr-nav">
-        <div className="hdr-cats">
-          {cats.map(c => (
-            <span key={c.id} className="chip" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              {t(c.en, c.ko)} <Icon name="lock" size={11} />
-            </span>
-          ))}
-        </div>
         <div className="hdr-pages">
           <button onClick={() => setView('insights')} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <span className="page-tab" style={{ opacity: 0.35, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <Icon name="lock" size={13} /> {t('Analyzer', '분석기')}
-          </span>
+          <button onClick={() => setView('about')} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
+            {t('About', '소개')}
+          </button>
         </div>
       </nav>
     </header>

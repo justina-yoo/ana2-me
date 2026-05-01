@@ -82,6 +82,22 @@
       setArticleJsonLd(null);
     },
 
+    setAbout: function () {
+      var title = 'About | ana2me';
+      var desc = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';
+      var url = BASE_URL + '/about';
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'website');
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setArticleJsonLd(null);
+    },
+
     setArticle: function (articleId) {
       var m = ARTICLE_META[articleId];
       if (!m) { window.SEO.setHome(); return; }
