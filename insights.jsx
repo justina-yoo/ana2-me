@@ -9,7 +9,10 @@ window.Insights = function Insights({ lang, density }) {
     const slug = window.location.pathname.replace('/', '').replace(/\/$/, '');
     if (slug) {
       const match = POSTS.find(p => p.id === slug);
-      if (match) setSelectedPost(match);
+      if (match) {
+        setSelectedPost(match);
+        if (window.SEO) window.SEO.setArticle(match.id);
+      }
     }
   }, []);
 
@@ -87,6 +90,7 @@ window.Insights = function Insights({ lang, density }) {
   const openPost = (p) => {
     setSelectedPost(p);
     history.pushState({}, '', '/' + p.id);
+    if (window.SEO) window.SEO.setArticle(p.id);
     if (window.gtag) gtag('event', 'page_view', { page_path: '/' + p.id, page_title: p.title.en });
     window.scrollTo(0, 0);
   };
@@ -94,6 +98,7 @@ window.Insights = function Insights({ lang, density }) {
   const closePost = () => {
     setSelectedPost(null);
     history.pushState({}, '', '/');
+    if (window.SEO) window.SEO.setHome();
     if (window.gtag) gtag('event', 'page_view', { page_path: '/', page_title: 'ana2me — Insights' });
     window.scrollTo(0, 0);
   };

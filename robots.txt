@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ana2-me.com/sitemap.xml
