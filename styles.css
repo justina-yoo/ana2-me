@@ -23,6 +23,17 @@
   --radius-pill: 999px;
 }
 
+/* ---------- Selection + highlight ---------- */
+::selection { background: var(--butter); color: var(--ink); }
+
+.hl {
+  background: linear-gradient(120deg, rgba(245,215,110,0) 0%, rgba(245,215,110,0.45) 20%, rgba(245,215,110,0.45) 80%, rgba(245,215,110,0) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 0.32em;
+  background-position: 0 88%;
+  padding: 0 2px;
+}
+
 /* ---------- Reset-ish ---------- */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -728,7 +739,7 @@ body.night {
 
 /* ---------- INSIGHTS ---------- */
 .insights { padding: 24px 0 60px; }
-.ins-hero { text-align: center; padding: 30px 0 50px; max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.ins-hero { text-align: center; padding: 16px 0 28px; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .ins-sub { color: var(--ink-soft); font-size: 17px; margin: 0; max-width: 50ch; }
 
 .ins-list { list-style: none; padding: 0; margin: 0; max-width: 880px; margin: 0 auto; }
