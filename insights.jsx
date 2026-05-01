@@ -4,6 +4,15 @@ window.Insights = function Insights({ lang, density }) {
   const [activeTag, setActiveTag] = useState(null);
   const isKo = lang === 'ko';
 
+  // On mount, check if URL path matches an article
+  useEffect(() => {
+    const slug = window.location.pathname.replace('/', '').replace(/\/$/, '');
+    if (slug) {
+      const match = POSTS.find(p => p.id === slug);
+      if (match) setSelectedPost(match);
+    }
+  }, []);
+
   const POSTS = [
     {
       id: 'skin-barrier-2026',
@@ -75,11 +84,25 @@ window.Insights = function Insights({ lang, density }) {
     },
   ];
 
+  const openPost = (p) => {
+    setSelectedPost(p);
+    history.pushState({}, '', '/' + p.id);
+    if (window.gtag) gtag('event', 'page_view', { page_path: '/' + p.id, page_title: p.title.en });
+    window.scrollTo(0, 0);
+  };
+
+  const closePost = () => {
+    setSelectedPost(null);
+    history.pushState({}, '', '/');
+    if (window.gtag) gtag('event', 'page_view', { page_path: '/', page_title: 'ana2me — Insights' });
+    window.scrollTo(0, 0);
+  };
+
   if (selectedPost) {
     return React.createElement(PostDetail, {
       post: selectedPost,
       lang,
-      onBack: () => { setSelectedPost(null); window.scrollTo(0, 0); },
+      onBack: closePost,
     });
   }
 
@@ -92,7 +115,7 @@ window.Insights = function Insights({ lang, density }) {
     density,
     activeTag,
     onTagClick: (tag) => setActiveTag(activeTag === tag ? null : tag),
-    onSelectPost: (p) => { setSelectedPost(p); window.scrollTo(0, 0); },
+    onSelectPost: openPost,
   });
 };
 
