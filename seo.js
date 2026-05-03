@@ -5,6 +5,36 @@
   var DEFAULT_IMAGE = BASE_URL + '/og-default.jpg';
 
   var ARTICLE_META = {
+    'spicules-microneedling': {
+      title: "\"Microneedling in a Bottle\" Is K-Beauty's Most Controversial New Ingredient.",
+      description: "Spicules are marine sponge micro-needles that create channels in skin for deeper active ingredient penetration. How they work, how they compare to professional microneedling, and who should use them.",
+      datePublished: '2026-05-03',
+      dateModified: '2026-05-03',
+      image: 'https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Skincare serum bottle representing spicule microneedling trend',
+      keywords: 'spicules, microneedling, K-beauty, liquid microneedling, collagen, skincare 2026, marine sponge',
+      category: 'Molecular Insights',
+    },
+    'myo-inositol-hormonal-health': {
+      title: "Myo-Inositol Is Quietly Becoming the Most Important Women's Wellness Supplement.",
+      description: "Myo-inositol improves insulin signaling — the upstream trigger behind PCOS, hormonal acne, and ovulation problems. The 40:1 ratio, clinical evidence, and what to look for on a label.",
+      datePublished: '2026-05-03',
+      dateModified: '2026-05-03',
+      image: 'https://images.unsplash.com/photo-1596572934426-52ac4e95e014?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Supplement capsules for women hormonal wellness',
+      keywords: 'myo-inositol, PCOS, hormonal acne, insulin resistance, women wellness, D-chiro-inositol, 40:1 ratio',
+      category: 'Nutritional Intelligence',
+    },
+    'edible-skincare-gut-skin': {
+      title: "Korea Is Eating Its Skincare Now. The Gut-Skin Science Says They're Right.",
+      description: "Olive Young's inner beauty category grew 55%. The gut-skin axis explains why — gut bacteria produce molecules that directly control skin inflammation, sebum, and barrier function.",
+      datePublished: '2026-05-03',
+      dateModified: '2026-05-03',
+      image: 'https://images.unsplash.com/photo-1620755901989-0f457a38011e?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Wellness supplement jars for gut-skin health',
+      keywords: 'edible skincare, inner beauty, gut-skin axis, probiotics, collagen, K-beauty supplements, Olive Young',
+      category: 'Nutritional Intelligence',
+    },
     'k-fragrance-skin-scents': {
       title: "K-Fragrance Just Hit Record Exports. Here's the Molecular Reason Korean Perfume Smells Different.",
       description: "K-fragrance exports hit $6.52M in January 2026. The secret isn't marketing — it's a fundamentally different approach to scent design built on synthetic musks and sheer woods.",
