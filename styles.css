@@ -188,8 +188,7 @@ body.night {
   font-weight: 500;
 }
 .page-tab:hover { color: var(--ink); }
-.page-tab-active { color: #fff; background: var(--sage); border: 1.5px solid rgba(60,90,60,0.3); font-weight: 700; box-shadow: 0 2px 0 rgba(60,90,60,0.22); }
-.page-tab-active:hover { color: #fff; }
+.page-tab-active { color: var(--ink); background: var(--cream-card); border: 1px solid var(--line); }
 .page-tab-accent { color: var(--accent); }
 
 /* Editorial header variant */
