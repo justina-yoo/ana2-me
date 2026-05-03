@@ -9,7 +9,13 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
     { id: 'wellness-food', en: 'Wellness', ko: '웰니스', icon: 'apple' },
   ];
 
-  const goFeed = () => { setView('insights'); setQuery(''); window.dispatchEvent(new CustomEvent('ana2me:go-home')); };
+  const goFeed = () => {
+    history.pushState({}, '', '/');
+    if (window.SEO) window.SEO.setHome();
+    setView('insights');
+    setQuery('');
+    window.dispatchEvent(new CustomEvent('ana2me:go-home'));
+  };
 
   if (headerStyle === 'editorial') {
     // Editorial: centered wordmark, cats below as underline links
