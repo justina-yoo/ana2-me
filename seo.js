@@ -85,7 +85,7 @@
 
   window.SEO = {
     setHome: function () {
-      var title = 'ana2me — Clean Beauty, Demystified';
+      var title = "ana2me — Know What's In Your Bottle";
       var desc = 'Deep molecular analysis of skincare, fragrance, and wellness ingredients.';
       var url = BASE_URL + '/';
       document.title = title;
