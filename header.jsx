@@ -48,7 +48,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
     <header className="hdr hdr-friendly">
       <div className="hdr-row">
         <button onClick={goFeed} className="wordmark">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" preserveAspectRatio="xMinYMid meet" aria-label="ANA2ME" style={{ height: 28, width: 'auto', display: 'block' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" preserveAspectRatio="xMinYMid meet" aria-label="ANA2ME" style={{ height: 34, width: 'auto', display: 'block' }}>
             <text x="80" y="216" fontSize="200" className="logo-ana"><tspan>ANA</tspan><tspan className="logo-two">2</tspan><tspan>ME</tspan></text>
           </svg>
         </button>
