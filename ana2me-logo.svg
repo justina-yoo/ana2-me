@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" preserveAspectRatio="xMinYMid meet" role="img" aria-label="ANA2ME">
+  <defs>
+    <style type="text/css"><![CDATA[
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Lora:ital,wght@1,500&display=swap');
+      .ana { font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500; letter-spacing: 0.04em; fill: #1a1a1a; }
+      .two { font-family: 'Lora', serif; font-style: italic; font-weight: 500; fill: #4a6a4a; }
+    ]]></style>
+  </defs>
+  <text x="80" y="216" font-size="200" class="ana">
+    <tspan>ANA</tspan><tspan class="two">2</tspan><tspan>ME</tspan>
+  </text>
+</svg>
