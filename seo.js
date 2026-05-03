@@ -5,6 +5,36 @@
   var DEFAULT_IMAGE = BASE_URL + '/og-default.jpg';
 
   var ARTICLE_META = {
+    'k-fragrance-skin-scents': {
+      title: "K-Fragrance Just Hit Record Exports. Here's the Molecular Reason Korean Perfume Smells Different.",
+      description: "K-fragrance exports hit $6.52M in January 2026. The secret isn't marketing — it's a fundamentally different approach to scent design built on synthetic musks and sheer woods.",
+      datePublished: '2026-05-03',
+      dateModified: '2026-05-03',
+      image: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Minimal perfume bottles representing K-fragrance skin scent design',
+      keywords: 'K-fragrance, Korean perfume, skin scent, quiet fragrance, Tamburins, Nonfiction, ambroxan, white musk',
+      category: 'Olfactory Science',
+    },
+    'pistachio-fragrance-note': {
+      title: "Pistachio Is Up 852%. Here's Why Your Nose Can't Resist It.",
+      description: "Pistachio is 2026's breakout fragrance note. The molecular science behind lactones, pyrazines, and benzaldehyde — and what separates a great pistachio perfume from a bad one.",
+      datePublished: '2026-05-03',
+      dateModified: '2026-05-03',
+      image: 'https://images.unsplash.com/photo-1502825751399-28baa9b81efe?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Pistachios representing the trending pistachio fragrance note',
+      keywords: 'pistachio fragrance, pistachio perfume, gourmand fragrance, lactone, pyrazine, fragrance trends 2026',
+      category: 'Olfactory Science',
+    },
+    'fragrance-wardrobing': {
+      title: "Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.",
+      description: "Olfactory habituation is why you can't smell your own perfume. The neuroscience behind fragrance fatigue — and why rotating scents like a wardrobe is the fix.",
+      datePublished: '2026-05-03',
+      dateModified: '2026-05-03',
+      image: 'https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Perfume bottle collection representing fragrance wardrobing',
+      keywords: 'olfactory habituation, fragrance fatigue, fragrance wardrobing, perfume rotation, signature scent',
+      category: 'Olfactory Science',
+    },
     'postbiotics-skin-barrier': {
       title: "The Bacteria That Aren't Alive Anymore Are Still Fixing Your Skin.",
       description: "Postbiotics — the bioactive byproducts of fermentation — strengthen the skin barrier without requiring live cultures. K-beauty has used them for decades as bifida ferment and lactobacillus filtrate.",

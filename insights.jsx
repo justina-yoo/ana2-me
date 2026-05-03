@@ -29,6 +29,57 @@ window.Insights = function Insights({ lang, density }) {
 
   const POSTS = [
     {
+      id: 'k-fragrance-skin-scents',
+      category: { en: 'Olfactory Science', ko: '후각 과학' },
+      title: {
+        en: "K-Fragrance Just Hit Record Exports. Here's the Molecular Reason Korean Perfume Smells Different.",
+        ko: 'K-프래그런스 수출이 역대 최고를 찍었습니다. 한국 향수는 왜 다를까요?',
+      },
+      excerpt: {
+        en: "South Korea's fragrance exports hit $6.52 million in January 2026 — the highest monthly figure since records began in 1988. The secret isn't marketing. It's a fundamentally different approach to scent design: skin-close, low-sillage, built on synthetic musks and sheer woods rather than projection.",
+        ko: '2026년 1월, 한국 향수 수출이 월 652만 달러로 사상 최고치를 기록했어요. 마케팅이 아닌 제조 철학이 다릅니다 — 피부에 밀착되는 머스크와 시어 우드 중심의 설계, 강하게 퍼지는 대신 가까이에서 느끼는 향.',
+      },
+      readTime: { en: '7 min read', ko: '7분 읽기' },
+      date: 'May 2026',
+      tag: { en: 'Fragrance', ko: '향수' },
+      tagColor: 'var(--sage)',
+      imageUrl: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      id: 'pistachio-fragrance-note',
+      category: { en: 'Olfactory Science', ko: '후각 과학' },
+      title: {
+        en: "Pistachio Is Up 852%. Here's Why Your Nose Can't Resist It.",
+        ko: '피스타치오 향이 852% 급등한 이유 — 코가 거부할 수 없는 분자 구조',
+      },
+      excerpt: {
+        en: "Pistachio is 2026's breakout fragrance note — up 852% year-over-year. It's not about the nut. It's about what happens when lactones, pyrazines, and aldehydes combine to create a scent your brain reads as 'creamy warmth' rather than 'food.'",
+        ko: '피스타치오가 2026년 가장 뜨거운 향료로 떠올랐어요. 비결은 견과류 자체가 아니라, 락톤과 피라진이 만드는 "크리미한 따뜻함"이라는 후각적 인상에 있습니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 2026',
+      tag: { en: 'Fragrance', ko: '향수' },
+      tagColor: 'var(--sage)',
+      imageUrl: 'https://images.unsplash.com/photo-1502825751399-28baa9b81efe?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      id: 'fragrance-wardrobing',
+      category: { en: 'Olfactory Science', ko: '후각 과학' },
+      title: {
+        en: "Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.",
+        ko: '20분이면 내 향수가 안 느껴져요. 뇌과학이 알려주는 해결법',
+      },
+      excerpt: {
+        en: "Olfactory habituation isn't a flaw — it's an evolutionary survival mechanism. Your brain categorizes familiar scents as 'safe background.' Rotating fragrances resets this filter. The signature scent is dead. The fragrance wardrobe is what works.",
+        ko: '후각 피로는 결함이 아니라 생존 본능이에요. 익숙한 냄새를 "안전한 배경"으로 분류하는 뇌의 필터링 시스템입니다. 시그니처 향수 대신, 향수 옷장을 만들어보세요.',
+      },
+      readTime: { en: '5 min read', ko: '5분 읽기' },
+      date: 'May 2026',
+      tag: { en: 'Fragrance', ko: '향수' },
+      tagColor: 'var(--sage)',
+      imageUrl: 'https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&fit=crop&q=80&w=800',
+    },
+    {
       id: 'postbiotics-skin-barrier',
       category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
       title: {
@@ -189,7 +240,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
         )}</p>
       </header>
 
-      <div style={{ maxWidth: 780, margin: '0 auto 12px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ maxWidth: 780, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <button
           onClick={() => onTagClick(null)}
           style={{
@@ -235,23 +286,21 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
                 onClick={() => onSelectPost(post)}
                 style={{
                   display: 'block', width: '100%', textAlign: 'left',
-                  background: 'var(--cream-card)',
-                  border: '1px solid var(--line)',
-                  borderRadius: 'var(--radius)',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: '1px solid var(--line)',
+                  borderRadius: 0,
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  margin: '18px 0',
-                  transition: 'transform .2s ease, box-shadow .2s ease',
+                  padding: '20px 0',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--shadow-card)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
               >
                 <ProductImg
                   src={post.imageUrl}
                   alt={post.title[lang] || post.title.en}
-                  style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }}
+                  style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block', borderRadius: 'var(--radius-sm)' }}
                 />
-                <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ padding: '16px 0 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <span
                     onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
                     style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer', alignSelf: 'flex-start' }}
@@ -269,12 +318,11 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
                   <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                     {post.excerpt[lang] || post.excerpt.en}
                   </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4 }}>
-                    <Icon name="clock" size={13} className="" />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>
                       {post.readTime[lang] || post.readTime.en}
                     </span>
-                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                    <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
                     <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
                   </div>
                 </div>
@@ -335,6 +383,9 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
 /* ─── Post Detail ───────────────────────────────────────────────────────────── */
 
 const ARTICLE_BODIES = {
+  'k-fragrance-skin-scents': KFragranceBody,
+  'pistachio-fragrance-note': PistachioBody,
+  'fragrance-wardrobing': FragranceWardrobingBody,
   'postbiotics-skin-barrier': PostbioticsBody,
   'skin-barrier-2026': SkinBarrierBody,
   'fragrance-volatility': FragranceVolatilityBody,
@@ -1110,6 +1161,322 @@ function PostbioticsBody({ lang }) {
             { brand: 'Benton', name: 'Fermentation Essence', note: isKo ? '갈락토미세스 + 유산균 발효물 조합 — 피부톤 균일화와 장벽 강화를 동시에' : 'Galactomyces + lactobacillus combo — brightening and barrier reinforcement together' },
             { brand: 'Haruharu Wonder', name: 'Black Rice Hyaluronic Toner', note: isKo ? '발효 흑미 추출물 기반 — 마이크로바이옴 친화적 수분 레이어링에 이상적' : 'Fermented black rice base — ideal for microbiome-friendly hydration layering' },
           ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="#a07850" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+}
+
+/* ─── Article: K-Fragrance ───────────────────────────────────────────────── */
+
+function KFragranceBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> K-프래그런스가 세계 시장에서 주목받는 건 마케팅이 아니라 설계 철학 때문이에요. 한국 향수는 강하게 퍼지는 대신 피부에 밀착되는 '스킨 센트'를 지향하며, 합성 머스크와 시어 우드 같은 저휘발성 분자를 중심으로 만들어집니다. 2026년 1월 수출 652만 달러 — 1988년 이래 최고 기록.</>
+        ) : (
+          <><strong>TL;DR:</strong> K-fragrance is gaining global traction not because of marketing, but because of a fundamentally different design philosophy. Korean perfumes prioritize skin-close "skin scents" built on low-volatility synthetic musks and sheer woods — not projection. January 2026 exports hit $6.52 million, the highest monthly figure since records began in 1988.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=1200"
+        alt="Minimal perfume bottles on a clean surface, representing K-fragrance skin scent design"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🌏 K-프래그런스가 갑자기 주목받는 이유' : '🌏 Why is K-fragrance suddenly everywhere?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>2026년 1월, 한국 향수 수출이 <strong>월 652만 달러</strong>를 기록하며 1988년 통계 작성 이래 최고치를 찍었어요. 더 놀라운 건 미국과의 향수 무역에서 <mark>28년 만에 처음으로 흑자를 달성</mark>했다는 점이에요. K-뷰티가 스킨케어로 세계를 바꿨듯이, 이제 향수 차례가 온 겁니다.</>
+          ) : (
+            <>In January 2026, South Korea's fragrance exports hit <strong>$6.52 million</strong> — the highest monthly figure since records began in 1988. Even more striking: Korea achieved a <mark>fragrance trade surplus with the US for the first time in 28 years</mark>. K-beauty rewrote the rules for skincare. Now it's fragrance's turn.</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '📈 652만 달러', desc: '2026년 1월 월간 향수 수출액. 역대 최고 기록.' },
+            { title: '🇺🇸 28년 만의 흑자', desc: '미국 향수 수출 184만 달러 vs 수입 127만 달러.' },
+            { title: '📊 연 9.1% 성장', desc: '니치 향수 시장의 연평균 성장률. 대중 향수(2.69%)의 3배 이상.' },
+          ] : [
+            { title: '📈 $6.52M', desc: 'January 2026 monthly fragrance exports — an all-time high.' },
+            { title: '🇺🇸 28-year first', desc: 'Fragrance trade surplus with the US: $1.84M exports vs $1.27M imports.' },
+            { title: '📊 9.1% CAGR', desc: 'Niche fragrance market growth rate — more than 3× the mass market.' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🧪 "스킨 센트"란 정확히 뭘까요?' : '🧪 What exactly is a "skin scent"?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>서양 향수가 '프로젝션(projection)' — 얼마나 멀리 퍼지느냐 — 을 중시한다면, 한국 향수는 정반대를 추구해요. <mark>가까이 다가와야 느낄 수 있는 향, 피부 위에서 체온과 섞여 나만의 냄새가 되는 향.</mark> 이걸 '스킨 센트'라고 부릅니다. 머스크, 파우더, 차, 시어 우드처럼 <strong>증기압이 낮고 분자량이 큰</strong> 원료를 중심으로 설계되기 때문에, 공기 중으로 빠르게 날아가지 않고 피부에 오래 밀착돼요.</>
+          ) : (
+            <>Western perfumery has long valued projection — how far a scent travels. Korean fragrance design pursues the opposite. <mark>A scent you can only smell up close, one that merges with your body heat and becomes uniquely yours.</mark> That's a skin scent. It's built on <strong>low-vapor-pressure, high-molecular-weight</strong> ingredients — musks, clean powders, tea, sheer woods — that don't rush into the air. They stay close to skin, evolving slowly over hours.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🔬 K-프래그런스를 만드는 핵심 분자들' : '🔬 The molecules behind the K-fragrance signature'}
+        </ArtSectionHeading>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🤍" title={isKo ? '화이트 머스크 — 실험실에서 만든 친밀함' : 'White Musk — intimacy, engineered'} borderColor="rgba(107,142,107,0.3)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? <>화이트 머스크는 자연에서 추출한 단일 원료가 아니에요. 실험실에서 여러 합성 분자를 조합해 '깨끗함, 부드러움, 친밀함'이라는 후각적 인상을 만든 어코드입니다. 한국 향수의 베이스에 가장 많이 쓰이며, <strong>피부 위에서 체온에 반응해 은은하게 올라오는 특성</strong>이 있어요.</> : <>White musk isn't a single natural ingredient — it's a lab-engineered accord of multiple synthetic molecules designed to evoke cleanliness, softness, and intimacy. It's the most common base in Korean fragrances, and it has a unique property: <strong>it responds to body heat, rising gently from skin rather than projecting into a room</strong>.</>}
+          </ArtCallout>
+          <ArtCallout icon="🌊" title={isKo ? '앰브록산(Ambroxan) — 피부처럼 느껴지는 분자' : 'Ambroxan — the molecule that smells like skin'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? <>앰브록산은 용연향(Ambergris)의 합성 버전으로, 짠맛과 미네랄 느낌이 나는 따뜻한 머스크예요. <mark>피부 자체의 냄새를 더 좋게 만드는 것처럼 느껴지기 때문에</mark> "세컨드 스킨" 분자라고 불립니다. K-프래그런스에서 자주 쓰이는 핵심 원료 중 하나예요.</> : <>Ambroxan is the synthetic version of ambergris — a warm, salty, mineral musk. <mark>It's called the "second skin" molecule because it doesn't smell like perfume — it makes your skin smell better.</mark> It's one of the most frequently used ingredients in K-fragrance formulation.</>}
+          </ArtCallout>
+          <ArtCallout icon="🌿" title={isKo ? '시어 우드 — 가볍게 스치는 나무' : 'Sheer Woods — timber, thinned to a whisper'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? <>전통 우디 향수가 묵직한 샌달우드나 시더를 쓴다면, K-프래그런스는 같은 나무 원료를 극도로 희석해서 사용해요. 나무 향이 존재하지만 느낌만 남을 정도로 가볍고, 머스크와 섞이면서 '깨끗한 따뜻함'을 만들어냅니다.</> : <>Where traditional woody perfumes lean on heavy sandalwood or cedar, K-fragrance uses the same materials at extreme dilution. The wood is there — but as a feeling, not a statement. Blended with musk, it creates what perfumers call "clean warmth" — present but never imposing.</>}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🇰🇷 한국 향수 브랜드는 뭐가 다른가요?' : '🇰🇷 What makes Korean fragrance brands different?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>프랑스 향수가 '나를 드러내는 도구'라면, 한국 향수는 '나를 감싸는 공기'에 가까워요. <mark>탬버린즈, 논픽션, 그랑핸드 같은 브랜드들은 향수를 감각적 의식(ritual)의 일부로 포지셔닝합니다</mark> — 핸드크림, 캔들, 디퓨저까지 하나의 향 세계관으로 확장하죠. 성분도 설페이트, 파라벤, 프탈레이트 프리를 기본으로 하며, '클린 포뮬레이션'을 향수에도 적용하고 있어요.</>
+          ) : (
+            <>French perfume is a tool for self-expression. Korean perfume is closer to the air around you. <mark>Brands like Tamburins, Nonfiction, and Granhand position fragrance as part of a sensory ritual</mark> — extending a single scent world across hand creams, candles, diffusers, and car fragrances. Formulations default to sulfate-, paraben-, and phthalate-free, applying the same "clean" philosophy K-beauty brought to skincare.</>
+          )}
+        </ArtBody>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
+          {(isKo ? [
+            { title: '탬버린즈 (Tamburins)', body: '달걀형 병으로 유명한 브랜드. 시소잎과 생강을 얹은 코코넛 밀크 향(Pumpkini) 같은 독특한 조합으로, 익숙한 듯 낯선 향을 만들어요.' },
+            { title: '논픽션 (Nonfiction)', body: '식물 유래 원료 중심으로 "절대 과하지 않은" 향을 지향해요. 자연에서 영감받은 이름과 내면의 평온을 테마로 합니다.' },
+            { title: '그랑핸드 (Granhand)', body: '서울 성수동에서 시작한 브랜드로, 향을 일상의 감각 경험으로 확장합니다. 핸드크림부터 공간 향까지 하나의 세계관.' },
+          ] : [
+            { title: 'Tamburins', body: 'Known for egg-shaped bottles and unexpected combinations — like Pumpkini (pumpkin + coconut milk + shiso leaf + ginger). Familiar notes made unfamiliar.' },
+            { title: 'Nonfiction', body: 'Plant-derived ingredients, never overpowering. Names inspired by nature, designed around the idea of finding calm through scent rituals.' },
+            { title: 'Granhand', body: 'Born in Seoul\'s Seongsu-dong. Extends fragrance into everyday sensory experience — hand cream, room spray, candles, all one world.' },
+          ]).map((item, i) => (
+            <div key={i}>
+              <h4 style={{ fontWeight: 700, color: 'var(--ink)', margin: '0 0 8px', fontSize: 15 }}>{item.title}</h4>
+              <p style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.6, margin: 0 }}>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 지금 써볼 만한 K-프래그런스' : '✨ K-fragrances worth trying now'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'Tamburins', name: 'Perfume Chamo', note: isKo ? '리날로올 탑, 시프리올 하트 — 침착하고 서서히 펼쳐지는 스킨 센트' : 'Linalool top, cypriol heart — calm, slow-unfurling skin scent' },
+            { brand: 'Nonfiction', name: 'Gentle Night Eau de Parfum', note: isKo ? '화이트 머스크 + 시어 우드 — 잠들기 전 의식처럼 쓰는 향' : 'White musk + sheer wood — a bedtime ritual in scent form' },
+            { brand: 'Borntostandout', name: 'Naked Mind', note: isKo ? '앰브록산 베이스의 미니멀 머스크 — "향수를 안 뿌린 것 같은" 향수' : 'Ambroxan-based minimal musk — perfume that smells like not wearing perfume' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--sage)" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+}
+
+/* ─── Article: Pistachio Fragrance Note ──────────────────────────────────── */
+
+function PistachioBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 피스타치오가 2026년 향수 업계에서 전년 대비 852% 성장한 노트로 떠올랐어요. 견과류 자체를 쓰는 게 아니라, 락톤(γ-운데카락톤), 피라진(2-아세틸 피라진), 벤즈알데히드를 조합해 '크리미하고 따뜻한' 후각적 인상을 합성합니다. 두바이 초콜릿 바이럴에서 시작된 이 트렌드는 구르망 향수의 진화를 보여줘요.</>
+        ) : (
+          <><strong>TL;DR:</strong> Pistachio is 2026's fastest-rising fragrance note — up 852% year-over-year. Perfumers don't use the nut itself. They build a synthetic accord from lactones (γ-undecalactone), pyrazines (2-acetyl pyrazine), and benzaldehyde to create the impression of "creamy warmth." What started with a viral Dubai chocolate moment is now reshaping gourmand perfumery.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1502825751399-28baa9b81efe?auto=format&fit=crop&q=80&w=1200"
+        alt="Pistachios in a bowl, representing the trending pistachio fragrance note in perfumery"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '📈 왜 갑자기 피스타치오인가요?' : '📈 Why pistachio, why now?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>2024년 말, 두바이 초콜릿 바이럴이 피스타치오를 전 세계적인 '맛의 아이콘'으로 만들었어요. 그 물결이 향수까지 왔습니다. <mark>피스타치오 노트는 전년 대비 852% 성장하며 2026년 가장 빠르게 뜨는 향료가 됐어요.</mark> 달콤하기만 한 기존 구르망 향수에 질린 소비자들이 <strong>질감이 있고 깊이 있는 따뜻함</strong>을 찾기 시작한 거예요.</>
+          ) : (
+            <>The Dubai chocolate viral moment of late 2024 turned pistachio into a global flavor icon. That wave reached perfumery. <mark>Pistachio notes are up 852% year-over-year, making it 2026's fastest-rising fragrance ingredient.</mark> Consumers tired of one-dimensional sweet gourmands are looking for <strong>warmth with texture and depth</strong> — and pistachio delivers exactly that.</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '📊 852% 성장', desc: '피스타치오 향료 노트의 전년 대비 인기 상승률.' },
+            { title: '🍫 두바이 초콜릿 효과', desc: '2024년 바이럴에서 시작된 피스타치오 열풍이 향수 산업까지 확산.' },
+            { title: '🧪 합성 어코드', desc: '진짜 견과류가 아닌, 여러 분자를 조합해 만든 후각적 인상.' },
+          ] : [
+            { title: '📊 852% growth', desc: 'Pistachio note popularity increase year-over-year.' },
+            { title: '🍫 Dubai chocolate effect', desc: 'The 2024 viral moment that launched pistachio into fragrance.' },
+            { title: '🧪 Synthetic accord', desc: 'Not the actual nut — a combination of molecules that creates the impression.' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🔬 피스타치오 향은 어떤 분자로 만들까요?' : '🔬 What molecules make a pistachio scent?'}
+        </ArtSectionHeading>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🥜" title={isKo ? '피라진 — 고소한 따뜻함의 정체' : 'Pyrazines — the source of nutty warmth'} borderColor="rgba(107,142,107,0.3)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? <><strong>2-아세틸 피라진(2-Acetyl Pyrazine)</strong>은 "팝콘 피라진"이라고도 불리는 분자로, 볶은 견과류·빵·팝콘에서 나는 고소한 향의 원인이에요. 피스타치오 어코드의 '따뜻하고 구운 느낌'을 만드는 핵심 원료입니다.</> : <><strong>2-Acetyl pyrazine</strong> — sometimes called "popcorn pyrazine" — is the molecule behind the toasted, nutty aroma in roasted nuts, bread, and popcorn. It's the backbone of the "warm, baked" quality in pistachio accords.</>}
+          </ArtCallout>
+          <ArtCallout icon="🍑" title={isKo ? '락톤 — 벨벳 같은 크리미함' : 'Lactones — velvety creaminess'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? <><strong>γ-운데카락톤(γ-Undecalactone)</strong>은 "피치 락톤"이라고 불리며, <mark>피스타치오 향 포뮬러의 20~25%를 차지하는 크리미한 중간 단계</mark>를 만들어요. 여기에 <strong>γ-노나락톤</strong>이 더해지면 열대 과일 같은 부드러움이 생깁니다. 이 두 락톤이 피스타치오를 "음식"이 아닌 "향수"로 느끼게 하는 비결이에요.</> : <><strong>γ-Undecalactone</strong> — the "peach lactone" — creates <mark>the velvety mid-phase that makes up 20–25% of a pistachio formula</mark>. Add <strong>γ-nonalactone</strong> for tropical creaminess. These two lactones are what make pistachio smell like perfume rather than food.</>}
+          </ArtCallout>
+          <ArtCallout icon="🍬" title={isKo ? '벤즈알데히드 — 마지팬의 달콤함' : 'Benzaldehyde — marzipan sweetness'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? <>벤즈알데히드 유도체는 아몬드·마지팬 같은 달콤한 견과류 느낌을 더해요. 피라진의 고소함, 락톤의 크리미함과 합쳐지면 <strong>'따뜻하고 포근하지만 무겁지 않은'</strong> 현대 구르망 향수의 시그니처가 완성됩니다.</> : <>Benzaldehyde derivatives add the sweet, almond-marzipan facet. Combined with pyrazine warmth and lactone creaminess, they complete the signature of modern gourmand pistachio — <strong>warm and cozy without being heavy</strong>.</>}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🧊 좋은 피스타치오 향수 vs 나쁜 피스타치오 향수' : '🧊 What separates a good pistachio fragrance from a bad one?'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
+          {(isKo ? [
+            { title: '균형이 핵심', body: '피라진만 많으면 팝콘 냄새, 락톤만 많으면 인공적인 크림 냄새가 나요. 좋은 피스타치오 향수는 세 분자군의 비율이 정확하게 맞아야 합니다.' },
+            { title: '달콤함의 절제', body: '2026년 구르망 트렌드는 "다크 구르망" — 디저트처럼 달기만 한 향은 사라지고 있어요. 피스타치오도 짠맛, 쓴맛, 우디 노트와 대비를 이뤄야 세련됩니다.' },
+            { title: '니치에서 빛나는 이유', body: '피스타치오 오일을 15%까지 사용하는 니치 브랜드도 있어요. 합성 어코드만으로는 낼 수 없는 진짜 로스팅된 따뜻함을 원한다면 원료 투자가 필요합니다.' },
+          ] : [
+            { title: 'Balance is everything', body: 'Too many pyrazines = popcorn. Too many lactones = artificial cream. A good pistachio fragrance gets the ratio between all three molecular families exactly right.' },
+            { title: 'Restraint on sweetness', body: "The 2026 gourmand trend is 'dark gourmand' — dessert-sweet is fading. Pistachio needs salt, bitterness, and woody contrast to feel sophisticated, not juvenile." },
+            { title: 'Why niche does it better', body: 'Some niche houses use cold-pressed pistachio oil at up to 15% concentration. That genuine roasted warmth is expensive — and impossible to replicate with synthetics alone.' },
+          ]).map((item, i) => (
+            <div key={i}>
+              <h4 style={{ fontWeight: 700, color: 'var(--ink)', margin: '0 0 8px', fontSize: 15 }}>{item.title}</h4>
+              <p style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.6, margin: 0 }}>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 피스타치오 노트가 빛나는 향수들' : '✨ Pistachio fragrances worth smelling'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'Maison Margiela', name: "Replica Coffee Break", note: isKo ? '라벤더 + 피스타치오 어코드 — 고소한 카페 라떼의 후각적 재현' : 'Lavender + pistachio accord — an olfactory latte moment' },
+            { brand: 'Xerjoff', name: 'Pikovaya Dama', note: isKo ? '진짜 피스타치오 오일 사용 — 깊고 로스팅된 따뜻함이 하루 종일' : 'Real pistachio oil — deep roasted warmth that lasts all day' },
+            { brand: 'Sol de Janeiro', name: 'Cheirosa 87', note: isKo ? '피스타치오 + 살티 카라멜 — 달콤함과 짠맛의 완벽한 긴장감' : 'Pistachio + salted caramel — perfect sweet-salty tension' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--sage)" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+}
+
+/* ─── Article: Fragrance Wardrobing ──────────────────────────────────────── */
+
+function FragranceWardrobingBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 같은 향수를 매일 뿌리면 15~20분 후 내 코가 감지를 멈춰요. 이건 후각 피로(olfactory habituation)라는 뇌의 생존 메커니즘입니다. 해결법은 더 많이 뿌리는 게 아니라, 향수를 옷장처럼 돌려 쓰는 "프래그런스 워드로빙"이에요. 2026년, 시그니처 향수의 시대는 끝나고 향수 옷장의 시대가 왔습니다.</>
+        ) : (
+          <><strong>TL;DR:</strong> If you wear the same perfume daily, your nose stops registering it after 15–20 minutes. That's olfactory habituation — a survival mechanism, not a flaw. The fix isn't spraying more. It's rotating scents like a wardrobe. In 2026, the signature scent is dead. The fragrance wardrobe is what works.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&fit=crop&q=80&w=1200"
+        alt="Collection of perfume bottles arranged like a wardrobe, representing fragrance rotation"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🧠 왜 내 향수가 안 느껴질까요?' : '🧠 Why can\'t you smell your own perfume?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>향수를 뿌리고 20분이 지나면 "향이 날아갔나?" 생각하게 되죠. 하지만 향은 그대로 있어요 — <mark>내 코가 더 이상 감지하지 않는 것뿐입니다.</mark> 이걸 <strong>후각 습관화(olfactory habituation)</strong>라고 해요. 같은 냄새에 계속 노출되면 후각 수용체의 반응이 둔해지면서, 뇌가 그 향을 "안전한 배경 정보"로 분류하고 무시합니다. 고장이 아니라 <strong>새로운 냄새를 감지하기 위한 생존 메커니즘</strong>이에요.</>
+          ) : (
+            <>Twenty minutes after spraying, you think your perfume has faded. It hasn't — <mark>your nose just stopped registering it.</mark> This is <strong>olfactory habituation</strong>. When your olfactory receptors are continuously exposed to the same scent molecules, they become less responsive. Your brain categorizes that smell as "safe background information" and filters it out — freeing resources to detect new, potentially important smells. It's not a flaw. <strong>It's a survival mechanism.</strong></>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '⏱️ 15~20분', desc: '같은 향에 대한 후각 수용체 반응이 둔해지기 시작하는 시간.' },
+            { title: '🧬 진화적 설계', desc: '익숙한 냄새를 무시해야 새로운 위험 신호를 빠르게 감지할 수 있어요.' },
+            { title: '👃 향은 그대로', desc: '주변 사람은 여전히 내 향수를 맡아요. 못 느끼는 건 나뿐입니다.' },
+          ] : [
+            { title: '⏱️ 15–20 minutes', desc: 'Time before your olfactory receptors start tuning out a constant scent.' },
+            { title: '🧬 Evolutionary design', desc: 'Filtering out familiar smells lets you detect new danger signals faster.' },
+            { title: '👃 The scent is still there', desc: "Others can still smell your perfume. You're the only one who can't." },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '👗 프래그런스 워드로빙이란?' : '👗 What is fragrance wardrobing?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>옷을 매일 같은 걸 입지 않듯이, 향수도 돌려 쓰는 거예요. <mark>다른 향 계열(시트러스, 우디, 머스크, 플로럴)을 번갈아 뿌리면 후각 수용체가 매번 "새로운 자극"으로 인식</mark>합니다. 월요일에 뿌린 시트러스 향을 다음 주 월요일에 다시 뿌리면, 코가 쉬었다 돌아왔기 때문에 처음처럼 신선하게 느껴져요.</>
+          ) : (
+            <>You don't wear the same outfit every day. Why wear the same scent? <mark>Rotating between different fragrance families — citrus, woody, musky, floral — keeps your olfactory receptors recognizing each one as a "new stimulus."</mark> When you return to Monday's citrus scent the following week, your nose has had enough time away to experience it as fresh again.</>
+          )}
+        </ArtBody>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🔄" title={isKo ? '3~4개면 충분해요' : '3–4 scents is all you need'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? <>향수 옷장은 수십 병이 필요한 게 아니에요. 서로 다른 향 계열에서 3~4개만 골라 2~3일 간격으로 돌리면 후각 피로를 효과적으로 방지할 수 있어요. 핵심은 양이 아니라 다양성입니다.</> : <>You don't need dozens of bottles. Pick 3–4 fragrances from different scent families and rotate every 2–3 days. That's enough to prevent habituation. The key isn't quantity — it's variety across molecular profiles.</>}
+          </ArtCallout>
+          <ArtCallout icon="🌬️" title={isKo ? '일주일에 1~2일은 쉬세요' : 'Go fragrance-free 1–2 days a week'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? <>향수를 아예 안 뿌리는 날을 만들면 후각 시스템이 완전히 리셋돼요. 다음에 향수를 뿌렸을 때 훨씬 생생하게 느껴지고, 향에 대한 전반적인 둔감화도 예방됩니다.</> : <>Complete fragrance-free days give your olfactory system a full reset. When you spray again, the scent hits with renewed clarity — and you prevent the gradual overall desensitization that comes from never giving your nose a break.</>}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '🧪 향 계열별 워드로빙 가이드' : '🧪 How to build your fragrance wardrobe by family'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
+          {(isKo ? [
+            { title: '🍋 시트러스 / 프레시', body: '베르가못, 자몽, 네롤리. 가벼운 분자라 빠르게 날아가지만 후각 리셋 효과가 탁월해요. 워드로빙의 "클렌저" 역할.' },
+            { title: '🌲 우디 / 앰버', body: '샌달우드, 시더, 베티버, 앰브록산. 무거운 분자라 피부에 오래 남아요. 워드로빙에서 "앵커" 역할을 합니다.' },
+            { title: '🤍 머스크 / 스킨 센트', body: '화이트 머스크, 클린 노트. 다른 향과의 대비가 적어 쉬는 날 대용으로 좋아요. K-프래그런스가 여기에 해당.' },
+            { title: '🌸 플로럴 / 스파이시', body: '로즈, 자스민, 사프란, 카다몸. 중간 무게의 분자들이라 시트러스와 우디 사이에서 균형을 잡아줘요.' },
+          ] : [
+            { title: '🍋 Citrus / Fresh', body: "Bergamot, grapefruit, neroli. Light molecules that fade fast but are excellent for resetting your nose. The 'cleanser' of your wardrobe." },
+            { title: '🌲 Woody / Amber', body: "Sandalwood, cedar, vetiver, ambroxan. Heavy molecules that linger on skin. The 'anchor' of your rotation." },
+            { title: '🤍 Musk / Skin Scent', body: "White musk, clean notes. Low contrast with other scents — good as a rest-day alternative. K-fragrance lives here." },
+            { title: '🌸 Floral / Spicy', body: "Rose, jasmine, saffron, cardamom. Mid-weight molecules that bridge citrus and woody days." },
+          ]).map((item, i) => (
+            <div key={i}>
+              <h4 style={{ fontWeight: 700, color: 'var(--ink)', margin: '0 0 8px', fontSize: 15 }}>{item.title}</h4>
+              <p style={{ fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.6, margin: 0 }}>{item.body}</p>
+            </div>
+          ))}
         </div>
       </ArtSection>
 
