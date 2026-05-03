@@ -185,7 +185,8 @@
       const [category, setCategory] = window.useLocalState('cat', 'skincare');
       const [productId, setProductId] = window.useLocalState('pid', null);
       const [query, setQuery] = window.useLocalState('q', '');
-      const [lang, setLang] = window.useLocalState('lang', 'en');
+      const detectedLang = (navigator.languages || [navigator.language]).some(l => l.startsWith('ko')) ? 'ko' : 'en';
+      const [lang, setLang] = window.useLocalState('lang', detectedLang);
 
       const product = productId ? window.PRODUCTS.find(p => p.id === productId) : null;
       const setProduct = (p) => {
