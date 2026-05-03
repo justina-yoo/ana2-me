@@ -276,13 +276,68 @@ const ARTICLE_BODIES = {
 function PostDetail({ post, lang, onBack }) {
   const Body = ARTICLE_BODIES[post.id];
   const isKo = lang === 'ko';
+  const articleRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const article = articleRef.current;
+    if (!article) return;
+
+    // Inject highlight keyframe once
+    if (!document.getElementById('ana2me-highlight-style')) {
+      const style = document.createElement('style');
+      style.id = 'ana2me-highlight-style';
+      style.textContent = `
+        @keyframes ana2me-sweep {
+          from { background-size: 0% 85%; }
+          to   { background-size: 100% 85%; }
+        }
+        mark {
+          background: none;
+          color: inherit;
+        }
+        .ana2me-hl {
+          background-image: linear-gradient(rgba(100, 176, 120, 0.32), rgba(100, 176, 120, 0.32));
+          background-repeat: no-repeat;
+          background-position: left center;
+          background-size: 0% 88%;
+          animation: ana2me-sweep 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          border-radius: 2px;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    const getTargets = () => Array.from(article.querySelectorAll('mark')).filter(el => !el.closest('[data-tldr]'));
+    const seen = new Set();
+    const TRIGGER = window.innerHeight * 0.62;
+
+    const handleScroll = () => {
+      getTargets().forEach(el => {
+        if (seen.has(el)) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < TRIGGER) {
+          seen.add(el);
+          el.classList.remove('ana2me-hl');
+          void el.offsetWidth;
+          el.classList.add('ana2me-hl');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      getParas().forEach(p => p.classList.remove('ana2me-hl'));
+    };
+  }, [post.id]);
+
   return (
     <div className="detail" style={{ maxWidth: 780, margin: '0 auto' }}>
       <button className="back-btn" onClick={onBack}>
         <Icon name="back" size={16} />
         {isKo ? '인사이트로 돌아가기' : 'Back to Insights'}
       </button>
-      <article>
+      <article ref={articleRef}>
         <header style={{ marginBottom: 28 }}>
           <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, display: 'block', marginBottom: 10 }}>
             {post.tag[lang] || post.tag.en}
@@ -301,6 +356,20 @@ function PostDetail({ post, lang, onBack }) {
             </span>
             <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
             <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+            <button
+              onClick={() => {
+                const url = window.location.href;
+                if (navigator.share) {
+                  navigator.share({ title: post.title[lang] || post.title.en, url });
+                } else {
+                  navigator.clipboard.writeText(url).then(() => alert('Link copied!'));
+                }
+              }}
+              style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', display: 'flex', alignItems: 'center', padding: 4 }}
+              title="Share"
+            >
+              <Icon name="share" size={15} />
+            </button>
           </div>
         </header>
         {Body && React.createElement(Body, { lang })}
@@ -313,7 +382,7 @@ function PostDetail({ post, lang, onBack }) {
 
 function ArtTlDr({ children }) {
   return (
-    <div style={{
+    <div data-tldr="true" style={{
       padding: '18px 22px',
       background: 'var(--cream-2)',
       borderRadius: 'var(--radius)',
@@ -438,9 +507,9 @@ function SkinBarrierBody({ lang }) {
         <ArtSectionHeading>{isKo ? '🔍 피부 장벽 손상의 주요 원인은 무엇인가요?' : '🔍 What are the primary drivers of skin barrier degradation?'}</ArtSectionHeading>
         <ArtBody>
           {isKo ? (
-            <>피부 장벽이 손상되는 원인은 하나가 아니에요. 스마트폰과 모니터에서 나오는 <strong>고에너지 가시광선(HEV)</strong>, 매일 마시는 공기 속 <strong>미세먼지(PM2.5)</strong>, 그리고 우리가 직접 선택한 <strong>pH 교란 클렌저</strong>까지 — 이 세 가지가 동시에 피부의 세라마이드와 지방산을 고갈시킵니다.</>
+            <>피부 장벽이 손상되는 원인은 하나가 아니에요. 스마트폰과 모니터에서 나오는 <strong>고에너지 가시광선(HEV)</strong>, 매일 마시는 공기 속 <strong>미세먼지(PM2.5)</strong>, 그리고 우리가 직접 선택한 <strong>pH 교란 클렌저</strong>까지 — <mark>이 세 가지가 동시에 피부의 세라마이드와 지방산을 고갈시킵니다.</mark></>
           ) : (
-            <>The barrier doesn't break down from one thing. It's a slow accumulation — <strong>HEV light</strong> from your phone and monitor, <strong>PM2.5</strong> from city air, and the <strong>pH-disrupting cleanser</strong> you chose yourself. Together, they strip the skin's ceramide and fatty acid reserves faster than passive recovery can keep up with.</>
+            <>The barrier doesn't break down from one thing. It's a slow accumulation — <strong>HEV light</strong> from your phone and monitor, <strong>PM2.5</strong> from city air, and the <strong>pH-disrupting cleanser</strong> you chose yourself. <mark>Together, they strip the skin's ceramide and fatty acid reserves faster than passive recovery can keep up with.</mark></>
           )}
         </ArtBody>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
@@ -474,7 +543,7 @@ function SkinBarrierBody({ lang }) {
       <ArtSection>
         <ArtSectionHeading>{isKo ? '🌿 한국 전통 식물 성분은 현대 합성과 어떻게 통합되나요?' : '🌿 How do Korean botanicals integrate with modern synthesis?'}</ArtSectionHeading>
         <ArtBody>
-          {isKo ? "한국의 '한방(漢方)' 전통은 수천 년간 피부와 체질의 연결을 탐구해왔어요. 2026년, 첨단 생물반응기와 정밀 추출 기술이 그 지혜를 분자 수준에서 다시 검증하고 있습니다." : 'Korean "Hanbang" medicine has spent centuries mapping the relationship between botanicals and skin. In 2026, high-tech bioreactors and precision extraction are validating that wisdom at a molecular level — not replacing it.'}
+          {isKo ? <>한국의 '한방(漢方)' 전통은 수천 년간 피부와 체질의 연결을 탐구해왔어요. <mark>2026년, 첨단 생물반응기와 정밀 추출 기술이 그 지혜를 분자 수준에서 다시 검증하고 있습니다.</mark></> : <>Korean "Hanbang" medicine has spent centuries mapping the relationship between botanicals and skin. <mark>In 2026, high-tech bioreactors and precision extraction are validating that wisdom at a molecular level — not replacing it.</mark></>}
         </ArtBody>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
           {(isKo ? [
@@ -530,9 +599,9 @@ function FragranceVolatilityBody({ lang }) {
         <ArtSectionHeading>{isKo ? '🔺 휘발성 피라미드란 무엇인가요?' : '🔺 What is the volatility pyramid?'}</ArtSectionHeading>
         <ArtBody>
           {isKo ? (
-            <>모든 향수는 고정된 향이 아닌 하나의 시퀀스입니다. 세 계층 — <strong>탑, 미들, 베이스</strong> — 은 각 방향족 분자가 피부에서 얼마나 빨리 증발하는지에 해당합니다. 이는 <strong>증기압</strong>에 의해 결정됩니다: 분자량이 낮을수록 압력이 높아져 더 빨리 사라집니다.</>
+            <><mark>모든 향수는 고정된 향이 아닌 하나의 시퀀스입니다.</mark> 세 계층 — <strong>탑, 미들, 베이스</strong> — 은 각 방향족 분자가 피부에서 얼마나 빨리 증발하는지에 해당합니다. 이는 <strong>증기압</strong>에 의해 결정됩니다: 분자량이 낮을수록 압력이 높아져 더 빨리 사라집니다.</>
           ) : (
-            <>Every fragrance is a sequence, not a static smell. The three tiers — <strong>top, heart, and base</strong> — correspond to how quickly each aromatic molecule evaporates from your skin. This is determined by <strong>vapor pressure</strong>: the lower the molecular weight, the higher the pressure, the faster the escape.</>
+            <><mark>Every fragrance is a sequence, not a static smell.</mark> The three tiers — <strong>top, heart, and base</strong> — correspond to how quickly each aromatic molecule evaporates from your skin. This is determined by <strong>vapor pressure</strong>: the lower the molecular weight, the higher the pressure, the faster the escape.</>
           )}
         </ArtBody>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
@@ -555,7 +624,7 @@ function FragranceVolatilityBody({ lang }) {
             {isKo ? <><strong>Iso E Super</strong>와 <strong>Ambroxan</strong> 같은 고착제는 반-휘발성 대형 분자로, 가벼운 화합물의 증발을 늦추는 분자 지지대를 형성합니다 — 탑 노트와 미들 노트의 자연 수명을 연장합니다.</> : <>Fixatives like <strong>Iso E Super</strong> and <strong>Ambroxan</strong> are large, semi-volatile molecules that slow the evaporation of lighter compounds by forming a molecular scaffold — extending the presence of top and heart notes beyond their natural lifespan.</>}
           </ArtCallout>
           <ArtCallout icon="🧪" title={isKo ? '변수로서의 피부 화학' : 'Skin Chemistry as a Variable'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
-            {isKo ? <>pH, 피지 함량, 심지어 식단도 향수 분자가 피부 단백질에 결합하는 방식을 변화시킵니다. 유분이 많은 피부는 분자를 천천히 방출하는 <strong>저장소</strong> 역할을 합니다. 건성 피부는 보유력이 낮아 공기 중으로 더 빨리 확산됩니다.</> : <>pH, sebum content, and even diet alter how fragrance molecules bind to skin proteins. Oilier skin acts as a <strong>carrier reservoir</strong>, releasing molecules slowly. Dry skin offers less retention, causing faster diffusion into air.</>}
+            {isKo ? <>pH, 피지 함량, 심지어 식단도 향수 분자가 피부 단백질에 결합하는 방식을 변화시킵니다. <mark>유분이 많은 피부는 분자를 천천히 방출하는 <strong>저장소</strong> 역할을 합니다.</mark> 건성 피부는 보유력이 낮아 공기 중으로 더 빨리 확산됩니다.</> : <>pH, sebum content, and even diet alter how fragrance molecules bind to skin proteins. <mark>Oilier skin acts as a <strong>carrier reservoir</strong>, releasing molecules slowly.</mark> Dry skin offers less retention, causing faster diffusion into air.</>}
           </ArtCallout>
           <ArtCallout icon="🌙" title={isKo ? '마크로사이클릭 머스크' : 'Macrocyclic Musks'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
             {isKo ? <>새로운 세대의 베이스 노트 — <strong>Exaltolide</strong>, <strong>Habanolide</strong> — 는 극도로 낮은 휘발성을 가진 고리 구조의 합성 머스크입니다. 피부 단백질과 공유 결합하여 24시간 이상 지속되는 '세컨드 스킨' 효과를 만들어냅니다.</> : <>The new generation of base notes — <strong>Exaltolide</strong>, <strong>Habanolide</strong> — are ring-structured synthetic musks with extremely low volatility. They interact with skin proteins covalently, producing the "second skin" effect that can last over 24 hours.</>}
@@ -622,7 +691,7 @@ function AdaptogensBody({ lang }) {
       <ArtSection>
         <ArtSectionHeading>{isKo ? '🧠 어댑토젠이란 정확히 무엇인가요?' : '🧠 What is an adaptogen, precisely?'}</ArtSectionHeading>
         <ArtBody>
-          {isKo ? <>어댑토젠은 <strong>시상하부-뇌하수체-부신(HPA) 축</strong>을 조절하여 신체가 물리적, 심리적 스트레스에 저항하도록 돕는 생체활성 화합물입니다. 자극제나 진정제와 달리, 어댑토젠은 정상화합니다 — 스트레스 반응을 단일 방향이 아닌 균형 쪽으로 이끕니다.</> : <>An adaptogen is a bioactive compound that helps the body resist physical and psychological stressors by modulating the <strong>HPA axis</strong> (hypothalamic-pituitary-adrenal). Unlike stimulants or sedatives, adaptogens normalize — they push stress response toward equilibrium rather than in a single direction.</>}
+          {isKo ? <>어댑토젠은 <strong>시상하부-뇌하수체-부신(HPA) 축</strong>을 조절하여 신체가 물리적, 심리적 스트레스에 저항하도록 돕는 생체활성 화합물입니다. <mark>자극제나 진정제와 달리, 어댑토젠은 정상화합니다 — 스트레스 반응을 단일 방향이 아닌 균형 쪽으로 이끕니다.</mark></> : <>An adaptogen is a bioactive compound that helps the body resist physical and psychological stressors by modulating the <strong>HPA axis</strong> (hypothalamic-pituitary-adrenal). <mark>Unlike stimulants or sedatives, adaptogens normalize — they push stress response toward equilibrium rather than in a single direction.</mark></>}
         </ArtBody>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
           {(isKo ? [
@@ -641,7 +710,7 @@ function AdaptogensBody({ lang }) {
         <ArtSectionHeading>{isKo ? '🔑 생체이용률이 숨겨진 변수인 이유' : '🔑 Why bioavailability is the hidden variable'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <ArtCallout icon="🌱" title={isKo ? '장 장벽 문제' : 'The Gut Barrier Problem'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? <>대부분의 어댑토젠 화합물은 장 상피를 통과하기 어려운 <strong>크고 친수성인 분자</strong>입니다. 최적화된 전달 시스템 없이는 대부분 분해되지 않은 채 통과하여 체내에 흡수되기 전에 배출됩니다.</> : <>Most adaptogen compounds are <strong>large, hydrophilic molecules</strong> that struggle to cross the intestinal epithelium. Without an optimized delivery system, they pass through largely intact — you excrete the compound before it reaches systemic circulation.</>}
+            {isKo ? <>대부분의 어댑토젠 화합물은 장 상피를 통과하기 어려운 <strong>크고 친수성인 분자</strong>입니다. <mark>최적화된 전달 시스템 없이는 대부분 분해되지 않은 채 통과하여 체내에 흡수되기 전에 배출됩니다.</mark></> : <>Most adaptogen compounds are <strong>large, hydrophilic molecules</strong> that struggle to cross the intestinal epithelium. <mark>Without an optimized delivery system, they pass through largely intact — you excrete the compound before it reaches systemic circulation.</mark></>}
           </ArtCallout>
           <ArtCallout icon="🧬" title={isKo ? '발효가 결합된 활성 성분을 해방시킵니다' : 'Fermentation Unlocks Bound Actives'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
             {isKo ? <>특히 <strong>락토바실러스</strong> 균주의 발효는 식물 세포벽을 분해하고 배당체 결합을 끊어 더 작고 친지질성인 아글리콘을 방출합니다. 이는 장 막을 통한 수동 확산을 극적으로 향상시킵니다.</> : <>Fermentation — particularly with <strong>Lactobacillus</strong> strains — breaks down plant cell walls and cleaves glycoside bonds, releasing active aglycones that are substantially smaller and more lipophilic. This dramatically improves passive diffusion across gut membranes.</>}
@@ -710,7 +779,7 @@ function FermentationBody({ lang }) {
       <ArtSection>
         <ArtSectionHeading>{isKo ? '🦠 발효 성분이 원료보다 뛰어난 이유' : '🦠 Why fermented ingredients outperform their raw counterparts'}</ArtSectionHeading>
         <ArtBody>
-          {isKo ? <>식물 세포벽은 <strong>셀룰로오스</strong>로 만들어집니다 — 인체 피부가 침투하거나 대사할 수 없는 분자. 발효 효소 활동이 이 벽을 열어 이전에 잠겨 있던 화합물을 방출하고 분자 크기를 줄여 각질층으로 확산할 수 있게 합니다.</> : <>Plant cell walls are made of <strong>cellulose</strong> — a molecule human skin cannot penetrate or metabolize. Fermentation-driven enzymatic activity breaks these walls open, releasing compounds that were previously locked inside and reducing their molecular size so they can diffuse into the stratum corneum.</>}
+          {isKo ? <>식물 세포벽은 <strong>셀룰로오스</strong>로 만들어집니다 — 인체 피부가 침투하거나 대사할 수 없는 분자. <mark>발효 효소 활동이 이 벽을 열어 이전에 잠겨 있던 화합물을 방출하고 분자 크기를 줄여 각질층으로 확산할 수 있게 합니다.</mark></> : <>Plant cell walls are made of <strong>cellulose</strong> — a molecule human skin cannot penetrate or metabolize. <mark>Fermentation-driven enzymatic activity breaks these walls open, releasing compounds that were previously locked inside and reducing their molecular size.</mark></>}
         </ArtBody>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
           {(isKo ? [
@@ -729,7 +798,7 @@ function FermentationBody({ lang }) {
         <ArtSectionHeading>{isKo ? '🔭 스킨케어의 세 가지 핵심 발효 미생물' : '🔭 The three key fermentation organisms in skincare'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <ArtCallout icon="🍶" title={isKo ? '갈락토미세스 발효 여과물' : 'Galactomyces Ferment Filtrate'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? <><strong>비타민, 미네랄, 아미노산</strong>, <strong>알파-하이드록시산</strong>을 포함하는 효모 발효 여과물. 청주 양조장 직원들의 손이 놀랍도록 매끈하다는 것이 발견되어 처음 알려졌습니다. 티로시나제를 억제하고 세포 재생을 가속하여 피부톤을 밝히고 모공을 조이며 결을 개선합니다.</> : <>A yeast-fermented filtrate containing <strong>vitamins, minerals, amino acids,</strong> and <strong>alpha-hydroxy acids</strong>. Originally discovered when sake brewery workers had remarkably smooth hands. It brightens, tightens pores, and improves texture by accelerating cell turnover and inhibiting tyrosinase.</>}
+            {isKo ? <><strong>비타민, 미네랄, 아미노산</strong>, <strong>알파-하이드록시산</strong>을 포함하는 효모 발효 여과물. <mark>청주 양조장 직원들의 손이 놀랍도록 매끈하다는 것이 발견되어 처음 알려졌습니다.</mark> 티로시나제를 억제하고 세포 재생을 가속하여 피부톤을 밝히고 모공을 조이며 결을 개선합니다.</> : <>A yeast-fermented filtrate containing <strong>vitamins, minerals, amino acids,</strong> and <strong>alpha-hydroxy acids</strong>. <mark>Originally discovered when sake brewery workers had remarkably smooth hands.</mark> It brightens, tightens pores, and improves texture by accelerating cell turnover and inhibiting tyrosinase.</>}
           </ArtCallout>
           <ArtCallout icon="🥛" title={isKo ? '락토바실러스 발효물' : 'Lactobacillus Ferment'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
             {isKo ? <>젖산균이 <strong>포스트바이오틱스</strong> — 피부의 Toll-like 수용체와 직접 소통하는 세포벽 파편과 대사 부산물 — 를 생성합니다. 이것이 면역 시스템에 염증 반응을 줄이도록 신호를 보내어, 민감성, 주사비, 예민한 피부 유형에 이상적입니다.</> : <>Lactic acid bacteria produce <strong>postbiotics</strong> — cell wall fragments and metabolic byproducts that communicate directly with skin's Toll-like receptors. This signals the immune system to reduce inflammatory response, making Lactobacillus ferments ideal for reactive, rosacea-prone, and sensitive skin types.</>}
@@ -799,9 +868,9 @@ function PDRNBody({ lang }) {
         <ArtSectionHeading>{isKo ? '🐟 연어 DNA가 피부에서 하는 일' : '🐟 What salmon DNA actually does to your skin'}</ArtSectionHeading>
         <ArtBody>
           {isKo ? (
-            <>PDRN은 연어에서 추출한 DNA 조각입니다. 이름은 복잡하지만 작동 방식은 단순해요 — 피부 세포 표면의 특정 수용체에 결합해서 <strong>"지금 복구 시작"</strong>이라는 신호를 보냅니다. 이 신호를 받은 세포들은 콜라겐을 새로 만들고, 혈관을 재생하고, 손상된 부위를 빠르게 회복시킵니다. 피부과에서 레이저 시술 후에 자주 쓰는 이유가 바로 이것입니다.</>
+            <>PDRN은 연어에서 추출한 DNA 조각입니다. 이름은 복잡하지만 작동 방식은 단순해요 — 피부 세포 표면의 특정 수용체에 결합해서 <strong>"지금 복구 시작"</strong>이라는 신호를 보냅니다. <mark>이 신호를 받은 세포들은 콜라겐을 새로 만들고, 혈관을 재생하고, 손상된 부위를 빠르게 회복시킵니다.</mark> 피부과에서 레이저 시술 후에 자주 쓰는 이유가 바로 이것입니다.</>
           ) : (
-            <>PDRN is a fragment of DNA taken from salmon. The name sounds complicated, but the mechanism is straightforward — it binds to specific receptors on your skin cells and sends a signal to <strong>start repairing</strong>. Cells respond by producing new collagen, rebuilding blood vessels, and speeding up recovery in damaged areas. That's why Korean dermatology clinics reach for it after laser treatments.</>
+            <>PDRN is a fragment of DNA taken from salmon. The name sounds complicated, but the mechanism is straightforward — it binds to specific receptors on your skin cells and sends a signal to <strong>start repairing</strong>. <mark>Cells respond by producing new collagen, rebuilding blood vessels, and speeding up recovery in damaged areas.</mark> That's why Korean dermatology clinics reach for it after laser treatments.</>
           )}
         </ArtBody>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
@@ -821,13 +890,13 @@ function PDRNBody({ lang }) {
         <ArtSectionHeading>{isKo ? '💉 왜 처음엔 주사였고, 이제는 세럼인가' : '💉 Why it was an injectable first — and why serums work now'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <ArtCallout icon="🏥" title={isKo ? '피부 속으로 직접 넣어야 했던 이유' : 'The original problem'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? <>PDRN 분자는 일반 세럼 성분보다 훨씬 큽니다. 그냥 피부에 바르면 표면에서 머물다 씻겨 내려가요. 한국 피부과에서는 이 문제를 피부에 미세한 경로를 만들어 성분을 직접 전달하는 방식으로 해결했습니다. 효과는 확실하지만 클리닉에 가야 한다는 한계가 있었죠.</> : <>PDRN molecules are much larger than most serum ingredients. Applied to the surface, they just sit there and wash off. Korean dermatologists got around this by creating tiny channels in the skin — microneedling, injections — to deliver it directly. It worked well, but required a clinic visit.</>}
+            {isKo ? <>PDRN 분자는 일반 세럼 성분보다 훨씬 큽니다. 그냥 피부에 바르면 표면에서 머물다 씻겨 내려가요. <mark>한국 피부과에서는 이 문제를 피부에 미세한 경로를 만들어 성분을 직접 전달하는 방식으로 해결했습니다.</mark> 효과는 확실하지만 클리닉에 가야 한다는 한계가 있었죠.</> : <>PDRN molecules are much larger than most serum ingredients. Applied to the surface, they just sit there and wash off. <mark>Korean dermatologists got around this by creating tiny channels in the skin — microneedling, injections — to deliver it directly.</mark> It worked well, but required a clinic visit.</>}
           </ArtCallout>
           <ArtCallout icon="💊" title={isKo ? '세럼으로 가능해진 방법' : 'How serums solved it'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
-            {isKo ? <>요즘 PDRN 세럼들은 성분을 아주 작은 지질 캡슐에 감싸서 피부 흡수를 돕습니다. 이 캡슐은 피부 세포막과 구조가 같아서 세포가 자연스럽게 흡수합니다. 연구에 따르면 이 방식이 일반 수용액 대비 침투율을 최대 <strong>4배</strong> 높인다고 합니다.</> : <>Modern PDRN serums wrap the molecule in tiny lipid capsules that help it absorb into skin. These capsules are structurally similar to cell membranes, so cells recognize and absorb them naturally. Studies show this method achieves up to <strong>4× better penetration</strong> compared to an unencapsulated formula.</>}
+            {isKo ? <><mark>요즘 PDRN 세럼들은 성분을 아주 작은 지질 캡슐에 감싸서 피부 흡수를 돕습니다.</mark> 이 캡슐은 피부 세포막과 구조가 같아서 세포가 자연스럽게 흡수합니다. 연구에 따르면 이 방식이 일반 수용액 대비 침투율을 최대 <strong>4배</strong> 높인다고 합니다.</> : <><mark>Modern PDRN serums wrap the molecule in tiny lipid capsules that help it absorb into skin.</mark> These capsules are structurally similar to cell membranes, so cells recognize and absorb them naturally. Studies show this method achieves up to <strong>4× better penetration</strong> compared to an unencapsulated formula.</>}
           </ArtCallout>
           <ArtCallout icon="🔬" title={isKo ? 'PN과 PDRN — 라벨에서 뭘 봐야 하나' : 'PN vs. PDRN on a label'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.1)">
-            {isKo ? <>두 이름이 같은 성분처럼 쓰이지만 실제로는 다릅니다. PDRN이 더 작은 분절이고, 작을수록 피부에 더 잘 흡수됩니다. 세럼에서 효과를 기대한다면 PDRN 표기가 있는 제품을 고르는 게 유리합니다.</> : <>The two names get used interchangeably, but they're different. PDRN is the shorter, smaller version — and smaller means better absorption through skin. If you're buying a topical product, PDRN on the label is the better bet over PN.</>}
+            {isKo ? <>두 이름이 같은 성분처럼 쓰이지만 실제로는 다릅니다. PDRN이 더 작은 분절이고, 작을수록 피부에 더 잘 흡수됩니다. <mark>세럼에서 효과를 기대한다면 PDRN 표기가 있는 제품을 고르는 게 유리합니다.</mark></> : <>The two names get used interchangeably, but they're different. PDRN is the shorter, smaller version — and smaller means better absorption through skin. <mark>If you're buying a topical product, PDRN on the label is the better bet over PN.</mark></>}
           </ArtCallout>
         </div>
       </ArtSection>
