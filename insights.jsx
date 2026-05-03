@@ -180,12 +180,12 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
       <header className="ins-hero">
         <Sticker color="sage" rotate={-4}>{t('insights', '인사이트')}</Sticker>
         <h1 className="display">
-          {t('Research &', '연구 및')}<br />
-          <span className="display-accent">{t('Analysis', '분석')}<span className="display-dot">.</span></span>
+          {t('Research &', '성분을')}<br />
+          <span className="display-accent">{t('Analysis', '읽다')}<span className="display-dot">.</span></span>
         </h1>
         <p className="ins-sub">{t(
           'Deep-dives into ingredients, formulas, and trends.',
-          '성분, 포뮬러, 트렌드에 대한 심층 분석.'
+          '성분, 포뮬러, 트렌드를 깊이 파헤칩니다.'
         )}</p>
       </header>
 
@@ -223,57 +223,110 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
         ))}
       </div>
 
-      <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 18 }}>
-        {posts.map((post) => (
-          <button
-            key={post.id}
-            onClick={() => onSelectPost(post)}
-            style={{
-              display: 'block', width: '100%', textAlign: 'left',
-              background: 'var(--cream-card)',
-              border: '1px solid var(--line)',
-              borderRadius: 'var(--radius)',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              transition: 'transform .2s ease, box-shadow .2s ease',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--shadow-card)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
-          >
-            <ProductImg
-              src={post.imageUrl}
-              alt={post.title[lang] || post.title.en}
-              style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }}
-            />
-            <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <span
-                onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
-                style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer', alignSelf: 'flex-start' }}
+      <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {posts.map((post, idx) => {
+          // Pattern: hero at 0, compact 1-3, hero at 4, compact 5-7, ...
+          const isHero = idx % 4 === 0;
+
+          if (isHero) {
+            return (
+              <button
+                key={post.id}
+                onClick={() => onSelectPost(post)}
+                style={{
+                  display: 'block', width: '100%', textAlign: 'left',
+                  background: 'var(--cream-card)',
+                  border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius)',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  margin: '18px 0',
+                  transition: 'transform .2s ease, box-shadow .2s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--shadow-card)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
               >
-                {post.tag[lang] || post.tag.en}
-              </span>
-              <h2 style={{
-                fontFamily: 'var(--font-display)', fontWeight: 500,
-                fontSize: 'clamp(20px, 2.4vw, 28px)', lineHeight: 1.1,
-                letterSpacing: '-0.015em', margin: 0, textWrap: 'balance',
-                color: 'var(--ink)',
-              }}>
-                {post.title[lang] || post.title.en}
-              </h2>
-              <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                {post.excerpt[lang] || post.excerpt.en}
-              </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4 }}>
-                <Icon name="clock" size={13} className="" />
-                <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>
-                  {post.readTime[lang] || post.readTime.en}
-                </span>
-                <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
-                <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                <ProductImg
+                  src={post.imageUrl}
+                  alt={post.title[lang] || post.title.en}
+                  style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }}
+                />
+                <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <span
+                    onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
+                    style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer', alignSelf: 'flex-start' }}
+                  >
+                    {post.tag[lang] || post.tag.en}
+                  </span>
+                  <h2 style={{
+                    fontFamily: 'var(--font-display)', fontWeight: 500,
+                    fontSize: 'clamp(20px, 2.4vw, 28px)', lineHeight: 1.1,
+                    letterSpacing: '-0.015em', margin: 0, textWrap: 'balance',
+                    color: 'var(--ink)',
+                  }}>
+                    {post.title[lang] || post.title.en}
+                  </h2>
+                  <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                    {post.excerpt[lang] || post.excerpt.en}
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4 }}>
+                    <Icon name="clock" size={13} className="" />
+                    <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>
+                      {post.readTime[lang] || post.readTime.en}
+                    </span>
+                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                    <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                  </div>
+                </div>
+              </button>
+            );
+          }
+
+          // Compact horizontal row for cards #2+
+          return (
+            <button
+              key={post.id}
+              onClick={() => onSelectPost(post)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 16,
+                width: '100%', textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                borderBottom: '1px solid var(--line)',
+                borderRadius: 0,
+                cursor: 'pointer',
+                padding: '14px 0',
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <h2 style={{
+                  fontFamily: 'var(--font-display)', fontWeight: 500,
+                  fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.25,
+                  letterSpacing: '-0.01em', margin: 0,
+                  color: 'var(--ink)',
+                  overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                }}>
+                  {post.title[lang] || post.title.en}
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span
+                    onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
+                    style={{ fontSize: 11, fontWeight: 600, color: post.tagColor, cursor: 'pointer' }}
+                  >
+                    {post.tag[lang] || post.tag.en}
+                  </span>
+                  <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                  <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                </div>
               </div>
-            </div>
-          </button>
-        ))}
+              <ProductImg
+                src={post.imageUrl}
+                alt={post.title[lang] || post.title.en}
+                style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }}
+              />
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -530,7 +583,7 @@ function SkinBarrierBody({ lang }) {
       />
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🔍 피부 장벽 손상의 주요 원인은 무엇인가요?' : '🔍 What are the primary drivers of skin barrier degradation?'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🔍 피부 장벽은 왜 무너질까요?' : '🔍 What are the primary drivers of skin barrier degradation?'}</ArtSectionHeading>
         <ArtBody>
           {isKo ? (
             <>피부 장벽이 손상되는 원인은 하나가 아니에요. 스마트폰과 모니터에서 나오는 <strong>고에너지 가시광선(HEV)</strong>, 매일 마시는 공기 속 <strong>미세먼지(PM2.5)</strong>, 그리고 우리가 직접 선택한 <strong>pH 교란 클렌저</strong>까지 — <mark>이 세 가지가 동시에 피부의 세라마이드와 지방산을 고갈시킵니다.</mark></>
@@ -552,29 +605,29 @@ function SkinBarrierBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🧪 장벽 회복에 필수적인 세 가지 분자 화합물은?' : '🧪 Which three molecular compounds are essential for barrier restoration?'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🧪 장벽을 다시 세우는 핵심 성분 세 가지' : '🧪 Which three molecular compounds are essential for barrier restoration?'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <ArtCallout icon="🌿" title={isKo ? '1. 시카-리포솜' : '1. Cica-Liposomes'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? <>캡슐화된 <strong>병풀(Centella Asiatica)</strong> 트리터페노이드(아시아티코사이드, 마데카소사이드)로, 각질층 더 깊은 곳까지 침투하여 GAG 합성과 세포 수준의 콜라겐 생성을 촉진합니다.</> : <>Encapsulated <strong>Centella Asiatica</strong> triterpenoids (Asiaticoside, Madecassoside) that penetrate deeper into the stratum corneum to stimulate GAG synthesis and collagen production at the cellular level.</>}
+            {isKo ? <><strong>병풀(Centella Asiatica)</strong>의 핵심 성분인 아시아티코사이드와 마데카소사이드를 캡슐에 감싸서 피부 깊숙이 전달해요. 콜라겐 합성과 보습 인자 생성을 촉진합니다.</> : <>Encapsulated <strong>Centella Asiatica</strong> triterpenoids (Asiaticoside, Madecassoside) that penetrate deeper into the stratum corneum to stimulate GAG synthesis and collagen production at the cellular level.</>}
           </ArtCallout>
           <ArtCallout icon="💧" title={isKo ? '2. 스쿠알란 유래 세라마이드' : '2. Squalane-Derived Ceramides'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
-            {isKo ? <>인체 피지를 모방하는 수소화 지질로, 모공을 막지 않으면서 <strong>경피수분손실(TEWL)</strong>을 방지하는 밀폐적이면서도 통기성 있는 층을 제공합니다.</> : <>Hydrogenated lipids that mimic human sebum, providing an occlusive yet breathable layer to prevent <strong>TEWL (Trans-Epidermal Water Loss)</strong> without clogging pores.</>}
+            {isKo ? <>우리 피부 피지와 구조가 비슷한 지질이에요. 모공을 막지 않으면서 <strong>수분 증발(TEWL)</strong>을 막아주는 보호막을 만들어줍니다.</> : <>Hydrogenated lipids that mimic human sebum, providing an occlusive yet breathable layer to prevent <strong>TEWL (Trans-Epidermal Water Loss)</strong> without clogging pores.</>}
           </ArtCallout>
           <ArtCallout icon="✨" title={isKo ? '3. 비피다 발효 용해물' : '3. Bifida Ferment Lysate'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.1)">
-            {isKo ? 'DNA 복구 효소가 풍부한 프로바이오틱 유도체로, 건강한 세균 균형을 촉진하여 피부 마이크로바이옴을 강화하고 민감성을 줄입니다.' : "A probiotic derivative rich in DNA repair enzymes that strengthens the skin's microbiome and reduces sensitivity by promoting a healthy bacterial balance."}
+            {isKo ? 'DNA 복구 효소가 풍부한 발효 유래 성분이에요. 피부 위의 유익균 균형을 도와 마이크로바이옴을 건강하게 유지하고 민감성을 낮춰줍니다.' : "A probiotic derivative rich in DNA repair enzymes that strengthens the skin's microbiome and reduces sensitivity by promoting a healthy bacterial balance."}
           </ArtCallout>
         </div>
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🌿 한국 전통 식물 성분은 현대 합성과 어떻게 통합되나요?' : '🌿 How do Korean botanicals integrate with modern synthesis?'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🌿 한방 성분, 첨단 기술을 만나다' : '🌿 How do Korean botanicals integrate with modern synthesis?'}</ArtSectionHeading>
         <ArtBody>
-          {isKo ? <>한국의 '한방(漢方)' 전통은 수천 년간 피부와 체질의 연결을 탐구해왔어요. <mark>2026년, 첨단 생물반응기와 정밀 추출 기술이 그 지혜를 분자 수준에서 다시 검증하고 있습니다.</mark></> : <>Korean "Hanbang" medicine has spent centuries mapping the relationship between botanicals and skin. <mark>In 2026, high-tech bioreactors and precision extraction are validating that wisdom at a molecular level — not replacing it.</mark></>}
+          {isKo ? <>한국의 한방(漢方) 전통은 수천 년간 피부와 체질의 관계를 연구해왔어요. <mark>2026년, 첨단 바이오리액터와 정밀 추출 기술이 그 경험을 분자 수준에서 과학적으로 증명하고 있습니다.</mark></> : <>Korean "Hanbang" medicine has spent centuries mapping the relationship between botanicals and skin. <mark>In 2026, high-tech bioreactors and precision extraction are validating that wisdom at a molecular level — not replacing it.</mark></>}
         </ArtBody>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
           {(isKo ? [
-            { title: '고급 발효', body: '전통 옹기 발효가 이제 첨단 생물반응기에서 재현되어 폴리페놀과 플라보노이드의 생체이용률을 높여 피부에 더욱 효과적으로 작용합니다.' },
-            { title: '식물성 레티놀', body: '바쿠치올 같은 성분은 합성 비타민 A의 장벽 손상 부작용 없이 레티놀과 같은 효과(세포 재생, 콜라겐 부스팅)를 제공합니다.' },
+            { title: '발효 기술의 진화', body: '전통 옹기 발효를 첨단 바이오리액터로 재현하면서 폴리페놀과 플라보노이드의 흡수율이 크게 높아졌어요. 같은 원료도 피부에 더 잘 스며듭니다.' },
+            { title: '식물성 레티놀', body: '바쿠치올은 레티놀과 같은 효과(세포 재생, 콜라겐 촉진)를 주지만, 합성 비타민 A처럼 장벽을 자극하지 않아요.' },
           ] : [
             { title: 'Advanced Fermentation', body: 'Traditional earthen-pot fermentation is now replicated in high-tech bioreactors to increase the bioavailability of polyphenols and flavonoids, making them more effective on the skin.' },
             { title: 'Phyto-Retinols', body: 'Ingredients like Bakuchiol provide retinol-like results (cell turnover, collagen boost) without the barrier-disrupting side effects of synthetic Vitamin A.' },
@@ -588,7 +641,7 @@ function SkinBarrierBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '✨ 장벽 손상 피부를 위한 추천 제품' : '✨ Products built for barrier-compromised skin'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '✨ 장벽이 무너졌을 때 쓸 제품' : '✨ Products built for barrier-compromised skin'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
           {[
             { brand: 'Dr. Jart+', name: 'Cicapair Intensive Soothing Repair Cream', note: isKo ? '마데카소사이드 + 세라마이드로 장벽 즉시 진정' : 'Madecassoside + ceramide — barrier calming from first application' },
@@ -622,7 +675,7 @@ function FragranceVolatilityBody({ lang }) {
       />
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🔺 휘발성 피라미드란 무엇인가요?' : '🔺 What is the volatility pyramid?'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🔺 향은 왜 시간에 따라 변할까요?' : '🔺 What is the volatility pyramid?'}</ArtSectionHeading>
         <ArtBody>
           {isKo ? (
             <><mark>모든 향수는 고정된 향이 아닌 하나의 시퀀스입니다.</mark> 세 계층 — <strong>탑, 미들, 베이스</strong> — 은 각 방향족 분자가 피부에서 얼마나 빨리 증발하는지에 해당합니다. 이는 <strong>증기압</strong>에 의해 결정됩니다: 분자량이 낮을수록 압력이 높아져 더 빨리 사라집니다.</>
@@ -644,28 +697,28 @@ function FragranceVolatilityBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🔬 지속력의 분자 과학' : '🔬 The molecular science of longevity'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🔬 향이 오래 남는 이유, 분자에 있습니다' : '🔬 The molecular science of longevity'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <ArtCallout icon="🌲" title={isKo ? '고착제와 실질성' : 'Fixatives & Substantivity'} borderColor="rgba(107,142,107,0.3)" bgColor="rgba(107,142,107,0.06)">
-            {isKo ? <><strong>Iso E Super</strong>와 <strong>Ambroxan</strong> 같은 고착제는 반-휘발성 대형 분자로, 가벼운 화합물의 증발을 늦추는 분자 지지대를 형성합니다 — 탑 노트와 미들 노트의 자연 수명을 연장합니다.</> : <>Fixatives like <strong>Iso E Super</strong> and <strong>Ambroxan</strong> are large, semi-volatile molecules that slow the evaporation of lighter compounds by forming a molecular scaffold — extending the presence of top and heart notes beyond their natural lifespan.</>}
+          <ArtCallout icon="🌲" title={isKo ? '고착제 — 향을 붙잡는 분자' : 'Fixatives & Substantivity'} borderColor="rgba(107,142,107,0.3)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? <><strong>Iso E Super</strong>나 <strong>Ambroxan</strong> 같은 고착제는 크고 잘 날아가지 않는 분자예요. 가벼운 향 분자가 너무 빨리 증발하지 않도록 잡아주는 역할을 합니다 — 덕분에 탑 노트와 미들 노트가 더 오래 남아요.</> : <>Fixatives like <strong>Iso E Super</strong> and <strong>Ambroxan</strong> are large, semi-volatile molecules that slow the evaporation of lighter compounds by forming a molecular scaffold — extending the presence of top and heart notes beyond their natural lifespan.</>}
           </ArtCallout>
-          <ArtCallout icon="🧪" title={isKo ? '변수로서의 피부 화학' : 'Skin Chemistry as a Variable'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
-            {isKo ? <>pH, 피지 함량, 심지어 식단도 향수 분자가 피부 단백질에 결합하는 방식을 변화시킵니다. <mark>유분이 많은 피부는 분자를 천천히 방출하는 <strong>저장소</strong> 역할을 합니다.</mark> 건성 피부는 보유력이 낮아 공기 중으로 더 빨리 확산됩니다.</> : <>pH, sebum content, and even diet alter how fragrance molecules bind to skin proteins. <mark>Oilier skin acts as a <strong>carrier reservoir</strong>, releasing molecules slowly.</mark> Dry skin offers less retention, causing faster diffusion into air.</>}
+          <ArtCallout icon="🧪" title={isKo ? '내 피부에서 다르게 느껴지는 이유' : 'Skin Chemistry as a Variable'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? <>피부의 pH, 유분량, 심지어 식단까지 향수 분자가 피부에 달라붙는 방식을 바꿔요. <mark>유분기 많은 피부는 향 분자를 천천히 내보내는 <strong>저장소</strong> 역할을 합니다.</mark> 건성 피부는 향을 잡아두는 힘이 약해서 더 빨리 날아가요.</> : <>pH, sebum content, and even diet alter how fragrance molecules bind to skin proteins. <mark>Oilier skin acts as a <strong>carrier reservoir</strong>, releasing molecules slowly.</mark> Dry skin offers less retention, causing faster diffusion into air.</>}
           </ArtCallout>
           <ArtCallout icon="🌙" title={isKo ? '마크로사이클릭 머스크' : 'Macrocyclic Musks'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? <>새로운 세대의 베이스 노트 — <strong>Exaltolide</strong>, <strong>Habanolide</strong> — 는 극도로 낮은 휘발성을 가진 고리 구조의 합성 머스크입니다. 피부 단백질과 공유 결합하여 24시간 이상 지속되는 '세컨드 스킨' 효과를 만들어냅니다.</> : <>The new generation of base notes — <strong>Exaltolide</strong>, <strong>Habanolide</strong> — are ring-structured synthetic musks with extremely low volatility. They interact with skin proteins covalently, producing the "second skin" effect that can last over 24 hours.</>}
+            {isKo ? <>차세대 베이스 노트인 <strong>Exaltolide</strong>, <strong>Habanolide</strong>는 고리형 합성 머스크로 거의 날아가지 않아요. 피부 단백질에 직접 결합해서 24시간 넘게 은은하게 남는 '세컨드 스킨' 효과를 만들어냅니다.</> : <>The new generation of base notes — <strong>Exaltolide</strong>, <strong>Habanolide</strong> — are ring-structured synthetic musks with extremely low volatility. They interact with skin proteins covalently, producing the "second skin" effect that can last over 24 hours.</>}
           </ArtCallout>
         </div>
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🛒 향수 구매 시 이 지식 활용하기' : '🛒 How to use this knowledge when buying fragrance'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🛒 향수 고를 때 이렇게 써보세요' : '🛒 How to use this knowledge when buying fragrance'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
           {(isKo ? [
-            { title: '👃 종이가 아닌 피부에 테스트', body: '테스터 스트립은 격리된 휘발성만 보여줍니다. 피부의 pH와 지질 함량이 진정한 매체입니다. 항상 맥박 부위에 테스트하고 30분을 기다린 후 결정하세요.' },
-            { title: '🎨 전략적 레이어링', body: '먼저 베이스 노트가 풍부한 오일(샌달우드, 우드, 베티버)을 바른 후 향수를 뿌리세요. 오일이 고착제 역할을 하여 가벼운 분자를 고정하고 증발 시간을 연장합니다.' },
-            { title: '📊 농도가 중요합니다', body: '퍼퓸(방향 화합물 20–40%)은 오드 뚜왈렛(5–15%)보다 베이스 무게의 분자가 더 많이 포함됩니다. 높은 농도 = 더 깊고 오래 지속되는 드라이다운.' },
-            { title: '🌡️ 온도가 증폭시킵니다', body: '열은 분자 증발을 가속합니다. 맥박 부위(손목, 목, 팔꿈치 안쪽)는 향수를 자연스럽게 따뜻하게 하여 프로젝션과 탑 노트가 사라지는 속도 모두를 강화합니다.' },
+            { title: '👃 시향은 반드시 피부에', body: '시향지는 향의 일부만 보여줘요. 내 피부의 pH와 유분이 향을 완전히 바꿉니다. 맥박 부위에 뿌리고 30분 이상 기다린 후 판단하세요.' },
+            { title: '🎨 레이어링의 기술', body: '먼저 샌달우드, 우드, 베티버 같은 무거운 오일을 바르고 그 위에 향수를 뿌려보세요. 오일이 가벼운 향 분자를 잡아줘서 지속력이 훨씬 길어집니다.' },
+            { title: '📊 농도에 따라 달라요', body: '퍼퓸(향료 20–40%)은 오드 뚜왈렛(5–15%)보다 무거운 베이스 분자가 훨씬 많아요. 농도가 높을수록 깊고 오래가는 잔향을 느낄 수 있습니다.' },
+            { title: '🌡️ 체온이 향을 키워요', body: '열은 향 분자의 증발을 빠르게 해요. 손목, 목, 팔꿈치 안쪽 같은 맥박 부위는 체온이 높아 향이 더 잘 퍼지지만, 탑 노트가 빨리 사라지기도 합니다.' },
           ] : [
             { title: '👃 Test on skin, not paper', body: 'Paper strips only reveal volatility in isolation. Your skin chemistry — its pH and lipid content — is the true medium. Always test on a pulse point and wait 30 minutes before deciding.' },
             { title: '🎨 Layer strategically', body: 'Apply a base-note-heavy oil first (sandalwood, oud, vetiver), then spray your fragrance on top. The oil acts as a fixative, anchoring lighter molecules and extending their evaporation window.' },
@@ -681,7 +734,7 @@ function FragranceVolatilityBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🌸 분자 구조로 살펴보는 컬렉션의 향수들' : '🌸 Scents in our collection, read by molecular architecture'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🌸 이 향수들, 분자로 읽어봤습니다' : '🌸 Scents in our collection, read by molecular architecture'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
           {[
             { brand: 'Diptyque', name: 'Philosykos Eau de Parfum', note: isKo ? '그린 락톤 탑 + 시더 세스퀴테르펜 베이스 — 6–8시간의 우디 잔향' : 'Green lactone top + cedar sesquiterpene base — 6–8 hr woody dry-down' },
@@ -733,28 +786,28 @@ function AdaptogensBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🔑 생체이용률이 숨겨진 변수인 이유' : '🔑 Why bioavailability is the hidden variable'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🔑 왜 먹어도 흡수가 안 될까요?' : '🔑 Why bioavailability is the hidden variable'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <ArtCallout icon="🌱" title={isKo ? '장 장벽 문제' : 'The Gut Barrier Problem'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? <>대부분의 어댑토젠 화합물은 장 상피를 통과하기 어려운 <strong>크고 친수성인 분자</strong>입니다. <mark>최적화된 전달 시스템 없이는 대부분 분해되지 않은 채 통과하여 체내에 흡수되기 전에 배출됩니다.</mark></> : <>Most adaptogen compounds are <strong>large, hydrophilic molecules</strong> that struggle to cross the intestinal epithelium. <mark>Without an optimized delivery system, they pass through largely intact — you excrete the compound before it reaches systemic circulation.</mark></>}
+          <ArtCallout icon="🌱" title={isKo ? '장에서 막히는 이유' : 'The Gut Barrier Problem'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? <>어댑토젠 성분 대부분은 분자가 크고 물에 잘 녹아서 장벽을 통과하기 어려워요. <mark>전달 기술 없이 그냥 먹으면 대부분 흡수되지 못한 채 그대로 빠져나갑니다.</mark></> : <>Most adaptogen compounds are <strong>large, hydrophilic molecules</strong> that struggle to cross the intestinal epithelium. <mark>Without an optimized delivery system, they pass through largely intact — you excrete the compound before it reaches systemic circulation.</mark></>}
           </ArtCallout>
-          <ArtCallout icon="🧬" title={isKo ? '발효가 결합된 활성 성분을 해방시킵니다' : 'Fermentation Unlocks Bound Actives'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
-            {isKo ? <>특히 <strong>락토바실러스</strong> 균주의 발효는 식물 세포벽을 분해하고 배당체 결합을 끊어 더 작고 친지질성인 아글리콘을 방출합니다. 이는 장 막을 통한 수동 확산을 극적으로 향상시킵니다.</> : <>Fermentation — particularly with <strong>Lactobacillus</strong> strains — breaks down plant cell walls and cleaves glycoside bonds, releasing active aglycones that are substantially smaller and more lipophilic. This dramatically improves passive diffusion across gut membranes.</>}
+          <ArtCallout icon="🧬" title={isKo ? '발효하면 흡수가 달라져요' : 'Fermentation Unlocks Bound Actives'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? <><strong>락토바실러스</strong> 균주로 발효하면 식물 세포벽이 분해되고, 활성 성분이 더 작고 지용성 높은 형태로 풀려나요. 이렇게 바뀌면 장벽을 훨씬 쉽게 통과합니다.</> : <>Fermentation — particularly with <strong>Lactobacillus</strong> strains — breaks down plant cell walls and cleaves glycoside bonds, releasing active aglycones that are substantially smaller and more lipophilic. This dramatically improves passive diffusion across gut membranes.</>}
           </ArtCallout>
-          <ArtCallout icon="💊" title={isKo ? '지질 캡슐화' : 'Lipid Encapsulation'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
-            {isKo ? <>리포솜 및 파이토솜 전달 시스템은 활성 화합물을 세포막과 구조적으로 동일한 <strong>인지질 이중층</strong>으로 감쌉니다. 세포가 이를 인식하고 직접 흡수하여 간의 초회 통과 대사를 우회합니다.</> : <>Liposomal and phytosomal delivery systems wrap active compounds in <strong>phospholipid bilayers</strong> that are structurally identical to cell membranes. Cells recognize and absorb the encapsulated compound directly — bypassing first-pass metabolism in the liver.</>}
+          <ArtCallout icon="💊" title={isKo ? '지질 캡슐로 감싸기' : 'Lipid Encapsulation'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? <>리포솜이나 파이토솜 기술은 활성 성분을 세포막과 같은 구조의 <strong>인지질 캡슐</strong>로 감싸요. 세포가 자기 것처럼 인식해서 바로 흡수하기 때문에, 간에서 먼저 분해되는 걸 피할 수 있습니다.</> : <>Liposomal and phytosomal delivery systems wrap active compounds in <strong>phospholipid bilayers</strong> that are structurally identical to cell membranes. Cells recognize and absorb the encapsulated compound directly — bypassing first-pass metabolism in the liver.</>}
           </ArtCallout>
         </div>
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🏷️ 실제 생체이용률을 위한 보충제 라벨 읽기' : '🏷️ Reading a supplement label for real bioavailability'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🏷️ 보충제 라벨, 이것만 보세요' : '🏷️ Reading a supplement label for real bioavailability'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
           {(isKo ? [
-            { title: '🎯 표준화 %', body: '라벨의 활성 화합물 비율을 확인하세요. "아슈와간다 500mg"은 의미 없습니다. "KSM-66 아슈와간다 300mg, 위타노라이드 5% 표준화"가 유효 용량을 알려줍니다.' },
-            { title: '📏 추출 비율', body: '10:1 추출물은 원료 10kg이 1kg으로 농축된 것입니다. 비율이 높을수록 그램당 활성 화합물이 더 많습니다.' },
-            { title: '🔀 이중 대 단일 추출', body: '버섯의 경우, 열수 추출은 베타글루칸을 포착합니다. 알코올 추출은 트리터펜을 포착합니다. 둘 다 필요합니다.' },
-            { title: '⚡ 피페린 또는 지방 첨가', body: '피페린(후추 추출물)은 간에서 어댑토젠을 분해하는 CYP 효소를 억제하여 일부 화합물의 혈청 농도를 최대 20배까지 높입니다.' },
+            { title: '🎯 표준화 % 확인', body: '"아슈와간다 500mg"만으로는 아무것도 알 수 없어요. "KSM-66 아슈와간다 300mg, 위타노라이드 5% 표준화"처럼 활성 성분 함량이 적혀 있어야 유효 용량을 판단할 수 있습니다.' },
+            { title: '📏 추출 비율', body: '10:1 추출물이란 원료 10kg을 1kg으로 농축했다는 뜻이에요. 비율이 높을수록 그램당 활성 성분이 많지만, 어떤 성분을 추출했느냐가 더 중요합니다.' },
+            { title: '🔀 이중 추출 vs 단일 추출', body: '버섯류는 열수 추출(베타글루칸)과 알코올 추출(트리터펜)을 둘 다 해야 해요. 한 가지만으로는 약리 활성의 절반을 놓칩니다.' },
+            { title: '⚡ 피페린·지방 함께 먹기', body: '피페린(후추 추출물)은 간에서 어댑토젠을 분해하는 효소를 억제해요. 일부 성분의 혈중 농도를 최대 20배까지 높여줍니다.' },
           ] : [
             { title: '🎯 Standardization %', body: 'Look for the active compound percentage on the label. "Ashwagandha 500mg" is meaningless. "KSM-66 Ashwagandha 300mg standardized to 5% withanolides" tells you the effective dose.' },
             { title: '📏 Extract ratio', body: 'A 10:1 extract means 10kg of raw material concentrated into 1kg. Higher ratios mean more active compounds per gram — but only if the extraction method targets the right molecules.' },
@@ -770,7 +823,7 @@ function AdaptogensBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '✨ 생체이용률 설계로 만들어진 추천 웰니스 제품' : '✨ Wellness products designed around bioavailability'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '✨ 흡수율까지 고려한 웰니스 제품' : '✨ Wellness products designed around bioavailability'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
           {[
             { brand: 'Medion', name: 'Supplecare Inositol', note: isKo ? '임상 검증 40:1 미오/D-카이로 비율 — OxuGel™ 기술로 위산 산화 방지 후 흡수' : 'Clinically validated 40:1 myo/D-chiro ratio — OxuGel™ protects polyphenols from gastric oxidation' },
@@ -803,15 +856,15 @@ function FermentationBody({ lang }) {
       />
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🦠 발효 성분이 원료보다 뛰어난 이유' : '🦠 Why fermented ingredients outperform their raw counterparts'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🦠 왜 발효하면 달라질까요?' : '🦠 Why fermented ingredients outperform their raw counterparts'}</ArtSectionHeading>
         <ArtBody>
-          {isKo ? <>식물 세포벽은 <strong>셀룰로오스</strong>로 만들어집니다 — 인체 피부가 침투하거나 대사할 수 없는 분자. <mark>발효 효소 활동이 이 벽을 열어 이전에 잠겨 있던 화합물을 방출하고 분자 크기를 줄여 각질층으로 확산할 수 있게 합니다.</mark></> : <>Plant cell walls are made of <strong>cellulose</strong> — a molecule human skin cannot penetrate or metabolize. <mark>Fermentation-driven enzymatic activity breaks these walls open, releasing compounds that were previously locked inside and reducing their molecular size.</mark></>}
+          {isKo ? <>식물 세포벽은 <strong>셀룰로오스</strong>로 되어 있어요 — 우리 피부가 뚫거나 분해할 수 없는 물질이죠. <mark>발효 과정의 효소가 이 벽을 열어서 안에 갇혀 있던 활성 성분을 꺼내고, 분자 크기를 줄여 피부 속까지 스며들 수 있게 만듭니다.</mark></> : <>Plant cell walls are made of <strong>cellulose</strong> — a molecule human skin cannot penetrate or metabolize. <mark>Fermentation-driven enzymatic activity breaks these walls open, releasing compounds that were previously locked inside and reducing their molecular size.</mark></>}
         </ArtBody>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
           {(isKo ? [
-            { title: '🔬 더 작은 분자', desc: '발효가 큰 다당류를 각질층을 직접 침투하는 흡수 가능한 올리고당으로 분해합니다.' },
-            { title: '✨ 새로운 화합물 형성', desc: '미생물 대사가 원료에 없는 완전히 새로운 생체활성 분자를 만들어냅니다.' },
-            { title: '🛡️ 낮은 자극 가능성', desc: '발효가 원료 식물 추출물에 존재하는 일반적인 자극제와 알레르겐을 분해합니다.' },
+            { title: '🔬 분자가 작아져요', desc: '큰 다당류가 작은 올리고당으로 쪼개져서 피부 속까지 직접 침투할 수 있어요.' },
+            { title: '✨ 새로운 성분이 생겨요', desc: '미생물이 대사하면서 원래 원료에는 없던 완전히 새로운 활성 물질이 만들어집니다.' },
+            { title: '🛡️ 자극이 줄어들어요', desc: '원료 식물 추출물에 있던 자극 성분과 알레르겐이 발효 과정에서 분해됩니다.' },
           ] : [
             { title: '🔬 Smaller molecules', desc: 'Fermentation cleaves large polysaccharides into absorbable oligosaccharides that penetrate the stratum corneum directly.' },
             { title: '✨ New compounds formed', desc: 'Microbial metabolism creates entirely new bioactive molecules — like galactomyces-derived NADHP and amino acids — not present in the raw material.' },
@@ -821,7 +874,7 @@ function FermentationBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '🔭 스킨케어의 세 가지 핵심 발효 미생물' : '🔭 The three key fermentation organisms in skincare'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '🔭 스킨케어를 바꾼 발효 미생물 세 가지' : '🔭 The three key fermentation organisms in skincare'}</ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <ArtCallout icon="🍶" title={isKo ? '갈락토미세스 발효 여과물' : 'Galactomyces Ferment Filtrate'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
             {isKo ? <><strong>비타민, 미네랄, 아미노산</strong>, <strong>알파-하이드록시산</strong>을 포함하는 효모 발효 여과물. <mark>청주 양조장 직원들의 손이 놀랍도록 매끈하다는 것이 발견되어 처음 알려졌습니다.</mark> 티로시나제를 억제하고 세포 재생을 가속하여 피부톤을 밝히고 모공을 조이며 결을 개선합니다.</> : <>A yeast-fermented filtrate containing <strong>vitamins, minerals, amino acids,</strong> and <strong>alpha-hydroxy acids</strong>. <mark>Originally discovered when sake brewery workers had remarkably smooth hands.</mark> It brightens, tightens pores, and improves texture by accelerating cell turnover and inhibiting tyrosinase.</>}
@@ -839,10 +892,10 @@ function FermentationBody({ lang }) {
         <ArtSectionHeading>{isKo ? '📖 라벨에서 발효 성분 읽는 법' : '📖 How to read ferment ingredients on a label'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
           {(isKo ? [
-            { title: '"발효 여과물"', body: '발효 후 액체 분획 — 미생물로부터 가용성 대사물, 산, 효소를 포함합니다. 활성이 높고 수용성입니다.' },
-            { title: '"발효 용해물"', body: '분해된(열려진) 미생물 자체. 효소, DNA 파편, 구조 단백질 등 세포 내 화합물을 포함합니다. 면역 조절에 더 강력합니다.' },
-            { title: '"발효 추출물"', body: '발효된 식물 성분 — 식물 자료가 미생물이 아닌 기질입니다. 결과는 변환되고 강화된 특성을 가진 변형된 식물 성분입니다.' },
-            { title: '피해야 할 것', body: 'INCI 목록 맨 끝에 나열된 발효 성분은 효과적이지 않은 농도로 존재합니다. 효과적인 사용을 위해서는 포뮬러의 무게 기준 상위 50% 내에 있어야 합니다.' },
+            { title: '"Ferment Filtrate" (발효 여과물)', body: '발효 후 걸러낸 액체예요. 미생물이 만든 대사물, 산, 효소가 녹아 있습니다. 활성이 높고 피부에 바로 흡수돼요.' },
+            { title: '"Ferment Lysate" (발효 용해물)', body: '미생물 세포를 터뜨려서 안에 있는 효소, DNA 파편, 단백질을 꺼낸 거예요. 면역 조절 효과가 더 강합니다.' },
+            { title: '"Fermented Extract" (발효 추출물)', body: '식물 성분을 미생물로 발효시킨 거예요. 미생물이 아니라 식물이 주인공이고, 발효를 거치면서 성분이 변하고 강화됩니다.' },
+            { title: '이건 피하세요', body: '성분표 맨 끝에 적힌 발효 성분은 함량이 너무 적어서 효과를 기대하기 어려워요. 전체 포뮬러의 상위 절반 안에 들어야 의미가 있습니다.' },
           ] : [
             { title: '"Ferment Filtrate"', body: 'The liquid fraction after fermentation — contains soluble metabolites, acids, and enzymes from the organism. High activity, water-soluble.' },
             { title: '"Ferment Lysate"', body: 'The organism itself, lysed (broken open). Contains intracellular compounds including enzymes, DNA fragments, and structural proteins. More potent for immune modulation.' },
@@ -858,7 +911,7 @@ function FermentationBody({ lang }) {
       </ArtSection>
 
       <ArtSection>
-        <ArtSectionHeading>{isKo ? '💚 발효 기술이 적용된 컬렉션 제품' : '💚 Ferment-forward products in our collection'}</ArtSectionHeading>
+        <ArtSectionHeading>{isKo ? '💚 발효 성분이 핵심인 제품들' : '💚 Ferment-forward products in our collection'}</ArtSectionHeading>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
           {[
             { brand: 'Dr. Jart+', name: 'Cicapair Intensive Soothing Repair Cream', note: isKo ? '마데카소사이드 + 알란토인 — 마이크로바이옴 지원과 함께 즉각적인 진정·장벽 복구' : 'Madecassoside + Allantoin — immediate calming and barrier repair with microbiome support' },

@@ -50,7 +50,7 @@ window.About = function About({ lang, density }) {
       q: "What does 'ana2me' mean?",
       qKo: "'ana2me'는 무슨 뜻인가요?",
       a: "It's a play on three words: anatomy, analyze, and 'to me'. The idea is that understanding what's inside a product is only half the equation — the other half is understanding your own body. We sit at that intersection.",
-      aKo: "세 단어의 조합이에요 — anatomy(해부), analyze(분석), 그리고 'to me(나에게)'. 제품 안에 뭐가 들었는지 아는 것이 절반이라면, 나머지 절반은 내 몸을 이해하는 거예요. 저희는 그 교차점에 있습니다.",
+      aKo: "세 단어를 합쳤어요 — anatomy(해부), analyze(분석), 그리고 'to me(나에게)'. 제품 속에 뭐가 들었는지 아는 게 절반이고, 그게 내 몸에 맞는지 아는 게 나머지 절반이에요. 저희는 그 둘이 만나는 지점에 있습니다.",
     },
     {
       q: "Who is this for?",
@@ -68,13 +68,13 @@ window.About = function About({ lang, density }) {
       q: "Why do products work differently on different people?",
       qKo: "같은 제품이 사람마다 다르게 반응하는 이유가 뭔가요?",
       a: "Because your skin microbiome, pH levels, sebum production, gut bacteria, hormone profile, and even diet are unique to you. A product optimized for combination skin in a humid climate behaves entirely differently on dry skin in a cold one. Marketing can't account for that. We try to give you the tools to.",
-      aKo: "피부 마이크로바이옴, pH, 피지 분비량, 장내 세균, 호르몬 프로필, 심지어 식습관까지 — 이 모든 것이 사람마다 다르기 때문이에요. 습한 기후의 복합성 피부에 최적화된 제품이 추운 지역의 건성 피부에는 전혀 다르게 작용합니다. 마케팅은 이걸 반영할 수 없어요. 저희는 여러분이 스스로 판단할 수 있는 도구를 드리려고 합니다.",
+      aKo: "피부 마이크로바이옴, pH, 피지량, 장내 세균, 호르몬, 심지어 식습관까지 사람마다 전부 달라요. 습한 기후의 복합성 피부에 맞춘 제품이 추운 지역 건성 피부에선 전혀 다르게 작용해요. 마케팅이 이걸 반영할 수는 없죠. 저희는 스스로 판단할 수 있는 도구를 드리고 싶습니다.",
     },
     {
       q: "Will there be more features beyond articles and the Analyzer?",
       qKo: "아티클과 Analyzer 외에 더 많은 기능이 생기나요?",
       a: "Yes — we're building toward a platform where you can explore products by ingredient, track what works for your body over time, and get recommendations grounded in molecular data rather than marketing spend. We're moving deliberately, not fast.",
-      aKo: "네 — 성분으로 제품을 탐색하고, 내 몸에 맞는 것들을 시간을 두고 추적하며, 마케팅 예산이 아닌 분자 데이터 기반 추천을 받을 수 있는 플랫폼을 만들어가고 있어요. 빠르게보다는, 제대로 만들고 있습니다.",
+      aKo: "네 — 성분별로 제품을 탐색하고, 내 몸에 맞는 걸 기록하면서 추적하고, 광고비가 아니라 분자 데이터로 추천받을 수 있는 플랫폼을 만들고 있어요. 빠르게보다는 제대로, 하나씩 만들어가고 있습니다.",
     },
   ];
 
@@ -122,26 +122,26 @@ window.About = function About({ lang, density }) {
           <p style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(20px, 2.4vw, 26px)', lineHeight: 1.45, color: 'var(--ink)', margin: '0 0 24px', letterSpacing: '-0.01em' }}>
             {t(
               'The beauty and wellness industry is very good at one thing: making you feel like you\'re missing something.',
-              '뷰티와 웰니스 산업은 한 가지를 매우 잘합니다. 당신이 뭔가를 놓치고 있다는 느낌을 만드는 것.'
+              '뷰티와 웰니스 업계가 가장 잘하는 건 하나예요. 뭔가 부족하다는 불안감을 만드는 것.'
             )}
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 20px' }}>
             {isKo ? (
-              <>새로운 성분이 바이럴되고, 인플루언서는 보충제를 극찬하고, 임상적인 라벨은 변화를 약속합니다. 그렇게 구매하지만 — 기대했던 대로 작동하지 않아요. 제품이 나빠서가 아니라. <mark>아무도 그게 <em>내</em> 몸에 맞는지 알려주지 않았기 때문이에요.</mark></>
+              <>새 성분이 바이럴되고, 인플루언서가 보충제를 극찬하고, 있어 보이는 라벨이 변화를 약속해요. 그래서 사지만 — 기대만큼 효과가 없어요. 제품 탓이 아니에요. <mark>그게 <em>내</em> 몸에 맞는 건지 아무도 말해준 적이 없으니까요.</mark></>
             ) : (
               <>A new ingredient goes viral. An influencer swears by a supplement. A clinical-sounding label promises transformation. And so you buy — only to find it doesn't work the way it was supposed to. Not because the product is bad. <mark>But because no one told you whether it was right for <em>your</em> body.</mark></>
             )}
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 20px' }}>
             {isKo ? (
-              <><strong style={{ color: 'var(--ink)' }}>ana2me</strong>는 그것을 바꾸기 위해 존재해요. 이름은 세 단어의 의도적인 충돌입니다 — <em>anatomy(해부)</em>, <em>analyze(분석)</em>, 그리고 <em>to me(나에게)</em>. <mark>중요한 유일한 분석은 당신이 실제로 누구인지를 고려한 것이니까요.</mark></>
+              <><strong style={{ color: 'var(--ink)' }}>ana2me</strong>는 그걸 바꾸려고 만들었어요. 이름은 세 단어를 합친 거예요 — <em>anatomy(해부)</em>, <em>analyze(분석)</em>, 그리고 <em>to me(나에게)</em>. <mark>내 몸을 모르고 하는 분석은 의미가 없으니까요.</mark></>
             ) : (
               <><strong style={{ color: 'var(--ink)' }}>ana2me</strong> exists to change that. The name is a deliberate collision of three words — <em>anatomy</em>, <em>analyze</em>, and <em>to me</em>. <mark>Because the only analysis that matters is the one that accounts for who you actually are.</mark></>
             )}
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 20px' }}>
             {isKo ? (
-              <>저희의 출발점은 한국 뷰티와 웰니스입니다 — <mark>세계에서 가장 엄격한 포뮬레이션 과학을 가진 동시에, 가장 공격적인 마케팅을 구사하는 산업.</mark> K-뷰티는 갈락토미세스, 비피다 발효 추출물, PDRN 같은 성분을 글로벌 시장에 소개했어요. 저희는 그것들이 트렌드 사이클이 아닌 제대로 된 설명을 받을 자격이 있다고 생각합니다. 저희 커버리지는 K-뷰티를 넘어 글로벌 스킨케어, 향수, 식품 기반 웰니스까지 — 항상 같은 성분 중심적 관점으로.</>
+              <>시작은 한국 뷰티와 웰니스예요 — <mark>세계에서 가장 정교한 포뮬레이션 과학과, 가장 공격적인 마케팅이 공존하는 산업.</mark> K-뷰티가 갈락토미세스, 비피다 발효물, PDRN 같은 성분을 세계에 알렸잖아요. 저희는 이런 성분들이 유행이 아니라 제대로 된 설명을 받아야 한다고 생각합니다. 다루는 범위는 K-뷰티를 넘어 글로벌 스킨케어, 향수, 식품 웰니스까지 — 언제나 성분 중심으로.</>
             ) : (
               <>Our starting point is Korean beauty and wellness — <mark>an industry with some of the most rigorous formulation science in the world, and also some of the most aggressive marketing.</mark> K-beauty introduced ingredients like galactomyces, bifida ferment lysate, and PDRN to global audiences. We think those deserve a proper explanation, not just a trend cycle. Our coverage spans K-beauty and beyond: global skincare, fragrance, and food-based wellness — always through the same ingredient-first lens.</>
             )}
