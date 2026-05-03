@@ -204,6 +204,13 @@
         window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
       };
 
+      // Handle direct URL navigation (e.g. /about)
+      useEffect(() => {
+        const path = window.location.pathname.replace(/\/$/, '');
+        if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
+        else if (path === '/privacy') setView('privacy');
+      }, []);
+
       // Edit-mode protocol
       useEffect(() => {
         const onMsg = (e) => {

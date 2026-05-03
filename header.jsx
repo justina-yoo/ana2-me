@@ -31,10 +31,10 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </button>
         </div>
         <nav className="hdr-catrow">
-          <button onClick={() => setView('insights')} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
+          <button onClick={() => { history.pushState({}, '', '/'); if (window.SEO) window.SEO.setHome(); setView('insights'); }} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button onClick={() => setView('about')} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
+          <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
             {t('About', '소개')}
           </button>
           <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} className="cat-edit" style={{ marginLeft: 8, fontWeight: 700, letterSpacing: '0.04em' }}>
@@ -57,10 +57,10 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </svg>
         </button>
         <nav style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
-          <button onClick={() => setView('insights')} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
+          <button onClick={() => { history.pushState({}, '', '/'); if (window.SEO) window.SEO.setHome(); setView('insights'); }} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button onClick={() => setView('about')} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
+          <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
             {t('About', '소개')}
           </button>
           <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} className="page-tab" style={{ fontWeight: 700, letterSpacing: '0.04em' }}>
