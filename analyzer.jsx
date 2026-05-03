@@ -213,6 +213,21 @@ Be concise and friendly. No jargon. ${langI}`;
           </div>
         )}
 
+        {busy && (
+          <article className="prof-result" aria-busy="true" aria-label={t('Analyzing…', '분석 중…')}>
+            <div className="prof-result-body" style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '4px 0' }}>
+              <div className="skeleton" style={{ height: 14, width: '55%', borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 14, width: '80%', borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 14, width: '65%', borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 14, width: '72%', borderRadius: 4 }} />
+              <div style={{ marginTop: 8 }} />
+              <div className="skeleton" style={{ height: 14, width: '50%', borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 14, width: '70%', borderRadius: 4 }} />
+              <div className="skeleton" style={{ height: 14, width: '60%', borderRadius: 4 }} />
+            </div>
+          </article>
+        )}
+
         {result && (
           <article className="prof-result">
             <header className="prof-result-head">

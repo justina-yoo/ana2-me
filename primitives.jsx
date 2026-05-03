@@ -83,18 +83,31 @@ window.Card = function Card({ children, className = '', as: As = 'div', ...rest 
   return <As className={cn('card', className)} {...rest}>{children}</As>;
 };
 
-// Placeholder image with striped fallback
+// Placeholder image with skeleton loader and striped fallback
 window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
   const [err, setErr] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
   if (err || !src) {
+    return <div className={cn('img-fallback', className)} style={style} aria-label={alt} />;
+  }
+
+  if (!loaded) {
     return (
-      <div
-        className={cn('img-fallback', className)}
-        style={style}
-        aria-label={alt}
-      />
+      <div className={cn('skeleton', className)} style={style} aria-hidden="true">
+        <img
+          src={src}
+          alt=""
+          style={{ visibility: 'hidden', width: '100%', height: '100%', display: 'block' }}
+          referrerPolicy="no-referrer"
+          onError={() => setErr(true)}
+          onLoad={(e) => { if (!e.target.naturalWidth) setErr(true); else setLoaded(true); }}
+          loading="lazy"
+        />
+      </div>
     );
   }
+
   return (
     <img
       src={src}
@@ -103,7 +116,6 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
       style={style}
       referrerPolicy="no-referrer"
       onError={() => setErr(true)}
-      onLoad={(e) => { if (!e.target.naturalWidth) setErr(true); }}
       loading="lazy"
     />
   );

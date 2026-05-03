@@ -63,6 +63,11 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <span className="detail-brand">{product.brand}</span>
           <h1 className="detail-name">{name}</h1>
           <p className="detail-tag">{tag}</p>
+          {product.id === 'skincare-5' && (
+            <p style={{ fontSize: 12, color: 'var(--ink-faint)', lineHeight: 1.6, margin: '8px 0 0' }}>
+              Product image and information belong to their respective brand owners. We do not claim ownership of any product imagery or official product descriptions.
+            </p>
+          )}
 
           <div className="detail-actions">
             <button

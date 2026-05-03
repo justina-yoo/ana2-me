@@ -31,6 +31,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <button onClick={() => setView('about')} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
             {t('About', '소개')}
           </button>
+          <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} className="cat-edit" style={{ marginLeft: 8, fontWeight: 700, letterSpacing: '0.04em' }}>
+            {lang === 'ko' ? 'EN' : '한국어'}
+          </button>
         </nav>
       </header>
     );
@@ -54,8 +57,20 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <button onClick={() => setView('about')} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
             {t('About', '소개')}
           </button>
+          <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} className="page-tab" style={{ fontWeight: 700, letterSpacing: '0.04em' }}>
+            {lang === 'ko' ? 'EN' : '한국어'}
+          </button>
         </nav>
       </div>
+      {(view === 'feed' || view === 'detail') && (
+        <div className="hdr-cats">
+          {cats.map(c => (
+            <button key={c.id} onClick={() => { setCategory(c.id); setView('feed'); }} className={cn('page-tab', category === c.id && 'page-tab-active')}>
+              {t(c.en, c.ko)}
+            </button>
+          ))}
+        </div>
+      )}
     </header>
   );
 };
