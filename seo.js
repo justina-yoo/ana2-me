@@ -5,6 +5,26 @@
   var DEFAULT_IMAGE = BASE_URL + '/og-default.jpg';
 
   var ARTICLE_META = {
+    'postbiotics-skin-barrier': {
+      title: "The Bacteria That Aren't Alive Anymore Are Still Fixing Your Skin.",
+      description: "Postbiotics — the bioactive byproducts of fermentation — strengthen the skin barrier without requiring live cultures. K-beauty has used them for decades as bifida ferment and lactobacillus filtrate.",
+      datePublished: '2026-05-01',
+      dateModified: '2026-05-01',
+      image: 'https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Fermentation flasks representing postbiotic skincare science',
+      keywords: 'postbiotics, skin barrier, bifida ferment, lactobacillus, fermentation, K-beauty, microbiome',
+      category: 'Nutritional Intelligence',
+    },
+    'pdrn-salmon-dna': {
+      title: "Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.",
+      description: "PDRN — Polydeoxyribonucleotide — is a DNA fragment from salmon that activates A2A adenosine receptors, triggering collagen repair. Used in Korean clinics for decades, topical delivery has finally caught up.",
+      datePublished: '2026-05-01',
+      dateModified: '2026-05-01',
+      image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=1200',
+      imageAlt: 'Skincare serum bottle representing PDRN and regenerative skincare science',
+      keywords: 'PDRN, polydeoxyribonucleotide, salmon DNA, collagen, regenerative skincare, K-beauty, adenosine receptor',
+      category: 'Molecular Insights',
+    },
     'skin-barrier-2026': {
       title: "Your Skin Barrier Is Leaking. Here's What 2026 Science Says to Do About It.",
       description: "Ceramides, fatty acids, and pH balance are the holy trinity of skin barrier health. Modern environments are attacking all three simultaneously. Here's the molecular fix.",
@@ -86,6 +106,38 @@
       var title = 'About | ana2me';
       var desc = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';
       var url = BASE_URL + '/about';
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'website');
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setArticleJsonLd(null);
+    },
+
+    setPrivacy: function () {
+      var title = 'Privacy Policy | ana2me';
+      var desc = 'ana2me collects no personal data. We use Google Analytics for anonymous usage stats only. Read our full privacy policy.';
+      var url = BASE_URL + '/privacy';
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'website');
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setArticleJsonLd(null);
+    },
+
+    setAnalyzer: function () {
+      var title = 'Ingredient Analyzer | ana2me';
+      var desc = 'Paste any skincare, supplement, or wellness ingredient list and get a plain-language breakdown of what works for your body — powered by molecular data.';
+      var url = BASE_URL + '/';
       document.title = title;
       setMeta('meta[name="description"]', desc);
       setMeta('link[rel="canonical"]', url);

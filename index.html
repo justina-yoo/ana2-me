@@ -208,8 +208,15 @@
       useEffect(() => {
         const path = window.location.pathname.replace(/\/$/, '');
         if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
-        else if (path === '/privacy') setView('privacy');
+        else if (path === '/privacy') { setView('privacy'); if (window.SEO) window.SEO.setPrivacy(); }
       }, []);
+
+      // Update SEO meta on view changes (for non-article views)
+      useEffect(() => {
+        if (!window.SEO) return;
+        if (view === 'privacy') window.SEO.setPrivacy();
+        if (view === 'analyzer') window.SEO.setAnalyzer();
+      }, [view]);
 
       // Edit-mode protocol
       useEffect(() => {
