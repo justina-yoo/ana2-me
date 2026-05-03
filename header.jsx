@@ -23,7 +23,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
       <header className="hdr hdr-edit">
         <div className="hdr-row">
           <button onClick={goFeed} className="wordmark-edit">
-            <img src="ana2me-logo.svg" alt="ANA2ME" style={{ height: 'clamp(22px, 3vw, 32px)', width: 'auto' }} />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" preserveAspectRatio="xMinYMid meet" aria-label="ANA2ME" style={{ height: 'clamp(22px, 3vw, 32px)', width: 'auto', display: 'block' }}>
+              <text x="80" y="216" fontSize="200" className="logo-ana"><tspan>ANA</tspan><tspan className="logo-two">2</tspan><tspan>ME</tspan></text>
+            </svg>
           </button>
         </div>
         <nav className="hdr-catrow">
@@ -46,7 +48,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
     <header className="hdr hdr-friendly">
       <div className="hdr-row">
         <button onClick={goFeed} className="wordmark">
-          <img src="ana2me-logo.svg" alt="ANA2ME" style={{ height: 28, width: 'auto' }} />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" preserveAspectRatio="xMinYMid meet" aria-label="ANA2ME" style={{ height: 28, width: 'auto', display: 'block' }}>
+            <text x="80" y="216" fontSize="200" className="logo-ana"><tspan>ANA</tspan><tspan className="logo-two">2</tspan><tspan>ME</tspan></text>
+          </svg>
         </button>
         <nav style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
           <button onClick={() => { history.pushState({}, '', '/'); if (window.SEO) window.SEO.setHome(); setView('insights'); }} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
