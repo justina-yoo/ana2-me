@@ -137,7 +137,7 @@ body.night {
 }
 
 /* ---------- Header ---------- */
-.hdr { padding: 22px 0 12px; position: sticky; top: 0; background: linear-gradient(var(--cream) 76%, transparent); z-index: 20; }
+.hdr { padding: 22px 0 4px; position: sticky; top: 0; background: linear-gradient(var(--cream) 76%, transparent); z-index: 20; }
 .hdr-row { display: flex; align-items: center; gap: 14px; }
 .wordmark { display: flex; align-items: baseline; gap: 8px; }
 .wm-mark {
@@ -739,7 +739,7 @@ body.night {
 
 /* ---------- INSIGHTS ---------- */
 .insights { padding: 24px 0 60px; }
-.ins-hero { text-align: left; padding: 6px 0 16px; max-width: 560px; margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.ins-hero { text-align: left; padding: 0 0 16px; max-width: 560px; margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .ins-sub { color: var(--ink-soft); font-size: 15px; margin: 0; max-width: 50ch; }
 
 .ins-list { list-style: none; padding: 0; margin: 0; max-width: 880px; margin: 0 auto; }
