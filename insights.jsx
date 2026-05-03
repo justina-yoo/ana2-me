@@ -8,8 +8,10 @@ window.Insights = function Insights({ lang, density }) {
   useEffect(() => {
     const handler = () => {
       setSelectedPost(null);
+      setActiveTag(null);
       history.pushState({}, '', '/');
       if (window.SEO) window.SEO.setHome();
+      setTimeout(() => window.scrollTo(0, 0), 10);
     };
     window.addEventListener('ana2me:go-home', handler);
     return () => window.removeEventListener('ana2me:go-home', handler);
@@ -255,6 +257,8 @@ window.Insights = function Insights({ lang, density }) {
       post: selectedPost,
       lang,
       onBack: closePost,
+      allPosts: POSTS,
+      onSelectPost: openPost,
     });
   }
 
@@ -448,7 +452,7 @@ const ARTICLE_BODIES = {
   'pdrn-salmon-dna': 'PDRNBody',
 };
 
-function PostDetail({ post, lang, onBack }) {
+function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
   const Body = window[ARTICLE_BODIES[post.id]] || null;
   const isKo = lang === 'ko';
   const articleRef = React.useRef(null);
@@ -519,7 +523,7 @@ function PostDetail({ post, lang, onBack }) {
           </span>
           <h1 style={{
             fontFamily: 'var(--font-display)', fontWeight: 500,
-            fontSize: 'clamp(30px, 4vw, 48px)', lineHeight: 1.05,
+            fontSize: 'clamp(24px, 3.2vw, 38px)', lineHeight: 1.1,
             letterSpacing: '-0.02em', margin: '0 0 12px', textWrap: 'balance',
           }}>
             {post.title[lang] || post.title.en}
@@ -548,6 +552,57 @@ function PostDetail({ post, lang, onBack }) {
           </div>
         </header>
         {Body && React.createElement(Body, { lang })}
+
+        {/* Related articles */}
+        {allPosts && (() => {
+          const related = allPosts
+            .filter(p => p.id !== post.id)
+            .sort((a, b) => (a.tag.en === post.tag.en ? -1 : 1) - (b.tag.en === post.tag.en ? -1 : 1))
+            .slice(0, 3);
+          return (
+            <section style={{ marginTop: 48, paddingTop: 32, borderTop: '1px solid var(--line)' }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, letterSpacing: '-0.01em', margin: '0 0 18px', color: 'var(--ink)' }}>
+                {isKo ? '📖 다음에 읽어볼 글' : '📖 Read next'}
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                {related.map(r => (
+                  <button
+                    key={r.id}
+                    onClick={() => { onSelectPost(r); window.scrollTo(0, 0); }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 14,
+                      width: '100%', textAlign: 'left',
+                      background: 'none', border: 'none',
+                      borderBottom: '1px solid var(--line)',
+                      cursor: 'pointer', padding: '14px 0',
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                      <h4 style={{
+                        fontFamily: 'var(--font-display)', fontWeight: 500,
+                        fontSize: 'clamp(14px, 1.6vw, 17px)', lineHeight: 1.25,
+                        margin: 0, color: 'var(--ink)',
+                        overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                      }}>
+                        {r.title[lang] || r.title.en}
+                      </h4>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 11, fontWeight: 600, color: r.tagColor }}>{r.tag[lang] || r.tag.en}</span>
+                        <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                        <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>{r.date}</span>
+                      </div>
+                    </div>
+                    <ProductImg
+                      src={r.imageUrl}
+                      alt={r.title[lang] || r.title.en}
+                      style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }}
+                    />
+                  </button>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
       </article>
     </div>
   );

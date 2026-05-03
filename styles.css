@@ -892,7 +892,7 @@ body.night {
 
 @media (max-width: 720px) {
   /* Header: non-sticky on mobile (it's tall), search on own row */
-  .hdr { padding: 14px 0 8px; position: relative; background: transparent; }
+  .hdr { padding: 14px 0 8px; position: sticky; top: 0; background: var(--cream); }
   .hdr-row { flex-wrap: wrap; gap: 10px; row-gap: 10px; }
   .wordmark { flex: 0 0 auto; }
   .wm-mark { width: 32px; height: 32px; font-size: 20px; border-radius: 10px; }
@@ -1054,8 +1054,8 @@ body.night {
   .page-tab { padding: 6px 10px; font-size: 12px; }
 }
 
-/* Prevent horizontal scroll from any stray wide content */
-html, body { overflow-x: hidden; max-width: 100%; }
+/* Prevent horizontal scroll */
+#root { overflow-x: clip; }
 
 /* ─── Skeleton loader ──────────────────────────────────────────────────────── */
 @keyframes shimmer {
