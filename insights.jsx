@@ -344,7 +344,7 @@ function PostDetail({ post, lang, onBack }) {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      getParas().forEach(p => p.classList.remove('ana2me-hl'));
+      getTargets().forEach(p => p.classList.remove('ana2me-hl'));
     };
   }, [post.id]);
 
