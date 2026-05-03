@@ -189,7 +189,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
         )}</p>
       </header>
 
-      <div style={{ maxWidth: 780, margin: '0 auto 24px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ maxWidth: 780, margin: '0 auto 12px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <button
           onClick={() => onTagClick(null)}
           style={{
