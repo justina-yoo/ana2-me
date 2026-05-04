@@ -9,7 +9,7 @@ window.Insights = function Insights({ lang, density }) {
     const handler = () => {
       setSelectedPost(null);
       setActiveTag(null);
-      history.pushState({}, '', '/');
+      history.pushState({}, '', '/insights');
       if (window.SEO) window.SEO.setHome();
       setTimeout(() => window.scrollTo(0, 0), 10);
     };
@@ -19,9 +19,9 @@ window.Insights = function Insights({ lang, density }) {
 
   // On mount, check if URL path matches an article
   useEffect(() => {
-    const slug = window.location.pathname.replace('/', '').replace(/\/$/, '');
-    if (slug) {
-      const match = POSTS.find(p => p.id === slug);
+    const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+    if (path && path !== 'insights') {
+      const match = POSTS.find(p => p.id === path);
       if (match) {
         setSelectedPost(match);
         if (window.SEO) window.SEO.setArticle(match.id);
@@ -246,9 +246,9 @@ window.Insights = function Insights({ lang, density }) {
 
   const closePost = () => {
     setSelectedPost(null);
-    history.pushState({}, '', '/');
+    history.pushState({}, '', '/insights');
     if (window.SEO) window.SEO.setHome();
-    if (window.gtag) gtag('event', 'page_view', { page_path: '/', page_title: 'ana2me — Insights' });
+    if (window.gtag) gtag('event', 'page_view', { page_path: '/insights', page_title: 'ana2me — Insights' });
     window.scrollTo(0, 0);
   };
 

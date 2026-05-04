@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=DM+Sans:wght@500&family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=5">
 
   <!-- Restore path from GitHub Pages 404 redirect -->
   <script>
@@ -80,7 +80,19 @@
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
   <script src="seo.js?v=2"></script>
-  <script src="data.js?v=3"></script>
+  <script src="products/skincare-3.js"></script>
+  <script src="products/skincare-4.js"></script>
+  <script src="products/skincare-5.js"></script>
+  <script src="products/skincare-6.js"></script>
+  <script src="products/fragrance-3.js"></script>
+  <script src="products/fragrance-4.js"></script>
+  <script src="products/fragrance-5.js"></script>
+  <script src="products/fragrance-6.js"></script>
+  <script src="products/fragrance-7.js"></script>
+  <script src="products/fragrance-8.js"></script>
+  <script src="products/food-3.js"></script>
+  <script src="products/food-4.js"></script>
+  <script src="data.js?v=4"></script>
   <script type="text/babel" src="primitives.jsx"></script>
   <script type="text/babel" src="header.jsx"></script>
   <script type="text/babel" src="feed.jsx"></script>
@@ -217,10 +229,14 @@
         window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
       };
 
-      // Handle direct URL navigation (e.g. /about)
+      // Handle direct URL navigation (e.g. /about, /insights)
       useEffect(() => {
         const path = window.location.pathname.replace(/\/$/, '');
-        if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
+        if (path === '' || path === '/insights') {
+          setView('insights'); if (window.SEO) window.SEO.setHome();
+        }
+        else if (path === '/analyzer') { setView('analyzer'); if (window.SEO) window.SEO.setAnalyzer(); }
+        else if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
         else if (path === '/privacy') { setView('privacy'); if (window.SEO) window.SEO.setPrivacy(); }
       }, []);
 
@@ -282,9 +298,14 @@
 
           <footer style={{ maxWidth: 1180, margin: '0 auto', padding: '32px 28px 48px', borderTop: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
             <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>© {new Date().getFullYear()} ana2me</span>
-            <button onClick={() => setView('privacy')} style={{ fontSize: 13, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
-              {lang === 'ko' ? '개인정보처리방침' : 'Privacy Policy'}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <button onClick={() => setView('privacy')} style={{ fontSize: 13, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                {lang === 'ko' ? '개인정보처리방침' : 'Privacy Policy'}
+              </button>
+              <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: '0.04em' }}>
+                {lang === 'ko' ? 'EN' : '한국어'}
+              </button>
+            </div>
           </footer>
 
           {tweaksOpen && <Tweaks tweaks={tweaks} setTweak={setTweak} lang={lang} setLang={setLang} />}
