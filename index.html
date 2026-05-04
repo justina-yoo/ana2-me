@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=DM+Sans:wght@500&family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=7">
 
   <!-- Restore path from GitHub Pages 404 redirect -->
   <script>
@@ -291,7 +291,7 @@
           )}
           {view === 'feed' && <Feed lang={lang} category={category} query={query} setView={setView} setProduct={setProduct} density={density} />}
           {view === 'detail' && product && <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />}
-          {view === 'insights' && <Insights lang={lang} density={density} />}
+          {view === 'insights' && <Insights lang={lang} density={density} query={query} />}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
           {view === 'about' && <About lang={lang} density={density} />}
           {view === 'privacy' && <Privacy lang={lang} />}

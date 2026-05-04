@@ -161,16 +161,17 @@ body.night {
   letter-spacing: -0.02em;
   }
 .hdr-search {
-  flex: 1;
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 8px;
   background: var(--cream-card);
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
-  padding: 10px 16px;
+  padding: 7px 14px;
   color: var(--ink-faint);
+  margin-left: auto;
+  width: 200px;
 }
 .hdr-search input {
-  flex: 1; border: 0; background: 0; outline: 0; font-size: 15px; color: var(--ink);
+  flex: 1; border: 0; background: 0; outline: 0; font-size: 13px; color: var(--ink); min-width: 0;
 }
 .hdr-search input::placeholder { color: var(--ink-faint); }
 .icon-btn {
@@ -206,8 +207,15 @@ body.night {
   background: var(--ink);
   border-radius: 2px;
 }
-.page-tab-locked { opacity: 0.4; cursor: default; }
+.page-tab-locked { opacity: 0.45; cursor: default; }
 .page-tab-locked:hover { color: var(--ink-soft); }
+.coming-soon-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--cream-2); color: var(--ink-faint);
+  padding: 2px 6px; border-radius: var(--radius-pill);
+  margin-left: 2px;
+}
 .page-tab-accent { color: var(--accent); }
 
 /* Editorial header variant */
@@ -231,7 +239,7 @@ body.night {
 }
 .cat-edit:hover { color: var(--ink); }
 .cat-edit-active { color: var(--accent); }
-.cat-edit-locked { opacity: 0.4; cursor: default; }
+.cat-edit-locked { opacity: 0.45; cursor: default; }
 .cat-edit-locked:hover { color: var(--ink-soft); }
 .cat-edit-active::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--accent); border-radius: 2px;
@@ -1148,11 +1156,11 @@ body.night {
 @media (max-width: 720px) {
   /* Header: non-sticky on mobile (it's tall), search on own row */
   .hdr { padding: 14px 0 8px; position: sticky; top: 0; background: var(--cream); }
-  .hdr-row { flex-wrap: wrap; gap: 10px; row-gap: 10px; }
+  .hdr-row { flex-wrap: nowrap; gap: 10px; }
   .wordmark { flex: 0 0 auto; }
   .wm-mark { width: 32px; height: 32px; font-size: 20px; border-radius: 10px; }
   .wm-text { font-size: 22px; }
-  .hdr-search { order: 3; flex: 0 0 100%; padding: 9px 14px; }
+  .hdr-search { order: 0; flex: 1 1 auto; padding: 7px 12px; width: auto; margin-left: auto; }
   .hdr-search input { font-size: 14px; }
   .icon-btn.pill { padding: 7px 10px; }
   .hdr-lang { font-size: 11px; }

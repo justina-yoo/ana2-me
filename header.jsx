@@ -35,15 +35,19 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </button>
         </div>
         <nav className="hdr-catrow">
+          <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
+            {t('About', '소개')}
+          </button>
           <button onClick={goFeed} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button className="cat-edit cat-edit-locked" disabled>
-            <Icon name="lock" size={14} />
-            {t('Analyzer', '분석기')}
+          <button className="cat-edit cat-edit-locked" disabled title={t('Coming soon', '준비 중')}>
+            {t('Products', '제품')}
+            <span className="coming-soon-badge">{t('soon', '곧')}</span>
           </button>
-          <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
-            {t('About', '소개')}
+          <button className="cat-edit cat-edit-locked" disabled title={t('Coming soon', '준비 중')}>
+            {t('Analyzer', '분석기')}
+            <span className="coming-soon-badge">{t('soon', '곧')}</span>
           </button>
         </nav>
       </header>
@@ -64,28 +68,31 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             </g>
           </svg>
         </button>
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
-          <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
-            {t('Insights', '인사이트')}
-          </button>
-          <button className="page-tab page-tab-locked" disabled>
-            <Icon name="lock" size={13} />
-            {t('Analyzer', '분석기')}
-          </button>
+        <div className="hdr-search">
+          <Icon name="search" size={15} />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t('Search a keyword…', '키워드 검색…')}
+          />
+        </div>
+      </div>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '8px 0 6px' }}>
           <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
             {t('About', '소개')}
           </button>
-        </nav>
-      </div>
-      {(view === 'feed' || view === 'detail') && (
-        <div className="hdr-cats">
-          {cats.map(c => (
-            <button key={c.id} onClick={() => { setCategory(c.id); setView('feed'); }} className={cn('page-tab', category === c.id && 'page-tab-active')}>
-              {t(c.en, c.ko)}
-            </button>
-          ))}
-        </div>
-      )}
+          <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
+            {t('Insights', '인사이트')}
+          </button>
+          <button className="page-tab page-tab-locked" disabled title={t('Coming soon', '준비 중')}>
+            {t('Products', '제품')}
+            <span className="coming-soon-badge">{t('soon', '곧')}</span>
+          </button>
+          <button className="page-tab page-tab-locked" disabled title={t('Coming soon', '준비 중')}>
+            {t('Analyzer', '분석기')}
+            <span className="coming-soon-badge">{t('soon', '곧')}</span>
+          </button>
+      </nav>
     </header>
   );
 };

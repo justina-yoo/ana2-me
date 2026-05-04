@@ -1,5 +1,19 @@
 // Insights — editorial feed with full article bodies
-window.Insights = function Insights({ lang, density }) {
+
+// Convert "May 3, 2026" → "2026-05-03"
+function dateToPrefix(dateStr) {
+  const d = new Date(dateStr);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function postSlug(post) {
+  return dateToPrefix(post.date) + '/' + post.id;
+}
+
+window.Insights = function Insights({ lang, density, query }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const isKo = lang === 'ko';
@@ -18,10 +32,13 @@ window.Insights = function Insights({ lang, density }) {
   }, []);
 
   // On mount, check if URL path matches an article
+  // Supports both /2026-05-04/article-id and legacy /article-id
   useEffect(() => {
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
     if (path && path !== 'insights') {
-      const match = POSTS.find(p => p.id === path);
+      const parts = path.split('/');
+      const articleId = parts.length >= 2 ? parts[parts.length - 1] : parts[0];
+      const match = POSTS.find(p => p.id === articleId);
       if (match) {
         setSelectedPost(match);
         if (window.SEO) window.SEO.setArticle(match.id);
@@ -30,6 +47,24 @@ window.Insights = function Insights({ lang, density }) {
   }, []);
 
   const POSTS = [
+    {
+      id: 'centella-superbug-discovery',
+      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
+      title: {
+        en: "The \"Cica\" Ingredient in Every K-Beauty Cream Just Got a Radical New Superpower.",
+        ko: '모든 시카 크림에 든 그 성분, 항생제 내성균까지 잡는다는 연구가 나왔습니다',
+      },
+      excerpt: {
+        en: "Madecassic acid — the active compound behind every cica cream on the market — can kill antibiotic-resistant E. coli by targeting a protein humans don't have. A University of Kent study just gave K-beauty's most familiar ingredient a completely unexpected second act.",
+        ko: '시카 크림의 핵심 성분인 마데카소산이 항생제 내성 대장균을 죽일 수 있다는 연구 결과가 나왔어요. 인간에게 없는 세균 단백질만 공격하는 방식으로, K-뷰티의 가장 익숙한 성분이 완전히 새로운 가능성을 열었습니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Skincare', ko: '스킨케어' },
+      tagColor: 'var(--accent)',
+      imageUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&q=80&w=800',
+      keywords: 'centella asiatica cica madecassic acid madecassoside asiaticoside antibiotic resistance cytochrome bd antibacterial E. coli superbug barrier repair collagen inflammation 센텔라 시카 마데카소산 항생제 내성균',
+    },
     {
       id: 'spicules-microneedling',
       category: { en: 'Molecular Insights', ko: '분자 인사이트' },
@@ -46,6 +81,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Skincare', ko: '스킨케어' },
       tagColor: 'var(--accent)',
       imageUrl: 'https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&fit=crop&q=80&w=800',
+      keywords: 'spicules microneedling marine sponge spongilla collagen micro-channels wound healing calcium silicate keratinocyte stratum corneum 스피큘 마이크로니들링 해면 콜라겐',
     },
     {
       id: 'myo-inositol-hormonal-health',
@@ -63,6 +99,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Wellness', ko: '웰니스' },
       tagColor: '#a07850',
       imageUrl: 'https://images.unsplash.com/photo-1596572934426-52ac4e95e014?auto=format&fit=crop&q=80&w=800',
+      keywords: 'myo-inositol D-chiro-inositol PCOS insulin resistance hormonal acne ovulation menstrual cycle androgens 40:1 ratio supplement 미오이노시톨 인슐린 호르몬 여드름 배란',
     },
     {
       id: 'edible-skincare-gut-skin',
@@ -80,6 +117,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Wellness', ko: '웰니스' },
       tagColor: '#a07850',
       imageUrl: 'https://images.unsplash.com/photo-1620755901989-0f457a38011e?auto=format&fit=crop&q=80&w=800',
+      keywords: 'edible skincare inner beauty gut-skin axis SCFA short-chain fatty acids collagen peptides probiotics postbiotics Lactobacillus Bifidobacterium prebiotics Olive Young 이너뷰티 장피부축 프로바이오틱스 콜라겐',
     },
     {
       id: 'k-fragrance-skin-scents',
@@ -97,6 +135,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Fragrance', ko: '향수' },
       tagColor: 'var(--sage)',
       imageUrl: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=800',
+      keywords: 'K-fragrance skin scent Korean perfume white musk ambroxan sheer woods synthetic musks Tamburins Nonfiction Granhand clean fragrance exports 한국향수 머스크 탐버린즈 논픽션',
     },
     {
       id: 'pistachio-fragrance-note',
@@ -114,6 +153,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Fragrance', ko: '향수' },
       tagColor: 'var(--sage)',
       imageUrl: 'https://images.unsplash.com/photo-1502825751399-28baa9b81efe?auto=format&fit=crop&q=80&w=800',
+      keywords: 'pistachio fragrance note gourmand pyrazine lactones benzaldehyde marzipan synthetic accord Dubai chocolate aroma molecules perfumery olfactory 피스타치오 향료 구르망',
     },
     {
       id: 'fragrance-wardrobing',
@@ -131,6 +171,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Fragrance', ko: '향수' },
       tagColor: 'var(--sage)',
       imageUrl: 'https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&fit=crop&q=80&w=800',
+      keywords: 'olfactory habituation fragrance rotation wardrobe scent families nose blindness perfume tolerance olfactory receptors signature scent 후각피로 향수옷장 시그니처향',
     },
     {
       id: 'postbiotics-skin-barrier',
@@ -148,6 +189,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Wellness', ko: '웰니스' },
       tagColor: '#a07850',
       imageUrl: 'https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&fit=crop&q=80&w=800',
+      keywords: 'postbiotics probiotics prebiotics bifida ferment lysate lactobacillus galactomyces fermentation microbiome skin barrier sensitivity immune 포스트바이오틱스 비피다 유산균 발효',
     },
     {
       id: 'pdrn-salmon-dna',
@@ -165,6 +207,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Skincare', ko: '스킨케어' },
       tagColor: 'var(--accent)',
       imageUrl: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=800',
+      keywords: 'PDRN salmon DNA polydeoxyribonucleotide nucleotides collagen regeneration fibroblasts A2A adenosine receptor growth factors melasma dark spots injectable topical liposomal 연어 DNA 콜라겐 재생',
     },
     {
       id: 'skin-barrier-2026',
@@ -182,6 +225,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Skincare', ko: '스킨케어' },
       tagColor: 'var(--accent)',
       imageUrl: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=800',
+      keywords: 'skin barrier ceramides lipids TEWL cica madecassoside squalane sebum HEV light PM2.5 pH acid mantle barrier repair bakuchiol 피부장벽 세라마이드 수분손실',
     },
     {
       id: 'fragrance-volatility',
@@ -199,6 +243,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Fragrance', ko: '향수' },
       tagColor: 'var(--sage)',
       imageUrl: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=800',
+      keywords: 'volatility molecular weight vapor pressure top notes heart base fixatives Iso E Super ambroxan macrocyclic musks citrus aldehydes dry-down sillage skin chemistry 분자량 증기압 향수노트',
     },
     {
       id: 'adaptogens-bioavailability',
@@ -216,6 +261,7 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Wellness', ko: '웰니스' },
       tagColor: '#a07850',
       imageUrl: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=800',
+      keywords: 'adaptogens ashwagandha lion\'s mane reishi bioavailability HPA axis cortisol withanolides KSM-66 NGF nerve growth factor piperine liposomal phytosomal 어댑토젠 아슈와간다 영지버섯 생체이용률',
     },
     {
       id: 'fermentation-transformation',
@@ -233,14 +279,16 @@ window.Insights = function Insights({ lang, density }) {
       tag: { en: 'Skincare', ko: '스킨케어' },
       tagColor: 'var(--accent)',
       imageUrl: 'https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&fit=crop&q=80&w=800',
+      keywords: 'fermentation galactomyces lactobacillus bifidobacterium microbial metabolism bioavailability ferment filtrate lysate enzyme polysaccharides amino acids sake brewery 발효 갈락토미세스 비피다 효소',
     },
   ];
 
   const openPost = (p) => {
     setSelectedPost(p);
-    history.pushState({}, '', '/' + p.id);
+    const slug = postSlug(p);
+    history.pushState({}, '', '/' + slug);
     if (window.SEO) window.SEO.setArticle(p.id);
-    if (window.gtag) gtag('event', 'page_view', { page_path: '/' + p.id, page_title: p.title.en });
+    if (window.gtag) gtag('event', 'page_view', { page_path: '/' + slug, page_title: p.title.en });
     window.scrollTo(0, 0);
   };
 
@@ -262,7 +310,20 @@ window.Insights = function Insights({ lang, density }) {
     });
   }
 
-  const filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;
+  const q = (query || '').trim().toLowerCase();
+  let filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;
+  if (q) {
+    filteredPosts = filteredPosts.filter(p => {
+      const haystack = [
+        p.title.en, p.title.ko,
+        p.excerpt.en, p.excerpt.ko,
+        p.tag.en, p.tag.ko,
+        p.category.en, p.category.ko,
+        p.keywords || '',
+      ].join(' ').toLowerCase();
+      return q.split(/\s+/).every(word => haystack.includes(word));
+    });
+  }
 
   return React.createElement(InsightsFeed, {
     posts: filteredPosts,
@@ -270,6 +331,7 @@ window.Insights = function Insights({ lang, density }) {
     lang,
     density,
     activeTag,
+    query: q,
     onTagClick: (tag) => setActiveTag(activeTag === tag ? null : tag),
     onSelectPost: openPost,
   });
@@ -277,62 +339,72 @@ window.Insights = function Insights({ lang, density }) {
 
 /* ─── Feed ─────────────────────────────────────────────────────────────────── */
 
-function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, onSelectPost }) {
+function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagClick, onSelectPost }) {
   const t = useL(lang);
   const allTags = [...new Map(allPosts.map(p => [p.tag.en, p])).values()].map(p => ({ en: p.tag.en, color: p.tagColor }));
 
   return (
     <div className={cn('insights', `dens-${density}`)}>
-      <header className="ins-hero">
-        <Sticker color="sage" rotate={-4}>{t('insights', '인사이트')}</Sticker>
-        <h1 className="display">
-          {t('Research &', '성분을')}<br />
-          <span className="display-accent">{t('Analysis', '읽다')}<span className="display-dot">.</span></span>
-        </h1>
-        <p className="ins-sub">{t(
-          'Deep-dives into ingredients, formulas, and trends.',
-          '성분, 포뮬러, 트렌드를 깊이 파헤칩니다.'
-        )}</p>
-      </header>
+      {!query && (
+        <header className="ins-hero">
+          <Sticker color="sage" rotate={-4}>{t('insights', '인사이트')}</Sticker>
+          <h1 className="display">
+            {t('Research &', '성분을')}<br />
+            <span className="display-accent">{t('Analysis', '읽다')}<span className="display-dot">.</span></span>
+          </h1>
+          <p className="ins-sub">{t(
+            'Deep-dives into ingredients, formulas, and trends.',
+            '성분, 포뮬러, 트렌드를 깊이 파헤칩니다.'
+          )}</p>
+        </header>
+      )}
 
-      <div style={{ maxWidth: 780, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <button
-          onClick={() => onTagClick(null)}
-          style={{
-            padding: '7px 16px',
-            borderRadius: 'var(--radius-pill)',
-            border: `1px solid ${activeTag === null ? 'var(--ink)' : 'var(--line)'}`,
-            background: activeTag === null ? 'var(--ink)' : 'var(--cream-card)',
-            color: activeTag === null ? '#fff' : 'var(--ink-soft)',
-            fontSize: 13, fontWeight: 600, cursor: 'pointer',
-            transition: 'all .15s ease',
-          }}
-        >
-          {t('All', '전체')}
-        </button>
-        {allTags.map(tag => (
+      {!query && (
+        <div style={{ maxWidth: 780, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button
-            key={tag.en}
-            onClick={() => onTagClick(tag.en)}
+            onClick={() => onTagClick(null)}
             style={{
               padding: '7px 16px',
               borderRadius: 'var(--radius-pill)',
-              border: `1px solid ${activeTag === tag.en ? tag.color : 'var(--line)'}`,
-              background: activeTag === tag.en ? tag.color : 'var(--cream-card)',
-              color: activeTag === tag.en ? '#fff' : 'var(--ink-soft)',
+              border: `1px solid ${activeTag === null ? 'var(--ink)' : 'var(--line)'}`,
+              background: activeTag === null ? 'var(--ink)' : 'var(--cream-card)',
+              color: activeTag === null ? '#fff' : 'var(--ink-soft)',
               fontSize: 13, fontWeight: 600, cursor: 'pointer',
               transition: 'all .15s ease',
             }}
           >
-            {tag.en}
+            {t('All', '전체')}
           </button>
-        ))}
-      </div>
+          {allTags.map(tag => (
+            <button
+              key={tag.en}
+              onClick={() => onTagClick(tag.en)}
+              style={{
+                padding: '7px 16px',
+                borderRadius: 'var(--radius-pill)',
+                border: `1px solid ${activeTag === tag.en ? tag.color : 'var(--line)'}`,
+                background: activeTag === tag.en ? tag.color : 'var(--cream-card)',
+                color: activeTag === tag.en ? '#fff' : 'var(--ink-soft)',
+                fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                transition: 'all .15s ease',
+              }}
+            >
+              {tag.en}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {posts.length === 0 && query && (
+          <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--ink-faint)' }}>
+            <p style={{ fontSize: 15, margin: 0 }}>{t('No articles found for', '검색 결과가 없습니다:')} "{query}"</p>
+          </div>
+        )}
         {posts.map((post, idx) => {
           // Pattern: hero at 0, compact 1-3, hero at 4, compact 5-7, ...
-          const isHero = idx % 4 === 0;
+          // When searching, show all as compact
+          const isHero = !query && idx % 4 === 0;
 
           if (isHero) {
             return (
@@ -438,6 +510,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, onTagClick, o
 /* ─── Post Detail ───────────────────────────────────────────────────────────── */
 
 const ARTICLE_BODIES = {
+  'centella-superbug-discovery': 'CentellaSuperbugBody',
   'spicules-microneedling': 'SpiculesBody',
   'myo-inositol-hormonal-health': 'MyoInositolBody',
   'edible-skincare-gut-skin': 'EdibleSkincareBody',
@@ -721,4 +794,123 @@ function ArtFigure({ src, alt, isKo }) {
     </figure>
   );
 }
+
+/* ─── Article: Centella Superbug Discovery ────────────────────────────────── */
+
+window.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 시카 크림의 핵심 활성 성분인 마데카소산(Madecassic Acid)이 항생제 내성 대장균을 억제할 수 있다는 연구가 발표됐어요. 세균이 호흡에 사용하는 시토크롬 bd 복합체를 차단하는 방식인데, 이 단백질은 인간에겐 없어서 부작용 가능성이 낮습니다.</>
+        ) : (
+          <><strong>TL;DR:</strong> Madecassic acid — the active compound in every cica cream — can halt antibiotic-resistant E. coli by blocking the cytochrome bd complex, a protein bacteria need to breathe but humans don't have. A University of Kent study just opened a completely new chapter for K-beauty's most familiar ingredient.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&q=80&w=1200"
+        alt="Green herbal leaves close-up, representing Centella asiatica used in K-beauty skincare"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '시카 크림 속 그 성분, 정확히 뭘까요?' : 'What exactly is inside your cica cream?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>센텔라 아시아티카(Centella Asiatica)는 K-뷰티에서 가장 많이 쓰이는 진정 성분이에요. 흔히 "시카"라고 부르죠. 이 식물에는 네 가지 핵심 화합물이 들어 있는데 — <strong>마데카소사이드</strong>, 아시아티코사이드, 아시아틱산, 그리고 <mark>마데카소산(Madecassic Acid)</mark>이에요. 대부분의 시카 크림은 이 네 가지를 함께 추출해서 사용합니다.</>
+          ) : (
+            <>Centella asiatica is the most widely used calming ingredient in K-beauty — the plant behind every product labeled "cica." It contains four key compounds: <strong>madecassoside</strong>, asiaticoside, asiatic acid, and <mark>madecassic acid</mark>. Most cica creams extract all four together. Until now, the conversation has been almost entirely about soothing irritation and repairing the skin barrier.</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '마데카소사이드', desc: '센텔라에서 가장 많이 함유된 성분. 콜라겐 합성과 피부 장벽 회복을 촉진해요.' },
+            { title: '아시아티코사이드', desc: '섬유아세포를 활성화해서 1형 콜라겐 생산을 늘려줍니다.' },
+            { title: '마데카소산', desc: '항염 효과로 알려졌고, 이번에 항균 능력까지 발견됐어요.' },
+          ] : [
+            { title: 'Madecassoside', desc: 'The most abundant compound in centella. Drives collagen synthesis and barrier recovery.' },
+            { title: 'Asiaticoside', desc: 'Activates fibroblasts — the cells that build your skin\'s structural framework — to produce type I collagen.' },
+            { title: 'Madecassic Acid', desc: 'Known for anti-inflammatory effects. Now discovered to have antibacterial powers too.' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '세균을 "질식"시키는 메커니즘' : 'How it suffocates bacteria'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>2026년 4월, 켄트 대학교와 UCL 공동 연구팀이 RSC Medicinal Chemistry에 발표한 논문이 주목받고 있어요. 연구팀은 컴퓨터 시뮬레이션과 실험실 테스트를 병행해서 <mark>마데카소산이 세균의 호흡 시스템을 직접 차단한다</mark>는 걸 밝혀냈습니다.</>
+          ) : (
+            <>In April 2026, a team at the University of Kent and UCL published a study in RSC Medicinal Chemistry that changed the conversation. Using computational screening combined with lab experiments, they discovered that <mark>madecassic acid directly blocks the respiratory system of bacteria</mark> — essentially suffocating them.</>
+          )}
+        </ArtBody>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🔬" title={isKo ? '시토크롬 bd 복합체' : 'Cytochrome bd Complex'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? '세균이 감염 중 생존하기 위해 사용하는 호흡 단백질이에요. 마데카소산은 이 단백질에 결합해서 ATP(에너지) 생산을 막습니다. 세균은 에너지를 만들 수 없으니 성장이 멈추는 거예요.' : 'A protein system that bacteria rely on to breathe and survive during infection. Madecassic acid binds to this complex, blocking ATP (energy) production. Without energy, the bacteria can\'t grow.'}
+          </ArtCallout>
+          <ArtCallout icon="🛡️" title={isKo ? '인간에게는 없는 단백질' : 'Humans don\'t have it'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? '시토크롬 bd 복합체는 인간이나 동물의 세포에 존재하지 않아요. 즉, 이 메커니즘으로 세균만 선택적으로 공격할 수 있어서 부작용 가능성이 매우 낮습니다.' : 'The cytochrome bd complex doesn\'t exist in human or animal cells. This means the compound can selectively target bacteria without damaging our own cells — a rare and valuable trait for any potential antibiotic.'}
+          </ArtCallout>
+          <ArtCallout icon="🧪" title={isKo ? '변형 화합물도 효과적' : 'Modified versions worked too'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '연구팀은 베트남산 식물 샘플에서 마데카소산을 추출한 뒤 세 가지 변형 버전을 만들었어요. 세 가지 모두 시토크롬 bd 복합체를 차단했고, 한 버전은 높은 농도에서 대장균을 완전히 사멸시켰습니다.' : 'The team extracted madecassic acid from a Vietnamese plant sample and created three modified versions. All three blocked the cytochrome bd complex. One version killed E. coli outright at higher concentrations.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '내 시카 크림이 슈퍼버그를 죽인다는 뜻일까요?' : 'So does my cica cream kill superbugs?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>솔직하게 말하면 — 아직은 아니에요. 이 연구는 실험실 환경에서 진행된 초기 단계이고, 시카 크림을 피부에 바른다고 체내 감염이 치료되는 건 아닙니다. 하지만 <mark>의미 있는 건 방향성이에요</mark>. K-뷰티의 가장 흔한 성분 안에 항생제 개발의 실마리가 있었다는 거죠.</>
+          ) : (
+            <>Let's be honest — not yet. This is early-stage lab research, not a clinical trial. Applying cica cream to your face won't treat an internal infection. But <mark>the direction matters</mark>. One of the most common ingredients in K-beauty contains the blueprint for a potential new class of antibiotics — one that targets bacteria through a mechanism existing drugs don't use.</>
+          )}
+        </ArtBody>
+        <ArtBody>
+          {isKo ? (
+            <>항생제 내성은 세계보건기구(WHO)가 '인류 건강에 대한 10대 위협' 중 하나로 꼽는 문제예요. 기존 항생제가 듣지 않는 세균이 늘어나는 상황에서, 완전히 새로운 작용 메커니즘을 가진 화합물의 발견은 그 자체로 의미가 큽니다.</>
+          ) : (
+            <>Antibiotic resistance is one of the WHO's top 10 global health threats. As existing antibiotics lose effectiveness against evolving bacteria, discovering a compound with an entirely new mechanism of action — from a plant already mass-produced for cosmetics — is significant on its own.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '시카 성분, 피부에는 여전히 최고입니다' : 'For your skin, cica is still as good as ever'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>항균 연구와 별개로, 센텔라 아시아티카는 피부 진정과 장벽 회복에 여전히 가장 검증된 성분 중 하나예요. 마데카소사이드는 콜라겐 합성을 촉진하고, 아시아티코사이드는 피부 조직 강화를 돕고, 마데카소산은 염증을 줄여줍니다. <mark>세 가지가 함께 작용할 때 가장 효과적이에요</mark>.</>
+          ) : (
+            <>Antibacterial research aside, centella asiatica remains one of the most well-validated ingredients for skin calming and barrier repair. Madecassoside drives collagen synthesis. Asiaticoside strengthens skin tissue. Madecassic acid reduces inflammation. <mark>The three work best together</mark> — which is exactly how most K-beauty cica products are formulated.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 추천 제품' : '✨ Products worth trying'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'SKIN1004', name: 'Madagascar Centella Ampoule', note: isKo ? '100% 센텔라 추출물. 즉각적인 진정과 장벽 회복에 집중한 가벼운 앰플이에요.' : '100% centella extract. Lightweight, fast-absorbing ampoule focused on instant calming and barrier recovery.' },
+            { brand: 'COSRX', name: 'Pure Fit Cica Cream Intense', note: isKo ? 'Cica-7 복합체 61.2% 함유. 깊은 보습과 오래가는 진정 효과가 특징이에요.' : '61.2% Cica-7 Complex. Deep hydration with long-lasting calming — especially good for nighttime repair.' },
+            { brand: 'Dr. Jart+', name: 'Cicapair Calming Gel Cream', note: isKo ? '시카페어 라인의 젤 크림. 센텔라와 미네랄을 결합한 독자적인 Green Science 포뮬러예요.' : 'The gel cream from the line that made cica mainstream. Combines centella with minerals in Dr. Jart\'s proprietary Green Science formula.' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--accent)" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+};
 
