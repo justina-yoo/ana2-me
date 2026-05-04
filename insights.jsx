@@ -48,6 +48,78 @@ window.Insights = function Insights({ lang, density, query }) {
 
   const POSTS = [
     {
+      id: 'ten-step-routine-dead',
+      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
+      title: {
+        en: "The 10-Step Routine Is Dead. Korean Dermatologists Now Say 3 Steps Is Enough.",
+        ko: '10단계 루틴은 끝났습니다. 한국 피부과 전문의가 말하는 3단계의 힘',
+      },
+      excerpt: {
+        en: "67% of Korean women aged 20-35 use five or fewer products daily. The 10-step routine was never real K-beauty — it was a Western invention. Korean dermatologists now recommend cleanse, treat, moisturize. That's it.",
+        ko: '한국 20-35세 여성의 67%가 매일 5개 이하의 제품을 사용해요. 10단계 루틴은 한국이 아니라 서양이 만든 이미지였습니다. 한국 피부과 전문의의 답은 세정, 치료, 보습. 이 세 가지예요.',
+      },
+      readTime: { en: '5 min read', ko: '5분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Skincare', ko: '스킨케어' },
+      tagColor: 'var(--accent)',
+      imageUrl: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=800',
+      keywords: 'routine 10 step minimalist 3 step dermatologist Korean skincare simplified barrier damage fewer products cleanser moisturizer serum 루틴 단계 미니멀 피부과 세정 보습',
+    },
+    {
+      id: 'celebrity-skincare-methods',
+      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
+      title: {
+        en: "Song Hye-kyo Washes Her Face with Milk. Suzy Does \"424.\" Which Celebrity Methods Actually Work?",
+        ko: '송혜교는 우유 세안, 수지는 424 세안법 — 셀럽 스킨케어, 과학적으로 따져봤습니다',
+      },
+      excerpt: {
+        en: "Korean celebrity skincare methods go viral every week — milk rinses, heated palm absorption, timed cleansing rituals. We asked dermatologists which ones are backed by science and which are just good PR.",
+        ko: '우유 세안, 손바닥 온열법, 시간 맞춤 클렌징까지. 매주 바이럴되는 한국 셀럽 스킨케어 비법들, 피부과학으로 하나씩 검증해봤어요.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Skincare', ko: '스킨케어' },
+      tagColor: 'var(--accent)',
+      imageUrl: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800',
+      keywords: 'Song Hye-kyo milk rinse Suzy 424 method Jessica Jung heated palm IU Korean celebrity actress idol skincare routine lactic acid double cleansing 송혜교 수지 제시카 셀럽 우유세안',
+    },
+    {
+      id: 'jjimjilbang-wellness-science',
+      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
+      title: {
+        en: "Jjimjilbangs Are Going Global. The Science Behind Korea's Oldest Wellness Ritual.",
+        ko: '찜질방이 세계로 갑니다. 한국 최고(最古)의 웰니스 의식, 과학이 증명하는 효과',
+      },
+      excerpt: {
+        en: "Korean bathhouses are driving a global wellness tourism boom — fueled by K-dramas and TikTok. The hot-cold contrast therapy isn't just tradition. Studies show it creates a vascular pump effect, lowers cortisol for up to 3 hours, and boosts growth hormone by up to 24x.",
+        ko: 'K-드라마와 틱톡이 만든 찜질방 관광 붐. 온냉 대비 요법은 단순한 전통이 아니에요. 혈관 펌프 효과, 코르티솔 3시간 저하, 성장호르몬 최대 24배 증가 — 과학이 뒷받침합니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Wellness', ko: '웰니스' },
+      tagColor: '#a07850',
+      imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbec6d?auto=format&fit=crop&q=80&w=800',
+      keywords: 'jjimjilbang Korean bathhouse sauna cold plunge contrast therapy cortisol circulation vascular pump growth hormone K-drama wellness tourism 찜질방 사우나 냉탕 온냉 대비 웰니스',
+    },
+    {
+      id: 'korea-sleep-crisis',
+      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
+      title: {
+        en: "Korea Sleeps Less Than Almost Any Country on Earth. It Built an ₩11 Trillion Industry to Fix It.",
+        ko: 'OECD 최하위 수면 시간, 한국이 만든 11조 원 규모의 수면 산업',
+      },
+      excerpt: {
+        en: "Korea's sleep market exploded from ₩500 billion to ₩11 trillion in a decade. Olive Young's sleep supplement sales are up 300%. Plant-based melatonin, GABA gummies, and sleep-specific skincare — Korea isn't sleeping, so it's buying solutions.",
+        ko: '10년 만에 5천억에서 11조로 성장한 한국 수면 시장. 올리브영 수면 건강식품 매출 300% 증가. 식물성 멜라토닌, GABA 구미, 수면 전용 스킨케어까지 — 못 자는 나라가 만든 거대한 산업입니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Wellness', ko: '웰니스' },
+      tagColor: '#a07850',
+      imageUrl: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&q=80&w=800',
+      keywords: 'Korea sleep crisis insomnia melatonin plant-based GABA Olive Young sleep market trillion won OECD supplement digital therapeutics 수면 불면증 멜라토닌 GABA 올리브영',
+    },
+    {
       id: 'creatine-women-brain',
       category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
       title: {
@@ -564,6 +636,10 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
 /* ─── Post Detail ───────────────────────────────────────────────────────────── */
 
 const ARTICLE_BODIES = {
+  'ten-step-routine-dead': 'TenStepRoutineBody',
+  'celebrity-skincare-methods': 'CelebritySkincareBody',
+  'jjimjilbang-wellness-science': 'JjimjilbangBody',
+  'korea-sleep-crisis': 'KoreaSleepBody',
   'creatine-women-brain': 'CreatineWomenBody',
   'milk-perfume-lactonic': 'MilkPerfumeBody',
   'tropical-fruit-fragrance': 'TropicalFruitBody',
@@ -1251,3 +1327,334 @@ window.TropicalFruitBody = function TropicalFruitBody({ lang }) {
   );
 };
 
+/* ─── Article: 10-Step Routine Is Dead ───────────────────────────────────── */
+
+window.TenStepRoutineBody = function TenStepRoutineBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 10단계 루틴은 한국이 만든 게 아니에요 — 서양 미디어가 K-뷰티를 포장한 마케팅이었습니다. 한국 20-35세 여성의 67%는 매일 5개 이하의 제품만 사용해요. 피부과 전문의들의 답은 간단합니다: 세정, 치료, 보습. 이 세 가지면 충분해요.</>
+        ) : (
+          <><strong>TL;DR:</strong> The 10-step routine was never real K-beauty — it was a Western media invention. 67% of Korean women aged 20-35 use five or fewer products daily. Korean dermatologists say the answer is simple: cleanse, treat, moisturize. Three steps. That's it.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=1200"
+        alt="Minimalist skincare products on clean surface, representing simplified Korean skincare"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '10단계는 누가 만들었을까요?' : 'Who invented the 10-step routine?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>2014-2015년 즈음, K-뷰티가 서양에 상륙하면서 "10단계 스킨케어 루틴"이라는 개념이 탄생했어요. 하지만 이건 <mark>한국 여성들의 실제 습관이 아니라 마케팅 프레임이었습니다</mark>. 한국 뷰티 브랜드들이 여러 카테고리의 제품을 팔기 위한 스토리텔링이었고, 서양 미디어가 이국적인 "K-뷰티 비밀"로 포장한 거예요.</>
+          ) : (
+            <>Around 2014-2015, as K-beauty landed in the West, the "10-step skincare routine" was born. But <mark>it was never how Korean women actually cared for their skin — it was a marketing frame</mark>. Korean beauty brands needed a narrative to sell products across multiple categories. Western media turned it into an exotic "K-beauty secret."</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '67%', desc: '한국 20-35세 여성 중 매일 5개 이하 제품을 사용하는 비율' },
+            { title: '3단계', desc: '피부과 전문의가 권장하는 핵심 루틴: 세정, 치료, 보습' },
+            { title: '2026 키워드', desc: '"스킨 론제비티" — 제품 수가 아닌 피부 건강의 장기적 유지' },
+          ] : [
+            { title: '67%', desc: 'Of Korean women aged 20-35 use five or fewer products daily' },
+            { title: '3 steps', desc: 'What dermatologists actually recommend: cleanse, treat, moisturize' },
+            { title: '2026 keyword', desc: '"Skin longevity" — long-term skin health over product count' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '3단계가 10단계를 이기는 이유' : 'Why 3 steps beats 10'}
+        </ArtSectionHeading>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🧴" title={isKo ? '1단계: 세정' : 'Step 1: Cleanse'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? '아침에는 물 세안이나 저자극 클렌저. 저녁에는 오일 클렌저 → 워터 클렌저의 더블 클렌징. 피부 장벽을 지키면서 불순물만 제거하는 게 핵심이에요.' : 'Morning: water-only or gentle cleanser. Evening: oil cleanser → water cleanser (double cleanse). The goal is removing impurities without stripping the barrier.'}
+          </ArtCallout>
+          <ArtCallout icon="💧" title={isKo ? '2단계: 치료' : 'Step 2: Treat'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? '토너, 에센스, 세럼을 따로 바르던 시대는 끝났어요. 멀티 펑셔널 세럼 하나가 세 가지 역할을 합니다. 자신의 핵심 피부 고민에 맞는 활성 성분 하나에 집중하세요.' : 'The era of separate toner, essence, and serum is over. One multi-functional serum does the work of three. Focus on one active that addresses your primary concern — hydration, brightening, or wrinkles.'}
+          </ArtCallout>
+          <ArtCallout icon="🛡️" title={isKo ? '3단계: 보습' : 'Step 3: Moisturize'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '지성 피부도 보습이 필요해요. 수분 손실(TEWL)을 막아 장벽을 유지하는 게 목적이에요. 아침에는 SPF가 포함된 보습제를 쓰면 한 단계를 더 줄일 수 있어요.' : 'Even oily skin needs this. The purpose is preventing transepidermal water loss (TEWL) to maintain the barrier. In the morning, a moisturizer with SPF eliminates yet another step.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '더 많이 바르면 더 나빠질 수 있어요' : 'More products can mean more damage'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>"50가지 세럼의 시대는 끝났습니다. 사람들은 지쳤고, 피부는 민감해졌고, 더 많은 단계가 더 많은 문제를 만든다는 걸 깨닫고 있어요." 2026년 피부과 전문의들의 공통된 메시지예요. <mark>과도한 제품 사용은 피부 장벽을 훼손하고 오히려 트러블을 유발합니다</mark>.</>
+          ) : (
+            <>"The days of 50 different serums are done. People are exhausted, their skin is sensitized, and they're realizing that more steps often mean more problems." That's the consensus from dermatologists in 2026. <mark>Overloading your skin with products compromises the barrier and can actually cause the problems you're trying to fix</mark>.</>
+          )}
+        </ArtBody>
+        <ArtBody>
+          {isKo ? (
+            <>진짜 K-뷰티는 항상 느리고, 조용하고, 인내심 있는 접근법이었어요. 글래스 스킨도 시각적 비유일 뿐이었죠. 핵심은 제품 수가 아니라 <strong>피부의 장기적 건강</strong>이에요.</>
+          ) : (
+            <>Real K-beauty was always slower, quieter, and more patient. Glass skin was just visual shorthand. The core philosophy has always been about <strong>long-term skin health</strong> — not how many products you can layer.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+    </div>
+  );
+};
+
+/* ─── Article: Celebrity Skincare Methods ────────────────────────────────── */
+
+window.CelebritySkincareBody = function CelebritySkincareBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 송혜교의 우유 세안은 락틱산(젖산)의 각질 제거 효과로 과학적 근거가 있어요. 수지의 424 세안법은 더블 클렌징의 체계적인 버전이에요. 제시카 정의 손바닥 온열법은 혈류 개선에 도움이 되지만 효과는 미미합니다.</>
+        ) : (
+          <><strong>TL;DR:</strong> Song Hye-kyo's milk rinse has scientific backing — lactic acid in milk genuinely exfoliates. Suzy's 424 method is a structured version of double cleansing. Jessica Jung's heated palm technique helps blood flow slightly, but the effect is modest.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=1200"
+        alt="Korean beauty skincare products and routine items on a vanity"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '송혜교의 우유 세안 — 판정: 과학적 근거 있음' : 'Song Hye-kyo\'s milk rinse — Verdict: Science-backed'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>송혜교는 클렌징 마지막 단계에서 따뜻하게 데운 우유를 얼굴에 부어요. 이상하게 들릴 수 있지만, <mark>우유에 포함된 락틱산(Lactic Acid)은 실제로 각질 제거 효과가 있는 AHA 성분</mark>이에요. 클레오파트라가 우유 목욕을 한 것도 같은 원리예요. 우유의 지방 분해 효소 리파아제(lipase)가 유분성 불순물을 제거하고, 비타민과 미네랄이 피부를 부드럽게 해줍니다.</>
+          ) : (
+            <>Song Hye-kyo pours warmed milk over her face as the final step of cleansing. Sounds strange, but <mark>the lactic acid in milk is a genuine AHA that exfoliates dead skin cells</mark>. Cleopatra bathed in milk for the same reason. The fat-soluble enzyme lipase removes oil-based impurities, while vitamins and minerals soften the skin.</>
+          )}
+        </ArtBody>
+        <ArtCallout icon="✅" title={isKo ? '피부과학 판정' : 'Dermatology verdict'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+          {isKo ? '효과 있어요. 단, 유제품 알레르기가 있다면 피하세요. 저온 살균 우유를 따뜻하게 데워서 사용하는 게 중요하고, 사용 후 반드시 물로 헹궈야 해요. 매일보다는 주 2-3회가 적당합니다.' : 'It works. The lactic acid concentration in milk is gentle enough for most skin types. Use pasteurized, warmed milk and always rinse with water afterward. 2-3 times per week is better than daily. Skip if you have dairy allergies.'}
+        </ArtCallout>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '수지의 424 세안법 — 판정: 효과적 (하지만 10분은 길어요)' : 'Suzy\'s 424 method — Verdict: Effective (but 10 minutes is long)'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>배수지의 424 세안법: 오일 클렌저 4분 마사지 → 폼 클렌저 2분 → 물 헹굼 4분. 총 10분이에요. 기본적으로 <strong>더블 클렌징</strong>을 시간까지 정해서 체계적으로 하는 방법인데, <mark>피부과 전문의들은 더블 클렌징 자체는 지지하지만 각 단계에 그렇게 오래 시간을 쓸 필요는 없다</mark>고 말해요.</>
+          ) : (
+            <>Suzy's 424 method: 4 minutes of oil cleanser massage → 2 minutes with foam cleanser → 4 minutes of rinsing. Ten minutes total. It's essentially <strong>double cleansing</strong> with strict timing. <mark>Dermatologists support double cleansing but say you don't need to spend that long on each step</mark>.</>
+          )}
+        </ArtBody>
+        <ArtCallout icon="⚠️" title={isKo ? '피부과학 판정' : 'Dermatology verdict'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+          {isKo ? '더블 클렌징은 좋아요. 하지만 4분 동안 오일 클렌저를 마사지하면 필요한 피지까지 제거될 수 있어요. 오일 1-2분, 폼 1분, 헹굼 1분이면 충분합니다. 방법은 맞지만 시간은 과해요.' : 'Double cleansing is great. But 4 minutes of oil massage can strip even the lipids your skin needs. Oil for 1-2 minutes, foam for 1 minute, rinse for 1 minute is sufficient. The method is right — the timing is excessive.'}
+        </ArtCallout>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '제시카 정의 손바닥 온열법 — 판정: 해롭진 않지만 효과도 미미' : 'Jessica Jung\'s heated palm press — Verdict: Harmless but modest'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>제시카 정은 스킨케어 제품을 바른 후 양손을 비벼 열을 만들고 얼굴에 감싸듯 올려요. 열이 모공을 열어 흡수를 돕는다는 논리인데, <mark>실제로 손바닥의 열은 모공을 열 만큼 충분하지 않아요</mark>. 다만 가볍게 누르는 압력이 혈류를 자극하고, 제품이 증발하지 않고 피부에 머무는 시간을 늘려주는 효과는 있어요.</>
+          ) : (
+            <>Jessica Jung rubs her palms together to generate heat, then presses them over her face after applying skincare. The theory: heat opens pores for better absorption. <mark>In reality, palm heat isn't enough to meaningfully open pores</mark>. However, the gentle pressure does stimulate blood flow slightly, and holding product against the skin prevents evaporation and increases contact time.</>
+          )}
+        </ArtBody>
+        <ArtCallout icon="🤷" title={isKo ? '피부과학 판정' : 'Dermatology verdict'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+          {isKo ? '해가 되진 않지만, 제품 흡수를 획기적으로 바꾸진 않아요. 릴렉싱 의식으로는 좋지만, 과학적으로 기대할 만한 효과는 크지 않습니다.' : 'Won\'t hurt you, won\'t transform your absorption. Nice as a relaxing ritual, but don\'t expect it to change how your products perform.'}
+        </ArtCallout>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '진짜 배울 점은 따로 있어요' : 'What\'s actually worth stealing'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>셀럽 스킨케어 비법의 공통점은 특별한 제품이 아니에요. <strong>일관성</strong>이에요. 송혜교, 수지, 제시카 정 모두 자기 루틴을 수년간 꾸준히 유지해요. 피부과학에서 가장 확실한 건 — 최고의 루틴은 매일 하는 루틴이에요.</>
+          ) : (
+            <>The common thread across all celebrity skincare isn't special products. It's <strong>consistency</strong>. Song Hye-kyo, Suzy, and Jessica Jung all maintain their routines for years. The most proven principle in dermatology — the best routine is the one you actually do every day.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+    </div>
+  );
+};
+
+/* ─── Article: Jjimjilbang Science ───────────────────────────────────────── */
+
+window.JjimjilbangBody = function JjimjilbangBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 찜질방의 온냉 대비 요법은 혈관을 확장·수축시켜 "혈관 펌프" 효과를 만들어요. 연구에 따르면 냉수 침수 15분만으로 코르티솔이 3시간 동안 낮아지고, 성장호르몬이 최대 24배 증가합니다. K-드라마가 만든 관광 붐 뒤에는 실제 과학이 있어요.</>
+        ) : (
+          <><strong>TL;DR:</strong> The hot-cold contrast therapy in jjimjilbangs creates a "vascular pump" effect by alternately dilating and constricting blood vessels. Studies show 15 minutes of cold immersion lowers cortisol for up to 3 hours, and growth hormone can spike up to 24x. Behind the K-drama tourism boom, there's real science.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1540555700478-4be289fbec6d?auto=format&fit=crop&q=80&w=1200"
+        alt="Steam rising from a hot bath, representing Korean jjimjilbang sauna culture"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '동네 목욕탕이 글로벌 웰니스 명소가 되기까지' : 'From neighborhood bathhouse to global wellness destination'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>한국인에게 찜질방은 그냥 동네에 있는 곳이에요. 삶은 달걀 먹고, 바닥에 누워서 TV 보고, 때를 밀고, 냉탕과 온탕을 오가는 곳이죠. 하지만 K-드라마, K-팝, 틱톡의 영향으로 <mark>외국인 방문객이 급증하면서 찜질방은 글로벌 웰니스 관광의 핵심 콘텐츠</mark>가 됐어요.</>
+          ) : (
+            <>For Koreans, jjimjilbangs are just... there. You eat boiled eggs, lie on heated floors watching TV, scrub dead skin, and alternate between hot and cold pools. But fueled by K-dramas, K-pop, and TikTok, <mark>foreign visitors have surged, turning jjimjilbangs into headline attractions for wellness tourism</mark>.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '온냉 대비 요법의 과학' : 'The science of contrast therapy'}
+        </ArtSectionHeading>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🔴" title={isKo ? '혈관 펌프 효과' : 'The vascular pump effect'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '열탕에서 혈관이 확장되고, 냉탕에서 수축돼요. 이 반복이 혈액 순환을 촉진하는 "펌프"를 만들어서 영양분 전달과 노폐물 제거를 동시에 가속합니다.' : 'Hot water dilates blood vessels. Cold water constricts them. The alternation creates a "pump" that accelerates circulation — delivering nutrients to tissues and removing metabolic waste more efficiently.'}
+          </ArtCallout>
+          <ArtCallout icon="😌" title={isKo ? '코르티솔 저하' : 'Cortisol reduction'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? '10°C 냉수에 15분 침수하면 코르티솔(스트레스 호르몬) 수치가 3시간까지 유의미하게 낮아진다는 연구 결과가 있어요. 정기적으로 하면 기저 스트레스 호르몬 수치 자체가 내려갑니다.' : 'Studies show 15 minutes of cold water immersion at 50°F (10°C) significantly lowers cortisol for up to 3 hours. Regular practice actually reduces baseline stress hormone levels — making your body more resilient to all stressors.'}
+          </ArtCallout>
+          <ArtCallout icon="💪" title={isKo ? '성장호르몬 & 회복' : 'Growth hormone & recovery'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? '냉수 노출 시 성장호르몬이 최대 24배까지 증가한다는 연구가 있어요. 엔돌핀(자연 진통제)도 분비됩니다. Journal of Science and Medicine in Sport에 게재된 연구에 따르면 근육 통증 감소와 회복 지표 개선이 확인됐어요.' : 'Cold exposure can increase growth hormone by up to 24x and triggers endorphin release. Studies in the Journal of Science and Medicine in Sport documented improved recovery markers and reduced muscle soreness in athletes using contrast therapy.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '한 가지 주의할 점' : 'One honest caveat'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>연구 결과는 유망하지만, <mark>많은 연구가 소규모 표본이고 자기 보고식 기분 측정은 편향될 수 있어요</mark>. 찜질방이 만병통치약은 아닙니다. 하지만 수천 년간 지속된 한국의 목욕 문화가 과학적 근거 없이 살아남았을 리도 없어요.</>
+          ) : (
+            <>The research is promising but <mark>many studies have small sample sizes, and self-reported mood measurements can be biased</mark>. Jjimjilbangs aren't a cure-all. But a bathing culture that has survived thousands of years in Korea didn't persist without reason.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+    </div>
+  );
+};
+
+/* ─── Article: Korea Sleep Crisis ────────────────────────────────────────── */
+
+window.KoreaSleepBody = function KoreaSleepBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 한국은 OECD 국가 중 수면 시간이 가장 짧아요. 이 문제가 10년 만에 5천억에서 11조 원 규모의 수면 산업을 만들었습니다. 올리브영 수면 건강식품 매출은 300% 증가. 한국에서 합성 멜라토닌은 의약품으로 분류되기 때문에 식물성 멜라토닌이 대안으로 떠올랐어요.</>
+        ) : (
+          <><strong>TL;DR:</strong> Korea sleeps less than almost any OECD nation. That problem created an ₩11 trillion sleep industry in a decade — up from ₩500 billion. Olive Young's sleep supplement sales are up 300%. Because synthetic melatonin is classified as medicine in Korea, plant-based melatonin has emerged as the legal alternative.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&q=80&w=1200"
+        alt="Person sleeping peacefully, representing Korea's growing sleep wellness industry"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '왜 한국은 잠을 못 잘까요?' : 'Why doesn\'t Korea sleep?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>한국은 OECD 국가 중 수면 시간이 최하위권이에요. 수면 장애 환자 수가 <strong>135만 명</strong>을 넘었어요. 장시간 노동 문화, 야간 학원, 스마트폰 사용, "4당5락"(4시간 자면 붙고 5시간 자면 떨어진다) 같은 수면 경시 문화가 복합적으로 작용합니다. <mark>못 자는 나라가 잠을 사기 시작한 거예요</mark>.</>
+          ) : (
+            <>Korea ranks near the bottom of OECD nations for sleep. Sleep disorder patients now exceed <strong>1.35 million</strong>. Long working hours, late-night cram schools, smartphone culture, and a deeply ingrained ethos that sleeping less equals working harder. <mark>A nation that doesn't sleep started buying it instead</mark>.</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '₩11조', desc: '한국 수면 시장 규모 (10년 전 5천억에서 22배 성장)' },
+            { title: '+300%', desc: '올리브영 수면 건강식품 매출 전년 대비 증가율' },
+            { title: '135만 명', desc: '한국 수면 장애 환자 수' },
+          ] : [
+            { title: '₩11 trillion', desc: 'Korea\'s sleep market size (22x growth from ₩500B a decade ago)' },
+            { title: '+300%', desc: 'Olive Young sleep supplement sales year-over-year growth' },
+            { title: '1.35M', desc: 'Sleep disorder patients in Korea' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '한국의 수면 솔루션들' : 'What Korea is buying to sleep'}
+        </ArtSectionHeading>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🌿" title={isKo ? '식물성 멜라토닌' : 'Plant-based melatonin'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? '한국에서 합성 멜라토닌은 의약품이에요. 건강기능식품에 쓸 수 없어요. 그래서 피스타치오 추출물, 타르트 체리 등에서 유래한 식물성 멜라토닌이 대안으로 급성장했어요. CJ웰케어의 피스타치오 멜라토닌 제품이 대표적이에요.' : 'In Korea, synthetic melatonin is classified as medicine — it can\'t be used in health functional foods. So plant-derived melatonin from pistachio extract, tart cherry, and other sources has exploded as the legal alternative. CJ Wellcare\'s pistachio melatonin product is a prime example.'}
+          </ArtCallout>
+          <ArtCallout icon="🧠" title={isKo ? 'GABA (감마아미노뷰티르산)' : 'GABA (Gamma-Aminobutyric Acid)'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? '뇌의 신경 활동을 진정시키는 억제성 신경전달물질이에요. GABA 보충이 수면 잠복기를 줄이고 비렘(NREM) 수면의 질을 높인다는 연구가 있어요. 정관장의 GABA 복합체가 올리브영 베스트셀러예요.' : 'An inhibitory neurotransmitter that calms neural activity in the brain. Studies show GABA supplementation decreases sleep latency (time to fall asleep) and improves NREM sleep quality. Jung Kwan Jang\'s GABA complex is an Olive Young bestseller.'}
+          </ArtCallout>
+          <ArtCallout icon="✨" title={isKo ? '수면 전용 스킨케어' : 'Sleep-specific skincare'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '올리브영은 멜라토닌, 마그네슘, 비타민을 함유한 스킨케어·바디케어·헤어케어 제품을 하나의 "수면 카테고리"로 묶고 있어요. 추가 시간 없이 일상 루틴에 수면 케어를 녹이는 전략이에요.' : 'Olive Young is bundling skincare, body care, and hair care products infused with melatonin, magnesium, and vitamins into a single "sleep category." The strategy: embed sleep wellness into your existing routine without adding extra steps.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '"건강한 쾌락"의 시대' : 'The era of "healthy pleasure"'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>CJ 올리브영의 2026년 트렌드 리포트 키워드는 <strong>"F.U.L.L.M.O.O.N"</strong>이에요. 핵심 메시지는 "건강한 쾌락" — 엄격한 루틴 대신 즐겁고 쉬운 웰니스 습관을 추구하는 거예요. <mark>수면은 더 이상 수동적인 행위가 아니라 적극적으로 투자하는 웰니스 카테고리</mark>가 됐습니다.</>
+          ) : (
+            <>CJ Olive Young's 2026 trend report is framed around <strong>"F.U.L.L.M.O.O.N"</strong> — code for "healthy pleasure." Instead of rigid regimens, consumers want easy, enjoyable wellness habits. <mark>Sleep is no longer passive. It's an active wellness category that Koreans are investing in</mark> — from what they swallow to what they put on their skin before bed.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 추천 제품' : '✨ Products worth trying'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'GREEN MONSTER', name: 'MELADAY Plant Melatonin', note: isKo ? '식물성 멜라토닌 1mg 함유. 올리브영 수면 카테고리 베스트셀러. 타르트 체리 추출물 베이스예요.' : 'Plant-based melatonin 1mg. Olive Young sleep category bestseller. Tart cherry extract base.' },
+            { brand: '정관장', name: 'Sleep Support GABA Complex 500mg', note: isKo ? 'GABA 500mg + 홍삼 조합. 120년 역사의 한국 건강 브랜드가 만든 수면 보조제예요.' : 'GABA 500mg + Korean red ginseng. Sleep support from Korea\'s most trusted 120-year-old health brand.' },
+            { brand: 'MelaMate', name: 'Plant-Based Melatonin Gummy', note: isKo ? '구미 형태의 식물성 멜라토닌. 먹기 편하고 올리브영에서 가장 빠르게 성장하는 수면 제품이에요.' : 'Plant melatonin in gummy form. Easy to take and one of the fastest-growing sleep products at Olive Young.' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="#a07850" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+};
