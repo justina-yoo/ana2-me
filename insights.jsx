@@ -10,7 +10,7 @@ function dateToPrefix(dateStr) {
 }
 
 function postSlug(post) {
-  return dateToPrefix(post.date) + '/' + post.id;
+  return 'article/' + post.tag.en.toLowerCase().replace(/\s+/g, '-') + '/' + dateToPrefix(post.date) + '/' + post.id;
 }
 
 window.Insights = function Insights({ lang, density, query }) {
