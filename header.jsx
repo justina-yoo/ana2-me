@@ -72,7 +72,16 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <Icon name="search" size={15} />
           <input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              const q = e.target.value.trim();
+              if (q.length >= 3 && window.gtag) {
+                clearTimeout(window.__searchDebounce);
+                window.__searchDebounce = setTimeout(() => {
+                  gtag('event', 'search', { search_term: q });
+                }, 800);
+              }
+            }}
             placeholder={t('Search a keyword…', '키워드 검색…')}
           />
         </div>

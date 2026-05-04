@@ -48,6 +48,60 @@ window.Insights = function Insights({ lang, density, query }) {
 
   const POSTS = [
     {
+      id: 'creatine-women-brain',
+      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
+      title: {
+        en: "Creatine Isn't Just for Gym Bros. Women Are Taking It for Their Brains Now.",
+        ko: '크레아틴, 근육이 아니라 뇌를 위해 먹는 여성들이 늘고 있습니다',
+      },
+      excerpt: {
+        en: "Creatine supplementation boosts ATP production in the brain, reduces cognitive fatigue during PMS, and alleviates menopause-related brain fog. Searches for 'creatine for women' are up 123% — and the science backs the hype.",
+        ko: '크레아틴 보충이 뇌의 ATP 생산을 높이고, 생리 전 인지 피로를 줄이며, 갱년기 브레인포그를 완화한다는 연구 결과가 쏟아지고 있어요. "여성 크레아틴" 검색량은 123% 증가했습니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Wellness', ko: '웰니스' },
+      tagColor: '#a07850',
+      imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800',
+      keywords: 'creatine women brain ATP cognitive PMS menopause fatigue supplement gummies monohydrate muscle recovery menstrual cycle estrogen 크레아틴 여성 뇌 인지기능 갱년기 생리전증후군',
+    },
+    {
+      id: 'milk-perfume-lactonic',
+      category: { en: 'Olfactory Science', ko: '후각 과학' },
+      title: {
+        en: "Milk Perfume Is 2026's Defining Scent. Here's the Chemistry Behind \"Soft.\"",
+        ko: '밀크 퍼퓸이 2026년을 정의하는 향이 된 이유 — "부드러움"의 화학',
+      },
+      excerpt: {
+        en: "Lactonic fragrances don't actually smell like milk. They're built from cyclic ester molecules — gamma-decalactone, delta-decalactone — that your brain reads as 'creamy warmth.' The science of why comfort has a smell.",
+        ko: '락토닉 향수는 사실 우유 냄새가 아니에요. 감마데카락톤, 델타데카락톤 같은 고리형 에스테르 분자가 만드는 "크리미한 따뜻함"이라는 후각적 인상입니다. 편안함에도 화학이 있어요.',
+      },
+      readTime: { en: '5 min read', ko: '5분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Fragrance', ko: '향수' },
+      tagColor: 'var(--sage)',
+      imageUrl: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=800',
+      keywords: 'milk perfume lactonic lactone gamma-decalactone delta-decalactone creamy vanilla tonka bean sandalwood comfort scent TikTok gourmand skin scent Commodity 밀크퍼퓸 락토닉 락톤 크리미 바닐라',
+    },
+    {
+      id: 'tropical-fruit-fragrance',
+      category: { en: 'Olfactory Science', ko: '후각 과학' },
+      title: {
+        en: "Tropical Fruit Notes Are Up 1,200%. Your Nose Is Craving Something Feral.",
+        ko: '열대 과일 향이 1,200% 급등했습니다. 코가 본능적으로 원하는 것',
+      },
+      excerpt: {
+        en: "Guava, passionfruit, and watermelon searches have surged 1,200% year-over-year in fragrance. It's not random — volatile sulfur compounds in tropical fruits trigger a uniquely intense neurological response that clean musks can't replicate.",
+        ko: '구아바, 패션프루트, 수박 향료 검색이 전년 대비 1,200% 급증했어요. 열대 과일의 휘발성 황 화합물이 만드는 강렬한 신경 반응은 클린 머스크로는 대체할 수 없습니다.',
+      },
+      readTime: { en: '5 min read', ko: '5분 읽기' },
+      date: 'May 4, 2026',
+      tag: { en: 'Fragrance', ko: '향수' },
+      tagColor: 'var(--sage)',
+      imageUrl: 'https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&q=80&w=800',
+      keywords: 'tropical fruit fragrance guava passionfruit watermelon raspberry sulfur compounds volatile esters mango pear gourmand feral juicy TikTok 열대과일 향수 구아바 패션프루트 수박',
+    },
+    {
       id: 'centella-superbug-discovery',
       category: { en: 'Molecular Insights', ko: '분자 인사이트' },
       title: {
@@ -510,6 +564,9 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
 /* ─── Post Detail ───────────────────────────────────────────────────────────── */
 
 const ARTICLE_BODIES = {
+  'creatine-women-brain': 'CreatineWomenBody',
+  'milk-perfume-lactonic': 'MilkPerfumeBody',
+  'tropical-fruit-fragrance': 'TropicalFruitBody',
   'centella-superbug-discovery': 'CentellaSuperbugBody',
   'spicules-microneedling': 'SpiculesBody',
   'myo-inositol-hormonal-health': 'MyoInositolBody',
@@ -907,6 +964,286 @@ window.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
             { brand: 'COSRX', name: 'Pure Fit Cica Cream Intense', note: isKo ? 'Cica-7 복합체 61.2% 함유. 깊은 보습과 오래가는 진정 효과가 특징이에요.' : '61.2% Cica-7 Complex. Deep hydration with long-lasting calming — especially good for nighttime repair.' },
             { brand: 'Dr. Jart+', name: 'Cicapair Calming Gel Cream', note: isKo ? '시카페어 라인의 젤 크림. 센텔라와 미네랄을 결합한 독자적인 Green Science 포뮬러예요.' : 'The gel cream from the line that made cica mainstream. Combines centella with minerals in Dr. Jart\'s proprietary Green Science formula.' },
           ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--accent)" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+};
+
+/* ─── Article: Creatine for Women ────────────────────────────────────────── */
+
+window.CreatineWomenBody = function CreatineWomenBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 크레아틴은 근육뿐 아니라 뇌의 에너지 생산(ATP)에도 핵심적인 역할을 해요. 최신 연구에 따르면 저용량(750mg/일)으로도 갱년기 여성의 인지 기능, 반응 속도, 기분 변화가 유의미하게 개선됐습니다. 생리 주기 중 에스트로겐이 낮아지는 시기에 특히 효과적이에요.</>
+        ) : (
+          <><strong>TL;DR:</strong> Creatine isn't just for muscles — it's critical for brain ATP production. New research shows that even low doses (750mg/day) significantly improve cognitive function, reaction times, and mood swings in menopausal women. It's especially effective during low-estrogen phases of the menstrual cycle.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1200"
+        alt="Woman exercising in a gym setting, representing creatine supplementation for women"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '크레아틴이 뇌에서 하는 일' : 'What creatine actually does in your brain'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>크레아틴은 체내에서 자연적으로 생성되는 화합물로, <strong>ATP(아데노신 삼인산)</strong>를 재충전하는 역할을 해요. ATP는 세포의 에너지 화폐예요. 근육이 ATP를 쓰듯, 뇌도 ATP를 소모합니다 — 특히 집중, 의사결정, 기억 같은 고차원 인지 작업에서요. <mark>뇌는 체중의 2%인데 전체 ATP의 20%를 사용해요</mark>.</>
+          ) : (
+            <>Creatine is a compound your body makes naturally. Its job is to recycle <strong>ATP (adenosine triphosphate)</strong> — the energy currency of every cell. Your muscles use ATP. So does your brain — especially during demanding cognitive tasks like focus, decision-making, and memory. <mark>Your brain is 2% of your body weight but uses 20% of its ATP</mark>.</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '+123%', desc: '"여성 크레아틴" 검색량 전년 대비 증가율' },
+            { title: '120%', desc: 'SPINS 데이터 기준 크레아틴 카테고리 매출 성장률' },
+            { title: '550K', desc: '"creatine" 월간 글로벌 검색량' },
+          ] : [
+            { title: '+123%', desc: 'Year-over-year increase in "creatine for women" searches' },
+            { title: '120%', desc: 'Category sales growth according to SPINS data' },
+            { title: '550K', desc: 'Monthly global searches for "creatine"' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '여성 호르몬 주기와 크레아틴의 관계' : 'The hormone connection'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>여성의 뇌가 크레아틴에 더 반응하는 이유가 있어요. 에스트로겐이 낮아지는 생리 주기의 난포기(follicular phase)에 <mark>크레아틴 키나아제 수치도 함께 떨어집니다</mark>. 이 시기에 수면의 질이 떨어지고 인지 기능이 저하되는데, 크레아틴 보충이 이를 완충해줄 수 있어요.</>
+          ) : (
+            <>There's a reason women's brains may respond even more to creatine. During the follicular phase of the menstrual cycle — when estrogen is low — <mark>creatine kinase levels drop too</mark>. This is exactly when sleep quality tanks and cognitive function dips. Creatine supplementation can buffer against this hormonal energy dip.</>
+          )}
+        </ArtBody>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🧠" title={isKo ? '갱년기 인지 기능' : 'Menopause cognition'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '이중맹검 연구에서 저용량 크레아틴 HCl(750mg/일)이 갱년기 여성의 주의력, 실행 기능, 처리 속도, 반응 시간을 유의미하게 개선했어요. 중간 용량(1500mg/일)은 기분 변동과 집중력 저하도 줄여줬습니다.' : 'A double-blind study found that low-dose creatine HCl (750mg/day) significantly improved alertness, executive control, processing speed, and reaction times in menopausal women. Medium-dose (1500mg/day) also reduced mood swings and concentration difficulties.'}
+          </ArtCallout>
+          <ArtCallout icon="😴" title={isKo ? '수면 부족과 인지력' : 'Sleep deprivation & cognition'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? '수면이 부족할 때 크레아틴 단일 복용만으로도 인지 능력이 개선됐다는 연구가 있어요. 뇌의 고에너지 인산 수치를 직접 높여주기 때문입니다.' : 'A single dose of creatine improved cognitive performance during sleep deprivation by directly increasing cerebral high-energy phosphate levels. Your brain literally gets more fuel when it needs it most.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '어떻게 먹어야 할까요?' : 'How to take it'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>크레아틴 모노하이드레이트 3-5g/일이 가장 많이 연구된 표준 용량이에요. 로딩(대량 복용 후 유지)은 필수가 아니고, 매일 꾸준히 복용하면 2-4주 안에 체내 저장량이 포화됩니다. 성별에 따른 크레아틴 차이는 없어요 — 같은 성분, 같은 효과예요.</>
+          ) : (
+            <>Creatine monohydrate at 3-5g/day is the most studied dose. Loading phases aren't necessary — consistent daily intake saturates your stores within 2-4 weeks. There's no gender-specific creatine. It's the same compound with the same benefits.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 추천 제품' : '✨ Products worth trying'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'Momentous', name: 'Creatine Monohydrate', note: isKo ? 'NSF 스포츠 인증. 순도와 안전성이 제3자 검증된 크레아틴 모노하이드레이트예요.' : 'NSF Certified for Sport. Third-party tested for purity — the gold standard for supplement quality.' },
+            { brand: 'Wellah', name: 'Creatine for Women', note: isKo ? '엽산, 민들레 추출물, 크랜베리 추출물을 함께 배합해 소화 부담을 줄인 여성 맞춤 포뮬러예요.' : 'Combines creatine monohydrate with folate, dandelion extract, and cranberry to reduce GI distress.' },
+            { brand: 'Thorne', name: 'Creatine', note: isKo ? '크레아틴 모노하이드레이트 5g. 불필요한 첨가물 없는 심플한 포뮬러로 신뢰도 높은 브랜드예요.' : 'Simple 5g creatine monohydrate formula. No unnecessary additives from one of the most trusted supplement brands.' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="#a07850" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+};
+
+/* ─── Article: Milk Perfume ──────────────────────────────────────────────── */
+
+window.MilkPerfumeBody = function MilkPerfumeBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> "밀크 퍼퓸"은 실제 우유 냄새가 아니에요. 락톤이라는 고리형 에스테르 분자가 만드는 크리미하고 따뜻한 후각적 인상입니다. 감마데카락톤은 복숭아, 델타데카락톤은 버터 같은 코코넛 향을 내요. 이 분자들이 편안함과 안정감이라는 감정 반응을 유도합니다.</>
+        ) : (
+          <><strong>TL;DR:</strong> "Milk perfume" doesn't smell like milk. It's built from lactones — cyclic ester molecules. Gamma-decalactone gives peach, delta-decalactone gives buttery coconut. Together, they create what your brain reads as "creamy warmth" — a scent profile wired to comfort and safety.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=1200"
+        alt="Warm creamy milk being poured, representing lactonic fragrance notes"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '"밀크 퍼퓸"이 우유 냄새가 아닌 이유' : 'Why "milk perfume" doesn\'t smell like milk'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>2026년 가장 주목받는 향수 트렌드는 <strong>락토닉(lactonic)</strong> 향이에요. TikTok에서 바이럴되고, Marie Claire가 "2026년을 정의하는 향"이라고 선언했죠. 하지만 이름에 속지 마세요. 락토닉 향수는 우유 냄새가 아닙니다. <mark>"락토닉"이라는 이름은 라틴어 lac(우유)에서 왔지만, 실제 향은 크리미하고 따뜻한 질감이에요</mark>.</>
+          ) : (
+            <>The biggest fragrance trend of 2026 is <strong>lactonic</strong> scents. Viral on TikTok, declared "the defining scent of 2026" by Marie Claire. But don't let the name fool you. Lactonic perfumes don't smell like milk. <mark>The name comes from the Latin "lac" (milk), but the actual scent is a creamy, warm texture</mark> — closer to cashmere than dairy.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '락톤의 분자 구조' : 'The molecular anatomy of a lactone'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>락톤은 같은 분자 안에서 하이드록실기와 카복실기가 반응해 만들어지는 <strong>고리형 에스테르</strong>예요. 고리의 크기가 향을 결정합니다. 감마(γ) 락톤은 5원 고리로 달콤하고 강렬하고, 델타(δ) 락톤은 6원 고리로 더 부드럽고 크리미해요.</>
+          ) : (
+            <>Lactones are <strong>cyclic esters</strong> — formed when a hydroxyl group and carboxyl group within the same molecule create an internal ring. The ring size determines the scent. Gamma (γ) lactones form five-membered rings — sweeter, more aggressive. Delta (δ) lactones form six-membered rings — softer, creamier, more naturalistic.</>
+          )}
+        </ArtBody>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🍑" title={isKo ? '감마데카락톤 (γ-Decalactone)' : 'Gamma-Decalactone'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '복숭아의 핵심 향 분자예요. 달콤한 과일향 아래에 코코넛 크리미함이 깔려 있어서 일차원적이지 않아요. 밀크 퍼퓸의 과일 측면을 담당합니다.' : 'The core molecule of peach. Delivers pure stone fruit with an underlying coconut creaminess that prevents one-dimensional fruitiness. This is the fruit side of milk perfume.'}
+          </ArtCallout>
+          <ArtCallout icon="🥥" title={isKo ? '델타데카락톤 (δ-Decalactone)' : 'Delta-Decalactone'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+            {isKo ? '감마데카락톤의 이성질체인데 향이 완전히 달라요. 복숭아 대신 버터 같은 코코넛 크리미함이 주가 됩니다. 코코넛, 복숭아, 라즈베리, 심지어 블루치즈에서도 자연적으로 발견돼요.' : 'A constitutional isomer of gamma-decalactone with one less carbon in its ring. Transforms pure peach into buttery coconut richness. Found naturally in coconut, peach, raspberry — and blue cheese.'}
+          </ArtCallout>
+          <ArtCallout icon="🌾" title={isKo ? '감마운데카락톤 (γ-Undecalactone)' : 'Gamma-Undecalactone'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? '"코코넛 락톤"이라고도 불려요. 많은 클래식 향수의 기반이 된 분자로, 밀크 퍼퓸의 따뜻하고 스킨라이크한 베이스를 만들어줍니다.' : 'Also called the "coconut lactone." The foundation molecule of many classic fragrances. It creates the warm, skin-like base that makes milk perfumes feel intimate rather than loud.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '왜 편안하게 느껴질까요?' : 'Why does it feel like comfort?'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>밀크 퍼퓸이 강렬한 게 아니라 편안하게 느껴지는 건 우연이 아니에요. 우유라는 감각은 <mark>영양, 안전, 친숙함이라는 초기 경험과 연결되어 있어요</mark>. 락토닉 향은 이 감정적 기억을 활성화합니다 — 자극적이고 과포화된 세상에서 그라운딩(안정감)을 주는 향이죠.</>
+          ) : (
+            <>It's not an accident that milk perfumes feel comforting rather than intense. Milk, as a sensory idea, is linked to <mark>nourishment, safety, and familiarity — early experiences of comfort</mark>. Lactonic scents activate these emotional memories. In a fast, overstimulated world, they offer grounding.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 추천 제품' : '✨ Products worth trying'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'Commodity', name: 'Milk Orchid', note: isKo ? '2026 Digital Fragrance Awards 바이럴 향수 부문 수상. 오키드와 밀크 노트의 조합으로 락토닉 트렌드의 중심에 선 제품이에요.' : 'Winner of the 2026 Digital Fragrance Awards for viral launch. The fragrance that put the milk trend on the map.' },
+            { brand: 'Maison Margiela', name: "Replica Lazy Sunday Morning", note: isKo ? '화이트 머스크와 알데히드 위에 섬세한 락토닉 노트가 깔려 있어요. "깨끗한 침대 시트" 향의 원조격 제품이에요.' : 'Subtle lactonic notes layered over white musk and aldehydes. The original "clean sheets" scent that pioneered comfort fragrance.' },
+            { brand: 'Glossier', name: 'You', note: isKo ? '머스크와 앰브렛 위에 크리미한 아이리스가 올라간 스킨 센트. 밀크 퍼퓸의 미니멀한 해석이에요.' : 'Creamy iris over musk and ambrette. A minimalist interpretation of the milk perfume concept — your skin, amplified.' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--sage)" />)}
+        </div>
+      </ArtSection>
+
+    </div>
+  );
+};
+
+/* ─── Article: Tropical Fruit Fragrance ──────────────────────────────────── */
+
+window.TropicalFruitBody = function TropicalFruitBody({ lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+      <ArtTlDr>
+        {isKo ? (
+          <><strong>요약:</strong> 구아바, 패션프루트, 수박 향 검색이 1,200% 급등했어요. 열대 과일의 독특한 향은 휘발성 황 화합물(VSC)에서 나옵니다. 이 분자들은 클린 머스크나 우디 향으로는 만들 수 없는 강렬한 후각 반응을 유발해요. 라즈베리가 다음 대세로 예측됩니다.</>
+        ) : (
+          <><strong>TL;DR:</strong> Searches for guava, passionfruit, and watermelon fragrance notes have surged 1,200% year-over-year. The unique aroma of tropical fruits comes from volatile sulfur compounds (VSCs) that trigger a neurological intensity clean musks can't match. Raspberry is predicted to be next.</>
+        )}
+      </ArtTlDr>
+
+      <ArtFigure
+        src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&q=80&w=1200"
+        alt="Colorful tropical fruits including passionfruit and mango on a bright background"
+        isKo={isKo}
+      />
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '클린 향의 시대가 끝나고 있다' : 'The clean era is ending'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>지난 몇 년간 향수 시장을 지배한 건 클린 머스크, 시어 우드, 스킨 센트였어요. 하지만 2026년, <mark>소비자의 코가 더 강렬한 것을 원하기 시작했습니다</mark>. 구아바 향 관련 검색이 1,000% 이상 증가했고, 패션프루트와 수박도 비슷한 성장세를 보이고 있어요. 파우더리한 꽃향 대신 <strong>잘 익은 과일</strong>의 생생한 즙이 터지는 향을 원하는 거예요.</>
+          ) : (
+            <>Clean musks, sheer woods, and skin scents dominated fragrance for years. But in 2026, <mark>noses are craving something wilder</mark>. Google searches for guava in fragrance are up over 1,000%. Passionfruit and watermelon are surging at similar rates. Consumers are moving away from powdery, perfumey florals toward scents that smell like <strong>ripe, bursting fruit</strong>.</>
+          )}
+        </ArtBody>
+        <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, padding: 0, margin: 0 }}>
+          {(isKo ? [
+            { title: '+1,200%', desc: '열대 과일 향 노트(구아바, 패션프루트) 검색량 전년 대비 증가율' },
+            { title: '+158%', desc: '수박, 배 등 워터 프루트 노트 검색량 증가율' },
+            { title: '다음 주자: 라즈베리', desc: '업계에서 차기 지배적 과일 프로필로 예측하는 향' },
+          ] : [
+            { title: '+1,200%', desc: 'Year-over-year surge in tropical fruit note searches (guava, passionfruit)' },
+            { title: '+158%', desc: 'Growth in water fruit searches (watermelon, pear)' },
+            { title: 'Next up: Raspberry', desc: 'Predicted to become the next dominant fruit profile in fragrance' },
+          ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
+        </ul>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '열대 과일이 특별한 이유: 황 화합물의 과학' : 'Why tropical fruits hit different: the sulfur science'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>열대 과일이 사과나 딸기와 다르게 느껴지는 건 <strong>휘발성 황 화합물(VSC)</strong> 때문이에요. 대부분의 과일향은 에스테르와 알코올로 만들어지지만, 구아바와 패션프루트에는 <mark>티오펜, 티아졸, 3-메르캅토헥사놀 같은 황 함유 분자가 독특한 즙 터지는 신선함</mark>을 만들어냅니다.</>
+          ) : (
+            <>What makes tropical fruits smell different from apples or strawberries is <strong>volatile sulfur compounds (VSCs)</strong>. Most fruit aromas come from esters and alcohols. But guava and passionfruit contain <mark>sulfur-bearing molecules — thiophenes, thiazoles, and 3-mercaptohexanol — that create a uniquely juicy, bursting freshness</mark>.</>
+          )}
+        </ArtBody>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <ArtCallout icon="🧬" title={isKo ? '구아바의 황 분자' : 'Guava\'s sulfur fingerprint'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+            {isKo ? '구아바에서 9종의 휘발성 황 화합물이 발견됐어요. 특히 3-메르캅토헥사놀(3MH)은 자몽 같은 즙 터지는 느낌을, 3MHA는 블랙커런트 같은 선명한 과일향을 만들어요.' : 'Nine volatile sulfur compounds were discovered in guava. 3-Mercaptohexanol (3MH) creates a grapefruit-like juiciness. 3MHA delivers blackcurrant-like vibrancy. These are the molecules that make guava smell alive.'}
+          </ArtCallout>
+          <ArtCallout icon="💛" title={isKo ? '패션프루트의 에스테르 폭발' : 'Passionfruit\'s ester explosion'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
+            {isKo ? '패션프루트의 향 프로필은 에스테르, 알코올, 알데히드, 케톤, 테르펜, 황 화합물의 조합이에요. 3MH가 아세트알데히드와 반응해 만드는 독특한 티오헥실 에스테르가 그 즙이 터지는 열대감의 핵심입니다.' : 'Passionfruit\'s aroma is a complex blend of esters, alcohols, aldehydes, ketones, terpenes, and sulfur compounds. The interaction between 3MH and acetaldehyde creates unique thiohexyl esters — the core of that bursting tropical intensity.'}
+          </ArtCallout>
+        </div>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '노스탤지어와 미래가 동시에' : 'Nostalgic and futuristic at once'}
+        </ArtSectionHeading>
+        <ArtBody>
+          {isKo ? (
+            <>이 트렌드가 흥미로운 건, 과거의 달달한 과일 향수와 다르다는 거예요. 2026년의 트로피컬 향은 <mark>성숙하고 복잡한 열대감을 추구합니다</mark> — 할라피뇨의 매운 열기, 카카오의 깊이, 아사이의 선명함이 과일과 어우러져요. 달콤하기만 한 게 아니라 다층적이고 의도적인 향이죠.</>
+          ) : (
+            <>What makes this trend interesting is that it's not a return to sweet, candy-like fruit fragrances. The 2026 tropical wave <mark>pursues sophistication</mark> — jalapeño heat colliding with lush guava, cacao depth layered under passionfruit brightness. These are layered, intentional compositions, not body sprays.</>
+          )}
+        </ArtBody>
+      </ArtSection>
+
+      <ArtSection>
+        <ArtSectionHeading>
+          {isKo ? '✨ 추천 제품' : '✨ Products worth trying'}
+        </ArtSectionHeading>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
+          {[
+            { brand: 'Sol de Janeiro', name: 'Brazilian Bum Bum Cream', note: isKo ? '살치 향(카라멜, 피스타치오, 바닐라)에 열대 과일 언더톤이 깔린 시그니처. 트로피컬 구르망 붐의 원조격이에요.' : 'The salted caramel-pistachio-vanilla signature with tropical fruit undertones. Arguably the fragrance that started the tropical gourmand boom.' },
+            { brand: 'Floral Street', name: 'Arizona Bloom', note: isKo ? '선인장 꽃과 패션프루트 노트의 조합. 열대감과 건조한 사막 느낌을 동시에 구현한 실험적인 향이에요.' : 'Cactus flower meets passionfruit. An experimental take on tropical — arid desert warmth with bursting fruit.' },
+            { brand: 'Vilhelm Parfumerie', name: 'Mango Skin', note: isKo ? '망고의 즙 터지는 상큼함에 재스민과 머스크를 겹쳐 성숙한 열대감을 만든 니치 향수예요.' : 'Juicy mango burst layered with jasmine and musk. Niche tropical done with restraint and sophistication.' },
+          ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--sage)" />)}
         </div>
       </ArtSection>
 
