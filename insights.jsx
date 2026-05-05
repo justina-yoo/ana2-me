@@ -48,6 +48,60 @@ window.Insights = function Insights({ lang, density, query }) {
 
   const POSTS = [
     {
+      id: 'grown-up-gourmand-matcha-pistachio',
+      category: { en: 'Olfactory Science', ko: '후각 과학' },
+      title: {
+        en: "Gourmand Fragrance Grew Up. Matcha, Pistachio, and Roasted Sesame Replaced Candy.",
+        ko: '구르망 향수가 어른이 됐습니다 — 캔디 대신 말차, 피스타치오, 볶은 참깨',
+      },
+      excerpt: {
+        en: "Pistachio is up 852% year-over-year in fragrance searches. Matcha is 2026's flagship gourmand note. The shift isn't random — gourmand is moving from sugar-sweet to savory, toasted, and umami. The culinary sophistication movement hit perfumery.",
+        ko: '피스타치오 향료 검색이 전년 대비 852% 급등했어요. 말차는 2026년 구르망의 대표 노트가 됐고요. 달콤함에서 고소함, 쓴맛, 감칠맛으로 — 구르망 향수가 미식의 언어를 배웠습니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 6, 2026',
+      tag: { en: 'Fragrance', ko: '향수' },
+      tagColor: 'var(--sage)',
+      imageUrl: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&q=80&w=800',
+      keywords: 'gourmand fragrance matcha pistachio roasted sesame savory umami solinote single note perfume culinary pyrazines lactones bitter-sweet toasted 구르망 향수 말차 피스타치오 참깨 고소한 감칠맛',
+    },
+    {
+      id: 'korea-sleep-wellness-snacks',
+      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
+      title: {
+        en: "Supplements Are Dead. Korea's Gen Z Is Eating Sleep Gummies Instead.",
+        ko: '알약은 끝났어요. MZ세대가 수면 간식을 먹기 시작한 이유',
+      },
+      excerpt: {
+        en: "Korea's sleep health food market is booming — Olive Young reports 300% YoY growth in sleep supplements. The secret? Repackaging GABA, magnesium, and plant melatonin as gummies, jellies, and flavored sticks that feel like snacks, not medicine.",
+        ko: '올리브영 수면 건강식품 매출이 전년 대비 300% 증가했어요. 비결은 GABA, 마그네슘, 식물성 멜라토닌을 구미, 젤리, 스틱 형태로 바꾼 것. 약이 아니라 간식처럼 느껴지는 웰니스가 MZ세대를 사로잡고 있습니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 6, 2026',
+      tag: { en: 'Wellness', ko: '웰니스' },
+      tagColor: '#a07850',
+      imageUrl: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=800',
+      keywords: 'sleep wellness snacks gummies GABA magnesium melatonin plant-based Olive Young Gen Z healthy pleasure 헬시플레저 수면 간식 구미 젤리 마그네슘 MZ세대 올리브영',
+    },
+    {
+      id: 'sugar-glycation-skin-aging',
+      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
+      title: {
+        en: "Sugar Is Aging Your Skin Faster Than the Sun. The Science of Glycation.",
+        ko: '설탕이 자외선보다 피부를 더 빨리 늙게 합니다 — 당화 반응의 과학',
+      },
+      excerpt: {
+        en: "Glycation — the process where sugar molecules bond to collagen and elastin — creates permanent cross-links that make skin stiff, yellow, and wrinkle-prone. New research from Estée Lauder (April 2026) confirms that sugar exposure accelerates cellular aging markers in skin. The next frontier in anti-aging isn't another retinoid. It's stopping sugar damage.",
+        ko: '당화 반응은 설탕 분자가 콜라겐과 엘라스틴에 결합해 피부를 뻣뻣하고 누렇게 만드는 과정이에요. 에스티 로더의 최신 연구(2026년 4월)가 설탕 노출이 피부 세포 노화 지표를 가속한다고 확인했어요. 다음 안티에이징의 핵심은 레티노이드가 아니라 당 손상 차단입니다.',
+      },
+      readTime: { en: '6 min read', ko: '6분 읽기' },
+      date: 'May 6, 2026',
+      tag: { en: 'Skincare', ko: '스킨케어' },
+      tagColor: 'var(--accent)',
+      imageUrl: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&q=80&w=800',
+      keywords: 'glycation sugar skin aging AGEs advanced glycation end products collagen cross-linking elastin yellowing wrinkles carnosine niacinamide anti-glycation Estee Lauder 당화 설탕 피부 노화 콜라겐 교차결합 엘라스틴',
+    },
+    {
       id: 'ten-step-routine-dead',
       category: { en: 'Molecular Insights', ko: '분자 인사이트' },
       title: {
@@ -98,7 +152,7 @@ window.Insights = function Insights({ lang, density, query }) {
       date: 'May 4, 2026',
       tag: { en: 'Wellness', ko: '웰니스' },
       tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbec6d?auto=format&fit=crop&q=80&w=800',
+      imageUrl: 'https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&q=80&w=800',
       keywords: 'jjimjilbang Korean bathhouse sauna cold plunge contrast therapy cortisol circulation vascular pump growth hormone K-drama wellness tourism 찜질방 사우나 냉탕 온냉 대비 웰니스',
     },
     {
@@ -636,6 +690,9 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
 /* ─── Post Detail ───────────────────────────────────────────────────────────── */
 
 const ARTICLE_BODIES = {
+  'grown-up-gourmand-matcha-pistachio': 'GrownUpGourmandBody',
+  'korea-sleep-wellness-snacks': 'KoreaSleepWellnessSnacksBody',
+  'sugar-glycation-skin-aging': 'SugarGlycationBody',
   'ten-step-routine-dead': 'TenStepRoutineBody',
   'celebrity-skincare-methods': 'CelebritySkincareBody',
   'jjimjilbang-wellness-science': 'JjimjilbangBody',
@@ -1515,8 +1572,8 @@ window.JjimjilbangBody = function JjimjilbangBody({ lang }) {
       </ArtTlDr>
 
       <ArtFigure
-        src="https://images.unsplash.com/photo-1540555700478-4be289fbec6d?auto=format&fit=crop&q=80&w=1200"
-        alt="Steam rising from a hot bath, representing Korean jjimjilbang sauna culture"
+        src="https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&q=80&w=1200"
+        alt="Wooden sauna interior with warm lighting, representing Korean jjimjilbang wellness culture"
         isKo={isKo}
       />
 

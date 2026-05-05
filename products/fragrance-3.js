@@ -55,5 +55,9 @@ window.__product_fragrance_3 = {
         en: "BTS's Jin is well known among fans for wearing Philosykos — Korean media covered his signature scent and the fragrance regularly sold out in Korea following the coverage.",
         ko: "BTS 진이 필로시코스를 즐겨 사용한다는 사실이 국내 미디어를 통해 알려지며, 해당 향수가 한국에서 일시 품절되는 일이 벌어지기도 했어요."
       }
+    ],
+    reviews: [
+      { author: "James K.", date: "2026-04-20", rating: 5, body: "The most natural fig scent I've ever worn. It genuinely smells like standing under a fig tree in summer.", bodyKo: "지금까지 써본 중 가장 자연스러운 무화과 향이에요. 진짜 여름에 무화과 나무 아래 서 있는 느낌." },
+      { author: "유진", date: "2026-03-10", rating: 4, body: "은은하고 고급스러운 향이에요. 지속력이 좀 아쉽지만 레이어링하면 괜찮아요.", bodyKo: "은은하고 고급스러운 향이에요. 지속력이 좀 아쉽지만 레이어링하면 괜찮아요." }
     ]
   };

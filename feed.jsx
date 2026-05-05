@@ -1,7 +1,7 @@
 // Feed view — home with chat greeting + daily pick + product grid
 const { useMemo: _uM1 } = React;
 
-window.Feed = function Feed({ lang, category, query, setView, setProduct, density }) {
+window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density }) {
   const t = useL(lang);
   const products = window.PRODUCTS;
 
@@ -41,68 +41,42 @@ window.Feed = function Feed({ lang, category, query, setView, setProduct, densit
     'wellness-food': { en: 'Wellness', ko: '웰니스', blurb: 'supplements that actually absorb', blurbKo: '진짜 흡수되는 보충제' },
   }[category];
 
+  const cats = [
+    { id: 'skincare', en: 'Skincare', ko: '스킨케어' },
+    { id: 'fragrance', en: 'Fragrance', ko: '향수' },
+    { id: 'wellness-food', en: 'Wellness', ko: '웰니스' },
+  ];
+
   return (
     <div className={cn('feed', `dens-${density}`)}>
-      {/* Chat-style greeting */}
-      {!query && (
-        <section className="chat-intro">
-          <div className="chat-bubble chat-from-us">
-            <div className="chat-avatar">A</div>
-            <div>
-              <p className="chat-name">anatomy <span className="chat-dot">·</span> <span className="chat-time">{new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</span></p>
-              <p className="chat-msg"><strong>{greet()}.</strong> {t(
-                'We pulled 3 things worth your attention today.',
-                '오늘 눈여겨볼 만한 것 세 가지를 골라봤어요.'
-              )}</p>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Hero title */}
       {!query && (
-        <section className="feed-hero">
-          <div className="feed-hero-row">
-            <h1 className="display">
-              {t(`The anatomy of`, '성분 해부:')} <br/>
-              <span className="display-accent">{t(catMeta.en, catMeta.ko)}<span className="display-dot">.</span></span>
-            </h1>
-            <div className="feed-hero-meta">
-              <Sticker color="butter" rotate={-6}>{t('new this week', '이번 주 신규')}</Sticker>
-              <p className="feed-hero-sub">{t(catMeta.blurb, catMeta.blurbKo)}</p>
-            </div>
-          </div>
-        </section>
+        <header className="ins-hero">
+          <Sticker color="sage" rotate={-4}>{t('products', '제품')}</Sticker>
+          <h1 className="display">
+            {t(`The anatomy of`, '성분 해부:')} <br/>
+            <span className="display-accent">{t(catMeta.en, catMeta.ko)}<span className="display-dot">.</span></span>
+          </h1>
+          <p className="ins-sub">{t(
+            'Every molecule, demystified.',
+            '모든 분자, 쉽게 풀어드려요.'
+          )}</p>
+        </header>
       )}
 
-      {/* Daily pick module */}
+      {/* Category tabs */}
       {!query && (
-        <section className="daily">
-          <div className="daily-label">
-            <Sticker color="accent" rotate={-3}>{t("today's pick", '오늘의 추천')}</Sticker>
-            <span className="daily-date">#{String(new Date().getDate()).padStart(2, '0')} · {new Date().toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US', { month: 'long' })}</span>
-          </div>
-          <button className="daily-card" onClick={() => { setProduct(daily); window.scrollTo(0,0); }}>
-            <div className="daily-img-wrap">
-              <Tape className="tape-tl" style={{ transform: 'rotate(-6deg) translate(-10px,-8px)' }} />
-              <Tape className="tape-br" style={{ transform: 'rotate(8deg) translate(10px,8px)', right: 0, bottom: 0 }} />
-              <ProductImg src={daily.imageUrl} alt={daily.name} className="daily-img" />
-            </div>
-            <div className="daily-body">
-              <span className="daily-brand">{daily.brand}</span>
-              <h3 className="daily-name">{lang === 'ko' && daily.nameKo ? daily.nameKo : daily.name}</h3>
-              <p className="daily-tagline">{lang === 'ko' && daily.summary?.taglineKo ? daily.summary.taglineKo : daily.summary?.tagline}</p>
-              <div className="daily-concerns">
-                {((lang === 'ko' ? daily.summary?.concernsKo : daily.summary?.concerns) || []).slice(0, 3).map(c => (
-                  <span key={c} className="concern-tag">{c}</span>
-                ))}
-              </div>
-              <span className="daily-cta">
-                {t('Read the breakdown', '분석 보러가기')} <Icon name="arrow" size={16} />
-              </span>
-            </div>
-          </button>
-        </section>
+        <nav className="feed-cats">
+          {cats.map(c => (
+            <button
+              key={c.id}
+              className={cn('feed-cat-btn', category === c.id && 'feed-cat-btn-active')}
+              onClick={() => setCategory(c.id)}
+            >
+              {t(c.en, c.ko)}
+            </button>
+          ))}
+        </nav>
       )}
 
       {/* Grid */}
@@ -156,7 +130,6 @@ window.ProductCard = function ProductCard({ product, lang, onClick, index }) {
       <div className="pcard-body">
         <span className="pcard-brand">{product.brand}</span>
         <h3 className="pcard-name">{name}</h3>
-        <p className="pcard-tag">{tag}</p>
       </div>
       <span className="pcard-arrow"><Icon name="arrow" size={16} /></span>
     </button>

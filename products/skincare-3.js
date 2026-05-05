@@ -26,5 +26,10 @@ window.__product_skincare_3 = {
       { id: "c2", symbol: "Al", name: "Allantoin", nameKo: "알란토인", description: "A gentle ingredient that soothes and supports skin recovery.", descriptionKo: "피부를 진정시키고 회복을 돕는 순한 성분.", science: "Soothes irritated skin and speeds up natural recovery — especially helpful for reactive or compromised skin.", scienceKo: "자극받은 피부를 진정시키고 자연 회복 속도를 높여줘요. 민감하거나 손상된 피부에 특히 효과적이에요.", percentage: 2 },
       { id: "c3", symbol: "Ec", name: "Ectoin", nameKo: "엑토인", description: "A natural ingredient that shields skin from environmental damage.", descriptionKo: "환경적 손상으로부터 피부를 보호하는 천연 성분.", science: "Acts like a protective shield on the skin — guards against pollution, UV stress, and harsh weather.", scienceKo: "피부 위에 보호막을 형성해 오염 물질, 자외선 스트레스, 거친 날씨로부터 피부를 지켜줘요.", percentage: 1 },
       { id: "c4", symbol: "Ce", name: "Ceramide", nameKo: "세라마이드", description: "A natural skin lipid that locks in moisture and protects the skin barrier.", descriptionKo: "수분을 가두고 피부 장벽을 보호하는 천연 피부 지질.", science: "Fills gaps in the skin barrier to lock moisture in and keep irritants out — the backbone of a healthy, resilient complexion.", scienceKo: "피부 장벽의 빈틈을 채워 수분은 잡아두고 외부 자극은 차단해줘요. 건강하고 탄탄한 피부의 핵심 성분이에요.", percentage: 3 },
+    ],
+    reviews: [
+      { author: "Mina", date: "2026-04-28", rating: 5, body: "My redness calmed down within days. This is the only cream that doesn't sting my irritated skin.", bodyKo: "며칠 만에 홍조가 가라앉았어요. 자극받은 피부에도 따갑지 않은 유일한 크림이에요." },
+      { author: "Sophie L.", date: "2026-04-15", rating: 4, body: "Great for winter — rich but not greasy. The cica really works on my eczema patches.", bodyKo: "겨울에 딱이에요. 묵직한데 끈적이지 않아요. 시카 성분이 습진 부위에 진짜 효과 있어요." },
+      { author: "하윤", date: "2026-03-22", rating: 5, body: "피부과에서 추천받고 써봤는데 진짜 진정 효과가 대단해요. 재구매 확정.", bodyKo: "피부과에서 추천받고 써봤는데 진짜 진정 효과가 대단해요. 재구매 확정." }
     ]
   };

@@ -85,6 +85,7 @@
   <script src="products/skincare-4.js"></script>
   <script src="products/skincare-5.js"></script>
   <script src="products/skincare-6.js"></script>
+  <script src="products/skincare-7.js"></script>
   <script src="products/fragrance-3.js"></script>
   <script src="products/fragrance-4.js"></script>
   <script src="products/fragrance-5.js"></script>
@@ -96,7 +97,7 @@
   <script src="data.js?v=4"></script>
   <script type="text/babel" src="primitives.jsx"></script>
   <script type="text/babel" src="header.jsx"></script>
-  <script type="text/babel" src="feed.jsx"></script>
+  <script type="text/babel" src="feed.jsx?v=2"></script>
   <script type="text/babel" src="detail.jsx"></script>
   <script type="text/babel" src="insights.jsx"></script>
   <script type="text/babel" src="articles/spicules.jsx"></script>
@@ -111,6 +112,9 @@
   <script type="text/babel" src="articles/k-fragrance.jsx"></script>
   <script type="text/babel" src="articles/pistachio.jsx"></script>
   <script type="text/babel" src="articles/fragrance-wardrobing.jsx"></script>
+  <script type="text/babel" src="articles/sugar-glycation.jsx"></script>
+  <script type="text/babel" src="articles/grown-up-gourmand.jsx"></script>
+  <script type="text/babel" src="articles/sleep-wellness-snacks.jsx"></script>
   <script type="text/babel" src="analyzer.jsx"></script>
   <script type="text/babel" src="about.jsx"></script>
   <script type="text/babel" src="privacy.jsx"></script>
@@ -236,6 +240,7 @@
         if (path === '' || path === '/insights') {
           setView('insights'); if (window.SEO) window.SEO.setHome();
         }
+        else if (path === '/products') { setView('feed'); }
         else if (path === '/analyzer') { setView('analyzer'); if (window.SEO) window.SEO.setAnalyzer(); }
         else if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
         else if (path === '/privacy') { setView('privacy'); if (window.SEO) window.SEO.setPrivacy(); }
@@ -290,7 +295,7 @@
               headerStyle={tweaks.headerStyle}
             />
           )}
-          {view === 'feed' && <Feed lang={lang} category={category} query={query} setView={setView} setProduct={setProduct} density={density} />}
+          {view === 'feed' && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} />}
           {view === 'detail' && product && <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />}
           {view === 'insights' && <Insights lang={lang} density={density} query={query} />}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}

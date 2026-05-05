@@ -1,14 +1,117 @@
 
+// Scrollable list with fade-out hint at bottom
+function IngScrollFade({ children }) {
+  const wrapRef = useRef(null);
+  const scrollRef = useRef(null);
+  const items = React.Children.toArray(children);
+  const needsFade = items.length > 4;
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    const wrap = wrapRef.current;
+    if (!el || !wrap || !needsFade) return;
+    const onScroll = () => {
+      const atEnd = el.scrollHeight - el.scrollTop - el.clientHeight < 10;
+      wrap.classList.toggle('scrolled-end', atEnd);
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [needsFade]);
+
+  return (
+    <div ref={wrapRef} className={cn('ing-scroll-wrap', !needsFade && 'scrolled-end')}>
+      <div className="ing-scroll" ref={scrollRef}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 // Product detail page — editorial long-read
 window.Detail = function Detail({ product, lang, setView, setProduct, density }) {
   const t = useL(lang);
   const [selIng, setSelIng] = useState(null);
   const [selNote, setSelNote] = useState(null);
+  const [selBio, setSelBio] = useState(null);
   const [saved, setSaved] = window.useLocalState('saved', {});
+  const [savedIngs, setSavedIngs] = window.useLocalState('savedIngs', {});
   const isSaved = !!saved[product.id];
 
   const isFragrance = product.category === 'fragrance';
   const isSkincare = product.category === 'skincare';
+  const detailRef = useRef(null);
+
+  // Wrap quoted text and key phrases in <mark> for highlight animation
+  const markUp = (text) => {
+    // Match quoted strings ("..." or \"...\")
+    const parts = text.split(/([""][^""]+[""]|「[^」]+」)/g);
+    if (parts.length > 1) {
+      return parts.map((p, i) => /^["「"]/.test(p) ? <mark key={i}>{p}</mark> : p);
+    }
+    // If no quotes, wrap text after an em dash or colon as the key phrase
+    const dashSplit = text.split(/(—.+$|：.+$)/);
+    if (dashSplit.length > 1) {
+      return dashSplit.map((p, i) => /^[—：]/.test(p) ? <mark key={i}>{p}</mark> : p);
+    }
+    return text;
+  };
+
+  // Scroll-triggered highlight sweep for fun facts + summary items
+  useEffect(() => {
+    const container = detailRef.current;
+    if (!container) return;
+
+    // Inject keyframe once
+    if (!document.getElementById('ana2me-highlight-style')) {
+      const style = document.createElement('style');
+      style.id = 'ana2me-highlight-style';
+      style.textContent = `
+        @keyframes ana2me-sweep {
+          from { background-size: 0% 85%; }
+          to   { background-size: 100% 85%; }
+        }
+        mark {
+          background: none;
+          color: inherit;
+        }
+        .ana2me-hl {
+          background-image: linear-gradient(rgba(100, 176, 120, 0.32), rgba(100, 176, 120, 0.32));
+          background-repeat: no-repeat;
+          background-position: left center;
+          background-size: 0% 88%;
+          animation: ana2me-sweep 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          border-radius: 2px;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    const getTargets = () => [
+      ...container.querySelectorAll('.fact-body mark'),
+    ];
+    const seen = new Set();
+    const TRIGGER = window.innerHeight * 0.62;
+
+    const handleScroll = () => {
+      getTargets().forEach(el => {
+        if (seen.has(el)) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < TRIGGER) {
+          seen.add(el);
+          el.classList.remove('ana2me-hl');
+          void el.offsetWidth;
+          el.classList.add('ana2me-hl');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      getTargets().forEach(el => el.classList.remove('ana2me-hl'));
+    };
+  }, [product.id]);
 
   const name = lang === 'ko' && product.nameKo ? product.nameKo : product.name;
 
@@ -35,6 +138,9 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
     base: notes.filter(n => n.type === 'base'),
   };
 
+  const reviews = product.reviews || [];
+  const reviewCount = reviews.length;
+
   // Benefits framing per category
   const benefitsHeadline = isFragrance
     ? t('You\'ll love this if you\'re:', '이런 분께 추천해요:')
@@ -44,7 +150,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
     : t('Best for these concerns', '이런 피부 고민에 좋아요');
 
   return (
-    <div className={cn('detail', `dens-${density}`)}>
+    <div ref={detailRef} className={cn('detail', `dens-${density}`)}>
       <button className="back-btn" onClick={() => { setProduct(null); setView('feed'); }}>
         <Icon name="back" size={16} /> {t('Back', '뒤로')}
       </button>
@@ -63,11 +169,9 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <span className="detail-brand">{product.brand}</span>
           <h1 className="detail-name">{name}</h1>
           <p className="detail-tag">{tag}</p>
-          {product.id === 'skincare-5' && (
-            <p style={{ fontSize: 12, color: 'var(--ink-faint)', lineHeight: 1.6, margin: '8px 0 0' }}>
-              Product image and information belong to their respective brand owners. We do not claim ownership of any product imagery or official product descriptions.
-            </p>
-          )}
+          <div style={{ fontSize: 12, color: 'var(--ink-faint)', lineHeight: 1.6, margin: '12px 0 16px', padding: '10px 14px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)' }}>
+            Product image and information belong to their respective brand owners. We do not claim ownership of any product imagery or official product descriptions.
+          </div>
 
           <div className="detail-actions">
             <button
@@ -77,6 +181,14 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
               <Icon name="bookmark" size={16} /> {isSaved ? t('Saved', '저장됨') : t('Save', '저장')}
             </button>
             <button className="act-btn"><Icon name="share" size={16} /> {t('Share', '공유')}</button>
+            {reviewCount > 0 && (
+              <button className="act-btn" onClick={() => {
+                const el = document.getElementById('reviews-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}>
+                <Icon name="chat" size={16} /> {reviewCount} {t('Reviews', '리뷰')}
+              </button>
+            )}
           </div>
 
           {/* Accords for skincare / Performance for fragrance */}
@@ -117,60 +229,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         </div>
       </section>
 
-      {/* ---------- SUMMARY: benefits / concerns side by side ---------- */}
-      <section className="summary-grid">
-        <div className="summary-col summary-col-yes">
-          <div className="summary-col-head">
-            <span className="summary-mark summary-mark-yes">+</span>
-            <h2 className="summary-h">{benefitsHeadline}</h2>
-          </div>
-          <ul className="summary-list">
-            {benefits.map((b, i) => (
-              <li key={i} className="summary-item">
-                <span className="summary-dot summary-dot-yes" />
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="summary-col summary-col-no">
-          <div className="summary-col-head">
-            <span className={cn('summary-mark', isFragrance ? 'summary-mark-no' : 'summary-mark-concern')}>
-              {isFragrance ? '−' : '•'}
-            </span>
-            <h2 className="summary-h">{concernsHeadline}</h2>
-          </div>
-          {isFragrance ? (
-            <ul className="summary-list">
-              {concerns.map((c, i) => (
-                <li key={i} className="summary-item">
-                  <span className="summary-dot summary-dot-no" />
-                  <span>{c}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="concern-chips concern-chips-big">
-              {concerns.map((c, i) => (
-                <span key={i} className="concern-tag tag-sage">{c}</span>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ---------- USAGE ---------- */}
-      {usage && (
-        <section className="usage-card">
-          <div className="usage-head">
-            <Sticker color="butter" rotate={-4}>{t('How to use', '사용법')}</Sticker>
-          </div>
-          <p className="usage-body">{usage}</p>
-        </section>
-      )}
-
-      {/* ---------- ANATOMY: ingredients (skincare) or notes pyramid (fragrance) ---------- */}
+      {/* ---------- ANATOMY: ingredients (skincare) or notes pyramid (fragrance) or bioValues (wellness) ---------- */}
       {isSkincare && product.ingredients && (
         <section className="ing-section">
           <header className="ing-head">
@@ -178,28 +237,47 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
               <h2 className="sec-h">{t('The anatomy', '이 제품의 해부도')}</h2>
               <p className="sec-sub">{t('Tap any ingredient — we\'ll explain exactly what it does.', '성분을 눌러보세요. 정확히 뭘 하는지 알려드려요.')}</p>
             </div>
-            <Sticker color="butter" rotate={-5}>{product.ingredients.length} {t('actives', '성분')}</Sticker>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <button
+                className={cn('act-btn', product.ingredients.every(ing => savedIngs[ing.id]) && 'act-btn-on')}
+                onClick={() => setSavedIngs(s => {
+                  const next = { ...s };
+                  const allSaved = product.ingredients.every(ing => s[ing.id]);
+                  product.ingredients.forEach(ing => { allSaved ? delete next[ing.id] : next[ing.id] = true; });
+                  return next;
+                })}
+              >
+                <Icon name="bookmark" size={14} /> {product.ingredients.every(ing => savedIngs[ing.id]) ? t('Unsave all', '전체 해제') : t('Save all', '전체 저장')}
+              </button>
+              <Sticker color="butter" rotate={-5}>{product.ingredients.length} {t('actives', '성분')}</Sticker>
+            </div>
           </header>
 
-          <div className="ing-grid">
+          <IngScrollFade>
             {product.ingredients.map((ing, i) => (
-              <button
-                key={ing.id}
-                onClick={() => setSelIng(ing)}
-                className="ing-card"
-                style={{ '--i': i }}
-              >
-                <span className="ing-sym">{ing.symbol}</span>
-                <div className="ing-body">
-                  <p className="ing-name">{lang === 'ko' && ing.nameKo ? ing.nameKo : ing.name}</p>
-                  <div className="ing-bar-wrap">
-                    <div className="ing-bar" style={{ width: `${Math.min(100, ing.percentage * 2)}%` }} />
+              <div key={ing.id} className="ing-card" style={{ '--i': i }}>
+                <button
+                  onClick={() => setSelIng(ing)}
+                  className="ing-card-main"
+                >
+                  <span className="ing-sym">{ing.symbol}</span>
+                  <div className="ing-body">
+                    <p className="ing-name">{lang === 'ko' && ing.nameKo ? ing.nameKo : ing.name}</p>
+                    <div className="ing-bar-wrap">
+                      <div className="ing-bar" style={{ width: `${Math.min(100, ing.percentage * 2)}%` }} />
+                    </div>
                   </div>
-                </div>
-                <span className="ing-pct">{ing.percentage}%</span>
-              </button>
+                  <span className="ing-pct">{ing.percentage}%</span>
+                </button>
+                <button
+                  className={cn('ing-save-btn', savedIngs[ing.id] && 'ing-save-btn-on')}
+                  onClick={() => setSavedIngs(s => ({ ...s, [ing.id]: !s[ing.id] }))}
+                >
+                  <Icon name="bookmark" size={14} />
+                </button>
+              </div>
             ))}
-          </div>
+          </IngScrollFade>
         </section>
       )}
 
@@ -250,8 +328,59 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         </section>
       )}
 
-      {/* ---------- FUN FACTS ---------- */}
-      {product.funFacts && product.funFacts.length > 0 && (
+      {product.bioValues && product.bioValues.length > 0 && (
+        <section className="ing-section">
+          <header className="ing-head">
+            <div>
+              <h2 className="sec-h">{t('The anatomy', '이 제품의 해부도')}</h2>
+              <p className="sec-sub">{t('Tap any compound — we\'ll explain what it does in your body.', '성분을 눌러보세요. 몸에서 어떤 역할을 하는지 알려드려요.')}</p>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <button
+                className={cn('act-btn', product.bioValues.every(bv => savedIngs[bv.id]) && 'act-btn-on')}
+                onClick={() => setSavedIngs(s => {
+                  const next = { ...s };
+                  const allSaved = product.bioValues.every(bv => s[bv.id]);
+                  product.bioValues.forEach(bv => { allSaved ? delete next[bv.id] : next[bv.id] = true; });
+                  return next;
+                })}
+              >
+                <Icon name="bookmark" size={14} /> {product.bioValues.every(bv => savedIngs[bv.id]) ? t('Unsave all', '전체 해제') : t('Save all', '전체 저장')}
+              </button>
+              <Sticker color="butter" rotate={-5}>{product.bioValues.length} {t('actives', '성분')}</Sticker>
+            </div>
+          </header>
+
+          <IngScrollFade>
+            {product.bioValues.map((bv, i) => (
+              <div key={bv.id} className="ing-card" style={{ '--i': i }}>
+                <button
+                  onClick={() => setSelBio(bv)}
+                  className="ing-card-main"
+                >
+                  <span className="ing-sym">{bv.system === 'brain' ? '🧠' : bv.system === 'energy' ? '⚡' : '✦'}</span>
+                  <div className="ing-body">
+                    <p className="ing-name">{lang === 'ko' && bv.nameKo ? bv.nameKo : bv.name}</p>
+                    <div className="ing-bar-wrap">
+                      <div className="ing-bar" style={{ width: `${bv.value}%` }} />
+                    </div>
+                  </div>
+                  <span className="ing-pct">{bv.value}</span>
+                </button>
+                <button
+                  className={cn('ing-save-btn', savedIngs[bv.id] && 'ing-save-btn-on')}
+                  onClick={() => setSavedIngs(s => ({ ...s, [bv.id]: !s[bv.id] }))}
+                >
+                  <Icon name="bookmark" size={14} />
+                </button>
+              </div>
+            ))}
+          </IngScrollFade>
+        </section>
+      )}
+
+      {/* ---------- FUN FACTS (not for wellness) ---------- */}
+      {product.funFacts && product.funFacts.length > 0 && product.category !== 'wellness-food' && (
         <section className="facts-section">
           <header className="facts-head">
             <h2 className="sec-h">{t('In the wild', '소소한 이야기')}</h2>
@@ -261,10 +390,97 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             {product.funFacts.map((f, i) => (
               <article key={i} className="fact-card">
                 <span className="fact-quote">&ldquo;</span>
-                <p className="fact-body">{lang === 'ko' ? f.ko : f.en}</p>
+                <p className="fact-body">{markUp(lang === 'ko' ? f.ko : f.en)}</p>
                 <span className="fact-num">No. {String(i + 1).padStart(2, '0')}</span>
               </article>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* ---------- SUMMARY: benefits / concerns side by side ---------- */}
+      <section className="summary-grid">
+        <div className="summary-col summary-col-yes">
+          <div className="summary-col-head">
+            <span className="summary-mark summary-mark-yes">+</span>
+            <h2 className="summary-h">{benefitsHeadline}</h2>
+          </div>
+          <ul className="summary-list">
+            {benefits.map((b, i) => (
+              <li key={i} className="summary-item">
+                <span className="summary-dot summary-dot-yes" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="summary-col summary-col-no">
+          <div className="summary-col-head">
+            <span className={cn('summary-mark', isFragrance ? 'summary-mark-no' : 'summary-mark-concern')}>
+              {isFragrance ? '−' : '•'}
+            </span>
+            <h2 className="summary-h">{concernsHeadline}</h2>
+          </div>
+          {isFragrance ? (
+            <ul className="summary-list">
+              {concerns.map((c, i) => (
+                <li key={i} className="summary-item">
+                  <span className="summary-dot summary-dot-no" />
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="concern-chips concern-chips-big">
+              {concerns.map((c, i) => (
+                <span key={i} className="concern-tag tag-sage">{c}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ---------- USAGE (skincare/wellness only) ---------- */}
+      {usage && !isFragrance && (
+        <section className="usage-card">
+          <div className="usage-head">
+            <Sticker color="butter" rotate={-4}>{t('How to use', '사용법')}</Sticker>
+          </div>
+          <p className="usage-body">{usage}</p>
+        </section>
+      )}
+
+      {/* ---------- REVIEWS ---------- */}
+      {reviewCount > 0 && (
+        <section id="reviews-section" className="reviews-section">
+          <header className="reviews-head">
+            <h2 className="sec-h">{t('Reviews', '리뷰')}</h2>
+            <span className="reviews-count">{reviewCount}</span>
+          </header>
+          <div className="reviews-list">
+            {reviews.map((r, i) => {
+              const stars = r.rating || 5;
+              return (
+                <article key={i} className="review-card">
+                  <div className="review-top">
+                    <div className="review-author">
+                      <span className="review-avatar">{(r.author || 'A')[0]}</span>
+                      <div>
+                        <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
+                        {r.date && <span className="review-date">{r.date}</span>}
+                      </div>
+                    </div>
+                    <div className="review-stars">
+                      {Array.from({ length: 5 }, (_, si) => (
+                        <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="review-body">{lang === 'ko' && r.bodyKo ? r.bodyKo : r.body}</p>
+                </article>
+              );
+            })}
           </div>
         </section>
       )}
@@ -318,6 +534,25 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             <div className="sheet-divider" />
             <p className="sheet-sci-label">{t('The science', '과학적으로는')}</p>
             <p className="sheet-sci">{lang === 'ko' && selNote.scienceKo ? selNote.scienceKo : selNote.science}</p>
+          </div>
+        </div>
+      )}
+
+      {/* ---------- BIO SHEET (wellness) ---------- */}
+      {selBio && (
+        <div className="sheet-back" onClick={() => setSelBio(null)}>
+          <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            <button className="sheet-close" onClick={() => setSelBio(null)}><Icon name="x" size={16} /></button>
+            <span className="sheet-tier">
+              {selBio.system === 'brain' && t('Brain & Mood', '뇌 & 기분')}
+              {selBio.system === 'energy' && t('Energy & Metabolism', '에너지 & 대사')}
+              {selBio.system === 'skin' && t('Skin & Repair', '피부 & 회복')}
+            </span>
+            <h3 className="sheet-name">{lang === 'ko' && selBio.nameKo ? selBio.nameKo : selBio.name}</h3>
+            <p className="sheet-desc">{lang === 'ko' && selBio.descriptionKo ? selBio.descriptionKo : selBio.description}</p>
+            <div className="sheet-divider" />
+            <p className="sheet-sci-label">{t('The science', '과학적으로는')}</p>
+            <p className="sheet-sci">{lang === 'ko' && selBio.scienceKo ? selBio.scienceKo : selBio.science}</p>
           </div>
         </div>
       )}
