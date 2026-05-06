@@ -298,19 +298,19 @@
           {view === 'about' && <About lang={lang} density={density} />}
           {view === 'privacy' && <Privacy lang={lang} />}
 
-          <footer style={{ maxWidth: 1180, margin: '0 auto', padding: '32px 28px 48px', borderTop: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>© {new Date().getFullYear()} ana2me</span>
-              <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>{lang === 'ko' ? '문의' : 'Inquiries'}: ana2me2026@gmail.com</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <footer style={{ maxWidth: 1180, margin: '0 auto', padding: '32px 28px 48px', borderTop: '1px solid var(--line)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
               <button onClick={() => setView('privacy')} style={{ fontSize: 13, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
                 {lang === 'ko' ? '개인정보처리방침' : 'Privacy Policy'}
               </button>
+              <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
+              <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>ana2me2026@gmail.com</span>
+              <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
               <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: '0.04em' }}>
                 {lang === 'ko' ? 'EN' : '한국어'}
               </button>
             </div>
+            <span style={{ fontSize: 12, color: 'var(--ink-faint)', opacity: 0.6 }}>© {new Date().getFullYear()} ana2me</span>
           </footer>
 
           {tweaksOpen && <Tweaks tweaks={tweaks} setTweak={setTweak} lang={lang} setLang={setLang} />}
