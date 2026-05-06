@@ -1,9 +1,9 @@
 // Feed view — home with chat greeting + daily pick + product grid
 const { useMemo: _uM1 } = React;
 
-window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density }) {
+window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  const products = window.PRODUCTS;
+  products = products || window.PRODUCTS || [];
 
   const filtered = useMemo(() => {
     if (query) {

@@ -352,8 +352,36 @@
       setArticleJsonLd(null);
     },
 
-    setArticle: function (articleId) {
-      var m = ARTICLE_META[articleId];
+    // Set SEO for an article — accepts either an articleId (legacy lookup)
+    // or a full article object from Supabase (dynamic)
+    setArticle: function (articleIdOrObj) {
+      var m, articleId;
+
+      if (typeof articleIdOrObj === 'object' && articleIdOrObj !== null) {
+        // Dynamic: article object from Supabase
+        var a = articleIdOrObj;
+        articleId = a.id;
+        var dateStr = a.date;
+        var d = new Date(dateStr);
+        var isoDate = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        m = {
+          title: a.title.en,
+          description: a.excerpt.en,
+          datePublished: isoDate,
+          dateModified: isoDate,
+          image: (a.imageUrl || a.image_url || '').replace('w=800', 'w=1200'),
+          imageAlt: a.title.en,
+          keywords: a.keywords || '',
+          category: a.category.en,
+          tag: a.tag.en.toLowerCase().replace(/\s+/g, '-'),
+          wordCount: 1000,
+        };
+      } else {
+        // Legacy: look up from hardcoded ARTICLE_META
+        articleId = articleIdOrObj;
+        m = ARTICLE_META[articleId];
+      }
+
       if (!m) { window.SEO.setHome(); return; }
       var title = m.title + ' | ' + SITE_NAME;
       var url = buildArticleUrl(articleId, m);

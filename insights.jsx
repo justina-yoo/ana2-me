@@ -16,7 +16,15 @@ function postSlug(post) {
 window.Insights = function Insights({ lang, density, query }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
+  const [POSTS, setPOSTS] = useState([]);
   const isKo = lang === 'ko';
+
+  // Fetch articles from Supabase
+  useEffect(() => {
+    window.__supabase.fetchArticles().then(function(data) {
+      setPOSTS(data);
+    });
+  }, []);
 
   // Logo click → go home
   useEffect(() => {
@@ -34,6 +42,7 @@ window.Insights = function Insights({ lang, density, query }) {
   // On mount, check if URL path matches an article
   // Supports both /2026-05-04/article-id and legacy /article-id
   useEffect(() => {
+    if (POSTS.length === 0) return;
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
     if (path && path !== 'insights') {
       const parts = path.split('/');
@@ -41,433 +50,17 @@ window.Insights = function Insights({ lang, density, query }) {
       const match = POSTS.find(p => p.id === articleId);
       if (match) {
         setSelectedPost(match);
-        if (window.SEO) window.SEO.setArticle(match.id);
+        if (window.SEO) window.SEO.setArticle(match);
       }
     }
-  }, []);
+  }, [POSTS]);
 
-  const POSTS = [
-    {
-      id: 'grown-up-gourmand-matcha-pistachio',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: "Gourmand Fragrance Grew Up. Matcha, Pistachio, and Roasted Sesame Replaced Candy.",
-        ko: '구르망 향수가 어른이 됐습니다 — 캔디 대신 말차, 피스타치오, 볶은 참깨',
-      },
-      excerpt: {
-        en: "Pistachio is up 852% year-over-year in fragrance searches. Matcha is 2026's flagship gourmand note. The shift isn't random — gourmand is moving from sugar-sweet to savory, toasted, and umami. The culinary sophistication movement hit perfumery.",
-        ko: '피스타치오 향료 검색이 전년 대비 852% 급등했어요. 말차는 2026년 구르망의 대표 노트가 됐고요. 달콤함에서 고소함, 쓴맛, 감칠맛으로 — 구르망 향수가 미식의 언어를 배웠습니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 6, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&q=80&w=800',
-      keywords: 'gourmand fragrance matcha pistachio roasted sesame savory umami solinote single note perfume culinary pyrazines lactones bitter-sweet toasted 구르망 향수 말차 피스타치오 참깨 고소한 감칠맛',
-    },
-    {
-      id: 'korea-sleep-wellness-snacks',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "Supplements Are Dead. Korea's Gen Z Is Eating Sleep Gummies Instead.",
-        ko: '알약은 끝났어요. MZ세대가 수면 간식을 먹기 시작한 이유',
-      },
-      excerpt: {
-        en: "Korea's sleep health food market is booming — Olive Young reports 300% YoY growth in sleep supplements. The secret? Repackaging GABA, magnesium, and plant melatonin as gummies, jellies, and flavored sticks that feel like snacks, not medicine.",
-        ko: '올리브영 수면 건강식품 매출이 전년 대비 300% 증가했어요. 비결은 GABA, 마그네슘, 식물성 멜라토닌을 구미, 젤리, 스틱 형태로 바꾼 것. 약이 아니라 간식처럼 느껴지는 웰니스가 MZ세대를 사로잡고 있습니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 6, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=800',
-      keywords: 'sleep wellness snacks gummies GABA magnesium melatonin plant-based Olive Young Gen Z healthy pleasure 헬시플레저 수면 간식 구미 젤리 마그네슘 MZ세대 올리브영',
-    },
-    {
-      id: 'sugar-glycation-skin-aging',
-      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
-      title: {
-        en: "Sugar Is Aging Your Skin Faster Than the Sun. The Science of Glycation.",
-        ko: '설탕이 자외선보다 피부를 더 빨리 늙게 합니다 — 당화 반응의 과학',
-      },
-      excerpt: {
-        en: "Glycation — the process where sugar molecules bond to collagen and elastin — creates permanent cross-links that make skin stiff, yellow, and wrinkle-prone. New research from Estée Lauder (April 2026) confirms that sugar exposure accelerates cellular aging markers in skin. The next frontier in anti-aging isn't another retinoid. It's stopping sugar damage.",
-        ko: '당화 반응은 설탕 분자가 콜라겐과 엘라스틴에 결합해 피부를 뻣뻣하고 누렇게 만드는 과정이에요. 에스티 로더의 최신 연구(2026년 4월)가 설탕 노출이 피부 세포 노화 지표를 가속한다고 확인했어요. 다음 안티에이징의 핵심은 레티노이드가 아니라 당 손상 차단입니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 6, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&q=80&w=800',
-      keywords: 'glycation sugar skin aging AGEs advanced glycation end products collagen cross-linking elastin yellowing wrinkles carnosine niacinamide anti-glycation Estee Lauder 당화 설탕 피부 노화 콜라겐 교차결합 엘라스틴',
-    },
-    {
-      id: 'ten-step-routine-dead',
-      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
-      title: {
-        en: "The 10-Step Routine Is Dead. Korean Dermatologists Now Say 3 Steps Is Enough.",
-        ko: '10단계 루틴은 끝났습니다. 한국 피부과 전문의가 말하는 3단계의 힘',
-      },
-      excerpt: {
-        en: "67% of Korean women aged 20-35 use five or fewer products daily. The 10-step routine was never real K-beauty — it was a Western invention. Korean dermatologists now recommend cleanse, treat, moisturize. That's it.",
-        ko: '한국 20-35세 여성의 67%가 매일 5개 이하의 제품을 사용해요. 10단계 루틴은 한국이 아니라 서양이 만든 이미지였습니다. 한국 피부과 전문의의 답은 세정, 치료, 보습. 이 세 가지예요.',
-      },
-      readTime: { en: '5 min read', ko: '5분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=800',
-      keywords: 'routine 10 step minimalist 3 step dermatologist Korean skincare simplified barrier damage fewer products cleanser moisturizer serum 루틴 단계 미니멀 피부과 세정 보습',
-    },
-    {
-      id: 'celebrity-skincare-methods',
-      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
-      title: {
-        en: "Song Hye-kyo Washes Her Face with Milk. Suzy Does \"424.\" Which Celebrity Methods Actually Work?",
-        ko: '송혜교는 우유 세안, 수지는 424 세안법 — 셀럽 스킨케어, 과학적으로 따져봤습니다',
-      },
-      excerpt: {
-        en: "Korean celebrity skincare methods go viral every week — milk rinses, heated palm absorption, timed cleansing rituals. We asked dermatologists which ones are backed by science and which are just good PR.",
-        ko: '우유 세안, 손바닥 온열법, 시간 맞춤 클렌징까지. 매주 바이럴되는 한국 셀럽 스킨케어 비법들, 피부과학으로 하나씩 검증해봤어요.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800',
-      keywords: 'Song Hye-kyo milk rinse Suzy 424 method Jessica Jung heated palm IU Korean celebrity actress idol skincare routine lactic acid double cleansing 송혜교 수지 제시카 셀럽 우유세안',
-    },
-    {
-      id: 'jjimjilbang-wellness-science',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "Jjimjilbangs Are Going Global. The Science Behind Korea's Oldest Wellness Ritual.",
-        ko: '찜질방이 세계로 갑니다. 한국 최고(最古)의 웰니스 의식, 과학이 증명하는 효과',
-      },
-      excerpt: {
-        en: "Korean bathhouses are driving a global wellness tourism boom — fueled by K-dramas and TikTok. The hot-cold contrast therapy isn't just tradition. Studies show it creates a vascular pump effect, lowers cortisol for up to 3 hours, and boosts growth hormone by up to 24x.",
-        ko: 'K-드라마와 틱톡이 만든 찜질방 관광 붐. 온냉 대비 요법은 단순한 전통이 아니에요. 혈관 펌프 효과, 코르티솔 3시간 저하, 성장호르몬 최대 24배 증가 — 과학이 뒷받침합니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&q=80&w=800',
-      keywords: 'jjimjilbang Korean bathhouse sauna cold plunge contrast therapy cortisol circulation vascular pump growth hormone K-drama wellness tourism 찜질방 사우나 냉탕 온냉 대비 웰니스',
-    },
-    {
-      id: 'korea-sleep-crisis',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "Korea Sleeps Less Than Almost Any Country on Earth. It Built an ₩11 Trillion Industry to Fix It.",
-        ko: 'OECD 최하위 수면 시간, 한국이 만든 11조 원 규모의 수면 산업',
-      },
-      excerpt: {
-        en: "Korea's sleep market exploded from ₩500 billion to ₩11 trillion in a decade. Olive Young's sleep supplement sales are up 300%. Plant-based melatonin, GABA gummies, and sleep-specific skincare — Korea isn't sleeping, so it's buying solutions.",
-        ko: '10년 만에 5천억에서 11조로 성장한 한국 수면 시장. 올리브영 수면 건강식품 매출 300% 증가. 식물성 멜라토닌, GABA 구미, 수면 전용 스킨케어까지 — 못 자는 나라가 만든 거대한 산업입니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&q=80&w=800',
-      keywords: 'Korea sleep crisis insomnia melatonin plant-based GABA Olive Young sleep market trillion won OECD supplement digital therapeutics 수면 불면증 멜라토닌 GABA 올리브영',
-    },
-    {
-      id: 'creatine-women-brain',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "Creatine Isn't Just for Gym Bros. Women Are Taking It for Their Brains Now.",
-        ko: '크레아틴, 근육이 아니라 뇌를 위해 먹는 여성들이 늘고 있습니다',
-      },
-      excerpt: {
-        en: "Creatine supplementation boosts ATP production in the brain, reduces cognitive fatigue during PMS, and alleviates menopause-related brain fog. Searches for 'creatine for women' are up 123% — and the science backs the hype.",
-        ko: '크레아틴 보충이 뇌의 ATP 생산을 높이고, 생리 전 인지 피로를 줄이며, 갱년기 브레인포그를 완화한다는 연구 결과가 쏟아지고 있어요. "여성 크레아틴" 검색량은 123% 증가했습니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800',
-      keywords: 'creatine women brain ATP cognitive PMS menopause fatigue supplement gummies monohydrate muscle recovery menstrual cycle estrogen 크레아틴 여성 뇌 인지기능 갱년기 생리전증후군',
-    },
-    {
-      id: 'milk-perfume-lactonic',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: "Milk Perfume Is 2026's Defining Scent. Here's the Chemistry Behind \"Soft.\"",
-        ko: '밀크 퍼퓸이 2026년을 정의하는 향이 된 이유 — "부드러움"의 화학',
-      },
-      excerpt: {
-        en: "Lactonic fragrances don't actually smell like milk. They're built from cyclic ester molecules — gamma-decalactone, delta-decalactone — that your brain reads as 'creamy warmth.' The science of why comfort has a smell.",
-        ko: '락토닉 향수는 사실 우유 냄새가 아니에요. 감마데카락톤, 델타데카락톤 같은 고리형 에스테르 분자가 만드는 "크리미한 따뜻함"이라는 후각적 인상입니다. 편안함에도 화학이 있어요.',
-      },
-      readTime: { en: '5 min read', ko: '5분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=800',
-      keywords: 'milk perfume lactonic lactone gamma-decalactone delta-decalactone creamy vanilla tonka bean sandalwood comfort scent TikTok gourmand skin scent Commodity 밀크퍼퓸 락토닉 락톤 크리미 바닐라',
-    },
-    {
-      id: 'tropical-fruit-fragrance',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: "Tropical Fruit Notes Are Up 1,200%. Your Nose Is Craving Something Feral.",
-        ko: '열대 과일 향이 1,200% 급등했습니다. 코가 본능적으로 원하는 것',
-      },
-      excerpt: {
-        en: "Guava, passionfruit, and watermelon searches have surged 1,200% year-over-year in fragrance. It's not random — volatile sulfur compounds in tropical fruits trigger a uniquely intense neurological response that clean musks can't replicate.",
-        ko: '구아바, 패션프루트, 수박 향료 검색이 전년 대비 1,200% 급증했어요. 열대 과일의 휘발성 황 화합물이 만드는 강렬한 신경 반응은 클린 머스크로는 대체할 수 없습니다.',
-      },
-      readTime: { en: '5 min read', ko: '5분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&q=80&w=800',
-      keywords: 'tropical fruit fragrance guava passionfruit watermelon raspberry sulfur compounds volatile esters mango pear gourmand feral juicy TikTok 열대과일 향수 구아바 패션프루트 수박',
-    },
-    {
-      id: 'centella-superbug-discovery',
-      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
-      title: {
-        en: "The \"Cica\" Ingredient in Every K-Beauty Cream Just Got a Radical New Superpower.",
-        ko: '모든 시카 크림에 든 그 성분, 항생제 내성균까지 잡는다는 연구가 나왔습니다',
-      },
-      excerpt: {
-        en: "Madecassic acid — the active compound behind every cica cream on the market — can kill antibiotic-resistant E. coli by targeting a protein humans don't have. A University of Kent study just gave K-beauty's most familiar ingredient a completely unexpected second act.",
-        ko: '시카 크림의 핵심 성분인 마데카소산이 항생제 내성 대장균을 죽일 수 있다는 연구 결과가 나왔어요. 인간에게 없는 세균 단백질만 공격하는 방식으로, K-뷰티의 가장 익숙한 성분이 완전히 새로운 가능성을 열었습니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 4, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&q=80&w=800',
-      keywords: 'centella asiatica cica madecassic acid madecassoside asiaticoside antibiotic resistance cytochrome bd antibacterial E. coli superbug barrier repair collagen inflammation 센텔라 시카 마데카소산 항생제 내성균',
-    },
-    {
-      id: 'spicules-microneedling',
-      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
-      title: {
-        en: "\"Microneedling in a Bottle\" Is K-Beauty's Most Controversial New Ingredient. Here's the Science.",
-        ko: '"병 속의 마이크로니들링" — K-뷰티 최대 논란의 성분, 과학으로 따져봤습니다',
-      },
-      excerpt: {
-        en: "Spicules are microscopic needles from freshwater sponges that create micro-channels in skin, boosting active ingredient penetration and triggering collagen production. Same principle as professional microneedling — but at home. K-beauty's hottest ingredient of 2026.",
-        ko: '스피큘은 해면에서 추출한 미세 바늘로, 피부에 마이크로 채널을 만들어 성분 흡수와 콜라겐 재생을 유도해요. 전문 마이크로니들링과 같은 원리를 집에서. 2026년 K-뷰티 최대 화제 성분입니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 3, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&fit=crop&q=80&w=800',
-      keywords: 'spicules microneedling marine sponge spongilla collagen micro-channels wound healing calcium silicate keratinocyte stratum corneum 스피큘 마이크로니들링 해면 콜라겐',
-    },
-    {
-      id: 'myo-inositol-hormonal-health',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "Myo-Inositol Is Quietly Becoming the Most Important Women's Wellness Supplement.",
-        ko: '미오이노시톨, 여성 웰니스에서 가장 주목받는 성분이 된 이유',
-      },
-      excerpt: {
-        en: "Myo-inositol improves insulin signaling — the upstream trigger behind PCOS, hormonal acne, and ovulation problems. Clinical studies show the 40:1 myo/D-chiro ratio reduces fasting insulin and restores hormonal balance. It's becoming the go-to before prescriptions.",
-        ko: '미오이노시톨은 인슐린 신호 전달을 개선해 PCOS, 호르몬성 여드름, 배란 장애의 근본 원인에 작용해요. 40:1 비율이 핵심이며, 처방 전 첫 번째 선택지로 떠오르고 있습니다.',
-      },
-      readTime: { en: '7 min read', ko: '7분 읽기' },
-      date: 'May 3, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1596572934426-52ac4e95e014?auto=format&fit=crop&q=80&w=800',
-      keywords: 'myo-inositol D-chiro-inositol PCOS insulin resistance hormonal acne ovulation menstrual cycle androgens 40:1 ratio supplement 미오이노시톨 인슐린 호르몬 여드름 배란',
-    },
-    {
-      id: 'edible-skincare-gut-skin',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "Korea Is Eating Its Skincare Now. The Gut-Skin Science Says They're Right.",
-        ko: '한국이 화장품을 "먹기" 시작했습니다. 장-피부 과학이 증명하는 이유',
-      },
-      excerpt: {
-        en: "Olive Young's inner beauty category grew 55% year-over-year. The science behind it is the gut-skin axis — short-chain fatty acids from gut bacteria directly regulate skin inflammation and barrier function. Collagen drinks and probiotics aren't hype. They're biology.",
-        ko: '올리브영 이너뷰티 매출이 55% 급증했어요. 핵심은 장-피부 축 — 장내 세균이 만드는 단쇄지방산이 피부 염증과 장벽 기능을 직접 조절합니다. 먹는 스킨케어는 마케팅이 아니라 생물학이에요.',
-      },
-      readTime: { en: '7 min read', ko: '7분 읽기' },
-      date: 'May 3, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1620755901989-0f457a38011e?auto=format&fit=crop&q=80&w=800',
-      keywords: 'edible skincare inner beauty gut-skin axis SCFA short-chain fatty acids collagen peptides probiotics postbiotics Lactobacillus Bifidobacterium prebiotics Olive Young 이너뷰티 장피부축 프로바이오틱스 콜라겐',
-    },
-    {
-      id: 'k-fragrance-skin-scents',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: "K-Fragrance Just Hit Record Exports. Here's the Molecular Reason Korean Perfume Smells Different.",
-        ko: 'K-프래그런스 수출이 역대 최고를 찍었습니다. 한국 향수는 왜 다를까요?',
-      },
-      excerpt: {
-        en: "South Korea's fragrance exports hit $6.52 million in January 2026 — the highest monthly figure since records began in 1988. The secret isn't marketing. It's a fundamentally different approach to scent design: skin-close, low-sillage, built on synthetic musks and sheer woods rather than projection.",
-        ko: '2026년 1월, 한국 향수 수출이 월 652만 달러로 사상 최고치를 기록했어요. 마케팅이 아닌 제조 철학이 다릅니다 — 피부에 밀착되는 머스크와 시어 우드 중심의 설계, 강하게 퍼지는 대신 가까이에서 느끼는 향.',
-      },
-      readTime: { en: '7 min read', ko: '7분 읽기' },
-      date: 'May 1, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&q=80&w=800',
-      keywords: 'K-fragrance skin scent Korean perfume white musk ambroxan sheer woods synthetic musks Tamburins Nonfiction Granhand clean fragrance exports 한국향수 머스크 탐버린즈 논픽션',
-    },
-    {
-      id: 'pistachio-fragrance-note',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: "Pistachio Is Up 852%. Here's Why Your Nose Can't Resist It.",
-        ko: '피스타치오 향이 852% 급등한 이유 — 코가 거부할 수 없는 분자 구조',
-      },
-      excerpt: {
-        en: "Pistachio is 2026's breakout fragrance note — up 852% year-over-year. It's not about the nut. It's about what happens when lactones, pyrazines, and aldehydes combine to create a scent your brain reads as 'creamy warmth' rather than 'food.'",
-        ko: '피스타치오가 2026년 가장 뜨거운 향료로 떠올랐어요. 비결은 견과류 자체가 아니라, 락톤과 피라진이 만드는 "크리미한 따뜻함"이라는 후각적 인상에 있습니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 1, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1502825751399-28baa9b81efe?auto=format&fit=crop&q=80&w=800',
-      keywords: 'pistachio fragrance note gourmand pyrazine lactones benzaldehyde marzipan synthetic accord Dubai chocolate aroma molecules perfumery olfactory 피스타치오 향료 구르망',
-    },
-    {
-      id: 'fragrance-wardrobing',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: "Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.",
-        ko: '20분이면 내 향수가 안 느껴져요. 뇌과학이 알려주는 해결법',
-      },
-      excerpt: {
-        en: "Olfactory habituation isn't a flaw — it's an evolutionary survival mechanism. Your brain categorizes familiar scents as 'safe background.' Rotating fragrances resets this filter. The signature scent is dead. The fragrance wardrobe is what works.",
-        ko: '후각 피로는 결함이 아니라 생존 본능이에요. 익숙한 냄새를 "안전한 배경"으로 분류하는 뇌의 필터링 시스템입니다. 시그니처 향수 대신, 향수 옷장을 만들어보세요.',
-      },
-      readTime: { en: '5 min read', ko: '5분 읽기' },
-      date: 'May 1, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&fit=crop&q=80&w=800',
-      keywords: 'olfactory habituation fragrance rotation wardrobe scent families nose blindness perfume tolerance olfactory receptors signature scent 후각피로 향수옷장 시그니처향',
-    },
-    {
-      id: 'postbiotics-skin-barrier',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: 'Probiotics Were Just the Beginning. Postbiotics Are What Your Skin Barrier Actually Needs.',
-        ko: '프로바이오틱스는 시작에 불과했어요. 피부 장벽이 진짜 필요한 건 포스트바이오틱스입니다',
-      },
-      excerpt: {
-        en: 'Postbiotics — the bioactive byproducts of fermentation — improve skin barrier function without introducing live bacteria. Korean beauty has been using them for decades under names like bifida ferment lysate and lactobacillus ferment filtrate. The science just caught up.',
-        ko: '포스트바이오틱스는 발효 과정에서 생성되는 생리활성 부산물로, 살아있는 균 없이도 피부 장벽을 강화해요. K-뷰티는 비피다 발효물, 유산균 발효물이라는 이름으로 이미 수십 년째 써왔습니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'May 1, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&fit=crop&q=80&w=800',
-      keywords: 'postbiotics probiotics prebiotics bifida ferment lysate lactobacillus galactomyces fermentation microbiome skin barrier sensitivity immune 포스트바이오틱스 비피다 유산균 발효',
-    },
-    {
-      id: 'pdrn-salmon-dna',
-      category: { en: 'Regenerative Science', ko: '재생 과학' },
-      title: {
-        en: "Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.",
-        ko: '한국 피부과에서 30년간 써온 연어 DNA 성분, 이제 세럼에 들어왔습니다',
-      },
-      excerpt: {
-        en: "PDRN — Polydeoxyribonucleotide — is a DNA fragment from salmon that activates your skin's A2A adenosine receptors, triggering a collagen repair cascade used in Korean clinics for decades. Topical delivery just caught up.",
-        ko: 'PDRN(폴리데옥시리보뉴클레오타이드)은 연어에서 추출한 DNA 분절로, A2A 아데노신 수용체를 활성화해 콜라겐 재생을 촉발합니다. 한국 피부과 시술 성분이 이제 세럼으로 왔습니다.',
-      },
-      readTime: { en: '7 min read', ko: '7분 읽기' },
-      date: 'May 1, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=800',
-      keywords: 'PDRN salmon DNA polydeoxyribonucleotide nucleotides collagen regeneration fibroblasts A2A adenosine receptor growth factors melasma dark spots injectable topical liposomal 연어 DNA 콜라겐 재생',
-    },
-    {
-      id: 'skin-barrier-2026',
-      category: { en: 'Molecular Insights', ko: '분자 인사이트' },
-      title: {
-        en: "Your Skin Barrier Is Leaking. Here's What 2026 Science Says to Do About It.",
-        ko: '피부 장벽이 무너지고 있다면, 지금 알아야 할 2026년의 정답',
-      },
-      excerpt: {
-        en: "Ceramides, fatty acids, and pH balance are the holy trinity of skin barrier health — and modern environments are attacking all three simultaneously. The fix isn't more layers. It's replacing what's missing at a molecular level.",
-        ko: '세라마이드 고갈, HEV 광선, pH 교란 클렌저가 동시에 피부를 공격하고 있어요. 답은 더 많은 제품을 바르는 게 아니라, 분자 수준에서 정확히 무엇이 빠졌는지를 채우는 것입니다.',
-      },
-      readTime: { en: '6 min read', ko: '6분 읽기' },
-      date: 'Apr 1, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=800',
-      keywords: 'skin barrier ceramides lipids TEWL cica madecassoside squalane sebum HEV light PM2.5 pH acid mantle barrier repair bakuchiol 피부장벽 세라마이드 수분손실',
-    },
-    {
-      id: 'fragrance-volatility',
-      category: { en: 'Olfactory Science', ko: '후각 과학' },
-      title: {
-        en: 'Why Your Perfume Smells Different on You Than in the Bottle.',
-        ko: '향수가 병 속과 피부 위에서 다르게 느껴지는 진짜 이유',
-      },
-      excerpt: {
-        en: "The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.",
-        ko: '같은 향수를 뿌려도 사람마다 다르게 느껴지는 건 우연이 아니에요. 분자량과 증기압, 피부 수분 상태가 각 노트가 피어나는 타이밍과 지속력을 결정합니다.',
-      },
-      readTime: { en: '5 min read', ko: '5분 읽기' },
-      date: 'Mar 15, 2026',
-      tag: { en: 'Fragrance', ko: '향수' },
-      tagColor: 'var(--sage)',
-      imageUrl: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=800',
-      keywords: 'volatility molecular weight vapor pressure top notes heart base fixatives Iso E Super ambroxan macrocyclic musks citrus aldehydes dry-down sillage skin chemistry 분자량 증기압 향수노트',
-    },
-    {
-      id: 'adaptogens-bioavailability',
-      category: { en: 'Nutritional Intelligence', ko: '영양 인텔리전스' },
-      title: {
-        en: "You're Probably Wasting Your Adaptogens. Delivery Matters More Than Dosage.",
-        ko: '어댑토젠이 효과 없다고 느껴진다면, 문제는 성분이 아닌 흡수율입니다',
-      },
-      excerpt: {
-        en: "Ashwagandha, Lion's Mane, Reishi — three of the most researched adaptogens on the market. But raw powder bioavailability sits below 10% for most people. The science of delivery is what actually determines whether any of it works.",
-        ko: '아슈와간다, 사자갈기, 영지버섯. 연구가 가장 많이 된 어댑토젠들이지만, 원료 분말의 생체이용률은 대부분 10% 미만이에요. 효과를 결정하는 건 성분 자체가 아니라 전달 방식입니다.',
-      },
-      readTime: { en: '7 min read', ko: '7분 읽기' },
-      date: 'Mar 15, 2026',
-      tag: { en: 'Wellness', ko: '웰니스' },
-      tagColor: '#a07850',
-      imageUrl: 'https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=800',
-      keywords: 'adaptogens ashwagandha lion\'s mane reishi bioavailability HPA axis cortisol withanolides KSM-66 NGF nerve growth factor piperine liposomal phytosomal 어댑토젠 아슈와간다 영지버섯 생체이용률',
-    },
-    {
-      id: 'fermentation-transformation',
-      category: { en: 'Fermentation Science', ko: '발효 과학' },
-      title: {
-        en: "Galactomyces Started in a Sake Brewery. Now It's One of Skincare's Most Studied Actives.",
-        ko: '청주 양조장에서 시작된 성분이 스킨케어를 바꾸고 있습니다',
-      },
-      excerpt: {
-        en: "Galactomyces was discovered by accident. Bifida Ferment Lysate was reverse-engineered from infant skin. Fermentation doesn't just preserve ingredients — it creates entirely new compounds that never existed in the original plant.",
-        ko: '갈락토미세스는 우연히 발견됐고, 비피다 발효물은 영아 피부 마이크로바이옴에서 역설계됐어요. 발효는 단순히 성분을 보존하는 게 아니라, 원료에 없던 새로운 활성 화합물을 만들어냅니다.',
-      },
-      readTime: { en: '8 min read', ko: '8분 읽기' },
-      date: 'Feb 1, 2026',
-      tag: { en: 'Skincare', ko: '스킨케어' },
-      tagColor: 'var(--accent)',
-      imageUrl: 'https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&fit=crop&q=80&w=800',
-      keywords: 'fermentation galactomyces lactobacillus bifidobacterium microbial metabolism bioavailability ferment filtrate lysate enzyme polysaccharides amino acids sake brewery 발효 갈락토미세스 비피다 효소',
-    },
-  ];
 
   const openPost = (p) => {
     setSelectedPost(p);
     const slug = postSlug(p);
     history.pushState({}, '', '/' + slug);
-    if (window.SEO) window.SEO.setArticle(p.id);
+    if (window.SEO) window.SEO.setArticle(p);
     if (window.gtag) gtag('event', 'page_view', { page_path: '/' + slug, page_title: p.title.en });
     window.scrollTo(0, 0);
   };
@@ -716,7 +309,8 @@ const ARTICLE_BODIES = {
 };
 
 function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
-  const Body = window[ARTICLE_BODIES[post.id]] || null;
+  const hasBlocks = post.bodyBlocks && post.bodyBlocks.length > 0;
+  const Body = hasBlocks ? null : (window[ARTICLE_BODIES[post.id]] || null);
   const isKo = lang === 'ko';
   const articleRef = React.useRef(null);
 
@@ -814,7 +408,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
             </button>
           </div>
         </header>
-        {Body && React.createElement(Body, { lang })}
+        {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : null}
 
         {/* Related articles */}
         {allPosts && (() => {
@@ -961,7 +555,10 @@ function ArtSection({ children }) {
   return <section style={{ marginBottom: 40 }}>{children}</section>;
 }
 
-function ArtBody({ children }) {
+function ArtBody({ children, dangerouslySetInnerHTML }) {
+  if (dangerouslySetInnerHTML) {
+    return <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 16px' }} dangerouslySetInnerHTML={dangerouslySetInnerHTML} />;
+  }
   return <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 16px' }}>{children}</p>;
 }
 
