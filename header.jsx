@@ -74,6 +74,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
+              if (e.target.value.trim()) setView('insights');
               const q = e.target.value.trim();
               if (q.length >= 3 && window.gtag) {
                 clearTimeout(window.__searchDebounce);

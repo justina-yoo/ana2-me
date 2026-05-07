@@ -201,6 +201,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
       )}
 
       <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {posts.length === 0 && loading && !query && <FeedSkeleton />}
         {posts.length === 0 && query && (
           <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--ink-faint)' }}>
             <p style={{ fontSize: 15, margin: 0 }}>{t('No articles found for', '검색 결과가 없습니다:')} "{query}"</p>
@@ -346,7 +347,7 @@ const ARTICLE_BODIES = {
   'pdrn-salmon-dna': 'PDRNBody',
 };
 
-function ShareBar({ post, lang, show }) {
+function ShareBar({ post, lang, show, allPosts, onSelectPost }) {
   const isKo = lang === 'ko';
   const url = window.location.href;
   const title = post.title[lang] || post.title.en;
@@ -405,6 +406,17 @@ function ShareBar({ post, lang, show }) {
         <Icon name="share" size={14} />
         {isKo ? '공유하기' : 'Share'}
       </button>
+      {allPosts && (() => {
+        const idx = allPosts.findIndex(p => p.id === post.id);
+        const next = allPosts[idx + 1] || allPosts[0];
+        if (!next || next.id === post.id) return null;
+        return (
+          <button onClick={() => { onSelectPost(next); window.scrollTo(0, 0); }} style={{ ...btnLight, background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', border: 'none', whiteSpace: 'nowrap' }}>
+            <Icon name="arrow" size={14} />
+            {isKo ? '다음 글' : 'Next'}
+          </button>
+        );
+      })()}
     </div>
   );
 }
@@ -464,6 +476,57 @@ function ShareCTA({ post, lang }) {
           {isKo ? '다른 앱으로 공유' : 'Share via...'}
         </button>
       </div>
+    </div>
+  );
+}
+
+function ArticleSkeleton() {
+  const bar = (w, h, mb) => <div className="skeleton" style={{ width: w, height: h, borderRadius: 6, marginBottom: mb || 0 }} />;
+  return (
+    <div style={{ maxWidth: 780, margin: '0 auto', padding: '20px 0' }}>
+      {bar('60px', 14, 16)}
+      {bar('90%', 32, 8)}
+      {bar('70%', 32, 16)}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
+        {bar('80px', 14)}
+        {bar('80px', 14)}
+      </div>
+      <div className="skeleton" style={{ width: '100%', height: 280, borderRadius: 'var(--radius)', marginBottom: 32 }} />
+      <div className="skeleton" style={{ width: '100%', height: 80, borderRadius: 'var(--radius)', marginBottom: 28 }} />
+      {bar('100%', 16, 10)}
+      {bar('95%', 16, 10)}
+      {bar('85%', 16, 10)}
+      {bar('90%', 16, 24)}
+      {bar('100%', 16, 10)}
+      {bar('80%', 16, 10)}
+      {bar('92%', 16, 10)}
+    </div>
+  );
+}
+
+function FeedSkeleton() {
+  const card = (isHero, i) => isHero ? (
+    <div key={i} style={{ padding: '20px 0', borderBottom: '1px solid var(--line)' }}>
+      <div className="skeleton" style={{ width: '100%', height: 200, borderRadius: 'var(--radius-sm)', marginBottom: 16 }} />
+      <div className="skeleton" style={{ width: '60px', height: 12, borderRadius: 6, marginBottom: 10 }} />
+      <div className="skeleton" style={{ width: '85%', height: 24, borderRadius: 6, marginBottom: 8 }} />
+      <div className="skeleton" style={{ width: '70%', height: 24, borderRadius: 6, marginBottom: 10 }} />
+      <div className="skeleton" style={{ width: '100%', height: 14, borderRadius: 6, marginBottom: 6 }} />
+      <div className="skeleton" style={{ width: '80%', height: 14, borderRadius: 6 }} />
+    </div>
+  ) : (
+    <div key={i} style={{ display: 'flex', gap: 16, padding: '14px 0', borderBottom: '1px solid var(--line)', alignItems: 'center' }}>
+      <div style={{ flex: 1 }}>
+        <div className="skeleton" style={{ width: '90%', height: 16, borderRadius: 6, marginBottom: 8 }} />
+        <div className="skeleton" style={{ width: '60%', height: 16, borderRadius: 6, marginBottom: 8 }} />
+        <div className="skeleton" style={{ width: '100px', height: 12, borderRadius: 6 }} />
+      </div>
+      <div className="skeleton" style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', flexShrink: 0 }} />
+    </div>
+  );
+  return (
+    <div style={{ maxWidth: 780, margin: '0 auto' }}>
+      {[0,1,2,3,4].map(i => card(i % 4 === 0, i))}
     </div>
   );
 }
@@ -576,7 +639,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
             </button>
           </div>
         </header>
-        {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : null}
+        {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : !hasBlocks && !Body ? <ArticleSkeleton /> : null}
 
         {/* Share CTA */}
         <ShareCTA post={post} lang={lang} />
@@ -632,7 +695,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
           );
         })()}
       </article>
-      <ShareBar post={post} lang={lang} show={showShareBar} />
+      <ShareBar post={post} lang={lang} show={showShareBar} allPosts={allPosts} onSelectPost={onSelectPost} />
     </div>
   );
 }
