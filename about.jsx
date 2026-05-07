@@ -117,7 +117,7 @@ window.About = function About({ lang, density }) {
       </header>
 
       {/* Mission */}
-      <section style={{ maxWidth: 680, margin: '0 auto 72px' }}>
+      <section style={{ maxWidth: 780, margin: '0 auto 72px' }}>
         <div>
           <p style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(20px, 2.4vw, 26px)', lineHeight: 1.45, color: 'var(--ink)', margin: '0 0 24px', letterSpacing: '-0.01em' }}>
             {t(
@@ -176,7 +176,7 @@ window.About = function About({ lang, density }) {
       </section>
 
       {/* FAQ */}
-      <section style={{ maxWidth: 680, margin: '0 auto 80px' }}>
+      <section style={{ maxWidth: 780, margin: '0 auto 80px' }}>
         <div style={{ marginBottom: 32 }}>
           <Sticker color="sage" rotate={-2}>FAQ</Sticker>
         </div>

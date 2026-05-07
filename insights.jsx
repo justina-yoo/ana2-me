@@ -565,8 +565,8 @@ function ArtBody({ children, dangerouslySetInnerHTML }) {
 function ArtFigure({ src, alt, isKo }) {
   const [loaded, setLoaded] = useState(false);
   return (
-    <figure style={{ borderRadius: 'var(--radius)', overflow: 'hidden', margin: '0 0 32px' }}>
-      <div style={{ position: 'relative', height: 280 }}>
+    <figure style={{ margin: '0 0 32px' }}>
+      <div style={{ position: 'relative', height: 280, borderRadius: 'var(--radius)', overflow: 'hidden' }}>
         {!loaded && <div className="skeleton" style={{ position: 'absolute', inset: 0 }} />}
         <img
           src={src} alt={alt}
