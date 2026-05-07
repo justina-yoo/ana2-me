@@ -3,13 +3,13 @@
   <!-- Home / Insights -->
   <url>
     <loc>https://ana2-me.com/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/insights</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,24 +17,36 @@
   <!-- Static pages -->
   <url>
     <loc>https://ana2-me.com/about</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/products</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/privacy</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- Articles -->
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-07/pdrn-injectable-vs-topical-vs-microneedling</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-07/korean-capsule-cream-technology</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-07/taeyeon-skips-toner</loc>
     <lastmod>2026-05-07</lastmod>
@@ -62,18 +74,6 @@
   <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-07/hypochlorous-acid-skincare</loc>
     <lastmod>2026-05-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-04/centella-superbug-discovery</loc>
-    <lastmod>2026-05-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-04/creatine-women-brain</loc>
-    <lastmod>2026-05-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -120,14 +120,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/grown-up-gourmand-matcha-pistachio</loc>
-    <lastmod>2026-05-06</lastmod>
+    <loc>https://ana2-me.com/article/wellness/2026-05-03/myo-inositol-hormonal-health</loc>
+    <lastmod>2026-05-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-04-01/skin-barrier-2026</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/grown-up-gourmand-matcha-pistachio</loc>
+    <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -174,8 +174,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-03/myo-inositol-hormonal-health</loc>
-    <lastmod>2026-05-03</lastmod>
+    <loc>https://ana2-me.com/article/skincare/2026-04-01/skin-barrier-2026</loc>
+    <lastmod>2026-04-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -199,6 +199,18 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/wellness/2026-05-04/jjimjilbang-wellness-science</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-04/centella-superbug-discovery</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-04/creatine-women-brain</loc>
     <lastmod>2026-05-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

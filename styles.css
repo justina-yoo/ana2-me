@@ -143,7 +143,7 @@ body.night {
 .night .logo-ana { fill: #f0e8da; }
 .night .logo-two { fill: #8aad8a; }
 
-.hdr { padding: 10px 0 10px; position: sticky; top: 0; background: var(--cream); z-index: 20; }
+.hdr { padding: 10px 0 10px; position: sticky; top: 0; background: var(--cream); z-index: 20; max-width: 780px; margin: 0 auto; }
 .hdr-row { display: flex; align-items: center; gap: 14px; }
 .wordmark { display: flex; align-items: baseline; gap: 8px; }
 .wm-mark {
