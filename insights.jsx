@@ -641,9 +641,6 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
         </header>
         {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : !hasBlocks && !Body ? <ArticleSkeleton /> : null}
 
-        {/* Share CTA */}
-        <ShareCTA post={post} lang={lang} />
-
         {/* Related articles */}
         {allPosts && (() => {
           const related = allPosts
