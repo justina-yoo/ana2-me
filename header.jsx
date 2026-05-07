@@ -34,7 +34,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             </svg>
           </button>
         </div>
-        <nav className="hdr-catrow">
+        <nav className="hdr-catrow" style={{ justifyContent: 'flex-start', gap: 16 }}>
           <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
             {t('About', '소개')}
           </button>
@@ -60,6 +60,14 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             </g>
           </svg>
         </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
+            {t('About', '소개')}
+          </button>
+          <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
+            {t('Insights', '인사이트')}
+          </button>
+        </div>
         <div className="hdr-search">
           <Icon name="search" size={15} />
           <input
@@ -79,14 +87,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           />
         </div>
       </div>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '8px 0 6px' }}>
-          <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
-            {t('About', '소개')}
-          </button>
-          <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
-            {t('Insights', '인사이트')}
-          </button>
-      </nav>
     </header>
   );
 };
