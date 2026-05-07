@@ -144,7 +144,7 @@ body.night {
 .night .logo-two { fill: #8aad8a; }
 
 .hdr { padding: 10px 0 10px; position: sticky; top: 0; background: var(--cream); z-index: 20; max-width: 780px; margin: 0 auto; }
-.hdr-row { display: flex; align-items: center; gap: 14px; }
+.hdr-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .wordmark { display: flex; align-items: baseline; gap: 8px; }
 .wm-mark {
   width: 36px; height: 36px;
@@ -170,7 +170,7 @@ body.night {
   margin-left: auto;
   flex: 1;
   max-width: 360px;
-  min-width: 160px;
+  min-width: 0;
 }
 .hdr-search input {
   flex: 1; border: 0; background: 0; outline: 0; font-size: 13px; color: var(--ink); min-width: 0;
