@@ -353,18 +353,20 @@ function ShareBar({ post, lang, show, allPosts, onSelectPost }) {
   const title = post.title[lang] || post.title.en;
   const [copied, setCopied] = useState(false);
 
+  const track = (action) => {
+    if (window.gtag) gtag('event', action, { event_category: 'share_bar', event_label: post.id });
+  };
+
   const copyLink = () => {
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      track('copy_link');
     });
   };
 
-  const shareX = () => {
-    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank', 'width=550,height=420');
-  };
-
-  const shareKakao = () => {
+  const shareNative = () => {
+    track('share_native');
     if (navigator.share) {
       navigator.share({ title, url });
     } else {
@@ -402,7 +404,7 @@ function ShareBar({ post, lang, show, allPosts, onSelectPost }) {
         <Icon name="link" size={14} />
         {copied ? (isKo ? '복사됨!' : 'Copied!') : (isKo ? '링크 복사' : 'Copy link')}
       </button>
-      <button onClick={shareKakao} style={{ ...btnLight, background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', border: 'none' }}>
+      <button onClick={shareNative} style={{ ...btnLight, background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', border: 'none' }}>
         <Icon name="share" size={14} />
         {isKo ? '공유하기' : 'Share'}
       </button>
@@ -411,7 +413,7 @@ function ShareBar({ post, lang, show, allPosts, onSelectPost }) {
         const next = allPosts[idx + 1] || allPosts[0];
         if (!next || next.id === post.id) return null;
         return (
-          <button onClick={() => { onSelectPost(next); window.scrollTo(0, 0); }} style={{ ...btnLight, background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', border: 'none', whiteSpace: 'nowrap' }}>
+          <button onClick={() => { track('read_next'); onSelectPost(next); window.scrollTo(0, 0); }} style={{ ...btnLight, background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', border: 'none', whiteSpace: 'nowrap' }}>
             <Icon name="arrow" size={14} />
             {isKo ? '다음 글' : 'Next'}
           </button>
