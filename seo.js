@@ -354,8 +354,9 @@
 
     // Set SEO for an article — accepts either an articleId (legacy lookup)
     // or a full article object from Supabase (dynamic)
-    setArticle: function (articleIdOrObj) {
+    setArticle: function (articleIdOrObj, lang) {
       var m, articleId;
+      var l = lang || (document.documentElement.classList.contains('lang-ko') ? 'ko' : 'en');
 
       if (typeof articleIdOrObj === 'object' && articleIdOrObj !== null) {
         // Dynamic: article object from Supabase
@@ -365,8 +366,8 @@
         var d = new Date(dateStr);
         var isoDate = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
         m = {
-          title: a.title.en,
-          description: a.excerpt.en,
+          title: (l === 'ko' && a.title.ko) ? a.title.ko : a.title.en,
+          description: (l === 'ko' && a.excerpt.ko) ? a.excerpt.ko : a.excerpt.en,
           datePublished: isoDate,
           dateModified: isoDate,
           image: (a.imageUrl || a.image_url || '').replace('w=800', 'w=1200'),
