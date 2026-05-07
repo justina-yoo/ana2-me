@@ -41,14 +41,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <button onClick={goFeed} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button className="cat-edit cat-edit-locked" disabled title={t('Coming soon', '준비 중')}>
-            {t('Products', '제품')}
-            <span className="coming-soon-badge">{t('soon', '곧')}</span>
-          </button>
-          <button className="cat-edit cat-edit-locked" disabled title={t('Coming soon', '준비 중')}>
-            {t('Analyzer', '분석기')}
-            <span className="coming-soon-badge">{t('soon', '곧')}</span>
-          </button>
         </nav>
       </header>
     );
@@ -93,14 +85,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </button>
           <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
             {t('Insights', '인사이트')}
-          </button>
-          <button className="page-tab page-tab-locked" disabled title={t('Coming soon', '준비 중')}>
-            {t('Products', '제품')}
-            <span className="coming-soon-badge">{t('soon', '곧')}</span>
-          </button>
-          <button className="page-tab page-tab-locked" disabled title={t('Coming soon', '준비 중')}>
-            {t('Analyzer', '분석기')}
-            <span className="coming-soon-badge">{t('soon', '곧')}</span>
           </button>
       </nav>
     </header>
