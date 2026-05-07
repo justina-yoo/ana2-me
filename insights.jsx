@@ -79,7 +79,7 @@ window.Insights = function Insights({ lang, density, query }) {
     const slug = postSlug(p);
     history.pushState({}, '', '/' + slug);
     if (window.SEO) window.SEO.setArticle(p);
-    if (window.gtag) gtag('event', 'page_view', { page_path: '/' + slug, page_title: p.title.en });
+    if (window.gtag) gtag('event', 'page_view', { page_path: '/' + slug, page_title: document.title });
     window.scrollTo(0, 0);
   };
 
