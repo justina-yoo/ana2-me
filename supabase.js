@@ -39,8 +39,11 @@
         });
       });
     },
-    fetchArticles: function() {
-      return query('articles', 'order=created_at.desc').then(function(rows) {
+    fetchArticles: function(limit, offset) {
+      var params = 'order=created_at.desc';
+      if (limit) params += '&limit=' + limit;
+      if (offset) params += '&offset=' + offset;
+      return query('articles', params).then(function(rows) {
         return rows.map(function(r) {
           return {
             id: r.id,

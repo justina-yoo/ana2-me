@@ -13,18 +13,36 @@ function postSlug(post) {
   return 'article/' + post.tag.en.toLowerCase().replace(/\s+/g, '-') + '/' + dateToPrefix(post.date) + '/' + post.id;
 }
 
+const PAGE_SIZE = 10;
+
 window.Insights = function Insights({ lang, density, query }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const [POSTS, setPOSTS] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
   const isKo = lang === 'ko';
 
-  // Fetch articles from Supabase
+  // Fetch first page of articles
   useEffect(() => {
-    window.__supabase.fetchArticles().then(function(data) {
+    setLoading(true);
+    window.__supabase.fetchArticles(PAGE_SIZE, 0).then(function(data) {
       setPOSTS(data);
+      setHasMore(data.length === PAGE_SIZE);
+      setLoading(false);
     });
   }, []);
+
+  // Load more articles
+  const loadMore = () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    window.__supabase.fetchArticles(PAGE_SIZE, POSTS.length).then(function(data) {
+      setPOSTS(prev => [...prev, ...data]);
+      setHasMore(data.length === PAGE_SIZE);
+      setLoading(false);
+    });
+  };
 
   // Logo click → go home
   useEffect(() => {
@@ -107,12 +125,26 @@ window.Insights = function Insights({ lang, density, query }) {
     query: q,
     onTagClick: (tag) => setActiveTag(activeTag === tag ? null : tag),
     onSelectPost: openPost,
+    loadMore,
+    hasMore,
+    loading,
   });
 };
 
 /* ─── Feed ─────────────────────────────────────────────────────────────────── */
 
-function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagClick, onSelectPost }) {
+function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagClick, onSelectPost, loadMore, hasMore, loading }) {
+  // Infinite scroll — use a simple scroll listener (more reliable than IntersectionObserver with React state)
+  useEffect(() => {
+    if (!loadMore || !hasMore || loading || query || activeTag) return;
+    const onScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400) {
+        loadMore();
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [hasMore, loading, query, activeTag, posts.length]);
   const t = useL(lang);
   const allTags = [...new Map(allPosts.map(p => [p.tag.en, p])).values()].map(p => ({ en: p.tag.en, color: p.tagColor }));
 
@@ -275,6 +307,12 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             </button>
           );
         })}
+        {/* Loading indicator */}
+        {loading && (
+          <div style={{ padding: '24px 0', textAlign: 'center' }}>
+            <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>Loading...</span>
+          </div>
+        )}
       </div>
     </div>
   );
