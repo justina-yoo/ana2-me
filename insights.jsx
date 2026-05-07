@@ -346,11 +346,141 @@ const ARTICLE_BODIES = {
   'pdrn-salmon-dna': 'PDRNBody',
 };
 
+function ShareBar({ post, lang, show }) {
+  const isKo = lang === 'ko';
+  const url = window.location.href;
+  const title = post.title[lang] || post.title.en;
+  const [copied, setCopied] = useState(false);
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const shareX = () => {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank', 'width=550,height=420');
+  };
+
+  const shareKakao = () => {
+    if (navigator.share) {
+      navigator.share({ title, url });
+    } else {
+      copyLink();
+    }
+  };
+
+  const btnStyle = {
+    display: 'flex', alignItems: 'center', gap: 7,
+    padding: '10px 20px', borderRadius: 'var(--radius-pill)',
+    border: 'none', background: 'var(--ink)',
+    fontSize: 13, fontWeight: 600, color: '#fff',
+    cursor: 'pointer', transition: 'all .15s ease',
+  };
+
+  const btnLight = {
+    ...btnStyle,
+    background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)',
+    whiteSpace: 'nowrap',
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', bottom: 24, left: '50%',
+      transform: show ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(calc(100% + 40px))',
+      background: '#2d5a3d',
+      padding: '10px 8px',
+      borderRadius: 'var(--radius-pill)',
+      zIndex: 30,
+      display: 'flex', alignItems: 'center', gap: 6,
+      transition: 'transform 0.3s ease',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+    }}>
+      <button onClick={copyLink} style={btnLight}>
+        <Icon name="link" size={14} />
+        {copied ? (isKo ? '복사됨!' : 'Copied!') : (isKo ? '링크 복사' : 'Copy link')}
+      </button>
+      <button onClick={shareKakao} style={{ ...btnLight, background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', border: 'none' }}>
+        <Icon name="share" size={14} />
+        {isKo ? '공유하기' : 'Share'}
+      </button>
+    </div>
+  );
+}
+
+function ShareCTA({ post, lang }) {
+  const isKo = lang === 'ko';
+  const url = window.location.href;
+  const title = post.title[lang] || post.title.en;
+  const [copied, setCopied] = useState(false);
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const shareX = () => {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank', 'width=550,height=420');
+  };
+
+  const shareNative = () => {
+    if (navigator.share) {
+      navigator.share({ title, url });
+    } else {
+      copyLink();
+    }
+  };
+
+  const btnStyle = {
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+    padding: '12px 24px', borderRadius: 'var(--radius-pill)',
+    border: '1px solid var(--line)', background: 'var(--cream-card)',
+    fontSize: 14, fontWeight: 600, color: 'var(--ink)',
+    cursor: 'pointer', transition: 'all .15s ease', flex: 1,
+  };
+
+  return (
+    <div style={{ margin: '48px 0 0', padding: '32px 0', borderTop: '1px solid var(--line)' }}>
+      <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 2vw, 22px)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 6px', textAlign: 'center' }}>
+        {isKo ? '도움이 됐다면, 공유해주세요' : 'Found this useful?'}
+      </p>
+      <p style={{ fontSize: 14, color: 'var(--ink-faint)', margin: '0 0 20px', textAlign: 'center' }}>
+        {isKo ? '성분을 따지는 친구에게 보내주세요.' : 'Share it with someone who reads labels too.'}
+      </p>
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <button onClick={copyLink} style={btnStyle}>
+          <Icon name="link" size={15} />
+          {copied ? (isKo ? '복사됨!' : 'Copied!') : (isKo ? '링크 복사' : 'Copy link')}
+        </button>
+        <button onClick={shareX} style={btnStyle}>
+          <span style={{ fontSize: 15, fontWeight: 800 }}>𝕏</span>
+          {isKo ? '트위터 공유' : 'Post on X'}
+        </button>
+        <button onClick={shareNative} style={btnStyle}>
+          <Icon name="share" size={15} />
+          {isKo ? '다른 앱으로 공유' : 'Share via...'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
   const hasBlocks = post.bodyBlocks && post.bodyBlocks.length > 0;
   const Body = hasBlocks ? null : (window[ARTICLE_BODIES[post.id]] || null);
   const isKo = lang === 'ko';
   const articleRef = React.useRef(null);
+  const [showShareBar, setShowShareBar] = useState(false);
+
+  // Show sticky share bar after scrolling 300px
+  useEffect(() => {
+    const onScroll = () => setShowShareBar(window.scrollY > 300);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   React.useEffect(() => {
     const article = articleRef.current;
@@ -448,6 +578,9 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
         </header>
         {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : null}
 
+        {/* Share CTA */}
+        <ShareCTA post={post} lang={lang} />
+
         {/* Related articles */}
         {allPosts && (() => {
           const related = allPosts
@@ -499,6 +632,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
           );
         })()}
       </article>
+      <ShareBar post={post} lang={lang} show={showShareBar} />
     </div>
   );
 }

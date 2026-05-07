@@ -2,7 +2,7 @@
 (function () {
   var BASE_URL = 'https://ana2-me.com';
   var SITE_NAME = 'ana2me';
-  var DEFAULT_IMAGE = BASE_URL + '/og-default.jpg';
+  var DEFAULT_IMAGE = BASE_URL + '/og-default.png';
 
   var AUTHOR = {
     '@type': 'Person',
@@ -17,7 +17,7 @@
     'url': BASE_URL + '/',
     'logo': {
       '@type': 'ImageObject',
-      'url': BASE_URL + '/og-default.jpg',
+      'url': BASE_URL + '/og-default.png',
     },
   };
 
