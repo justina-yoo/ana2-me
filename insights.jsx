@@ -123,7 +123,17 @@ window.Insights = function Insights({ lang, density, query }) {
     density,
     activeTag,
     query: q,
-    onTagClick: (tag) => setActiveTag(activeTag === tag ? null : tag),
+    onTagClick: (tag) => {
+      const newTag = activeTag === tag ? null : tag;
+      setActiveTag(newTag);
+      // When filtering, load all articles so filter shows everything
+      if (newTag && hasMore) {
+        window.__supabase.fetchArticles().then(function(data) {
+          setPOSTS(data);
+          setHasMore(false);
+        });
+      }
+    },
     onSelectPost: openPost,
     loadMore,
     hasMore,
