@@ -296,7 +296,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                     </h2>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
-                        style={{ fontSize: 11, fontWeight: 600, color: post.tagColor, cursor: 'pointer' }}>
+                        style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer' }}>
                         {post.tag[lang] || post.tag.en}
                       </span>
                       <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
