@@ -175,7 +175,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
       )}
 
       {!query && (
-        <div style={{ maxWidth: 780, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button
             onClick={() => onTagClick(null)}
             style={{
@@ -210,113 +210,108 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
         </div>
       )}
 
-      <div style={{ maxWidth: 780, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
         {posts.length === 0 && loading && !query && <FeedSkeleton />}
         {posts.length === 0 && query && (
           <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--ink-faint)' }}>
             <p style={{ fontSize: 15, margin: 0 }}>{t('No articles found for', '검색 결과가 없습니다:')} "{query}"</p>
           </div>
         )}
-        {posts.map((post, idx) => {
-          // Pattern: hero at 0, compact 1-3, hero at 4, compact 5-7, ...
-          // When searching, show all as compact
-          const isHero = !query && idx % 4 === 0;
+        {(() => {
+          const cards = [];
+          let i = 0;
+          while (i < posts.length) {
+            const post = posts[i];
+            // Pattern: hero (full width) → 2-col grid of 2 cards → compact list of 2 → repeat
+            const blockIndex = Math.floor(i / 5);
+            const posInBlock = i % 5;
 
-          if (isHero) {
-            return (
-              <button
-                key={post.id}
-                onClick={() => onSelectPost(post)}
-                style={{
-                  display: 'block', width: '100%', textAlign: 'left',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: '1px solid var(--line)',
-                  borderRadius: 0,
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  padding: '20px 0',
-                }}
-              >
-                <ProductImg
-                  src={post.imageUrl}
-                  alt={post.title[lang] || post.title.en}
-                  style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block', borderRadius: 'var(--radius-sm)' }}
-                />
-                <div style={{ padding: '16px 0 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <span
-                    onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
-                    style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer', alignSelf: 'flex-start' }}
-                  >
-                    {post.tag[lang] || post.tag.en}
-                  </span>
-                  <h2 style={{
-                    fontFamily: 'var(--font-display)', fontWeight: 500,
-                    fontSize: 'clamp(20px, 2.4vw, 28px)', lineHeight: 1.1,
-                    letterSpacing: '-0.015em', margin: 0, textWrap: 'balance',
-                    color: 'var(--ink)',
-                  }}>
-                    {post.title[lang] || post.title.en}
-                  </h2>
-                  <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                    {post.excerpt[lang] || post.excerpt.en}
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>
-                      {post.readTime[lang] || post.readTime.en}
-                    </span>
-                    <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
-                    <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
-                  </div>
-                </div>
-              </button>
-            );
-          }
-
-          // Compact horizontal row for cards #2+
-          return (
-            <button
-              key={post.id}
-              onClick={() => onSelectPost(post)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 16,
-                width: '100%', textAlign: 'left',
-                background: 'none',
-                border: 'none',
-                borderBottom: '1px solid var(--line)',
-                borderRadius: 0,
-                cursor: 'pointer',
-                padding: '14px 0',
-              }}
-            >
-              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <h2 style={{
-                  fontFamily: 'var(--font-display)', fontWeight: 500,
-                  fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.25,
-                  letterSpacing: '-0.01em', margin: 0,
-                  color: 'var(--ink)',
-                  overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+            if (posInBlock === 0) {
+              // Hero card — full width with large image
+              cards.push(
+                <button key={post.id} onClick={() => onSelectPost(post)} style={{
+                  display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none',
+                  borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '20px 0',
                 }}>
-                  {post.title[lang] || post.title.en}
-                </h2>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span
-                    onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
-                    style={{ fontSize: 11, fontWeight: 600, color: post.tagColor, cursor: 'pointer' }}
-                  >
-                    {post.tag[lang] || post.tag.en}
-                  </span>
-                  <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
-                  <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                  <ProductImg src={post.imageUrl} alt={post.title[lang] || post.title.en}
+                    style={{ width: '100%', height: 'clamp(200px, 30vw, 320px)', objectFit: 'cover', display: 'block', borderRadius: 'var(--radius-sm)' }} />
+                  <div style={{ padding: '16px 0 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <span onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
+                      style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer' }}>
+                      {post.tag[lang] || post.tag.en}
+                    </span>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(22px, 2.8vw, 32px)', lineHeight: 1.1, letterSpacing: '-0.015em', margin: 0, color: 'var(--ink)' }}>
+                      {post.title[lang] || post.title.en}
+                    </h2>
+                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {post.excerpt[lang] || post.excerpt.en}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.readTime[lang] || post.readTime.en}</span>
+                      <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                      <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                    </div>
+                  </div>
+                </button>
+              );
+              i++;
+            } else if (posInBlock <= 2 && i + 1 < posts.length) {
+              // 2-column image cards
+              const p1 = posts[i];
+              const p2 = posts[i + 1];
+              cards.push(
+                <div key={p1.id + '-grid'} className="feed-2col" style={{
+                  display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16,
+                  padding: '16px 0', borderBottom: '1px solid var(--line)',
+                }}>
+                  {[p1, p2].map(p => (
+                    <button key={p.id} onClick={() => onSelectPost(p)} style={{
+                      display: 'flex', flexDirection: 'column', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', gap: 10,
+                    }}>
+                      <ProductImg src={p.imageUrl} alt={p.title[lang] || p.title.en}
+                        style={{ width: '100%', height: 'clamp(120px, 18vw, 180px)', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
+                      <span onClick={(e) => { e.stopPropagation(); onTagClick(p.tag.en); }}
+                        style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: p.tagColor, cursor: 'pointer' }}>
+                        {p.tag[lang] || p.tag.en}
+                      </span>
+                      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(14px, 1.6vw, 17px)', lineHeight: 1.2, margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                        {p.title[lang] || p.title.en}
+                      </h3>
+                      <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>{p.date}</span>
+                    </button>
+                  ))}
                 </div>
-              </div>
-              <ProductImg
-                src={post.imageUrl}
-                alt={post.title[lang] || post.title.en}
-                style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }}
-              />
-            </button>
-          );
+              );
+              i += 2;
+            } else {
+              // Compact row — text + small thumbnail
+              cards.push(
+                <button key={post.id} onClick={() => onSelectPost(post)} style={{
+                  display: 'flex', alignItems: 'center', gap: 16, width: '100%', textAlign: 'left',
+                  background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '14px 0',
+                }}>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.25, letterSpacing: '-0.01em', margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {post.title[lang] || post.title.en}
+                    </h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
+                        style={{ fontSize: 11, fontWeight: 600, color: post.tagColor, cursor: 'pointer' }}>
+                        {post.tag[lang] || post.tag.en}
+                      </span>
+                      <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                      <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                    </div>
+                  </div>
+                  <ProductImg src={post.imageUrl} alt={post.title[lang] || post.title.en}
+                    style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
+                </button>
+              );
+              i++;
+            }
+          }
+          return cards;
+        })()
         })}
         {/* Loading indicator */}
         {loading && (
