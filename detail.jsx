@@ -545,9 +545,16 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         const [recArticles, setRecArticles] = React.useState([]);
         React.useEffect(() => {
           const tag = product.category === 'fragrance' ? 'Fragrance' : product.category === 'wellness-food' ? 'Wellness' : 'Skincare';
-          window.__supabase.fetchArticles(5, 0).then(articles => {
-            const filtered = articles.filter(a => a.tag && a.tag.en === tag).slice(0, 3);
-            setRecArticles(filtered.length > 0 ? filtered : articles.slice(0, 3));
+          window.__supabase.fetchArticles(20, 0).then(articles => {
+            const filtered = articles.filter(a => a.tag && a.tag.en === tag);
+            // Shuffle and pick 3 different ones per product
+            const seed = product.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+            const shuffled = filtered.sort((a, b) => {
+              const ha = (a.id.charCodeAt(0) * 31 + seed) % 100;
+              const hb = (b.id.charCodeAt(0) * 31 + seed) % 100;
+              return ha - hb;
+            });
+            setRecArticles(shuffled.length > 0 ? shuffled.slice(0, 3) : articles.slice(0, 3));
           });
         }, [product.id]);
         if (!recArticles.length) return null;
