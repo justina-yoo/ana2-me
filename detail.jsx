@@ -247,6 +247,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             <div>
               <h2 className="sec-h">{t('The anatomy', '이 제품의 아나토미')}</h2>
               <p className="sec-sub">{t('Tap any ingredient — we\'ll explain exactly what it does.', '성분을 눌러보세요. 정확히 뭘 하는지 알려드려요.')}</p>
+              <p style={{ fontSize: 11, color: 'var(--ink-faint)', margin: '4px 0 0', opacity: 0.7 }}>{t('Ingredient descriptions are independently written by ana2me.', '성분 설명은 ana2me가 독립적으로 작성했습니다.')}</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <button
