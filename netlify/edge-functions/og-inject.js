@@ -61,11 +61,11 @@ export default async function (request, context) {
     .replace(/(<meta\s+property="og:title"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
     .replace(/(<meta\s+property="og:url"\s+content=")[^"]*"/, `$1${pageUrl}"`)
-    .replace(/(<meta\s+property="og:image"\s+content=")[^"]*"/, `$1${escAttr(image)}"`)
+    .replace(/(<meta\s+property="og:image"\s+content=")[^"]*"/, `$1${image}"`)
     .replace(/(<meta\s+property="og:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
     .replace(/(<meta\s+name="twitter:title"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
     .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
-    .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*"/, `$1${escAttr(image)}"`)
+    .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*"/, `$1${image}"`)
     .replace(/(<meta\s+name="twitter:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`);
 
   return new Response(newHtml, { headers: response.headers });
