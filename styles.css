@@ -893,7 +893,7 @@ body.night {
 @media (max-width: 600px) {
   .feed-2col { grid-template-columns: 1fr !important; }
   .detail-disclaimer { font-size: 11px !important; }
-  .page-tab { padding: 4px 6px !important; font-size: 11px !important; }
+  .page-tab { padding: 5px 8px !important; font-size: 13px !important; }
   .hdr-search-icon { flex-shrink: 0 !important; }
   .hdr-search-desktop { display: none !important; }
   .hdr-search-icon { display: flex !important; }

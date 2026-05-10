@@ -76,9 +76,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             <button onClick={() => { history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', (view === 'feed' || view === 'detail') && 'page-tab-active')}>
               {t('Products', '프로덕트')}
             </button>
-            <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} className="page-tab" style={{ fontWeight: 700, letterSpacing: '0.04em' }}>
-              {lang === 'ko' ? 'EN' : 'KR'}
-            </button>
           </div>
         )}
         {searchOpen ? (
