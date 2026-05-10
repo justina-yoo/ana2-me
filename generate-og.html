@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0">
+<canvas id="c" width="1200" height="630"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+
+// Background — cream
+ctx.fillStyle = '#f5efe6';
+ctx.fillRect(0, 0, 1200, 630);
+
+// Subtle border
+ctx.strokeStyle = 'rgba(26,25,22,0.08)';
+ctx.lineWidth = 2;
+ctx.strokeRect(40, 40, 1120, 550);
+
+// ANA2ME text
+ctx.fillStyle = '#1a1916';
+ctx.font = '700 72px "Inter", "Helvetica Neue", sans-serif';
+ctx.textAlign = 'center';
+ctx.fillText('ANA', 520, 280);
+
+// 2 in green
+ctx.fillStyle = '#2d5a3d';
+ctx.fillText('2', 610, 280);
+
+// ME in black
+ctx.fillStyle = '#1a1916';
+ctx.fillText('ME', 700, 280);
+
+// Tagline
+ctx.fillStyle = '#4d4944';
+ctx.font = '400 24px "Inter", "Helvetica Neue", sans-serif';
+ctx.fillText('Know What\'s In Your Bottle.', 600, 340);
+
+// Category pills
+const pills = ['Skincare', 'Wellness', 'Fragrance'];
+const colors = ['#2d5a3d', '#a07850', '#6b8e6b'];
+let x = 420;
+pills.forEach((pill, i) => {
+  const w = ctx.measureText(pill).width + 32;
+  ctx.fillStyle = colors[i];
+  ctx.beginPath();
+  ctx.roundRect(x, 380, w, 36, 18);
+  ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.font = '600 14px "Inter", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(pill, x + w/2, 403);
+  ctx.textAlign = 'center';
+  x += w + 12;
+  ctx.font = '400 24px "Inter", "Helvetica Neue", sans-serif';
+});
+
+// URL
+ctx.fillStyle = '#8a8479';
+ctx.font = '400 16px "Inter", sans-serif';
+ctx.fillText('ana2-me.com', 600, 550);
+
+// Download
+const link = document.createElement('a');
+link.download = 'og-default.png';
+link.href = c.toDataURL('image/png');
+document.body.appendChild(link);
+document.body.innerHTML += '<p style="font-family:sans-serif;padding:20px">Right-click the image below and Save As "og-default.png" to /Users/justina/Desktop/ana2me/<br>Or just open this file in a browser.</p>';
+document.body.appendChild(c);
+</script>
+</body>
+</html>

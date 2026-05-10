@@ -1,3 +1,7 @@
 [[edge_functions]]
   function = "og-inject"
   path = "/article/*"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/products/*"

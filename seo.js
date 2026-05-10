@@ -425,5 +425,41 @@
         'isPartOf': { '@id': BASE_URL + '/#website' },
       });
     },
+
+    setProduct: function (product, lang) {
+      var l = lang || (document.documentElement.classList.contains('lang-ko') ? 'ko' : 'en');
+      var name = (l === 'ko' && product.nameKo) ? product.nameKo : product.name;
+      var brand = product.brand;
+      var title = brand + ' ' + name + ' | ' + SITE_NAME;
+      var desc = (l === 'ko' && product.summary.taglineKo) ? product.summary.taglineKo : product.summary.tagline;
+      var image = product.imageUrl || product.image_url || '';
+      var slug = (product.name || product.id).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+      var url = BASE_URL + '/products/' + slug;
+
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'product');
+      setMeta('meta[property="og:title"]', brand + ' ' + name);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[property="og:image"]', image);
+      setMeta('meta[property="og:image:alt"]', brand + ' ' + name);
+      setMeta('meta[name="twitter:title"]', brand + ' ' + name);
+      setMeta('meta[name="twitter:description"]', desc);
+      setMeta('meta[name="twitter:image"]', image);
+      setMeta('meta[name="twitter:image:alt"]', brand + ' ' + name);
+      setArticleJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        '@id': url + '#product',
+        'name': name,
+        'brand': { '@type': 'Brand', 'name': brand },
+        'description': product.summary.tagline,
+        'image': image,
+        'url': url,
+        'category': product.category,
+      });
+    },
   };
 })();

@@ -47,10 +47,28 @@ window.Privacy = function Privacy({ lang }) {
       bodyKo: '이 방침은 필요에 따라 업데이트될 수 있어요. 상단의 "최종 업데이트" 날짜를 확인해 주세요. 변경 후에도 사이트를 계속 이용하시면 업데이트된 방침에 동의한 것으로 봅니다.',
     },
     {
-      heading: '8. Contact',
-      headingKo: '8. 문의',
-      body: 'For any questions about this privacy policy, please reach out via the contact information on our About page.',
-      bodyKo: '본 개인정보처리방침에 관한 문의사항은 소개 페이지의 연락처를 통해 문의해 주세요.',
+      heading: '8. Affiliate Disclosure',
+      headingKo: '8. 제휴 링크 안내',
+      body: 'Some links on this site are affiliate links. If you click and make a purchase, we may earn a small commission at no extra cost to you. This helps support the site and allows us to continue producing independent, research-based content. Affiliate relationships do not influence our editorial opinions or product evaluations.',
+      bodyKo: '이 사이트의 일부 링크는 제휴 링크예요. 클릭 후 구매하시면 추가 비용 없이 저희가 소정의 수수료를 받을 수 있어요. 이 수익은 사이트 운영과 독립적인 연구 기반 콘텐츠 제작에 사용됩니다. 제휴 관계는 편집 의견이나 제품 평가에 영향을 미치지 않아요.',
+    },
+    {
+      heading: '9. Content Disclaimer',
+      headingKo: '9. 콘텐츠 면책 조항',
+      body: 'Content on ana2me is for informational purposes only and is not medical advice. We strive for accuracy, but ingredient science and product formulations change frequently. Always consult a dermatologist or healthcare professional before starting any new skincare or supplement routine. We are not responsible for any adverse effects resulting from the use of information provided on this site.',
+      bodyKo: 'ana2me의 콘텐츠는 정보 제공 목적으로만 작성되며 의학적 조언이 아니에요. 정확성을 위해 노력하지만 성분 과학과 제품 포뮬레이션은 자주 변경돼요. 새로운 스킨케어나 보충제를 시작하기 전에 반드시 피부과 전문의나 의료 전문가와 상담하세요. 이 사이트에 제공된 정보 사용으로 인한 부작용에 대해 책임지지 않아요.',
+    },
+    {
+      heading: '10. DMCA / Copyright',
+      headingKo: '10. 저작권 및 DMCA',
+      body: 'We respect intellectual property rights. If you believe any content on this site infringes your copyright, please contact us at ana2me2026@gmail.com with a description of the copyrighted work, the URL where the material appears, and your contact information. We will review and respond to valid requests promptly.',
+      bodyKo: '저희는 지식재산권을 존중해요. 이 사이트의 콘텐츠가 저작권을 침해한다고 판단되시면 ana2me2026@gmail.com으로 저작물 설명, 해당 URL, 연락처를 보내주세요. 유효한 요청에 신속하게 검토 및 대응하겠습니다.',
+    },
+    {
+      heading: '11. Contact',
+      headingKo: '11. 문의',
+      body: 'For any questions about this privacy policy or the disclaimers above, please contact us at ana2me2026@gmail.com.',
+      bodyKo: '본 개인정보처리방침 또는 위 면책 조항에 관한 문의사항은 ana2me2026@gmail.com으로 연락해 주세요.',
     },
   ];
 

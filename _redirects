@@ -3,6 +3,7 @@
 /privacy    /index.html  200
 /analyzer   /index.html  200
 /products   /index.html  200
+/products/:id  /index.html  200
 /article/:a  /index.html  200
 /article/:a/:b  /index.html  200
 /article/:a/:b/:c  /index.html  200

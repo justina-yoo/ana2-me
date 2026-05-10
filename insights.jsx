@@ -215,8 +215,27 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         {posts.length === 0 && loading && !query && <FeedSkeleton />}
         {posts.length === 0 && query && (
-          <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--ink-faint)' }}>
-            <p style={{ fontSize: 15, margin: 0 }}>{t('No articles found for', '검색 결과가 없습니다:')} "{query}"</p>
+          <div style={{ padding: '48px 0' }}>
+            <p style={{ fontSize: 15, margin: '0 0 32px', color: 'var(--ink-faint)', textAlign: 'center' }}>{t('No articles found for', '검색 결과가 없습니다:')} {query}</p>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 16px' }}>
+              {t('Popular reads', '인기 글')}
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {allPosts.slice(0, 5).map(p => (
+                <button key={p.id} onClick={() => onSelectPost(p)} style={{
+                  display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
+                  background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '12px 0',
+                }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {p.title[lang] || p.title.en}
+                    </h4>
+                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: p.tagColor }}>{p.tag[lang] || p.tag.en}</span>
+                  </div>
+                  <ProductImg src={p.imageUrl} alt={p.title[lang] || p.title.en} style={{ width: 64, height: 64, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {(() => {
@@ -313,8 +332,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             }
           }
           return cards;
-        })()
-        })}
+        })()}
         {/* Loading indicator */}
         {loading && (
           <div style={{ padding: '24px 0', textAlign: 'center' }}>

@@ -240,6 +240,17 @@
           setView('insights'); if (window.SEO) window.SEO.setHome();
         }
         else if (path === '/products') { setView('feed'); }
+        else if (path.startsWith('/products/')) {
+          const slug = path.split('/').pop();
+          setView('feed');
+          const tryOpen = () => {
+            const prods = window.PRODUCTS || [];
+            const p = prods.find(x => x.id === slug) || prods.find(x => x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'') === slug);
+            if (p) { setProductId(p.id); setView('detail'); if (window.SEO && window.SEO.setProduct) window.SEO.setProduct(p); }
+            else if (prods.length === 0) setTimeout(tryOpen, 200);
+          };
+          tryOpen();
+        }
         else if (path === '/analyzer') { setView('analyzer'); if (window.SEO) window.SEO.setAnalyzer(); }
         else if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
         else if (path === '/privacy') { setView('privacy'); if (window.SEO) window.SEO.setPrivacy(); }

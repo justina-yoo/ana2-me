@@ -21,7 +21,7 @@ window.Icon = function Icon({ name, size = 18, className = '' }) {
   const s = { width: size, height: size };
   const paths = {
     search: <><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></>,
-    x: <><path d="M18 6 6 18M6 6l18 12" transform="scale(.66) translate(4 4)"/></>,
+    x: <><path d="M18 6 6 18M6 6l12 12"/></>,
     globe: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18"/></>,
     bookmark: <path d="M6 3h12v18l-6-4-6 4z"/>,
     share: <><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8 11 8-5M8 13l8 5"/></>,

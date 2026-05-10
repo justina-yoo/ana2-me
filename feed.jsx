@@ -3,7 +3,7 @@ const { useMemo: _uM1 } = React;
 
 window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  products = products || window.PRODUCTS || [];
+  products = (products || window.PRODUCTS || []).filter(p => p.id === 'skincare-7');
 
   const filtered = useMemo(() => {
     if (query) {
@@ -14,8 +14,8 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
         p.brand.toLowerCase().includes(q)
       );
     }
-    return products.filter(p => p.category === category);
-  }, [query, category, products]);
+    return products;
+  }, [query, products]);
 
   const dailyPool = useMemo(
     () => products.filter(p => p.category === category),
@@ -81,32 +81,41 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
 
       {/* Grid */}
       <section className="grid-section">
-        <div className="grid-head">
-          <h2 className="grid-h">
-            {query
-              ? t(`Results for "${query}"`, `"${query}" 검색 결과`)
-              : t(`All ${catMeta.en.toLowerCase()}`, `전체 ${catMeta.ko}`)}
-          </h2>
-          <span className="grid-count">{filtered.length} {t('items', '개')}</span>
-        </div>
-        {filtered.length > 0 ? (
-          <div className="product-grid">
-            {filtered.map((p, i) => (
-              <ProductCard key={p.id} product={p} lang={lang} onClick={() => { setProduct(p); window.scrollTo(0,0); }} index={i} />
-            ))}
+        {(category === 'fragrance' || category === 'wellness-food') && !query ? (
+          <div style={{ textAlign: 'center', padding: '60px 24px' }}>
+            <p style={{ fontSize: 18, fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 8px' }}>
+              {t('Coming soon', '곧 공개됩니다')}
+            </p>
+            <p style={{ fontSize: 14, color: 'var(--ink-faint)', margin: 0 }}>
+              {t('We\'re working on adding products for this category.', '이 카테고리의 제품을 준비하고 있어요.')}
+            </p>
           </div>
         ) : (
-          <div className="empty">
-            <Sticker color="sage" rotate={-4}>{t('nothing here', '결과 없음')}</Sticker>
-            <p>{t("Try another word — we might have it under a different name.", '다른 키워드로 검색해보세요.')}</p>
-          </div>
+          <>
+            <div className="grid-head">
+              <h2 className="grid-h">
+                {query
+                  ? t(`Results for "${query}"`, `"${query}" 검색 결과`)
+                  : t(`All ${catMeta.en.toLowerCase()}`, `전체 ${catMeta.ko}`)}
+              </h2>
+              <span className="grid-count">{filtered.length} {t('items', '개')}</span>
+            </div>
+            {filtered.length > 0 ? (
+              <div className="product-grid">
+                {filtered.map((p, i) => (
+                  <ProductCard key={p.id} product={p} lang={lang} onClick={() => { setProduct(p); history.pushState({}, '', '/products/' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'')); window.scrollTo(0,0); }} index={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="empty">
+                <Sticker color="sage" rotate={-4}>{t('nothing here', '결과 없음')}</Sticker>
+                <p>{t("Try another word — we might have it under a different name.", '다른 키워드로 검색해보세요.')}</p>
+              </div>
+            )}
+          </>
         )}
       </section>
 
-      {/* Footnote */}
-      <footer className="feed-foot">
-        <p className="foot-mark">anatomy <span>·</span> <em>{t('clean, curious, kind to skin', '깨끗하게, 궁금하게, 피부에 친절하게')}</em></p>
-      </footer>
     </div>
   );
 };

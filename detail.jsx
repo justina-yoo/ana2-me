@@ -41,6 +41,20 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
   const isSkincare = product.category === 'skincare';
   const detailRef = useRef(null);
 
+  // Set SEO tags for product page
+  useEffect(() => {
+    if (window.SEO && window.SEO.setProduct) window.SEO.setProduct(product, lang);
+  }, [product.id, lang]);
+
+  // Floating share bar
+  const [showShare, setShowShare] = useState(false);
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowShare(window.scrollY > 300);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // Wrap quoted text and key phrases in <mark> for highlight animation
   const markUp = (text) => {
     // Match quoted strings ("..." or \"...\")
@@ -144,9 +158,9 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
   // Benefits framing per category
   const benefitsHeadline = isFragrance
     ? t('You\'ll love this if you\'re:', '이런 분께 추천해요:')
-    : t('What it does for you', '이 제품이 해주는 일');
+    : t('What it does for you', '이런 효과가 있어요');
   const concernsHeadline = isFragrance
-    ? t('Maybe skip if:', '이런 분께는 권하지 않아요:')
+    ? t('Maybe skip if:', '이런 분은 참고하세요:')
     : t('Best for these concerns', '이런 피부 고민에 좋아요');
 
   return (
@@ -169,8 +183,8 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <span className="detail-brand">{product.brand}</span>
           <h1 className="detail-name">{name}</h1>
           <p className="detail-tag">{tag}</p>
-          <div style={{ fontSize: 12, color: 'var(--ink-faint)', lineHeight: 1.6, margin: '12px 0 16px', padding: '10px 14px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)' }}>
-            Product image and information belong to their respective brand owners. We do not claim ownership of any product imagery or official product descriptions.
+          <div style={{ fontSize: 'clamp(10px, 2.5vw, 12px)', color: 'var(--ink-faint)', lineHeight: 1.6, margin: '12px 0 16px', padding: '10px 14px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)' }}>
+            {lang === 'ko' ? '이 페이지에 사용된 제품 이미지 및 공식 제품 정보의 저작권은 해당 브랜드에 있습니다. 본 사이트는 해당 자료에 대한 소유권을 주장하지 않으며, 정보 제공 목적으로만 사용됩니다. 관련 문의는 ana2me2026@gmail.com으로 연락해 주세요.' : 'Product images and official product information on this page are copyrighted by their respective brands. We do not claim ownership of these materials and use them for informational purposes only. For inquiries, contact ana2me2026@gmail.com.'}
           </div>
 
           <div className="detail-actions">
@@ -192,17 +206,14 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           </div>
 
           {/* Accords for skincare / Performance for fragrance */}
-          {isSkincare && product.accords && (
+          {false && isSkincare && product.accords && (
             <div className="accords">
               {product.accords.map((a, i) => {
                 const label = lang === 'ko' && a.labelKo ? a.labelKo : a.label;
                 return (
-                  <div key={i} className="accord-row">
+                  <div key={i} className="accord-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ color: 'var(--accent)', fontSize: 16 }}>✓</span>
                     <span className="accord-label">{label}</span>
-                    <div className="accord-bar-wrap">
-                      <div className="accord-bar" style={{ width: `${a.percentage}%` }} />
-                    </div>
-                    <span className="accord-pct">{a.percentage}</span>
                   </div>
                 );
               })}
@@ -211,7 +222,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           {isFragrance && product.performance && (
             <div className="accords">
               <div className="accord-row">
-                <span className="accord-label">{t('Sillage', '시야주')}</span>
+                <span className="accord-label">{t('Sillage', '확산력')}</span>
                 <div className="accord-bar-wrap">
                   <div className="accord-bar accord-bar-sage" style={{ width: `${product.performance.sillage}%` }} />
                 </div>
@@ -234,7 +245,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         <section className="ing-section">
           <header className="ing-head">
             <div>
-              <h2 className="sec-h">{t('The anatomy', '이 제품의 해부도')}</h2>
+              <h2 className="sec-h">{t('The anatomy', '이 제품의 아나토미')}</h2>
               <p className="sec-sub">{t('Tap any ingredient — we\'ll explain exactly what it does.', '성분을 눌러보세요. 정확히 뭘 하는지 알려드려요.')}</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -285,8 +296,8 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         <section className="notes-section">
           <header className="ing-head">
             <div>
-              <h2 className="sec-h">{t('The anatomy', '이 향의 해부도')}</h2>
-              <p className="sec-sub">{t('How the scent unfolds — from first spray to dry-down.', '첫 뿌림부터 드라이다운까지, 향이 펼쳐지는 순서예요.')}</p>
+              <h2 className="sec-h">{t('The anatomy', '이 향의 아나토미')}</h2>
+              <p className="sec-sub">{t('How the scent unfolds — from first spray to dry-down.', '처음부터 끝까지, 향이 펼쳐지는 순서')}</p>
             </div>
             <Sticker color="butter" rotate={-5}>{notes.length} {t('notes', '노트')}</Sticker>
           </header>
@@ -332,7 +343,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         <section className="ing-section">
           <header className="ing-head">
             <div>
-              <h2 className="sec-h">{t('The anatomy', '이 제품의 해부도')}</h2>
+              <h2 className="sec-h">{t('The anatomy', '이 제품의 아나토미')}</h2>
               <p className="sec-sub">{t('Tap any compound — we\'ll explain what it does in your body.', '성분을 눌러보세요. 몸에서 어떤 역할을 하는지 알려드려요.')}</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -383,7 +394,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       {product.funFacts && product.funFacts.length > 0 && product.category !== 'wellness-food' && (
         <section className="facts-section">
           <header className="facts-head">
-            <h2 className="sec-h">{t('In the wild', '소소한 이야기')}</h2>
+            <h2 className="sec-h">{t('In the wild', '알아두면 재밌는 이야기')}</h2>
             <p className="sec-sub">{t('Stories, trivia, and cultural footnotes.', '이 제품에 얽힌 이야기들.')}</p>
           </header>
           <div className="facts-grid">
@@ -448,44 +459,63 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             <Sticker color="butter" rotate={-4}>{t('How to use', '사용법')}</Sticker>
           </div>
           <p className="usage-body">{usage}</p>
+          {product.summary?.caution && (
+            <div style={{ marginTop: 20, padding: '14px 18px', background: 'var(--cream-2)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--line)' }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-soft)', margin: '0 0 6px' }}>{t('Precautions', '주의사항')}</p>
+              <p style={{ fontSize: 13, color: 'var(--ink-faint)', lineHeight: 1.6, margin: 0 }}>
+                {lang === 'ko' && product.summary.cautionKo ? product.summary.cautionKo : product.summary.caution}
+              </p>
+            </div>
+          )}
         </section>
       )}
 
       {/* ---------- REVIEWS ---------- */}
-      {reviewCount > 0 && (
-        <section id="reviews-section" className="reviews-section">
+            {false && (<section id="reviews-section" className="reviews-section">
           <header className="reviews-head">
             <h2 className="sec-h">{t('Reviews', '리뷰')}</h2>
-            <span className="reviews-count">{reviewCount}</span>
+            {reviewCount > 0 && <span className="reviews-count">{reviewCount}</span>}
           </header>
-          <div className="reviews-list">
-            {reviews.map((r, i) => {
-              const stars = r.rating || 5;
-              return (
-                <article key={i} className="review-card">
-                  <div className="review-top">
-                    <div className="review-author">
-                      <span className="review-avatar">{(r.author || 'A')[0]}</span>
-                      <div>
-                        <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
-                        {r.date && <span className="review-date">{r.date}</span>}
+          {reviewCount > 0 ? (
+            <div className="reviews-list">
+              {reviews.map((r, i) => {
+                const stars = r.rating || 5;
+                return (
+                  <article key={i} className="review-card">
+                    <div className="review-top">
+                      <div className="review-author">
+                        <span className="review-avatar">{(r.author || 'A')[0]}</span>
+                        <div>
+                          <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
+                          {r.date && <span className="review-date">{r.date}</span>}
+                        </div>
+                      </div>
+                      <div className="review-stars">
+                        {Array.from({ length: 5 }, (_, si) => (
+                          <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
+                        ))}
                       </div>
                     </div>
-                    <div className="review-stars">
-                      {Array.from({ length: 5 }, (_, si) => (
-                        <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="review-body">{lang === 'ko' && r.bodyKo ? r.bodyKo : r.body}</p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                    <p className="review-body">{lang === 'ko' && r.bodyKo ? r.bodyKo : r.body}</p>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '32px 20px', color: 'var(--ink-faint)' }}>
+              <p style={{ fontSize: 14, margin: '0 0 12px' }}>{t('No reviews yet. Be the first to share your experience.', '아직 리뷰가 없어요. 첫 번째 리뷰를 남겨주세요.')}</p>
+              <button style={{
+                padding: '10px 24px', borderRadius: 'var(--radius-pill)',
+                border: '1px solid var(--line)', background: 'var(--cream-card)',
+                fontSize: 13, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer',
+              }}>
+                {t('Write a review', '리뷰 작성하기')}
+              </button>
+            </div>
+          )}
+        </section>)}
 
-      {/* ---------- RELATED ---------- */}
+      {false && (
       <section className="related">
         <h2 className="sec-h">{t('You might also like', '이런 제품도 있어요')}</h2>
         <div className="related-row">
@@ -505,6 +535,49 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           })}
         </div>
       </section>
+      )}
+
+      {/* ---------- RECOMMENDED ARTICLES ---------- */}
+      {window.__supabase && (() => {
+        const [recArticles, setRecArticles] = React.useState([]);
+        React.useEffect(() => {
+          const tag = product.category === 'fragrance' ? 'Fragrance' : product.category === 'wellness-food' ? 'Wellness' : 'Skincare';
+          window.__supabase.fetchArticles(5, 0).then(articles => {
+            const filtered = articles.filter(a => a.tag && a.tag.en === tag).slice(0, 3);
+            setRecArticles(filtered.length > 0 ? filtered : articles.slice(0, 3));
+          });
+        }, [product.id]);
+        if (!recArticles.length) return null;
+        return (
+          <section style={{ marginTop: 40, paddingTop: 28, borderTop: '1px solid var(--line)' }}>
+            <h2 className="sec-h">{t('Recommended reads', '추천 아티클')}</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {recArticles.map(a => (
+                <button key={a.id} onClick={() => {
+                  const tag = a.tag.en.toLowerCase().replace(/\s+/g, '-');
+                  const d = new Date(a.date);
+                  const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                  history.pushState({}, '', '/article/' + tag + '/' + iso + '/' + a.id);
+                  if (window.SEO) window.SEO.setArticle(a);
+                  setView('insights');
+                  window.scrollTo(0, 0);
+                }} style={{
+                  display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
+                  background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '12px 0',
+                }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {a.title[lang] || a.title.en}
+                    </h4>
+                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: a.tagColor }}>{a.tag[lang] || a.tag.en}</span>
+                  </div>
+                  <ProductImg src={a.imageUrl} alt={a.title[lang] || a.title.en} style={{ width: 64, height: 64, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
+                </button>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ---------- INGREDIENT SHEET ---------- */}
       {selIng && (
@@ -544,7 +617,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <div className="sheet" onClick={(e) => e.stopPropagation()}>
             <button className="sheet-close" onClick={() => setSelBio(null)}><Icon name="x" size={16} /></button>
             <span className="sheet-tier">
-              {selBio.system === 'brain' && t('Brain & Mood', '뇌 & 기분')}
+              {selBio.system === 'brain' && t('Brain & Mood', '두뇌 & 기분')}
               {selBio.system === 'energy' && t('Energy & Metabolism', '에너지 & 대사')}
               {selBio.system === 'skin' && t('Skin & Repair', '피부 & 회복')}
             </span>
@@ -556,6 +629,46 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           </div>
         </div>
       )}
+
+      {/* Floating share bar */}
+      <div style={{
+        position: 'fixed', bottom: 24, left: '50%',
+        transform: showShare ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(calc(100% + 40px))',
+        background: '#2d5a3d',
+        padding: '10px 8px',
+        borderRadius: 'var(--radius-pill)',
+        zIndex: 30,
+        display: 'flex', alignItems: 'center', gap: 6,
+        transition: 'transform 0.3s ease',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+      }}>
+        <button onClick={() => {
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          });
+          if (window.gtag) gtag('event', 'copy_link', { event_category: 'product_share', event_label: product.id });
+        }} style={{
+          display: 'flex', alignItems: 'center', gap: 7, padding: '10px 20px', borderRadius: 'var(--radius-pill)',
+          border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.15)',
+          fontSize: 13, fontWeight: 600, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap',
+        }}>
+          <Icon name="link" size={14} />
+          {copied ? (t('Copied!', '복사됨!')) : (t('Copy link', '링크 복사'))}
+        </button>
+        <button onClick={() => {
+          if (navigator.share) navigator.share({ title: product.brand + ' ' + product.name, url: window.location.href });
+          else { navigator.clipboard.writeText(window.location.href); setCopied(true); setTimeout(() => setCopied(false), 2000); }
+          if (window.gtag) gtag('event', 'share_native', { event_category: 'product_share', event_label: product.id });
+        }} style={{
+          display: 'flex', alignItems: 'center', gap: 7, padding: '10px 20px', borderRadius: 'var(--radius-pill)',
+          border: 'none', background: 'rgba(255,255,255,0.95)', color: 'var(--ink)',
+          fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap',
+        }}>
+          <Icon name="share" size={14} />
+          {t('Share', '공유하기')}
+        </button>
+      </div>
     </div>
   );
 };
