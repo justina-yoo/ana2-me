@@ -3,7 +3,7 @@ const { useMemo: _uM1 } = React;
 
 window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  products = (products || window.PRODUCTS || []).filter(p => p.id === 'skincare-7');
+  products = (products || window.PRODUCTS || []).filter(p => p.id === 'skincare-7' || p.id === 'skincare-8' || p.id === 'skincare-9');
 
   const filtered = useMemo(() => {
     if (query) {
@@ -103,7 +103,7 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
             {filtered.length > 0 ? (
               <div className="product-grid">
                 {filtered.map((p, i) => (
-                  <ProductCard key={p.id} product={p} lang={lang} onClick={() => { setProduct(p); history.pushState({}, '', '/products/' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'')); window.scrollTo(0,0); }} index={i} />
+                  <ProductCard key={p.id} product={p} lang={lang} onClick={() => { setProduct(p); history.pushState({}, '', '/products/' + p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'')); window.scrollTo(0,0); }} index={i} />
                 ))}
               </div>
             ) : (

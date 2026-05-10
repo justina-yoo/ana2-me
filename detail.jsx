@@ -474,7 +474,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       )}
 
       {/* ---------- REVIEWS ---------- */}
-            {false && (<section id="reviews-section" className="reviews-section">
+            {(<section id="reviews-section" className="reviews-section">
           <header className="reviews-head">
             <h2 className="sec-h">{t('Reviews', '리뷰')}</h2>
             {reviewCount > 0 && <span className="reviews-count">{reviewCount}</span>}

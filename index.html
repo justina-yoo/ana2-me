@@ -245,7 +245,7 @@
           setView('feed');
           const tryOpen = () => {
             const prods = window.PRODUCTS || [];
-            const p = prods.find(x => x.id === slug) || prods.find(x => x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'') === slug);
+            const p = prods.find(x => x.id === slug) || prods.find(x => x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'') === slug) || prods.find(x => (x.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'')) === slug);
             if (p) { setProductId(p.id); setView('detail'); if (window.SEO && window.SEO.setProduct) window.SEO.setProduct(p); }
             else if (prods.length === 0) setTimeout(tryOpen, 200);
           };

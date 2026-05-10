@@ -433,7 +433,7 @@
       var title = brand + ' ' + name + ' | ' + SITE_NAME;
       var desc = (l === 'ko' && product.summary.taglineKo) ? product.summary.taglineKo : product.summary.tagline;
       var image = product.imageUrl || product.image_url || '';
-      var slug = (product.name || product.id).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+      var slug = ((product.brand || '') + ' ' + (product.name || product.id)).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
       var url = BASE_URL + '/products/' + slug;
 
       document.title = title;
