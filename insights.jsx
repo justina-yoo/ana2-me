@@ -125,13 +125,15 @@ window.Insights = function Insights({ lang, density, query }) {
     query: q,
     onTagClick: (tag) => {
       const newTag = activeTag === tag ? null : tag;
-      setActiveTag(newTag);
-      // When filtering, load all articles so filter shows everything
       if (newTag && hasMore) {
+        // Fetch ALL articles first, then set the tag filter
         window.__supabase.fetchArticles().then(function(data) {
           setPOSTS(data);
           setHasMore(false);
+          setActiveTag(newTag);
         });
+      } else {
+        setActiveTag(newTag);
       }
     },
     onSelectPost: openPost,
