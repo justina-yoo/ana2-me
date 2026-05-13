@@ -626,7 +626,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
   }, [post.id]);
 
   return (
-    <div className="detail" style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div className="detail" style={{ maxWidth: 780, margin: '0 auto' }}>
       <button className="back-btn" onClick={onBack}>
         <Icon name="back" size={16} />
         {isKo ? '인사이트로 돌아가기' : 'Back to Insights'}
