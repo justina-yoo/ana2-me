@@ -466,7 +466,7 @@ body.night {
   height: 300px;
   overflow: visible;
 }
-.detail-img { width: 100%; height: 100%; object-fit: contain; }
+.detail-img { width: 100%; height: 100%; object-fit: cover; }
 .detail-sticker { position: absolute; bottom: 18px; left: 18px; }
 
 .detail-head { padding-top: 8px; }
