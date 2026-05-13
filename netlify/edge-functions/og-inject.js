@@ -9,12 +9,22 @@ export default async function (request, context) {
 
   const articleMatch = path.match(/^\/article\/[^/]+\/[^/]+\/([^/]+)\/?$/);
   const productMatch = path.match(/^\/products\/([^/]+)\/?$/);
+  const staticPage = ['/about', '/privacy', '/insights'].includes(path.replace(/\/$/, ''));
 
-  if (!articleMatch && !productMatch) {
+  if (!articleMatch && !productMatch && !staticPage) {
     return context.next();
   }
 
-  let title, description, image, pageUrl, jsonLd, ssrContent;
+  // Fix canonical URLs for static pages
+  if (staticPage) {
+    const response = await context.next();
+    const html = await response.text();
+    const canonicalUrl = `${SITE}${path.replace(/\/$/, '')}`;
+    const newHtml = html.replace(/(<link\s+rel="canonical"\s+href=")[^"]*"/, `$1${canonicalUrl}"`);
+    return new Response(newHtml, { headers: response.headers });
+  }
+
+  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent;
 
   try {
     if (articleMatch) {
@@ -31,11 +41,10 @@ export default async function (request, context) {
       image = (a.image_url || '').replace('w=800', 'w=1200');
       pageUrl = `${SITE}${path}`;
 
-      // Build article body text for JSON-LD articleBody
       const bodyText = extractBodyText(a.body_blocks);
-
-      // Build JSON-LD
       const isoDate = toISODate(a.date);
+      const categoryName = a.tag?.en || a.category?.en || 'Insights';
+
       jsonLd = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "NewsArticle",
@@ -47,7 +56,7 @@ export default async function (request, context) {
         "dateModified": isoDate,
         "image": { "@type": "ImageObject", "url": image, "width": 1200, "height": 630 },
         "keywords": typeof a.keywords === 'string' ? a.keywords : '',
-        "articleSection": a.category?.en || a.tag?.en || '',
+        "articleSection": categoryName,
         "articleBody": bodyText,
         "wordCount": bodyText.split(/\s+/).length,
         "inLanguage": ["en", "ko"],
@@ -63,7 +72,17 @@ export default async function (request, context) {
         "isPartOf": { "@id": `${SITE}/#website` }
       });
 
-      // Build server-rendered HTML for crawlers
+      breadcrumbLd = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE },
+          { "@type": "ListItem", "position": 2, "name": "Insights", "item": `${SITE}/insights` },
+          { "@type": "ListItem", "position": 3, "name": categoryName, "item": `${SITE}/insights` },
+          { "@type": "ListItem", "position": 4, "name": a.title.en, "item": pageUrl }
+        ]
+      });
+
       ssrContent = renderArticleHTML(a);
 
     } else {
@@ -74,7 +93,6 @@ export default async function (request, context) {
       );
       const data = await res.json();
       if (!data) return context.next();
-      // Match by id, or by slug
       const p = data.find(x => x.id === slug) ||
                 data.find(x => (x.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '') === slug);
       if (!p) return context.next();
@@ -94,6 +112,16 @@ export default async function (request, context) {
         "image": image.startsWith('/') ? SITE + image : image,
         "url": pageUrl,
         "category": p.category || ''
+      });
+
+      breadcrumbLd = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE },
+          { "@type": "ListItem", "position": 2, "name": "Products", "item": `${SITE}/products` },
+          { "@type": "ListItem", "position": 3, "name": p.brand + ' ' + p.name, "item": pageUrl }
+        ]
       });
 
       ssrContent = renderProductHTML(p);
@@ -125,12 +153,15 @@ export default async function (request, context) {
   if (jsonLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${jsonLd}</script>\n</head>`);
   }
+  if (breadcrumbLd) {
+    newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${breadcrumbLd}</script>\n</head>`);
+  }
 
   // Inject SSR content inside <div id="root"> for crawlers
-  // This is hidden by React hydration — React replaces it on mount
-  // But crawlers without JS see the full content
+  // Wrapped in <main> for semantic landmark
+  // React replaces it on mount — no visual change for users
   if (ssrContent) {
-    newHtml = newHtml.replace('<div id="root"></div>', `<div id="root">${ssrContent}</div>`);
+    newHtml = newHtml.replace('<div id="root"></div>', `<div id="root"><main>${ssrContent}</main></div>`);
   }
 
   return new Response(newHtml, { headers: response.headers });
