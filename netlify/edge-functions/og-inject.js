@@ -9,19 +9,8 @@ export default async function (request, context) {
 
   const articleMatch = path.match(/^\/article\/[^/]+\/[^/]+\/([^/]+)\/?$/);
   const productMatch = path.match(/^\/products\/([^/]+)\/?$/);
-  const staticPage = ['/about', '/privacy', '/insights'].includes(path.replace(/\/$/, ''));
-
-  if (!articleMatch && !productMatch && !staticPage) {
+  if (!articleMatch && !productMatch) {
     return context.next();
-  }
-
-  // Fix canonical URLs for static pages
-  if (staticPage) {
-    const response = await context.next();
-    const html = await response.text();
-    const canonicalUrl = `${SITE}${path.replace(/\/$/, '')}`;
-    const newHtml = html.replace(/(<link\s+rel="canonical"\s+href=")[^"]*"/, `$1${canonicalUrl}"`);
-    return new Response(newHtml, { headers: response.headers });
   }
 
   let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent;
