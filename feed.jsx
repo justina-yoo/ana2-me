@@ -3,7 +3,7 @@ const { useMemo: _uM1 } = React;
 
 window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  products = (products || window.PRODUCTS || []).filter(p => p.id === 'skincare-7' || p.id === 'skincare-8' || p.id === 'skincare-9');
+  products = products || window.PRODUCTS || [];
 
   const filtered = useMemo(() => {
     if (query) {
