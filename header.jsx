@@ -43,9 +43,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           <button onClick={goFeed} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </button>
-          <button onClick={() => { history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'feed' && 'cat-edit-active')}>
-            {t('Products', '프로덕트')}
-          </button>
+          {/* Products tab hidden */}
         </nav>
       </header>
     );
@@ -73,9 +71,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
               {t('Insights', '인사이트')}
             </button>
-            <button onClick={() => { history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', (view === 'feed' || view === 'detail') && 'page-tab-active')}>
-              {t('Products', '프로덕트')}
-            </button>
+            {/* Products tab hidden */}
           </div>
         )}
         {searchOpen ? (
