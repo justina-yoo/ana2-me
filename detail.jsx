@@ -184,7 +184,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <h1 className="detail-name">{name}</h1>
           <p className="detail-tag">{tag}</p>
           <div style={{ fontSize: 'clamp(10px, 2.5vw, 12px)', color: 'var(--ink-faint)', lineHeight: 1.6, margin: '12px 0 16px', padding: '10px 14px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)' }}>
-            {lang === 'ko' ? '이 페이지에 사용된 제품 이미지 및 공식 제품 정보의 저작권은 해당 브랜드에 있습니다. 본 사이트는 해당 자료에 대한 소유권을 주장하지 않으며, 정보 제공 목적으로만 사용됩니다. 관련 문의는 ana2me2026@gmail.com으로 연락해 주세요.' : 'Product images and official product information on this page are copyrighted by their respective brands. We do not claim ownership of these materials and use them for informational purposes only. For inquiries, contact ana2me2026@gmail.com.'}
+            {lang === 'ko' ? '이 페이지의 공식 제품 정보의 저작권은 해당 브랜드에 있습니다. 본 사이트는 해당 자료에 대한 소유권을 주장하지 않으며, 정보 제공 목적으로만 사용됩니다. 관련 문의는 ana2me2026@gmail.com으로 연락해 주세요.' : 'Official product information on this page are copyrighted by their respective brands. We do not claim ownership of these materials and use them for informational purposes only. For inquiries, contact ana2me2026@gmail.com.'}
           </div>
 
           <div className="detail-actions">
