@@ -585,10 +585,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
                   const tag = a.tag.en.toLowerCase().replace(/\s+/g, '-');
                   const d = new Date(a.date);
                   const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-                  history.pushState({}, '', '/article/' + tag + '/' + iso + '/' + a.id);
-                  if (window.SEO) window.SEO.setArticle(a);
-                  setView('insights');
-                  window.scrollTo(0, 0);
+                  window.location.href = '/article/' + tag + '/' + iso + '/' + a.id;
                 }} style={{
                   display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
                   background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '12px 0',
