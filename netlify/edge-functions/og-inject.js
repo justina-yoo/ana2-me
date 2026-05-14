@@ -215,7 +215,23 @@ export default async function (request, context) {
     newHtml = newHtml.replace('<div id="root"></div>', `<div id="root"><main>${ssrContent}</main></div>`);
   }
 
-  return new Response(newHtml, { headers: response.headers });
+  // Set cache headers based on page type
+  const responseHeaders = new Headers(response.headers);
+  if (articleMatch) {
+    // Articles are immutable after publishing — cache aggressively
+    responseHeaders.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=3600');
+    responseHeaders.set('Netlify-CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=3600');
+  } else if (productMatch) {
+    // Products change rarely
+    responseHeaders.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=600');
+    responseHeaders.set('Netlify-CDN-Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=600');
+  } else if (isListing || isProductListing) {
+    // Listings update when new content is added — short cache
+    responseHeaders.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+    responseHeaders.set('Netlify-CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60');
+  }
+
+  return new Response(newHtml, { headers: responseHeaders });
 }
 
 // ---------- HTML Renderers ----------

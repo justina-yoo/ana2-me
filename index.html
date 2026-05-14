@@ -80,6 +80,17 @@
 <body>
   <div id="top-anchor" style="height:0;overflow:hidden"></div>
   <div id="root"></div>
+  <!-- CDN fallback: shown if React never mounts -->
+  <div id="load-fallback" style="display:none;justify-content:center;align-items:center;min-height:80vh;padding:24px;font-family:system-ui,sans-serif">
+    <div style="max-width:400px;text-align:center;padding:40px 32px;background:#faf9f6;border:1px solid #e8e6e1;border-radius:14px">
+      <div style="font-size:32px;margin-bottom:16px">&#9888;&#65039;</div>
+      <h2 style="font-size:20px;font-weight:500;color:#1a1916;margin:0 0 8px">Page failed to load</h2>
+      <p style="font-size:14px;color:#6b6962;margin:0 0 24px">Please check your connection and try again.</p>
+      <button onclick="window.location.reload()" style="padding:10px 22px;font-size:13px;font-weight:600;border-radius:8px;cursor:pointer;border:none;background:#2d5a3d;color:#fff">Refresh</button>
+    </div>
+  </div>
+  <script>setTimeout(function(){if(!document.getElementById('root').hasChildNodes()){var f=document.getElementById('load-fallback');if(f)f.style.display='flex';}},5000);</script>
+  <noscript><div style="display:flex;justify-content:center;align-items:center;min-height:80vh;padding:24px;font-family:system-ui,sans-serif"><div style="max-width:400px;text-align:center;padding:40px 32px"><h2 style="font-size:20px">JavaScript is required</h2><p style="font-size:14px;color:#6b6962">Please enable JavaScript to use ana2me.</p></div></div></noscript>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
@@ -114,6 +125,24 @@
 
   <script type="text/babel">
     const { useState, useEffect } = React;
+
+    // Error Boundary — catches any child component crash
+    class ErrorBoundary extends React.Component {
+      constructor(props) { super(props); this.state = { hasError: false }; }
+      static getDerivedStateFromError() { return { hasError: true }; }
+      render() {
+        if (this.state.hasError) {
+          const isKo = (localStorage.getItem('lang') || '').includes('ko');
+          return React.createElement(window.ErrorCard, {
+            icon: '\u26A0\uFE0F',
+            title: isKo ? '\uD398\uC774\uC9C0\uB97C \uBD88\uB7EC\uC62C \uC218 \uC5C6\uC5B4\uC694' : 'This page couldn\u2019t load',
+            message: isKo ? '\uC608\uC0C1\uCE58 \uBABB\uD55C \uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694.' : 'An unexpected error occurred.',
+            lang: isKo ? 'ko' : 'en',
+          });
+        }
+        return this.props.children;
+      }
+    }
 
     const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
       "fontPair": "sourceserif-inter",
@@ -212,10 +241,13 @@
       const [lang, setLang] = window.useLocalState('lang', detectedLang);
 
       const [products, setProducts] = useState(window.PRODUCTS || []);
+      const [fetchError, setFetchError] = useState(null);
       useEffect(() => {
         window.__supabase.fetchProducts().then(function(data) {
           window.PRODUCTS = data;
           setProducts(data);
+        }).catch(function() {
+          setFetchError('products');
         });
       }, []);
 
@@ -308,7 +340,8 @@
               headerStyle={tweaks.headerStyle}
             />
           )}
-          {view === 'feed' && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} products={products} />}
+          {fetchError === 'products' && view === 'feed' && <ErrorCard icon="📡" title={lang === 'ko' ? '제품을 불러올 수 없어요' : 'Couldn\u2019t load products'} message={lang === 'ko' ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />}
+          {!fetchError && view === 'feed' && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} products={products} />}
           {view === 'detail' && product && <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />}
           {view === 'insights' && <Insights lang={lang} density={density} query={query} />}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
@@ -352,7 +385,9 @@
 
     // Mount
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    root.render(<ErrorBoundary><App /></ErrorBoundary>);
+    // Hide CDN fallback now that React mounted
+    var lf = document.getElementById('load-fallback'); if (lf) lf.style.display = 'none';
   </script>
 </body>
 </html>

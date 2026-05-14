@@ -126,3 +126,44 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
 window.Tape = function Tape({ className = '', style }) {
   return <span className={cn('tape', className)} style={style} aria-hidden="true" />;
 };
+
+// Error card — reusable error UI for fetch failures, 404s, crashes
+window.ErrorCard = function ErrorCard({ icon, title, message, actions, lang }) {
+  const isKo = lang === 'ko';
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'center', alignItems: 'center',
+      minHeight: '60vh', padding: '24px',
+    }}>
+      <div style={{
+        maxWidth: 400, width: '100%', textAlign: 'center',
+        padding: '40px 32px',
+        background: 'var(--cream-card)', border: '1px solid var(--line)',
+        borderRadius: 'var(--radius)',
+      }}>
+        <div style={{ fontSize: 32, marginBottom: 16 }}>{icon || '\u26A0\uFE0F'}</div>
+        <h2 style={{
+          fontFamily: 'var(--font-display)', fontWeight: 500,
+          fontSize: 20, color: 'var(--ink)', margin: '0 0 8px',
+        }}>{title || (isKo ? '\uBB38\uC81C\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694' : 'Something went wrong')}</h2>
+        <p style={{
+          fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.6, margin: '0 0 24px',
+        }}>{message || ''}</p>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {(actions || [
+            { label: isKo ? '\uD648\uC73C\uB85C' : 'Go Home', onClick: () => { window.location.href = '/'; }, primary: true },
+            { label: isKo ? '\uC0C8\uB85C\uACE0\uCE68' : 'Refresh', onClick: () => { window.location.reload(); } },
+          ]).map((a, i) => (
+            <button key={i} onClick={a.onClick} style={{
+              padding: '10px 22px', fontSize: 13, fontWeight: 600,
+              borderRadius: 'var(--radius-sm)', cursor: 'pointer',
+              border: a.primary ? 'none' : '1px solid var(--line)',
+              background: a.primary ? 'var(--accent)' : 'transparent',
+              color: a.primary ? '#fff' : 'var(--ink-soft)',
+            }}>{a.label}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};

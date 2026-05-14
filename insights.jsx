@@ -21,6 +21,8 @@ window.Insights = function Insights({ lang, density, query }) {
   const [POSTS, setPOSTS] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const isKo = lang === 'ko';
 
   // Fetch first page of articles
@@ -30,6 +32,9 @@ window.Insights = function Insights({ lang, density, query }) {
       setPOSTS(data);
       setHasMore(data.length === PAGE_SIZE);
       setLoading(false);
+    }).catch(function() {
+      setLoading(false);
+      setFetchError(true);
     });
   }, []);
 
@@ -40,6 +45,8 @@ window.Insights = function Insights({ lang, density, query }) {
     window.__supabase.fetchArticles(PAGE_SIZE, POSTS.length).then(function(data) {
       setPOSTS(prev => [...prev, ...data]);
       setHasMore(data.length === PAGE_SIZE);
+      setLoading(false);
+    }).catch(function() {
       setLoading(false);
     });
   };
@@ -69,6 +76,8 @@ window.Insights = function Insights({ lang, density, query }) {
       if (match) {
         setSelectedPost(match);
         if (window.SEO) window.SEO.setArticle(match);
+      } else {
+        setNotFound(true);
       }
     }
   }, [POSTS]);
@@ -159,6 +168,17 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
   }, [hasMore, loading, query, activeTag, posts.length]);
   const t = useL(lang);
   const allTags = [...new Map(allPosts.map(p => [p.tag.en, p])).values()].map(p => ({ en: p.tag.en, color: p.tagColor }));
+
+  if (fetchError) {
+    return <ErrorCard icon="📡" title={isKo ? '글을 불러올 수 없어요' : 'Couldn\u2019t load articles'} message={isKo ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />;
+  }
+
+  if (notFound) {
+    return <ErrorCard icon="🔍" title={isKo ? '글을 찾을 수 없어요' : 'Article not found'} message={isKo ? '이 글이 삭제되었거나 주소가 잘못되었을 수 있어요.' : 'This article may have been removed or the URL may be incorrect.'} lang={lang} actions={[
+      { label: isKo ? '인사이트로' : 'Go to Insights', onClick: () => { setNotFound(false); setSelectedPost(null); history.pushState({}, '', '/insights'); }, primary: true },
+      { label: isKo ? '홈으로' : 'Go Home', onClick: () => { window.location.href = '/'; } },
+    ]} />;
+  }
 
   return (
     <div className={cn('insights', `dens-${density}`)}>
