@@ -260,6 +260,18 @@ function renderBlock(block, lang) {
       return s;
     }
 
+    case 'sources': {
+      if (!block.items) return '';
+      let s = '<footer><h3>Sources</h3><ol>';
+      for (const src of block.items) {
+        s += src.url
+          ? `<li><a href="${escAttr(src.url)}">${escHtml(src.label || '')}</a></li>`
+          : `<li>${escHtml(src.label || '')}</li>`;
+      }
+      s += '</ol></footer>';
+      return s;
+    }
+
     default:
       return '';
   }
