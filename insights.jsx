@@ -64,22 +64,42 @@ window.Insights = function Insights({ lang, density, query }) {
     return () => window.removeEventListener('ana2me:go-home', handler);
   }, []);
 
-  // On mount, check if URL path matches an article
-  // Supports both /2026-05-04/article-id and legacy /article-id
+  // On mount, check if URL path matches an article.
+  // Supports /article/<tag>/<date>/<id>, legacy /<date>/<id>, and /<id>.
+  // If the article isn't on the first page of POSTS, fetch the full archive
+  // so direct and shared links resolve no matter how old the article is.
+  const urlResolved = React.useRef(false);
   useEffect(() => {
-    if (POSTS.length === 0) return;
+    if (urlResolved.current) return;
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
-    if (path && path !== 'insights') {
-      const parts = path.split('/');
-      const articleId = parts.length >= 2 ? parts[parts.length - 1] : parts[0];
-      const match = POSTS.find(p => p.id === articleId);
+    if (!path || path === 'insights') { urlResolved.current = true; return; }
+    const parts = path.split('/');
+    const articleId = parts[parts.length - 1];
+
+    // Fast path: the article is already in the loaded first page.
+    const inLoaded = POSTS.find(p => p.id === articleId);
+    if (inLoaded) {
+      urlResolved.current = true;
+      setSelectedPost(inLoaded);
+      if (window.SEO) window.SEO.setArticle(inLoaded);
+      return;
+    }
+
+    // Slow path: not on the first page — pull the whole archive and search it.
+    urlResolved.current = true;
+    window.__supabase.fetchArticles().then(function(all) {
+      setPOSTS(all);
+      setHasMore(false);
+      const match = all.find(p => p.id === articleId);
       if (match) {
         setSelectedPost(match);
         if (window.SEO) window.SEO.setArticle(match);
       } else {
         setNotFound(true);
       }
-    }
+    }).catch(function() {
+      setNotFound(true);
+    });
   }, [POSTS]);
 
 
@@ -845,18 +865,15 @@ function ArtFigure({ src, alt, isKo }) {
   const [loaded, setLoaded] = useState(false);
   return (
     <figure style={{ margin: '0 0 32px' }}>
-      <div style={{ position: 'relative', height: 280, borderRadius: 'var(--radius)', overflow: 'hidden' }}>
-        {!loaded && <div className="skeleton" style={{ position: 'absolute', inset: 0 }} />}
+      <div style={{ position: 'relative', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
+        {!loaded && <div className="skeleton" style={{ position: 'absolute', inset: 0, height: 280 }} />}
         <img
           src={src} alt={alt}
-          style={{ width: '100%', height: 280, objectFit: 'cover', display: 'block', opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }}
+          style={{ width: '100%', display: 'block', borderRadius: 'var(--radius)', opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }}
           referrerPolicy="no-referrer"
           onLoad={() => setLoaded(true)}
         />
       </div>
-      <figcaption style={{ marginTop: 10, fontSize: 11, color: 'var(--ink-faint)', textAlign: 'center' }}>
-        {isKo ? '📷 사진: Unsplash — Unsplash 라이선스' : '📷 Photo: Unsplash — Unsplash License'}
-      </figcaption>
     </figure>
   );
 }

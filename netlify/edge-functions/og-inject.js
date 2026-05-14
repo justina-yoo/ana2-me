@@ -212,7 +212,7 @@ export default async function (request, context) {
   // Wrapped in <main> for semantic landmark
   // React replaces it on mount — no visual change for users
   if (ssrContent) {
-    newHtml = newHtml.replace('<div id="root"></div>', `<div id="root"><main>${ssrContent}</main></div>`);
+    newHtml = newHtml.replace('<div id="root"></div>', `<div id="root"><main style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
   }
 
   // Set cache headers based on page type
