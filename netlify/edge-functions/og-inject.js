@@ -9,7 +9,9 @@ export default async function (request, context) {
 
   const articleMatch = path.match(/^\/article\/[^/]+\/[^/]+\/([^/]+)\/?$/);
   const productMatch = path.match(/^\/products\/([^/]+)\/?$/);
-  if (!articleMatch && !productMatch) {
+  const isListing = path === '/' || path === '/insights' || path === '/insights/';
+  const isProductListing = path === '/products' || path === '/products/';
+  if (!articleMatch && !productMatch && !isListing && !isProductListing) {
     return context.next();
   }
 
@@ -140,6 +142,28 @@ export default async function (request, context) {
       });
 
       ssrContent = renderProductHTML(p);
+
+    } else if (isListing) {
+      // SSR article listing — gives crawlers links to every article
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/articles?select=id,title,excerpt,tag,date&order=created_at.desc`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const articles = await res.json();
+      if (articles && articles.length) {
+        ssrContent = renderArticleListing(articles);
+      }
+
+    } else if (isProductListing) {
+      // SSR product listing — gives crawlers links to every product
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&order=updated_at.desc`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const products = await res.json();
+      if (products && products.length) {
+        ssrContent = renderProductListing(products);
+      }
     }
   } catch (e) {
     return context.next();
@@ -148,21 +172,25 @@ export default async function (request, context) {
   const response = await context.next();
   const html = await response.text();
 
-  // Inject meta tags
-  let newHtml = html
-    .replace(/<title>[^<]*<\/title>/, `<title>${escHtml(title)}</title>`)
-    .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
-    .replace(/(<link\s+rel="canonical"\s+href=")[^"]*"/, `$1${pageUrl}"`)
-    .replace(/(<meta\s+property="og:type"\s+content=")[^"]*"/, `$1${articleMatch ? 'article' : 'product'}"`)
-    .replace(/(<meta\s+property="og:title"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
-    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
-    .replace(/(<meta\s+property="og:url"\s+content=")[^"]*"/, `$1${pageUrl}"`)
-    .replace(/(<meta\s+property="og:image"\s+content=")[^"]*"/, `$1${image}"`)
-    .replace(/(<meta\s+property="og:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
-    .replace(/(<meta\s+name="twitter:title"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
-    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
-    .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*"/, `$1${image}"`)
-    .replace(/(<meta\s+name="twitter:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`);
+  let newHtml = html;
+
+  // Inject meta tags (only for article/product detail pages)
+  if (title) {
+    newHtml = newHtml
+      .replace(/<title>[^<]*<\/title>/, `<title>${escHtml(title)}</title>`)
+      .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
+      .replace(/(<link\s+rel="canonical"\s+href=")[^"]*"/, `$1${pageUrl}"`)
+      .replace(/(<meta\s+property="og:type"\s+content=")[^"]*"/, `$1${articleMatch ? 'article' : 'product'}"`)
+      .replace(/(<meta\s+property="og:title"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
+      .replace(/(<meta\s+property="og:description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
+      .replace(/(<meta\s+property="og:url"\s+content=")[^"]*"/, `$1${pageUrl}"`)
+      .replace(/(<meta\s+property="og:image"\s+content=")[^"]*"/, `$1${image}"`)
+      .replace(/(<meta\s+property="og:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
+      .replace(/(<meta\s+name="twitter:title"\s+content=")[^"]*"/, `$1${escAttr(title)}"`)
+      .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*"/, `$1${escAttr(description)}"`)
+      .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*"/, `$1${image}"`)
+      .replace(/(<meta\s+name="twitter:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`);
+  }
 
   // Inject article:published_time for articles
   if (articleMatch && publishedDate) {
@@ -191,6 +219,33 @@ export default async function (request, context) {
 }
 
 // ---------- HTML Renderers ----------
+
+function renderArticleListing(articles) {
+  let html = `<nav aria-label="Articles"><h1>Insights</h1><ul>`;
+  for (const a of articles) {
+    const tag = (a.tag?.en || '').toLowerCase().replace(/\s+/g, '-');
+    const d = new Date(a.date);
+    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const href = `/article/${tag}/${iso}/${a.id}`;
+    html += `<li><a href="${href}">${escHtml(a.title?.en || '')}</a>`;
+    if (a.excerpt?.en) html += ` — ${escHtml(a.excerpt.en)}`;
+    html += `</li>`;
+  }
+  html += `</ul></nav>`;
+  return html;
+}
+
+function renderProductListing(products) {
+  let html = `<nav aria-label="Products"><h1>Products</h1><ul>`;
+  for (const p of products) {
+    const slug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
+    html += `<li><a href="/products/${slug}">${escHtml(p.brand)} ${escHtml(p.name)}</a>`;
+    if (p.summary?.tagline) html += ` — ${escHtml(p.summary.tagline)}`;
+    html += `</li>`;
+  }
+  html += `</ul></nav>`;
+  return html;
+}
 
 function renderArticleHTML(a) {
   const title = a.title?.en || '';
@@ -486,5 +541,5 @@ function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt
 function escAttr(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
 
 export const config = {
-  path: ["/article/*", "/products/*"],
+  path: ["/", "/insights", "/insights/", "/article/*", "/products", "/products/", "/products/*"],
 };
