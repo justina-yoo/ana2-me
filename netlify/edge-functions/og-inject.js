@@ -13,7 +13,7 @@ export default async function (request, context) {
     return context.next();
   }
 
-  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent;
+  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate;
 
   try {
     if (articleMatch) {
@@ -32,9 +32,15 @@ export default async function (request, context) {
 
       const bodyText = extractBodyText(a.body_blocks);
       const isoDate = toISODate(a.date);
+      publishedDate = isoDate;
       const categoryName = a.tag?.en || a.category?.en || 'Insights';
 
-      jsonLd = JSON.stringify({
+      // Build citation list from sources block
+      const citations = buildCitations(a.body_blocks);
+      // Extract TL;DR text for speakable
+      const tldrText = extractTldr(a.body_blocks);
+
+      const articleLd = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
         "@id": `${pageUrl}#article`,
@@ -59,7 +65,19 @@ export default async function (request, context) {
         },
         "mainEntityOfPage": { "@type": "WebPage", "@id": pageUrl },
         "isPartOf": { "@id": `${SITE}/#website` }
-      });
+      };
+
+      if (citations.length > 0) {
+        articleLd.citation = citations;
+      }
+      if (tldrText) {
+        articleLd.speakable = {
+          "@type": "SpeakableSpecification",
+          "cssSelector": ["[data-tldr]"]
+        };
+      }
+
+      jsonLd = JSON.stringify(articleLd);
 
       breadcrumbLd = JSON.stringify({
         "@context": "https://schema.org",
@@ -71,6 +89,14 @@ export default async function (request, context) {
           { "@type": "ListItem", "position": 4, "name": a.title.en, "item": pageUrl }
         ]
       });
+
+      // Build FAQPage JSON-LD from question-format section headings
+      const faqItems = buildFAQItems(a.body_blocks);
+      var faqLd = faqItems.length > 0 ? JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItems
+      }) : null;
 
       ssrContent = renderArticleHTML(a);
 
@@ -138,12 +164,20 @@ export default async function (request, context) {
     .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*"/, `$1${image}"`)
     .replace(/(<meta\s+name="twitter:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`);
 
+  // Inject article:published_time for articles
+  if (articleMatch && publishedDate) {
+    newHtml = newHtml.replace('</head>', `<meta property="article:published_time" content="${publishedDate}" />\n</head>`);
+  }
+
   // Inject JSON-LD before </head>
   if (jsonLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${jsonLd}</script>\n</head>`);
   }
   if (breadcrumbLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${breadcrumbLd}</script>\n</head>`);
+  }
+  if (typeof faqLd === 'string') {
+    newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${faqLd}</script>\n</head>`);
   }
 
   // Inject SSR content inside <div id="root"> for crawlers
@@ -392,6 +426,60 @@ function toISODate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d)) return dateStr;
   return d.toISOString().slice(0, 10);
+}
+
+function buildFAQItems(blocks) {
+  if (!blocks) return [];
+  const items = [];
+  for (const block of blocks) {
+    if (block.type !== 'section') continue;
+    const heading = block.heading?.en || block.title?.en || '';
+    if (!heading || !heading.includes('?')) continue;
+    // Collect text from children as the answer
+    let answer = '';
+    for (const child of (block.children || [])) {
+      if (child.type === 'body') {
+        const t = child.text?.en || child.body?.en || '';
+        answer += t.replace(/<[^>]+>/g, '') + ' ';
+      } else if (child.type === 'callout') {
+        const t = child.text?.en || child.body?.en || '';
+        answer += t.replace(/<[^>]+>/g, '') + ' ';
+      }
+    }
+    answer = answer.trim();
+    if (answer) {
+      items.push({
+        "@type": "Question",
+        "name": heading,
+        "acceptedAnswer": { "@type": "Answer", "text": answer }
+      });
+    }
+  }
+  return items;
+}
+
+function buildCitations(blocks) {
+  if (!blocks) return [];
+  for (const block of blocks) {
+    if (block.type === 'sources' && block.items) {
+      return block.items.filter(s => s.url).map(s => ({
+        "@type": "CreativeWork",
+        "name": s.label,
+        "url": s.url
+      }));
+    }
+  }
+  return [];
+}
+
+function extractTldr(blocks) {
+  if (!blocks) return '';
+  for (const block of blocks) {
+    if (block.type === 'tldr') {
+      return block.text?.en || '';
+    }
+  }
+  return '';
 }
 
 function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
