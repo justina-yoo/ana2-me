@@ -106,13 +106,13 @@ window.About = function About({ lang, density }) {
     <div ref={aboutRef} className={cn('insights', `dens-${density}`)}>
 
       {/* Hero */}
-      <header className="ins-hero" style={{ paddingTop: 12, paddingBottom: 24 }}>
+      <header className="ins-hero">
         <Sticker color="ink" rotate={3}>{t('about', '소개')}</Sticker>
         <h1 className="display">
-          {isKo ? <>무엇이<br /><span className="display-accent">들어있는지<span className="display-dot">.</span></span></> : <>Know what's<br /><span className="display-accent">in your bottle<span className="display-dot">.</span></span></>}
+          {isKo ? <>보틀 속의<br /><span className="display-accent">진실<span className="display-dot">.</span></span></> : <>Know what's<br /><span className="display-accent">in your bottle<span className="display-dot">.</span></span></>}
         </h1>
         <p className="ins-sub" style={{ maxWidth: '54ch' }}>
-          {t('And whether it actually belongs in yours.', '그리고 그게 나에게 맞는 건지.')}
+          {t('And whether it actually belongs in yours.', '유행하는 성분이 아닌, 내 몸에 맞는 성분을 찾으세요.')}
         </p>
       </header>
 

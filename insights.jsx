@@ -125,6 +125,17 @@ window.Insights = function Insights({ lang, density, query }) {
     });
   }
 
+  if (fetchError) {
+    return <ErrorCard icon="📡" title={isKo ? '글을 불러올 수 없어요' : 'Couldn\u2019t load articles'} message={isKo ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />;
+  }
+
+  if (notFound) {
+    return <ErrorCard icon="🔍" title={isKo ? '글을 찾을 수 없어요' : 'Article not found'} message={isKo ? '이 글이 삭제되었거나 주소가 잘못되었을 수 있어요.' : 'This article may have been removed or the URL may be incorrect.'} lang={lang} actions={[
+      { label: isKo ? '인사이트로' : 'Go to Insights', onClick: () => { setNotFound(false); setSelectedPost(null); history.pushState({}, '', '/insights'); }, primary: true },
+      { label: isKo ? '홈으로' : 'Go Home', onClick: () => { window.location.href = '/'; } },
+    ]} />;
+  }
+
   return React.createElement(InsightsFeed, {
     posts: filteredPosts,
     allPosts: POSTS,
@@ -169,35 +180,24 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
   const t = useL(lang);
   const allTags = [...new Map(allPosts.map(p => [p.tag.en, p])).values()].map(p => ({ en: p.tag.en, color: p.tagColor }));
 
-  if (fetchError) {
-    return <ErrorCard icon="📡" title={isKo ? '글을 불러올 수 없어요' : 'Couldn\u2019t load articles'} message={isKo ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />;
-  }
-
-  if (notFound) {
-    return <ErrorCard icon="🔍" title={isKo ? '글을 찾을 수 없어요' : 'Article not found'} message={isKo ? '이 글이 삭제되었거나 주소가 잘못되었을 수 있어요.' : 'This article may have been removed or the URL may be incorrect.'} lang={lang} actions={[
-      { label: isKo ? '인사이트로' : 'Go to Insights', onClick: () => { setNotFound(false); setSelectedPost(null); history.pushState({}, '', '/insights'); }, primary: true },
-      { label: isKo ? '홈으로' : 'Go Home', onClick: () => { window.location.href = '/'; } },
-    ]} />;
-  }
-
   return (
     <div className={cn('insights', `dens-${density}`)}>
       {!query && (
         <header className="ins-hero">
           <Sticker color="sage" rotate={-4}>{t('insights', '인사이트')}</Sticker>
           <h1 className="display">
-            {t('Research &', '성분을')}<br />
-            <span className="display-accent">{t('Analysis', '읽다')}<span className="display-dot">.</span></span>
+            {t('Research &', '성분, 그 이면의')}<br />
+            <span className="display-accent">{t('Analysis', '데이터')}<span className="display-dot">.</span></span>
           </h1>
           <p className="ins-sub">{t(
             'Deep-dives into ingredients, formulas, and trends.',
-            '성분, 포뮬러, 트렌드를 깊이 파헤칩니다.'
+            '마케팅 너머의 성분과 포뮬러, 트렌드의 핵심을 해부합니다.'
           )}</p>
         </header>
       )}
 
       {!query && (
-        <div style={{ maxWidth: 900, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ maxWidth: 720, margin: '0 auto 0', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button
             onClick={() => onTagClick(null)}
             style={{
@@ -232,7 +232,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
         </div>
       )}
 
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto' }}>
         {posts.length === 0 && loading && !query && <FeedSkeleton />}
         {posts.length === 0 && query && (
           <div style={{ padding: '48px 0' }}>

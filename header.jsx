@@ -44,6 +44,9 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             {t('Insights', '인사이트')}
           </button>
           {/* Products tab hidden */}
+          <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
+            {lang === 'ko' ? 'EN' : 'KR'}
+          </button>
         </nav>
       </header>
     );
@@ -63,17 +66,6 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             </g>
           </svg>
         </button>
-        {!searchOpen && (
-          <div className="hdr-tabs" style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-            <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
-              {t('About', '소개')}
-            </button>
-            <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
-              {t('Insights', '인사이트')}
-            </button>
-            {/* Products tab hidden */}
-          </div>
-        )}
         {searchOpen ? (
           <div className="hdr-search" style={{ flex: 1, marginLeft: 8 }}>
             <Icon name="search" size={15} />
@@ -101,7 +93,10 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </div>
         ) : (
           <>
-            <div className="hdr-search hdr-search-desktop">
+            <button className="hdr-search-icon" onClick={() => setSearchOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 6 }}>
+              <Icon name="search" size={18} />
+            </button>
+            <div className="hdr-search hdr-search-desktop" style={{ marginRight: 'auto' }}>
               <Icon name="search" size={15} />
               <input
                 value={query}
@@ -119,10 +114,21 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
                 placeholder={t('Search', '검색')}
               />
             </div>
-            <button className="hdr-search-icon" onClick={() => setSearchOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 6, marginLeft: 'auto' }}>
-              <Icon name="search" size={18} />
-            </button>
           </>
+        )}
+        {!searchOpen && (
+          <div className="hdr-tabs" style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: 'auto' }}>
+            <button onClick={() => { history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
+              {t('About', '소개')}
+            </button>
+            <button onClick={goFeed} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
+              {t('Insights', '인사이트')}
+            </button>
+            {/* Products tab hidden */}
+            <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 8, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
+              {lang === 'ko' ? 'EN' : 'KR'}
+            </button>
+          </div>
         )}
       </div>
     </header>
