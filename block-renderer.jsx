@@ -87,6 +87,33 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
           </div>
         );
 
+      case 'sources':
+        return (
+          <footer key={idx} style={{
+            marginTop: 32, paddingTop: 16,
+            borderTop: '1px solid var(--line)',
+          }}>
+            <h4 style={{
+              fontSize: 11, fontWeight: 600, letterSpacing: '0.08em',
+              textTransform: 'uppercase', color: 'var(--ink-faint)',
+              margin: '0 0 10px',
+            }}>{t('Sources', '출처')}</h4>
+            <ol style={{
+              margin: 0, padding: '0 0 0 16px',
+              display: 'flex', flexDirection: 'column', gap: 4,
+            }}>
+              {(block.items || []).map((src, si) => (
+                <li key={si} style={{ fontSize: 12, lineHeight: 1.5, color: 'var(--ink-faint)' }}>
+                  {src.url
+                    ? <a href={src.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-faint)', textDecoration: 'underline', textUnderlineOffset: 2 }}>{src.label}</a>
+                    : src.label
+                  }
+                </li>
+              ))}
+            </ol>
+          </footer>
+        );
+
       default:
         return null;
     }
