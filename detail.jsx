@@ -544,17 +544,35 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       {window.__supabase && (() => {
         const [recArticles, setRecArticles] = React.useState([]);
         React.useEffect(() => {
-          const tag = product.category === 'fragrance' ? 'Fragrance' : product.category === 'wellness-food' ? 'Wellness' : 'Skincare';
-          window.__supabase.fetchArticles(20, 0).then(articles => {
-            const filtered = articles.filter(a => a.tag && a.tag.en === tag);
-            // Shuffle and pick 3 different ones per product
-            const seed = product.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-            const shuffled = filtered.sort((a, b) => {
-              const ha = (a.id.charCodeAt(0) * 31 + seed) % 100;
-              const hb = (b.id.charCodeAt(0) * 31 + seed) % 100;
-              return ha - hb;
+          // Build relevance keywords from product data
+          const terms = [
+            product.brand, product.name, product.category,
+            ...(product.ingredients || []).map(i => i.name),
+            ...(product.ingredients || []).map(i => i.nameKo || ''),
+            ...(product.notes || []).map(n => n.name),
+          ].join(' ').toLowerCase().split(/[\s,\-\/]+/).filter(w => w.length > 2);
+
+          window.__supabase.fetchArticles(50, 0).then(articles => {
+            // Score each article by keyword overlap
+            const scored = articles.map(a => {
+              const haystack = [
+                a.title.en, a.title.ko || '',
+                a.keywords || '',
+                a.excerpt?.en || '', a.excerpt?.ko || '',
+              ].join(' ').toLowerCase();
+              const score = terms.reduce((s, t) => s + (haystack.includes(t) ? 1 : 0), 0);
+              return { ...a, _score: score };
             });
-            setRecArticles(shuffled.length > 0 ? shuffled.slice(0, 3) : articles.slice(0, 3));
+            scored.sort((a, b) => b._score - a._score);
+            // Take top 3 with score > 0, fall back to same-category
+            const relevant = scored.filter(a => a._score > 0).slice(0, 3);
+            if (relevant.length >= 3) {
+              setRecArticles(relevant);
+            } else {
+              const tag = product.category === 'fragrance' ? 'Fragrance' : product.category === 'wellness-food' ? 'Wellness' : 'Skincare';
+              const fallback = articles.filter(a => a.tag && a.tag.en === tag).slice(0, 3);
+              setRecArticles(fallback.length ? fallback : articles.slice(0, 3));
+            }
           });
         }, [product.id]);
         if (!recArticles.length) return null;

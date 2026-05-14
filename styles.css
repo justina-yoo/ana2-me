@@ -380,7 +380,7 @@ body.night {
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
-.pcard-img { width: 100%; height: 100%; object-fit: cover; }
+.pcard-img { width: 100%; height: 100%; object-fit: contain; padding: 12%; }
 .pcard-ing-pill {
   position: absolute; bottom: 10px; left: 10px;
   display: inline-flex; align-items: center; gap: 6px;
@@ -466,7 +466,7 @@ body.night {
   height: 300px;
   overflow: visible;
 }
-.detail-img { width: 100%; height: 100%; object-fit: contain; padding: 16px; }
+.detail-img { width: 100%; height: 100%; object-fit: contain; padding: 12%; }
 .detail-sticker { position: absolute; bottom: 18px; left: 18px; }
 
 .detail-head { padding-top: 8px; }
