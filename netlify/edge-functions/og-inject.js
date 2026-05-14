@@ -102,7 +102,7 @@ export default async function (request, context) {
 
       ssrContent = renderArticleHTML(a);
 
-    } else {
+    } else if (productMatch) {
       const slug = productMatch[1];
       const res = await fetch(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,name_ko,brand,summary,image_url,category,ingredients,notes,bio_values`,
