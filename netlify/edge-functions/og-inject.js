@@ -15,7 +15,7 @@ export default async function (request, context) {
     return context.next();
   }
 
-  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate;
+  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate, faqLd;
 
   try {
     if (articleMatch) {
@@ -94,7 +94,7 @@ export default async function (request, context) {
 
       // Build FAQPage JSON-LD from question-format section headings
       const faqItems = buildFAQItems(a.body_blocks);
-      var faqLd = faqItems.length > 0 ? JSON.stringify({
+      faqLd = faqItems.length > 0 ? JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": faqItems
@@ -204,7 +204,7 @@ export default async function (request, context) {
   if (breadcrumbLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${breadcrumbLd}</script>\n</head>`);
   }
-  if (typeof faqLd === 'string') {
+  if (faqLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${faqLd}</script>\n</head>`);
   }
 
