@@ -12,7 +12,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
   ];
 
   const goFeed = () => {
-    history.pushState({}, '', '/insights');
+    history.pushState({}, '', '/');
     if (window.SEO) window.SEO.setHome();
     setView('insights');
     setQuery('');
