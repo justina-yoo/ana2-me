@@ -281,6 +281,12 @@
           tryOpen();
         }
         else if (path.startsWith('/article/')) { setView('insights'); }
+        else if (path === '/search') {
+          const q = new URLSearchParams(window.location.search).get('q') || '';
+          setQuery(q);
+          setView('insights');
+          if (window.SEO) window.SEO.setHome();
+        }
         else if (path === '/analyzer') { setView('analyzer'); if (window.SEO) window.SEO.setAnalyzer(); }
         else if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
         else if (path === '/privacy') { setView('privacy'); if (window.SEO) window.SEO.setPrivacy(); }

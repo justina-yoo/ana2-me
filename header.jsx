@@ -80,6 +80,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
                 setQuery(e.target.value);
                 if (e.target.value.trim()) setView('insights');
                 const q = e.target.value.trim();
+                history.replaceState({}, '', q ? '/search?q=' + encodeURIComponent(q) : '/insights');
                 if (q.length >= 3 && window.gtag) {
                   clearTimeout(window.__searchDebounce);
                   window.__searchDebounce = setTimeout(() => {
@@ -89,7 +90,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
               }}
               placeholder={t('Search', '검색')}
             />
-            <button onClick={() => { setQuery(''); setSearchOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 2 }}>
+            <button onClick={() => { setQuery(''); setSearchOpen(false); history.replaceState({}, '', '/insights'); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 2 }}>
               <Icon name="x" size={14} />
             </button>
           </div>
@@ -106,6 +107,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
                   setQuery(e.target.value);
                   if (e.target.value.trim()) setView('insights');
                   const q = e.target.value.trim();
+                  history.replaceState({}, '', q ? '/search?q=' + encodeURIComponent(q) : '/insights');
                   if (q.length >= 3 && window.gtag) {
                     clearTimeout(window.__searchDebounce);
                     window.__searchDebounce = setTimeout(() => {
