@@ -25,3 +25,27 @@
 [[edge_functions]]
   function = "og-inject"
   path = "/products/*"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/about"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/about/"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/analyzer"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/analyzer/"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/privacy"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/privacy/"

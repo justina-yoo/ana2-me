@@ -18,7 +18,11 @@ export default async function (request, context) {
   const productMatch = path.match(/^\/products\/([^/]+)\/?$/);
   const isListing = path === '/' || path === '/insights' || path === '/insights/';
   const isProductListing = path === '/products' || path === '/products/';
-  if (!articleMatch && !productMatch && !isListing && !isProductListing) {
+  const isAbout = path === '/about' || path === '/about/';
+  const isAnalyzer = path === '/analyzer' || path === '/analyzer/';
+  const isPrivacy = path === '/privacy' || path === '/privacy/';
+  const isStaticPage = isAbout || isAnalyzer || isPrivacy;
+  if (!articleMatch && !productMatch && !isListing && !isProductListing && !isStaticPage) {
     return context.next();
   }
 
@@ -171,6 +175,21 @@ export default async function (request, context) {
       if (products && products.length) {
         ssrContent = renderProductListing(products);
       }
+    } else if (isAbout) {
+      title = 'About | ana2me';
+      description = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';
+      pageUrl = `${SITE}/about`;
+      ssrContent = `<article><h1>About ana2me</h1><p>${escHtml(description)}</p><p>We break down ingredients using molecular data so you can make informed decisions about skincare, fragrance, and wellness products.</p><nav><a href="/insights">Read our articles</a> · <a href="/products">Browse products</a></nav></article>`;
+    } else if (isAnalyzer) {
+      title = 'Ingredient Analyzer | ana2me';
+      description = 'Paste any skincare, supplement, or wellness ingredient list and get a plain-language breakdown of what works for your body — powered by molecular data.';
+      pageUrl = `${SITE}/analyzer`;
+      ssrContent = `<article><h1>Ingredient Analyzer</h1><p>${escHtml(description)}</p></article>`;
+    } else if (isPrivacy) {
+      title = 'Privacy Policy | ana2me';
+      description = 'ana2me collects no personal data. We use Google Analytics for anonymous usage stats only.';
+      pageUrl = `${SITE}/privacy`;
+      ssrContent = `<article><h1>Privacy Policy</h1><p>${escHtml(description)}</p></article>`;
     }
   } catch (e) {
     // Don't let Supabase failures become 5xx — fall through to SPA with a
