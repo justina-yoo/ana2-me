@@ -130,6 +130,14 @@ window.Insights = function Insights({ lang, density, query }) {
     });
   }
 
+  // If URL points to an article but it hasn't resolved yet, show skeleton instead of flashing the feed
+  const pathNow = window.location.pathname;
+  if (pathNow.startsWith('/article/') && !notFound) {
+    return React.createElement('div', { style: { maxWidth: 720, margin: '0 auto', padding: '40px 28px' } },
+      React.createElement(ArticleSkeleton)
+    );
+  }
+
   const q = (query || '').trim().toLowerCase();
   let filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;
   if (q) {
