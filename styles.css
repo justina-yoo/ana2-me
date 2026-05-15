@@ -195,6 +195,7 @@ body.night {
   color: var(--ink-soft);
   font-weight: 500;
   position: relative;
+  text-decoration: none;
 }
 .page-tab:hover { color: var(--ink); }
 .page-tab-active {
@@ -237,7 +238,7 @@ body.night {
   font-family: var(--font-display); }
 .cat-edit {
   font-size: 18px; color: var(--ink-soft); font-weight: 500;
-  position: relative; padding: 4px 2px;
+  position: relative; padding: 4px 2px; text-decoration: none;
 }
 .cat-edit:hover { color: var(--ink); }
 .cat-edit-active { color: var(--accent); }
