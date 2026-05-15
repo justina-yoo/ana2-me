@@ -869,6 +869,11 @@ function ArtBody({ children, dangerouslySetInnerHTML }) {
 
 function ArtFigure({ src, alt, isKo }) {
   const [loaded, setLoaded] = useState(false);
+  const credit = src && src.includes('pexels.com') ? 'Pexels'
+    : src && src.includes('unsplash.com') ? 'Unsplash'
+    : src && src.includes('pixabay.com') ? 'Pixabay'
+    : src && src.includes('wikimedia.org') ? 'Wikimedia Commons'
+    : null;
   return (
     <figure style={{ margin: '0 0 32px' }}>
       <div style={{ position: 'relative', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
@@ -880,6 +885,11 @@ function ArtFigure({ src, alt, isKo }) {
           onLoad={() => setLoaded(true)}
         />
       </div>
+      {(alt || credit) && (
+        <figcaption style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.6, marginTop: 6, lineHeight: 1.4 }}>
+          {alt}{credit ? (alt ? ' · ' : '') + credit : ''}
+        </figcaption>
+      )}
     </figure>
   );
 }

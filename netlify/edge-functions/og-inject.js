@@ -338,8 +338,12 @@ function renderBlock(block, lang) {
     case 'tldr':
       return `<aside><p>${escHtml(t(block.text))}</p></aside>`;
 
-    case 'figure':
-      return `<figure><img src="${escAttr(block.src || '')}" alt="${escAttr(block.alt || '')}" />${block.alt ? `<figcaption>${escHtml(block.alt)}</figcaption>` : ''}</figure>`;
+    case 'figure': {
+      const src = block.src || '';
+      const credit = src.includes('pexels.com') ? 'Pexels' : src.includes('unsplash.com') ? 'Unsplash' : src.includes('pixabay.com') ? 'Pixabay' : src.includes('wikimedia.org') ? 'Wikimedia Commons' : '';
+      const cap = [block.alt || '', credit].filter(Boolean).join(' · ');
+      return `<figure><img src="${escAttr(src)}" alt="${escAttr(block.alt || '')}" />${cap ? `<figcaption>${escHtml(cap)}</figcaption>` : ''}</figure>`;
+    }
 
     case 'section': {
       let s = `<section>`;
@@ -392,7 +396,8 @@ function renderBlock(block, lang) {
 
     case 'sources': {
       if (!block.items) return '';
-      let s = '<footer><h3>Sources</h3><ol>';
+      let s = `<p style="font-size:11px;color:#999;margin:4px 0 0">${lang === 'ko' ? '본 콘텐츠는 정보를 제공하기 위한 것이며, 전문적인 의료 조언을 대신하지 않습니다.' : 'For informational purposes only. Not intended as medical or professional advice.'}</p>`;
+      s += '<footer><h3>Sources</h3><ol>';
       for (const src of block.items) {
         s += src.url
           ? `<li><a href="${escAttr(src.url)}">${escHtml(src.label || '')}</a></li>`
