@@ -4,6 +4,72 @@ Persistent archive of every X post drafted by the X Post Writer agent. Newest at
 
 ---
 
+## 2026-05-15 — Manual (X Post Writer)
+
+### Jjimjilbangs Are Going Global
+- **Article:** https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science
+- **Tag:** wellness · **Pub date:** 2026-05-06
+- **Overlap check:** not in posted-to-x.md — safe to post
+
+**Link post (utm_source=twitter):**
+> Why does a Korean bathhouse ritual spike your growth hormone up to 24x?
+> https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science?utm_source=twitter
+
+**Alternative hook:**
+> A Korean bathhouse ritual can drop your cortisol for 3 hours and spike growth hormone up to 24x — and it's just hot room, cold plunge, repeat.
+
+**Status:** drafted (shown in chat)
+
+---
+
+### BTS V Uses a Derma Brand Most Fans Have Never Heard Of
+- **Article:** https://ana2-me.com/article/skincare/2026-05-15/bts-v-zeroid-derma-skincare
+- **Tag:** skincare · **Pub date:** 2026-05-15
+
+**Link post:**
+> BTS V doesn't use luxury skincare — or even the brands he endorses. He uses a clinical derma line you used to need a prescription to get.
+> https://ana2-me.com/article/skincare/2026-05-15/bts-v-zeroid-derma-skincare?utm_source=twitter
+
+**Alternative hooks:**
+> What does BTS V actually put on his skin? Not the brands he endorses — a derma line dermatologists used to prescribe.
+> BTS V's entire routine is a toner and a moisturizer from a clinic brand. No 10-step anything.
+
+**Threads post (utm_source=threads):**
+> why does BTS V endorse skincare he doesn't actually use?
+> https://ana2-me.com/article/skincare/2026-05-15/bts-v-zeroid-derma-skincare?utm_source=threads
+
+**Threads alt (one sentence):**
+> BTS V doesn't use the skincare he sells you — he uses a derma brand that used to be prescription-only.
+> https://ana2-me.com/article/skincare/2026-05-15/bts-v-zeroid-derma-skincare?utm_source=threads
+
+**Threads alt (in-flight detail):**
+> BTS V's long-haul flight skincare hack: cotton pads soaked in a toner that used to be prescription-only.
+> https://ana2-me.com/article/skincare/2026-05-15/bts-v-zeroid-derma-skincare?utm_source=threads
+
+**Threads alt (minimalism):**
+> BTS V's entire skincare routine is two products from a brand that used to be locked behind a prescription.
+> https://ana2-me.com/article/skincare/2026-05-15/bts-v-zeroid-derma-skincare?utm_source=threads
+
+**Status:** drafted (shown in chat)
+
+---
+
+### Milk Perfume Is 2026's Defining Scent
+- **Article:** https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic
+- **Tag:** fragrance · **Pub date:** 2026-05-06
+
+**Link post:**
+> The "milk perfume" everyone's wearing doesn't smell like milk at all — it's just molecules your brain has decided mean comfort.
+> https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic?utm_source=twitter
+
+**Alternative hooks:**
+> What if "soft" is a smell — and perfumers cracked the exact molecules that trigger it?
+> Milk perfume is everywhere in 2026. Plot twist: there's no milk in it, and it was never meant to smell like milk.
+
+**Status:** drafted (shown in chat)
+
+---
+
 ## 2026-05-14 — Test run (manual)
 
 ### Hair Perfume Is the Format Nobody Asked For
