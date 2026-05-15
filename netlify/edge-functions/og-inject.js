@@ -178,11 +178,11 @@ export default async function (request, context) {
     const response = await context.next();
     const html = await response.text();
     const fallbackContent = articleMatch
-      ? `<main style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading article…</p><p><a href="/insights">Browse all articles</a></p></main>`
+      ? `<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading article…</p><p><a href="/insights">Browse all articles</a></p></main>`
       : productMatch
-      ? `<main style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading product…</p><p><a href="/products">Browse all products</a></p></main>`
+      ? `<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading product…</p><p><a href="/products">Browse all products</a></p></main>`
       : isListing
-      ? `<main style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p><a href="/insights">Insights</a> · <a href="/products">Products</a> · <a href="/about">About</a></p></main>`
+      ? `<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p><a href="/insights">Insights</a> · <a href="/products">Products</a> · <a href="/about">About</a></p></main>`
       : '';
     const newHtml = fallbackContent
       ? html.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1${fallbackContent}</div>`)
@@ -234,10 +234,10 @@ export default async function (request, context) {
   }
 
   // Inject SSR content inside <div id="root"> for crawlers
-  // Wrapped in <main> for semantic landmark
-  // React replaces it on mount — no visual change for users
+  // Hidden from JS-enabled browsers to prevent flash; crawlers (no JS) see it
   if (ssrContent) {
-    newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1<main style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
+    newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
+    newHtml = newHtml.replace('</head>', `<script>document.addEventListener('DOMContentLoaded',function(){var s=document.getElementById('ssr');if(s)s.remove();});</script>\n</head>`);
   }
 
   // Set cache headers based on page type
