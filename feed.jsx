@@ -3,7 +3,7 @@ const { useMemo: _uM1 } = React;
 
 window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  products = products.filter(p => p.id === 'skincare-7');
+  // products = products.filter(p => p.id === 'skincare-7');
 
   const filtered = useMemo(() => {
     if (query) {
@@ -102,9 +102,10 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
             </div>
             {filtered.length > 0 ? (
               <div className="product-grid">
-                {filtered.map((p, i) => (
-                  <ProductCard key={p.id} product={p} lang={lang} onClick={() => { setProduct(p); history.pushState({}, '', '/products/' + p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'')); window.scrollTo(0,0); }} index={i} />
-                ))}
+                {filtered.map((p, i) => {
+                  const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+                  return <ProductCard key={p.id} product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} />;
+                })}
               </div>
             ) : (
               <div className="empty">
@@ -120,13 +121,13 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
   );
 };
 
-window.ProductCard = function ProductCard({ product, lang, onClick, index }) {
+window.ProductCard = function ProductCard({ product, lang, onClick, href, index }) {
   const t = useL(lang);
   const name = lang === 'ko' && product.nameKo ? product.nameKo : product.name;
   const tag = lang === 'ko' && product.summary?.taglineKo ? product.summary.taglineKo : product.summary?.tagline;
   const topIng = product.ingredients?.[0];
   return (
-    <button className="pcard" onClick={onClick} style={{ '--i': index }}>
+    <a className="pcard" href={href || '#'} onClick={onClick} style={{ '--i': index, textDecoration: 'none', color: 'inherit' }}>
       <div className="pcard-img-wrap">
         <ProductImg src={product.imageUrl} alt={name} className="pcard-img" />
         {topIng && (
@@ -141,6 +142,6 @@ window.ProductCard = function ProductCard({ product, lang, onClick, index }) {
         <h3 className="pcard-name">{name}</h3>
       </div>
       <span className="pcard-arrow"><Icon name="arrow" size={16} /></span>
-    </button>
+    </a>
   );
 };

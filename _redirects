@@ -1,9 +1,15 @@
 /insights   /index.html  200
+/insights/  /insights    301
 /about      /index.html  200
+/about/     /about       301
 /privacy    /index.html  200
+/privacy/   /privacy     301
 /analyzer   /index.html  200
+/analyzer/  /analyzer    301
 /products   /index.html  200
+/products/  /products    301
 /products/:id  /index.html  200
 /article/:a  /index.html  200
 /article/:a/:b  /index.html  200
 /article/:a/:b/:c  /index.html  200
+/article/:a/:b/:c/  /article/:a/:b/:c  301

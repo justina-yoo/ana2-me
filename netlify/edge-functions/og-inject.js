@@ -2,6 +2,13 @@
 const SUPABASE_URL = 'https://hkyfggapijgedsizfqec.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhreWZnZ2FwaWpnZWRzaXpmcWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzY5MDksImV4cCI6MjA5MzY1MjkwOX0.huZi2uDRI0EnVWkg6HTo-VK1V3fz3DyR-ZNGpMd0yLQ';
 const SITE = 'https://ana2-me.com';
+const FETCH_TIMEOUT = 4000; // 4s timeout for Supabase calls
+
+function fetchWithTimeout(url, opts = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+  return fetch(url, { ...opts, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
 
 export default async function (request, context) {
   const url = new URL(request.url);
@@ -20,7 +27,7 @@ export default async function (request, context) {
   try {
     if (articleMatch) {
       const articleId = articleMatch[1];
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/articles?id=eq.${articleId}&select=id,title,excerpt,tag,category,date,image_url,keywords,body_blocks,read_time`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
@@ -104,7 +111,7 @@ export default async function (request, context) {
 
     } else if (productMatch) {
       const slug = productMatch[1];
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,name_ko,brand,summary,image_url,category,ingredients,notes,bio_values`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
@@ -145,7 +152,7 @@ export default async function (request, context) {
 
     } else if (isListing) {
       // SSR article listing — gives crawlers links to every article
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/articles?select=id,title,excerpt,tag,date&order=created_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
@@ -156,7 +163,7 @@ export default async function (request, context) {
 
     } else if (isProductListing) {
       // SSR product listing — gives crawlers links to every product
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&order=updated_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
@@ -166,13 +173,31 @@ export default async function (request, context) {
       }
     }
   } catch (e) {
-    return context.next();
+    // Don't let Supabase failures become 5xx — fall through to SPA with a
+    // minimal SSR hint so crawlers still see *something* rather than an empty shell
+    const response = await context.next();
+    const html = await response.text();
+    const fallbackContent = articleMatch
+      ? `<main style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading article…</p><p><a href="/insights">Browse all articles</a></p></main>`
+      : productMatch
+      ? `<main style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading product…</p><p><a href="/products">Browse all products</a></p></main>`
+      : isListing
+      ? `<main style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p><a href="/insights">Insights</a> · <a href="/products">Products</a> · <a href="/about">About</a></p></main>`
+      : '';
+    const newHtml = fallbackContent
+      ? html.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1${fallbackContent}</div>`)
+      : html;
+    return new Response(newHtml, { headers: response.headers });
   }
 
   const response = await context.next();
   const html = await response.text();
 
   let newHtml = html;
+
+  // Update hreflang tags to match the current page URL
+  const currentUrl = pageUrl || `${SITE}${path}`;
+  newHtml = newHtml.replace(/(<link\s+rel="alternate"\s+hreflang="[^"]*"\s+href=")[^"]*"/g, `$1${currentUrl}"`);
 
   // Inject meta tags (only for article/product detail pages)
   if (title) {
@@ -212,7 +237,7 @@ export default async function (request, context) {
   // Wrapped in <main> for semantic landmark
   // React replaces it on mount — no visual change for users
   if (ssrContent) {
-    newHtml = newHtml.replace('<div id="root"></div>', `<div id="root"><main style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
+    newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1<main style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
   }
 
   // Set cache headers based on page type
@@ -556,6 +581,4 @@ function extractTldr(blocks) {
 function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function escAttr(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
 
-export const config = {
-  path: ["/", "/insights", "/insights/", "/article/*", "/products", "/products/", "/products/*"],
-};
+// Path config is in netlify.toml (single source of truth)

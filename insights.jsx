@@ -262,9 +262,10 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               {allPosts.slice(0, 5).map(p => (
-                <button key={p.id} onClick={() => onSelectPost(p)} style={{
+                <a key={p.id} href={'/' + postSlug(p)} onClick={(e) => { e.preventDefault(); onSelectPost(p); }} style={{
                   display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
                   background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '12px 0',
+                  textDecoration: 'none', color: 'inherit',
                 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
@@ -273,7 +274,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: p.tagColor }}>{p.tag[lang] || p.tag.en}</span>
                   </div>
                   <ProductImg src={p.imageUrl} alt={p.title[lang] || p.title.en} style={{ width: 64, height: 64, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
-                </button>
+                </a>
               ))}
             </div>
           </div>
@@ -290,9 +291,10 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             if (posInBlock === 0) {
               // Hero card — full width with large image
               cards.push(
-                <button key={post.id} onClick={() => onSelectPost(post)} style={{
+                <a key={post.id} href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
                   display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none',
                   borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '20px 0',
+                  textDecoration: 'none', color: 'inherit',
                 }}>
                   <ProductImg src={post.imageUrl} alt={post.title[lang] || post.title.en}
                     style={{ width: '100%', height: 'clamp(200px, 30vw, 320px)', objectFit: 'cover', display: 'block', borderRadius: 'var(--radius-sm)' }} />
@@ -313,7 +315,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                       <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
                     </div>
                   </div>
-                </button>
+                </a>
               );
               i++;
             } else if (posInBlock <= 2 && i + 1 < posts.length) {
@@ -326,8 +328,9 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                   padding: '16px 0', borderBottom: '1px solid var(--line)',
                 }}>
                   {[p1, p2].map(p => (
-                    <button key={p.id} onClick={() => onSelectPost(p)} style={{
+                    <a key={p.id} href={'/' + postSlug(p)} onClick={(e) => { e.preventDefault(); onSelectPost(p); }} style={{
                       display: 'flex', flexDirection: 'column', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', gap: 10,
+                      textDecoration: 'none', color: 'inherit',
                     }}>
                       <ProductImg src={p.imageUrl} alt={p.title[lang] || p.title.en}
                         style={{ width: '100%', height: 'clamp(120px, 18vw, 180px)', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} />
@@ -339,7 +342,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                         {p.title[lang] || p.title.en}
                       </h3>
                       <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>{p.date}</span>
-                    </button>
+                    </a>
                   ))}
                 </div>
               );
@@ -347,9 +350,10 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             } else {
               // Compact row — text + small thumbnail
               cards.push(
-                <button key={post.id} onClick={() => onSelectPost(post)} style={{
+                <a key={post.id} href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
                   display: 'flex', alignItems: 'center', gap: 16, width: '100%', textAlign: 'left',
                   background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '14px 0',
+                  textDecoration: 'none', color: 'inherit',
                 }}>
                   <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                     <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.25, letterSpacing: '-0.01em', margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
@@ -366,7 +370,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                   </div>
                   <ProductImg src={post.imageUrl} alt={post.title[lang] || post.title.en}
                     style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
-                </button>
+                </a>
               );
               i++;
             }
@@ -721,15 +725,17 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {related.map(r => (
-                  <button
+                  <a
                     key={r.id}
-                    onClick={() => { onSelectPost(r); window.scrollTo(0, 0); }}
+                    href={'/' + postSlug(r)}
+                    onClick={(e) => { e.preventDefault(); onSelectPost(r); window.scrollTo(0, 0); }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 14,
                       width: '100%', textAlign: 'left',
                       background: 'none', border: 'none',
                       borderBottom: '1px solid var(--line)',
                       cursor: 'pointer', padding: '14px 0',
+                      textDecoration: 'none', color: 'inherit',
                     }}
                   >
                     <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -752,7 +758,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
                       alt={r.title[lang] || r.title.en}
                       style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }}
                     />
-                  </button>
+                  </a>
                 ))}
               </div>
             </section>

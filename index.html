@@ -11,7 +11,10 @@
   <link rel="alternate" type="application/rss+xml" title="ana2me Insights" href="/feed.xml" />
   <meta name="description" content="Deep molecular analysis of skincare, fragrance, and wellness ingredients. Evidence-based editorial for people who read labels." />
   <link rel="canonical" href="https://ana2-me.com/" />
-  <script>document.querySelector('link[rel=canonical]').href='https://ana2-me.com'+location.pathname.replace(/\/$/,'')+(location.pathname==='/'?'/':'');</script>
+  <link rel="alternate" hreflang="en" href="https://ana2-me.com/" />
+  <link rel="alternate" hreflang="ko" href="https://ana2-me.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://ana2-me.com/" />
+  <script>(function(){var p=location.pathname.replace(/\/$/,'')+(location.pathname==='/'?'/':''),u='https://ana2-me.com'+p;document.querySelector('link[rel=canonical]').href=u;document.querySelectorAll('link[hreflang]').forEach(function(el){el.href=u;});})();</script>
 
   <!-- Open Graph -->
   <meta property="og:site_name" content="ana2me" />
@@ -59,14 +62,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=DM+Sans:wght@500&family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=7">
-
-  <!-- Restore path from GitHub Pages 404 redirect -->
-  <script>
-    (function() {
-      var p = new URLSearchParams(window.location.search).get('p');
-      if (p) history.replaceState(null, null, p);
-    })();
-  </script>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4BGRNVKN6L"></script>
@@ -353,9 +348,9 @@
             borderTop: '1px solid var(--line)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <button onClick={() => setView('privacy')} style={{ fontSize: 12, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+              <a href="/privacy" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/privacy'); if (window.SEO) window.SEO.setPrivacy(); setView('privacy'); }} style={{ fontSize: 12, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
                 {lang === 'ko' ? '개인정보처리방침' : 'Privacy'}
-              </button>
+              </a>
               <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
               <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>ana2me2026@gmail.com</span>
               <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />

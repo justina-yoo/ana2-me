@@ -580,15 +580,16 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <section style={{ marginTop: 40, paddingTop: 28, borderTop: '1px solid var(--line)' }}>
             <h2 className="sec-h">{t('Recommended reads', '추천 아티클')}</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {recArticles.map(a => (
-                <button key={a.id} onClick={() => {
-                  const tag = a.tag.en.toLowerCase().replace(/\s+/g, '-');
-                  const d = new Date(a.date);
-                  const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-                  window.location.href = '/article/' + tag + '/' + iso + '/' + a.id;
-                }} style={{
+              {recArticles.map(a => {
+                const tag = a.tag.en.toLowerCase().replace(/\s+/g, '-');
+                const d = new Date(a.date);
+                const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                const href = '/article/' + tag + '/' + iso + '/' + a.id;
+                return (
+                <a key={a.id} href={href} style={{
                   display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
                   background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '12px 0',
+                  textDecoration: 'none', color: 'inherit',
                 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
@@ -597,8 +598,9 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
                     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: a.tagColor }}>{a.tag[lang] || a.tag.en}</span>
                   </div>
                   <ProductImg src={a.imageUrl} alt={a.title[lang] || a.title.en} style={{ width: 64, height: 64, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
-                </button>
-              ))}
+                </a>
+                );
+              })}
             </div>
           </section>
         );

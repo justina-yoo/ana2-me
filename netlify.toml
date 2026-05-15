@@ -8,11 +8,19 @@
 
 [[edge_functions]]
   function = "og-inject"
+  path = "/insights/"
+
+[[edge_functions]]
+  function = "og-inject"
   path = "/article/*"
 
 [[edge_functions]]
   function = "og-inject"
   path = "/products"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/products/"
 
 [[edge_functions]]
   function = "og-inject"
