@@ -15,7 +15,7 @@ function postSlug(post) {
 
 const PAGE_SIZE = 10;
 
-window.Insights = function Insights({ lang, density, query }) {
+window.Insights = function Insights({ lang, density, query, onResultCount }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const [POSTS, setPOSTS] = useState([]);
@@ -153,6 +153,14 @@ window.Insights = function Insights({ lang, density, query }) {
     });
   }
 
+  // Report result count to parent for search page logic
+  useEffect(() => {
+    if (onResultCount && q) onResultCount(filteredPosts.length);
+  }, [filteredPosts.length, q]);
+
+  // If searching and no article results, don't render anything (parent handles empty state)
+  if (q && filteredPosts.length === 0 && !loading) return null;
+
   if (fetchError) {
     return <ErrorCard icon="📡" title={isKo ? '글을 불러올 수 없어요' : 'Couldn\u2019t load articles'} message={isKo ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />;
   }
@@ -262,31 +270,6 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
 
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
         {posts.length === 0 && loading && !query && <FeedSkeleton />}
-        {posts.length === 0 && query && (
-          <div style={{ padding: '48px 0' }}>
-            <p style={{ fontSize: 15, margin: '0 0 32px', color: 'var(--ink-faint)', textAlign: 'center' }}>{t('No articles found for', '검색 결과가 없습니다:')} {query}</p>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 16px' }}>
-              {t('Popular reads', '인기 글')}
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {allPosts.slice(0, 5).map(p => (
-                <a key={p.id} href={'/' + postSlug(p)} onClick={(e) => { e.preventDefault(); onSelectPost(p); }} style={{
-                  display: 'flex', alignItems: 'center', gap: 14, width: '100%', textAlign: 'left',
-                  background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '12px 0',
-                  textDecoration: 'none', color: 'inherit',
-                }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                      {p.title[lang] || p.title.en}
-                    </h4>
-                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: p.tagColor }}>{p.tag[lang] || p.tag.en}</span>
-                  </div>
-                  <ProductImg src={p.imageUrl} alt={p.title[lang] || p.title.en} style={{ width: 64, height: 64, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
         {(() => {
           const cards = [];
           let i = 0;

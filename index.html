@@ -237,10 +237,11 @@
 
       const [products, setProducts] = useState(window.PRODUCTS || []);
       const [fetchError, setFetchError] = useState(null);
+      const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11'];
       useEffect(() => {
         window.__supabase.fetchProducts().then(function(data) {
           window.PRODUCTS = data;
-          setProducts(data);
+          setProducts(data.filter(p => VISIBLE_PRODUCTS.includes(p.id)));
         }).catch(function() {
           setFetchError('products');
         });
@@ -251,6 +252,9 @@
         setProductId(p ? p.id : null);
         setView(p ? 'detail' : 'feed');
       };
+
+      // Search result tracking
+      const [articleResultCount, setArticleResultCount] = useState(null);
 
       // Tweaks
       const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
@@ -344,7 +348,70 @@
           {fetchError === 'products' && view === 'feed' && <ErrorCard icon="📡" title={lang === 'ko' ? '제품을 불러올 수 없어요' : 'Couldn\u2019t load products'} message={lang === 'ko' ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />}
           {!fetchError && view === 'feed' && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} products={products} />}
           {view === 'detail' && product && <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />}
-          {view === 'insights' && <Insights lang={lang} density={density} query={query} />}
+          {view === 'insights' && (() => {
+            const q = (query || '').trim().toLowerCase();
+            const matchedProducts = q ? products.filter(p =>
+              p.name.toLowerCase().includes(q) ||
+              (p.nameKo || '').toLowerCase().includes(q) ||
+              p.brand.toLowerCase().includes(q) ||
+              (p.ingredients || []).some(ing => ing.name.toLowerCase().includes(q) || (ing.nameKo || '').toLowerCase().includes(q)) ||
+              (p.summary?.tagline || '').toLowerCase().includes(q)
+            ) : [];
+            const hasProducts = matchedProducts.length > 0;
+            const hasArticles = articleResultCount === null || articleResultCount > 0;
+            const noResults = q && !hasProducts && !hasArticles;
+
+            return (
+              <>
+                {/* Product results (shown first) */}
+                {q && hasProducts && (
+                  <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 28px 24px' }}>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
+                      {lang === 'ko' ? '관련 제품' : 'Related products'}
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                      {matchedProducts.map(p => {
+                        const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+                        const name = lang === 'ko' && p.nameKo ? p.nameKo : p.name;
+                        return (
+                          <a key={p.id} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} style={{
+                            display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0',
+                            borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
+                          }}>
+                            <ProductImg src={p.imageUrl} alt={name} style={{ width: 56, height: 56, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: '6%' }} />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{p.brand}</span>
+                              <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: '2px 0 0', color: 'var(--ink)' }}>{name}</h4>
+                            </div>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Article results */}
+                <Insights lang={lang} density={density} query={query} onResultCount={setArticleResultCount} />
+
+                {/* No results for both */}
+                {noResults && (
+                  <div style={{ maxWidth: 720, margin: '0 auto', padding: '48px 28px', textAlign: 'center' }}>
+                    <p style={{ fontSize: 15, color: 'var(--ink-faint)', margin: '0 0 24px' }}>
+                      {lang === 'ko' ? `"${query}"에 대한 검색 결과가 없어요.` : `No results found for "${query}".`}
+                    </p>
+                    <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+                      <a href="/insights" onClick={(e) => { e.preventDefault(); setQuery(''); history.pushState({}, '', '/insights'); }} style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--accent)', borderRadius: 'var(--radius-pill)' }}>
+                        {lang === 'ko' ? '인사이트 보기' : 'Browse Insights'}
+                      </a>
+                      <a href="/products" onClick={(e) => { e.preventDefault(); setQuery(''); setView('feed'); history.pushState({}, '', '/products'); }} style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--accent)', borderRadius: 'var(--radius-pill)' }}>
+                        {lang === 'ko' ? '제품 보기' : 'Browse Products'}
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+          })()}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
           {view === 'about' && <About lang={lang} density={density} />}
           {view === 'privacy' && <Privacy lang={lang} />}

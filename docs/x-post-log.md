@@ -4,6 +4,59 @@ Persistent archive of every X post drafted by the X Post Writer agent. Newest at
 
 ---
 
+## 2026-05-16 — Manual (X Post Writer)
+
+### 10-Year-Olds Are Using Retinol. Italy Just Launched an Investigation.
+- **Article:** https://ana2-me.com/article/skincare/2026-05-16/sephora-kids-retinol-tweens-danger
+- **Tag:** skincare · **Pub date:** 2026-05-16
+- **Overlap check:** not in posted-to-x.md — safe to post
+
+**Link post (utm_source=twitter) — one sentence, expert-claim declarative:**
+> Dermatologists say the anti-aging products sold to ten-year-olds will accelerate aging, not prevent it.
+> https://ana2-me.com/article/skincare/2026-05-16/sephora-kids-retinol-tweens-danger?utm_source=twitter
+
+**Alternative hooks (one sentence each, varied structure):**
+> Italy just opened a formal investigation into Sephora for marketing anti-aging serums to children as young as ten.
+> 76% of parents with girls aged 7 to 17 say their child already has a skincare routine.
+
+**Status:** drafted (shown in chat)
+
+---
+
+### Jennie Drinks Chicken Feet Soup for Collagen
+- **Article:** https://ana2-me.com/article/wellness/2026-05-16/jennie-chicken-feet-oral-collagen-skin
+- **Tag:** wellness · **Pub date:** 2026-05-16
+- **Overlap check:** not in posted-to-x.md — safe to post
+
+**Link post (utm_source=twitter) — one sentence, question hook:**
+> Does the collagen in Jennie's chicken feet soup actually reach her skin?
+> https://ana2-me.com/article/wellness/2026-05-16/jennie-chicken-feet-oral-collagen-skin?utm_source=twitter
+
+**Alternative hooks (one sentence each, varied structure):**
+> Chicken feet are 70% collagen by weight, and Jennie drinks them as soup every morning for exactly that reason.
+> The collagen industry's best evidence quietly disappears once you stop counting the studies it funded.
+
+**Status:** drafted (shown in chat)
+
+---
+
+### Your Vitamin C Serum Is Probably Oxidized
+- **Article:** https://ana2-me.com/article/skincare/2026-05-16/vitamin-c-serum-oxidized-signs
+- **Tag:** skincare · **Pub date:** 2026-05-16
+- **Overlap check:** not in posted-to-x.md — safe to post
+
+**Link post (utm_source=twitter):**
+> By the time your vitamin C serum turns orange, the vitamin C is already gone — the real warning signs come weeks earlier.
+> https://ana2-me.com/article/skincare/2026-05-16/vitamin-c-serum-oxidized-signs?utm_source=twitter
+
+**Alternative hooks:**
+> How do you know your vitamin C serum has gone bad? Not the color — that's the last sign, not the first.
+> Your vitamin C serum is probably already oxidized, and waiting for it to turn orange means you missed it by weeks.
+
+**Status:** drafted (shown in chat)
+
+---
+
 ## 2026-05-15 — Manual (X Post Writer)
 
 ### Jjimjilbangs Are Going Global

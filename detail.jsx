@@ -245,10 +245,12 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         <section className="ing-section">
           <header className="ing-head">
             <div>
-              <h2 className="sec-h">{t('The anatomy', '이 제품의 아나토미')}</h2>
-              <p className="sec-sub" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                {t('Tap any ingredient — we\'ll explain exactly what it does.', '성분을 눌러보세요. 정확히 뭘 하는지 알려드려요.')}
+              <h2 className="sec-h" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {t('The anatomy', '이 제품의 아나토미')}
                 <span onClick={() => alert(t('Ingredient descriptions are independently written by ana2me.', '성분 설명은 ana2me가 독립적으로 작성했습니다.'))} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 16, height: 16, borderRadius: '50%', border: '1px solid var(--ink-faint)', fontSize: 10, color: 'var(--ink-faint)', cursor: 'pointer', flexShrink: 0 }}>i</span>
+              </h2>
+              <p className="sec-sub">
+                {t('Tap any ingredient — we\'ll explain exactly what it does.', '성분을 눌러보세요. 정확히 뭘 하는지 알려드려요.')}
               </p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

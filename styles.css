@@ -269,7 +269,7 @@ body.night {
 .card { background: var(--cream-card); border-radius: var(--radius); border: 1px solid var(--line); }
 
 /* ---------- FEED ---------- */
-.feed { padding-top: 22px; max-width: 720px; margin: 0 auto; }
+.feed { padding-top: 0; max-width: 720px; margin: 0 auto; }
 .feed-cats { display: flex; gap: 8px; margin-bottom: 20px; }
 .feed-cat-btn {
   padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;

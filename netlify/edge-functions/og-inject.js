@@ -115,6 +115,7 @@ export default async function (request, context) {
 
     } else if (productMatch) {
       const slug = productMatch[1];
+      const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11'];
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,name_ko,brand,summary,image_url,category,ingredients,notes,bio_values`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
@@ -123,7 +124,7 @@ export default async function (request, context) {
       if (!data) return context.next();
       const p = data.find(x => x.id === slug) ||
                 data.find(x => (x.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '') === slug);
-      if (!p) return context.next();
+      if (!p || !VISIBLE_PRODUCTS.includes(p.id)) return context.next();
 
       title = p.brand + ' ' + p.name + ' | ana2me';
       description = p.summary?.tagline || '';
@@ -166,9 +167,10 @@ export default async function (request, context) {
       }
 
     } else if (isProductListing) {
-      // SSR product listing — gives crawlers links to every product
+      // SSR product listing — only show visible products (must match feed.jsx filter)
+      const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11'];
       const res = await fetchWithTimeout(
-        `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&order=updated_at.desc`,
+        `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&id=in.(${VISIBLE_PRODUCTS.join(',')})&order=updated_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       const products = await res.json();

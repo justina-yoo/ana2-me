@@ -82,11 +82,13 @@ async function generate() {
 
 
 
-  // Individual product pages
+  // Individual product pages — only visible ones (must match feed.jsx filter)
+  const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11'];
+  const visibleProducts = products.filter(p => VISIBLE_PRODUCTS.includes(p.id));
   xml += `
 
   <!-- Products -->`;
-  for (const p of products) {
+  for (const p of visibleProducts) {
     const slug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
     const lastmod = p.updated_at ? p.updated_at.slice(0, 10) : today;
     xml += `
@@ -103,7 +105,7 @@ async function generate() {
 `;
 
   writeFileSync('sitemap.xml', xml);
-  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${products.length} products + 5 static pages`);
+  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${visibleProducts.length} products + 5 static pages`);
 }
 
 generate();

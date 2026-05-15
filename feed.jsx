@@ -3,7 +3,7 @@ const { useMemo: _uM1 } = React;
 
 window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  products = products.filter(p => p.id === 'skincare-7' || p.id === 'skincare-10' || p.id === 'skincare-11');
+  // Visible products filtered at App level (VISIBLE_PRODUCTS in index.html)
 
   const filtered = useMemo(() => {
     if (query) {
