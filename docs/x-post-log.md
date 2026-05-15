@@ -6,6 +6,23 @@ Persistent archive of every X post drafted by the X Post Writer agent. Newest at
 
 ## 2026-05-16 — Manual (X Post Writer)
 
+### Sugar Is Aging Your Skin Faster Than the Sun
+- **Article:** https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging
+- **Tag:** skincare · **Pub date:** 2026-05-06
+- **Overlap check:** not in posted-to-x.md, not previously drafted — safe to post
+
+**Link post (utm_source=twitter) — one sentence, research-finding declarative:**
+> Estée Lauder's lab just aged human skin cells using nothing but sugar, with zero UV exposure.
+> https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging?utm_source=twitter
+
+**Alternative hooks (one sentence each, varied structure):**
+> Sunscreen blocks over 90% of UV damage; the sugar in your diet ages skin everywhere sunscreen can't reach.
+> The sugar in your lunch is permanently cross-linking the collagen in your face, and no sunscreen can stop it.
+
+**Status:** drafted (shown in chat)
+
+---
+
 ### 10-Year-Olds Are Using Retinol. Italy Just Launched an Investigation.
 - **Article:** https://ana2-me.com/article/skincare/2026-05-16/sephora-kids-retinol-tweens-danger
 - **Tag:** skincare · **Pub date:** 2026-05-16

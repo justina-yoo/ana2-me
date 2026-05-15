@@ -96,6 +96,7 @@ body.night {
   letter-spacing: -0.02em;
   margin: 0;
   }
+.lang-ko .display { line-height: 1.15; }
 .display-accent {
   color: var(--accent);
   font-weight: 600;
