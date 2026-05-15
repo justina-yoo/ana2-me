@@ -255,10 +255,9 @@ export default async function (request, context) {
   }
 
   // Inject SSR content inside <div id="root"> for crawlers
-  // Hidden from JS-enabled browsers to prevent flash; crawlers (no JS) see it
+  // React removes it on mount via useEffect in App component
   if (ssrContent) {
     newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
-    newHtml = newHtml.replace('</head>', `<script>document.addEventListener('DOMContentLoaded',function(){var s=document.getElementById('ssr');if(s)s.remove();});</script>\n</head>`);
   }
 
   // Set cache headers based on page type

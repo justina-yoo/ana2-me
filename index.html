@@ -266,6 +266,12 @@
         window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
       };
 
+      // Remove SSR content now that React has mounted
+      useEffect(() => {
+        const ssr = document.getElementById('ssr');
+        if (ssr) ssr.remove();
+      }, []);
+
       // Handle direct URL navigation (e.g. /about, /insights)
       useEffect(() => {
         const path = window.location.pathname.replace(/\/$/, '');
