@@ -129,19 +129,12 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      {blocks.map((block, idx) => {
-        if (block.type === 'sources') {
-          return React.createElement(React.Fragment, { key: idx },
-            React.createElement('p', { style: { fontSize: 11, color: 'var(--ink-faint)', opacity: 0.6, margin: '-24px 0 0', lineHeight: 1.5 } },
-              isKo
-                ? '본 콘텐츠는 정보를 제공하기 위한 것이며, 전문적인 의료 조언을 대신하지 않습니다.'
-                : 'For informational purposes only. Not intended as medical or professional advice.'
-            ),
-            renderBlock(block, idx)
-          );
-        }
-        return renderBlock(block, idx);
-      })}
+      {blocks.map((block, idx) => renderBlock(block, idx))}
+      <p style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.6, margin: '-24px 0 0', lineHeight: 1.5 }}>
+        {isKo
+          ? '본 콘텐츠는 정보를 제공하기 위한 것이며, 전문적인 의료 조언을 대신하지 않습니다.'
+          : 'For informational purposes only. Not intended as medical or professional advice.'}
+      </p>
     </div>
   );
 };
