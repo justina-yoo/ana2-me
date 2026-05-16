@@ -6,6 +6,23 @@ Persistent archive of every X post drafted by the X Post Writer agent. Newest at
 
 ## 2026-05-16 — Manual (X Post Writer)
 
+### Korean Dermatologists Have Been Injecting Salmon DNA for Decades
+- **Article:** https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna
+- **Tag:** skincare · **Pub date:** 2026-05-06
+- **Overlap check:** not in posted-to-x.md, not previously drafted — safe to post
+
+**Link post (utm_source=twitter) — one sentence, temporal-sequence declarative:**
+> The salmon DNA in K-beauty's hottest new serum spent thirty years as a Korean clinic injection first.
+> https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna?utm_source=twitter
+
+**Alternative hooks (one sentence each, varied structure):**
+> K-beauty's hottest new serum contains DNA harvested from salmon.
+> PDRN serums work by sending fragments of salmon DNA into your skin to tell your cells to start repairing themselves.
+
+**Status:** drafted (shown in chat)
+
+---
+
 ### Your Brain Stops Smelling Your Perfume After 20 Minutes
 - **Article:** https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing
 - **Tag:** fragrance · **Pub date:** 2026-05-06

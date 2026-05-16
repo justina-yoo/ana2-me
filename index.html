@@ -265,38 +265,56 @@
         window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
       };
 
-      // Handle direct URL navigation (e.g. /about, /insights)
-      useEffect(() => {
+      // Handle URL navigation (initial load + browser back/forward)
+      const handleRoute = () => {
         const path = window.location.pathname.replace(/\/$/, '');
         if (path === '') {
-          setView('landing'); if (window.SEO) window.SEO.setHome();
+          setView('landing'); setProductId(null); setQuery('');
+          if (window.SEO) window.SEO.setHome();
+          window.scrollTo(0, 0);
         }
         else if (path === '/insights') {
-          setView('insights'); if (window.SEO) window.SEO.setHome();
+          setView('insights'); setProductId(null); setQuery('');
+          window.dispatchEvent(new CustomEvent('ana2me:go-home'));
+          if (window.SEO) window.SEO.setHome();
+          window.scrollTo(0, 0);
         }
-        else if (path === '/products') { setView('feed'); }
+        else if (path === '/products') {
+          setView('feed'); setProductId(null); setQuery('');
+          window.scrollTo(0, 0);
+        }
         else if (path.startsWith('/products/')) {
           const slug = path.split('/').pop();
-          setView('feed');
+          setQuery('');
           const tryOpen = () => {
             const prods = window.PRODUCTS || [];
             const p = prods.find(x => x.id === slug) || prods.find(x => x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'') === slug) || prods.find(x => (x.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'')) === slug);
             if (p) { setProductId(p.id); setView('detail'); if (window.SEO && window.SEO.setProduct) window.SEO.setProduct(p); }
             else if (prods.length === 0) setTimeout(tryOpen, 200);
+            else { setView('feed'); setProductId(null); }
           };
           tryOpen();
+          window.scrollTo(0, 0);
         }
-        else if (path.startsWith('/article/')) { setView('insights'); }
+        else if (path.startsWith('/article/')) {
+          setView('insights'); setProductId(null); setQuery('');
+          window.dispatchEvent(new CustomEvent('ana2me:navigate-article'));
+          window.scrollTo(0, 0);
+        }
         else if (path === '/search') {
           const q = new URLSearchParams(window.location.search).get('q') || '';
-          setQuery(q);
-          setView('insights');
+          setQuery(q); setView('insights'); setProductId(null);
           if (window.SEO) window.SEO.setHome();
         }
         else if (path === '/admin') { setView('admin'); }
-        else if (path === '/analyzer') { setView('analyzer'); if (window.SEO) window.SEO.setAnalyzer(); }
-        else if (path === '/about') { setView('about'); if (window.SEO) window.SEO.setAbout(); }
-        else if (path === '/privacy') { setView('privacy'); if (window.SEO) window.SEO.setPrivacy(); }
+        else if (path === '/analyzer') { setView('analyzer'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setAnalyzer(); window.scrollTo(0, 0); }
+        else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setAbout(); window.scrollTo(0, 0); }
+        else if (path === '/privacy') { setView('privacy'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setPrivacy(); window.scrollTo(0, 0); }
+      };
+      useEffect(() => {
+        handleRoute();
+        window.addEventListener('popstate', handleRoute);
+        return () => window.removeEventListener('popstate', handleRoute);
       }, []);
 
       // Update SEO meta on view changes (for non-article views)

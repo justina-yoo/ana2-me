@@ -23,6 +23,7 @@ window.Insights = function Insights({ lang, density, query }) {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [navTrigger, setNavTrigger] = useState(0);
   const isKo = lang === 'ko';
 
   // Fetch first page of articles
@@ -51,17 +52,27 @@ window.Insights = function Insights({ lang, density, query }) {
     });
   };
 
-  // Logo click → go home
+  // Clear article selection (triggered by back nav or logo click)
   useEffect(() => {
-    const handler = () => {
+    const goHome = () => {
       setSelectedPost(null);
       setActiveTag(null);
-      history.pushState({}, '', '/insights');
+      setNotFound(false);
       if (window.SEO) window.SEO.setHome();
-      setTimeout(() => window.scrollTo(0, 0), 10);
     };
-    window.addEventListener('ana2me:go-home', handler);
-    return () => window.removeEventListener('ana2me:go-home', handler);
+    // Re-resolve article from URL (triggered by back nav to an article)
+    const navArticle = () => {
+      urlResolved.current = false;
+      setSelectedPost(null);
+      setNotFound(false);
+      setNavTrigger(n => n + 1);
+    };
+    window.addEventListener('ana2me:go-home', goHome);
+    window.addEventListener('ana2me:navigate-article', navArticle);
+    return () => {
+      window.removeEventListener('ana2me:go-home', goHome);
+      window.removeEventListener('ana2me:navigate-article', navArticle);
+    };
   }, []);
 
   // On mount, check if URL path matches an article.
@@ -100,7 +111,7 @@ window.Insights = function Insights({ lang, density, query }) {
     }).catch(function() {
       setNotFound(true);
     });
-  }, [POSTS]);
+  }, [POSTS, navTrigger]);
 
 
   const openPost = (p) => {
@@ -695,6 +706,62 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
               : 'This article is for informational purposes only. Not intended as medical or professional advice.'}
           </p>
         )}
+
+        {/* Related products — matched by content overlap */}
+        {window.PRODUCTS && (() => {
+          const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11', 'skincare-12'];
+          // Build haystack from all article text
+          const texts = [post.keywords || '', post.title.en || '', post.title.ko || '', post.excerpt.en || '', post.excerpt.ko || ''];
+          (post.bodyBlocks || []).forEach(function extractText(b) {
+            if (b.text) { texts.push(typeof b.text === 'string' ? b.text : (b.text.en || '') + ' ' + (b.text.ko || '')); }
+            if (b.title) { texts.push(typeof b.title === 'string' ? b.title : (b.title.en || '')); }
+            if (b.heading) { texts.push(typeof b.heading === 'string' ? b.heading : (b.heading.en || '')); }
+            if (b.children) b.children.forEach(extractText);
+            if (b.cards) b.cards.forEach(function(c) { if (c.title) texts.push(typeof c.title === 'string' ? c.title : (c.title.en || '')); if (c.desc) texts.push(typeof c.desc === 'string' ? c.desc : (c.desc.en || '')); });
+          });
+          const haystack = texts.join(' ').toLowerCase().replace(/<[^>]+>/g, '');
+          // Score each product by number of ingredient matches
+          const scored = (window.PRODUCTS || []).filter(p => VISIBLE_PRODUCTS.includes(p.id)).map(p => {
+            const terms = [
+              p.name.toLowerCase(), p.brand.toLowerCase(),
+              ...(p.ingredients || []).map(ing => (ing.name || '').toLowerCase()),
+            ];
+            const score = terms.filter(t => t && t.length > 3 && haystack.includes(t)).length;
+            return { ...p, score };
+          }).filter(p => p.score > 0).sort((a, b) => b.score - a.score);
+          const remaining = (window.PRODUCTS || []).filter(p => VISIBLE_PRODUCTS.includes(p.id) && !scored.find(s => s.id === p.id));
+          const matched = [...scored, ...remaining].slice(0, 3);
+          if (!matched.length) return null;
+          return (
+            <section style={{ marginTop: 48 }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, letterSpacing: '-0.01em', margin: '0 0 12px', color: 'var(--ink)' }}>
+                {isKo ? '관련 제품 분석' : 'Related products'}
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                {matched.slice(0, 3).map(p => {
+                  const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+                  const name = isKo && p.nameKo ? p.nameKo : p.name;
+                  return (
+                    <a key={p.id} href={'/products/' + slug} style={{
+                      display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0',
+                      textDecoration: 'none', color: 'inherit',
+                    }}>
+                      <ProductImg src={p.imageUrl} alt={name}
+                        style={{ width: 72, height: 72, objectFit: 'contain', borderRadius: 'var(--radius-sm)', flexShrink: 0, background: 'var(--cream-card)', padding: '2%' }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>{p.brand}</span>
+                        <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: '2px 0 0', color: 'var(--ink)' }}>{name}</h4>
+                      </div>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', flexShrink: 0 }}>
+                        {isKo ? '성분 보기 →' : 'See ingredients →'}
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Related articles */}
         {allPosts && (() => {

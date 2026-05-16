@@ -38,14 +38,19 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
       case 'figure':
         return <ArtFigure key={idx} src={block.src} alt={block.alt || ''} isKo={isKo} />;
 
-      case 'section':
+      case 'section': {
+        // Hide sections whose only children are prodCards (now hidden)
+        const hasVisibleChildren = (block.children || []).some(c => c.type !== 'prodCards');
+        const hasBody = block.body && !block.children;
+        if (!hasVisibleChildren && !hasBody) return null;
         return (
           <ArtSection key={idx}>
             {(block.heading || block.title) && <ArtSectionHeading>{txt(block.heading || block.title)}</ArtSectionHeading>}
-            {(block.body && !block.children) && <ArtBody key={idx+'-body'} dangerouslySetInnerHTML={html(block.body)} />}
+            {hasBody && <ArtBody key={idx+'-body'} dangerouslySetInnerHTML={html(block.body)} />}
             {block.children && block.children.map((child, ci) => renderBlock(child, `${idx}-${ci}`))}
           </ArtSection>
         );
+      }
 
       case 'body':
         return <ArtBody key={idx} dangerouslySetInnerHTML={html(block.text || block.body)} />;
@@ -67,13 +72,8 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
         );
 
       case 'prodCards':
-        return (
-          <div key={idx} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 14 }}>
-            {(block.cards || []).map((card, ci) => (
-              <ArtProdCard key={ci} brand={card.brand} name={card.name} note={txt(card.note)} accentColor={card.accentColor || 'var(--accent)'} />
-            ))}
-          </div>
-        );
+        // Replaced by auto-matched "Related products" section in insights.jsx
+        return null;
 
       case 'grid':
         return (
