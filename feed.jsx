@@ -104,7 +104,7 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
               <div className="product-grid">
                 {filtered.map((p, i) => {
                   const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
-                  return <ProductCard key={p.id} product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} />;
+                  return <Reveal key={p.id}><ProductCard product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} /></Reveal>;
                 })}
               </div>
             ) : (

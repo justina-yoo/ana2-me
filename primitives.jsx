@@ -1,6 +1,21 @@
 // UI atoms & primitives
 const { useState, useEffect, useMemo, useRef } = React;
 
+// Scroll reveal — fade up on viewport enter
+window.Reveal = function Reveal({ children, delay }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { el.classList.add('reveal-visible'); obs.unobserve(el); }
+    }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return React.createElement('div', { ref, className: 'reveal', style: delay ? { transitionDelay: delay + 'ms' } : undefined }, children);
+};
+
 window.useLocalState = function useLocalState(key, initial) {
   const [v, setV] = useState(() => {
     try { const s = localStorage.getItem(key); return s !== null ? JSON.parse(s) : initial; } catch { return initial; }

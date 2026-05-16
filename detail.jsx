@@ -203,8 +203,8 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
     // Rate limit
     const rlKey = 'rl_' + product.id;
     const lastSubmit = localStorage.getItem(rlKey);
-    if (lastSubmit && Date.now() - parseInt(lastSubmit) < 3600000) {
-      setReviewError(t('You already submitted a review recently. Please wait before submitting another.', '최근에 이미 리뷰를 작성했어요. 잠시 후 다시 시도해주세요.'));
+    if (lastSubmit) {
+      setReviewError(t('You already reviewed this product.', '이 제품에 이미 리뷰를 작성했어요.'));
       return;
     }
     setReviewSubmitting(true);

@@ -61,6 +61,36 @@
     fetchAllReviews: function() {
       return query('reviews', 'order=created_at.desc');
     },
+    fetchFeaturedArticles: function() {
+      return query('articles', 'featured=not.is.null&order=created_at.desc').then(function(rows) {
+        return rows.map(function(r) {
+          return {
+            id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
+            readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
+            imageUrl: r.image_url, keywords: r.keywords, bodyBlocks: r.body_blocks,
+            featured: r.featured
+          };
+        });
+      });
+    },
+    fetchLatestArticles: function(limit) {
+      return query('articles', 'order=created_at.desc&limit=' + (limit || 3)).then(function(rows) {
+        return rows.map(function(r) {
+          return {
+            id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
+            readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
+            imageUrl: r.image_url, keywords: r.keywords
+          };
+        });
+      });
+    },
+    toggleFeatured: function(id, value) {
+      return fetch(SUPABASE_URL + '/rest/v1/articles?id=eq.' + id, {
+        method: 'PATCH',
+        headers: headers,
+        body: JSON.stringify({ featured: value })
+      });
+    },
     fetchArticles: function(limit, offset) {
       var params = 'order=created_at.desc';
       if (limit) params += '&limit=' + limit;
@@ -78,7 +108,8 @@
             tagColor: r.tag_color,
             imageUrl: r.image_url,
             keywords: r.keywords,
-            bodyBlocks: r.body_blocks
+            bodyBlocks: r.body_blocks,
+            featured: r.featured
           };
         });
       });

@@ -114,6 +114,7 @@
   <script type="text/babel" src="articles/sugar-glycation.jsx"></script>
   <script type="text/babel" src="articles/grown-up-gourmand.jsx"></script>
   <script type="text/babel" src="articles/sleep-wellness-snacks.jsx"></script>
+  <script type="text/babel" src="landing.jsx"></script>
   <script type="text/babel" src="analyzer.jsx"></script>
   <script type="text/babel" src="about.jsx"></script>
   <script type="text/babel" src="privacy.jsx"></script>
@@ -267,7 +268,10 @@
       // Handle direct URL navigation (e.g. /about, /insights)
       useEffect(() => {
         const path = window.location.pathname.replace(/\/$/, '');
-        if (path === '' || path === '/insights') {
+        if (path === '') {
+          setView('landing'); if (window.SEO) window.SEO.setHome();
+        }
+        else if (path === '/insights') {
           setView('insights'); if (window.SEO) window.SEO.setHome();
         }
         else if (path === '/products') { setView('feed'); }
@@ -344,6 +348,7 @@
               headerStyle={tweaks.headerStyle}
             />
           )}
+          {view === 'landing' && <Landing lang={lang} products={products} setView={setView} setProduct={(p) => { setProductId(p.id); setView('detail'); }} density={density} />}
           {fetchError === 'products' && view === 'feed' && <ErrorCard icon="📡" title={lang === 'ko' ? '제품을 불러올 수 없어요' : 'Couldn\u2019t load products'} message={lang === 'ko' ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />}
           {!fetchError && view === 'feed' && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} products={products} />}
           {view === 'detail' && product && <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />}

@@ -268,7 +268,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             if (posInBlock === 0) {
               // Hero card — full width with large image
               cards.push(
-                <a key={post.id} href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
+                <Reveal key={post.id}><a href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
                   display: 'block', width: '100%', textAlign: 'left', background: 'none', border: 'none',
                   borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '20px 0',
                   textDecoration: 'none', color: 'inherit',
@@ -292,7 +292,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                       <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
                     </div>
                   </div>
-                </a>
+                </a></Reveal>
               );
               i++;
             } else if (posInBlock <= 2 && i + 1 < posts.length) {
@@ -300,7 +300,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
               const p1 = posts[i];
               const p2 = posts[i + 1];
               cards.push(
-                <div key={p1.id + '-grid'} className="feed-2col" style={{
+                <Reveal key={p1.id + '-grid'}><div className="feed-2col" style={{
                   display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16,
                   padding: '16px 0', borderBottom: '1px solid var(--line)',
                 }}>
@@ -321,13 +321,13 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                       <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>{p.date}</span>
                     </a>
                   ))}
-                </div>
+                </div></Reveal>
               );
               i += 2;
             } else {
               // Compact row — text + small thumbnail
               cards.push(
-                <a key={post.id} href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
+                <Reveal key={post.id}><a href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
                   display: 'flex', alignItems: 'center', gap: 16, width: '100%', textAlign: 'left',
                   background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '14px 0',
                   textDecoration: 'none', color: 'inherit',
@@ -347,7 +347,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                   </div>
                   <ProductImg src={post.imageUrl} alt={post.title[lang] || post.title.en}
                     style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
-                </a>
+                </a></Reveal>
               );
               i++;
             }
