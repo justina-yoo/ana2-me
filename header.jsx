@@ -37,14 +37,14 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </button>
         </div>
         <nav className="hdr-catrow" style={{ justifyContent: 'flex-start', gap: 16 }}>
-          <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
-            {t('About', '소개')}
-          </a>
           <a href="/insights" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/insights'); setView('insights'); setQuery(''); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </a>
           <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'feed' && 'cat-edit-active')}>
             {t('Products', '제품')}
+          </a>
+          <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
+            {t('About', '소개')}
           </a>
           <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
             {lang === 'ko' ? 'EN' : 'KR'}
@@ -122,14 +122,14 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
         )}
         {!searchOpen && (
           <div className="hdr-tabs" style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: 'auto' }}>
-            <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
-              {t('About', '소개')}
-            </a>
             <a href="/insights" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/insights'); setView('insights'); setQuery(''); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
               {t('Insights', '인사이트')}
             </a>
             <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'feed' && 'page-tab-active')}>
               {t('Products', '제품')}
+            </a>
+            <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
+              {t('About', '소개')}
             </a>
             <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 8, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
               {lang === 'ko' ? 'EN' : 'KR'}

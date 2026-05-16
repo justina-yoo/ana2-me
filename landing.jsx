@@ -53,6 +53,19 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '18px 0 60px' }}>
 
+      {/* ── TAGLINE ── */}
+      <header className="ins-hero">
+        <Sticker color="ink" rotate={-4}>{t('ingredient-first', '성분 중심')}</Sticker>
+        <h1 className="display">
+          {t("Know What's In", '당신이 바르는 것의')}<br />
+          <span className="display-accent">{t('Your Bottle', '성분을 알아보세요')}<span className="display-dot">.</span></span>
+        </h1>
+        <p className="ins-sub">{t(
+          'And whether it actually belongs in yours.',
+          '유행하는 성분이 아닌, 내 몸에 맞는 성분을 찾으세요.'
+        )}</p>
+      </header>
+
       {/* ── HERO ── */}
       {hero && (<Reveal>
         <a href={'/' + postSlug(hero)} onClick={(e) => { e.preventDefault(); goArticle(hero); }}
@@ -90,11 +103,16 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
       {products.length > 0 && (<Reveal>
         <section style={{ margin: '24px 0 0' }}>
           <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); window.scrollTo(0,0); }}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 14, textDecoration: 'none' }}>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, color: 'var(--ink)', margin: 0 }}>
-              {t("What's in the bottle?", '그 안에 뭐가 들었을까?')}
-            </h3>
-            <span style={{ fontSize: 18, color: 'var(--ink-faint)' }}>›</span>
+            style={{ display: 'block', marginBottom: 14, textDecoration: 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, color: 'var(--ink)', margin: 0 }}>
+                {t("What's in the bottle?", '그 안에 뭐가 들었을까?')}
+              </h3>
+              <span style={{ fontSize: 18, color: 'var(--ink-faint)' }}>›</span>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: '4px 0 0' }}>
+              {t('We read the ingredients so you don\u2019t have to.', '성분을 대신 읽어드릴게요.')}
+            </p>
           </a>
           <div style={{
             display: 'flex', gap: 14, overflowX: 'auto', scrollSnapType: 'x mandatory',
