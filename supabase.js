@@ -39,6 +39,28 @@
         });
       });
     },
+    fetchReviews: function(productId) {
+      return query('reviews', 'product_id=eq.' + productId + '&order=created_at.desc');
+    },
+    submitReview: function(review) {
+      return fetch(SUPABASE_URL + '/rest/v1/reviews', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(review)
+      }).then(function(r) {
+        if (!r.ok) return r.json().then(function(e) { throw new Error(e.message || 'Failed'); });
+        return true;
+      });
+    },
+    deleteReview: function(id) {
+      return fetch(SUPABASE_URL + '/rest/v1/reviews?id=eq.' + id, {
+        method: 'DELETE',
+        headers: headers
+      });
+    },
+    fetchAllReviews: function() {
+      return query('reviews', 'order=created_at.desc');
+    },
     fetchArticles: function(limit, offset) {
       var params = 'order=created_at.desc';
       if (limit) params += '&limit=' + limit;

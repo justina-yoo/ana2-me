@@ -1,4 +1,26 @@
 
+// Profanity filter — masks explicit words with ****
+const PROFANITY_LIST = [
+  // English
+  'fuck','shit','ass','bitch','dick','cock','pussy','bastard','damn','crap',
+  'asshole','bullshit','motherfucker','wtf','stfu','lmao','penis','vagina',
+  'slut','whore','porn','sexy','nude','naked','boob','tits',
+  // Korean
+  '시발','씨발','씨빨','ㅅㅂ','ㅆㅂ','병신','ㅂㅅ','지랄','ㅈㄹ','개새끼',
+  '미친','ㅁㅊ','좆','씹','꺼져','닥쳐','년','놈','새끼','개같',
+];
+function filterProfanity(text) {
+  let filtered = text;
+  for (const word of PROFANITY_LIST) {
+    const re = new RegExp(word, 'gi');
+    filtered = filtered.replace(re, '*'.repeat(word.length));
+  }
+  return filtered;
+}
+function containsUrl(text) {
+  return /https?:\/\/|www\.|\.com|\.co|\.kr|\.net|\.org|\.io/i.test(text);
+}
+
 // Scrollable list with fade-out hint at bottom
 function IngScrollFade({ children }) {
   const wrapRef = useRef(null);
@@ -152,8 +174,56 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
     base: notes.filter(n => n.type === 'base'),
   };
 
-  const reviews = product.reviews || [];
+  const [reviews, setReviews] = useState([]);
+  const [reviewLoading, setReviewLoading] = useState(true);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewAuthor, setReviewAuthor] = useState('');
+  const [reviewBody, setReviewBody] = useState('');
+  const [reviewError, setReviewError] = useState('');
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const reviewCount = reviews.length;
+
+  useEffect(() => {
+    setReviewLoading(true);
+    window.__supabase.fetchReviews(product.id).then(function(data) {
+      setReviews(data);
+      setReviewLoading(false);
+    }).catch(function() { setReviewLoading(false); });
+  }, [product.id]);
+
+  const submitReview = () => {
+    setReviewError('');
+    if (reviewRating === 0) { setReviewError(t('Please select a rating.', '별점을 선택해주세요.')); return; }
+    if (reviewBody.trim().length < 5) { setReviewError(t('Review must be at least 5 characters.', '리뷰는 최소 5자 이상이어야 해요.')); return; }
+    if (containsUrl(reviewBody) || containsUrl(reviewAuthor)) { setReviewError(t('URLs are not allowed in reviews.', '리뷰에 URL을 포함할 수 없어요.')); return; }
+    // Honeypot check
+    const hp = document.getElementById('rev-hp');
+    if (hp && hp.value) return;
+    // Rate limit
+    const rlKey = 'rl_' + product.id;
+    const lastSubmit = localStorage.getItem(rlKey);
+    if (lastSubmit && Date.now() - parseInt(lastSubmit) < 3600000) {
+      setReviewError(t('You already submitted a review recently. Please wait before submitting another.', '최근에 이미 리뷰를 작성했어요. 잠시 후 다시 시도해주세요.'));
+      return;
+    }
+    setReviewSubmitting(true);
+    window.__supabase.submitReview({
+      product_id: product.id,
+      author: filterProfanity(reviewAuthor.trim()) || 'Anonymous',
+      rating: reviewRating,
+      body: filterProfanity(reviewBody.trim())
+    }).then(function() {
+      localStorage.setItem(rlKey, Date.now().toString());
+      setReviewRating(0); setReviewAuthor(''); setReviewBody('');
+      setShowReviewForm(false); setReviewSubmitting(false);
+      // Refresh reviews
+      window.__supabase.fetchReviews(product.id).then(setReviews);
+    }).catch(function(e) {
+      setReviewError(e.message || t('Failed to submit. Please try again.', '제출에 실패했어요. 다시 시도해주세요.'));
+      setReviewSubmitting(false);
+    });
+  };
 
   // Benefits framing per category
   const benefitsHeadline = isFragrance
@@ -476,49 +546,144 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       )}
 
       {/* ---------- REVIEWS ---------- */}
-            {false && (<section id="reviews-section" className="reviews-section">
-          <header className="reviews-head">
-            <h2 className="sec-h">{t('Reviews', '리뷰')}</h2>
-            {reviewCount > 0 && <span className="reviews-count">{reviewCount}</span>}
-          </header>
-          {reviewCount > 0 ? (
-            <div className="reviews-list">
-              {reviews.map((r, i) => {
-                const stars = r.rating || 5;
-                return (
-                  <article key={i} className="review-card">
-                    <div className="review-top">
-                      <div className="review-author">
-                        <span className="review-avatar">{(r.author || 'A')[0]}</span>
-                        <div>
-                          <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
-                          {r.date && <span className="review-date">{r.date}</span>}
-                        </div>
-                      </div>
-                      <div className="review-stars">
-                        {Array.from({ length: 5 }, (_, si) => (
-                          <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
-                        ))}
+      <section id="reviews-section" className="reviews-section">
+        <header className="reviews-head">
+          <h2 className="sec-h">{t('Reviews', '리뷰')}</h2>
+          {reviewCount > 0 && <span className="reviews-count">{reviewCount}</span>}
+        </header>
+
+        {reviewCount > 0 && (
+          <div className="reviews-list">
+            {reviews.map((r) => {
+              const stars = r.rating || 5;
+              const d = new Date(r.created_at);
+              const dateStr = d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+              const avatarColors = ['#2d5a3d','#a44a3f','#2e3d8f','#6b3a5c','#a07850','#3a6b5c','#8f5a2e'];
+              const charCode = (r.author || 'A').charCodeAt(0);
+              const avatarColor = avatarColors[charCode % avatarColors.length];
+              return (
+                <article key={r.id} className="review-card">
+                  <div className="review-top">
+                    <div className="review-author">
+                      <span className="review-avatar" style={{ background: avatarColor }}>{(r.author || 'A')[0].toUpperCase()}</span>
+                      <div>
+                        <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
+                        <span className="review-date">{dateStr}</span>
                       </div>
                     </div>
-                    <p className="review-body">{lang === 'ko' && r.bodyKo ? r.bodyKo : r.body}</p>
-                  </article>
-                );
-              })}
+                    <div className="review-stars">
+                      {Array.from({ length: 5 }, (_, si) => (
+                        <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="review-body">{filterProfanity(r.body)}</p>
+                </article>
+              );
+            })}
+          </div>
+        )}
+
+        {reviewCount === 0 && !reviewLoading && !showReviewForm && (
+          <div style={{ textAlign: 'center', padding: '32px 20px', color: 'var(--ink-faint)' }}>
+            <p style={{ fontSize: 14, margin: '0 0 12px' }}>{t('No reviews yet. Be the first to share your experience.', '아직 리뷰가 없어요. 첫 번째 리뷰를 남겨주세요.')}</p>
+          </div>
+        )}
+
+        {/* Review form */}
+        {showReviewForm ? (
+          <div style={{ padding: '20px 0', borderTop: reviewCount > 0 ? '1px solid var(--line)' : 'none' }}>
+            {/* Honeypot */}
+            <input id="rev-hp" type="text" style={{ position: 'absolute', left: '-9999px', tabIndex: -1 }} autoComplete="off" />
+
+            {/* Star picker */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 8 }}>{t('Rating', '별점')}</label>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {[1,2,3,4,5].map(s => (
+                  <button key={s} onClick={() => setReviewRating(s)} style={{
+                    fontSize: 24, background: 'none', border: 'none', cursor: 'pointer',
+                    color: s <= reviewRating ? '#f5a623' : 'var(--line)', transition: 'color 0.1s',
+                  }}>★</button>
+                ))}
+              </div>
             </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '32px 20px', color: 'var(--ink-faint)' }}>
-              <p style={{ fontSize: 14, margin: '0 0 12px' }}>{t('No reviews yet. Be the first to share your experience.', '아직 리뷰가 없어요. 첫 번째 리뷰를 남겨주세요.')}</p>
-              <button style={{
+
+            {/* Name */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>{t('Name (optional)', '이름 (선택)')}</label>
+              <input
+                value={reviewAuthor}
+                onChange={e => setReviewAuthor(e.target.value)}
+                placeholder={t('Anonymous', '익명')}
+                maxLength={30}
+                style={{
+                  width: '100%', padding: '10px 14px', fontSize: 14, border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius-sm)', background: 'var(--cream-card)', color: 'var(--ink)',
+                  outline: 'none', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Body */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>{t('Your review', '리뷰 내용')}</label>
+              <textarea
+                value={reviewBody}
+                onChange={e => setReviewBody(e.target.value)}
+                placeholder={t('Share your experience with this product (min 10 characters)', '이 제품에 대한 경험을 공유해주세요 (최소 10자)')}
+                rows={4}
+                maxLength={1000}
+                style={{
+                  width: '100%', padding: '10px 14px', fontSize: 14, border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius-sm)', background: 'var(--cream-card)', color: 'var(--ink)',
+                  outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box',
+                }}
+              />
+              <span style={{ fontSize: 11, color: 'var(--ink-faint)', marginTop: 4, display: 'block' }}>{reviewBody.length}/1000</span>
+            </div>
+
+            {reviewError && <p style={{ fontSize: 13, color: '#c0392b', margin: '0 0 12px' }}>{reviewError}</p>}
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={submitReview}
+                disabled={reviewSubmitting}
+                style={{
+                  padding: '10px 24px', borderRadius: 'var(--radius-pill)', border: 'none',
+                  background: 'var(--ink)', color: '#fff', fontSize: 13, fontWeight: 600,
+                  cursor: reviewSubmitting ? 'not-allowed' : 'pointer', opacity: reviewSubmitting ? 0.6 : 1,
+                }}
+              >
+                {reviewSubmitting ? t('Submitting...', '제출 중...') : t('Submit', '제출')}
+              </button>
+              <button
+                onClick={() => { setShowReviewForm(false); setReviewError(''); }}
+                style={{
+                  padding: '10px 24px', borderRadius: 'var(--radius-pill)',
+                  border: '1px solid var(--line)', background: 'var(--cream-card)',
+                  fontSize: 13, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer',
+                }}
+              >
+                {t('Cancel', '취소')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ padding: '16px 0', textAlign: reviewCount > 0 ? 'left' : 'center' }}>
+            <button
+              onClick={() => setShowReviewForm(true)}
+              style={{
                 padding: '10px 24px', borderRadius: 'var(--radius-pill)',
                 border: '1px solid var(--line)', background: 'var(--cream-card)',
                 fontSize: 13, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer',
-              }}>
-                {t('Write a review', '리뷰 작성하기')}
-              </button>
-            </div>
-          )}
-        </section>)}
+              }}
+            >
+              {t('Write a review', '리뷰 작성하기')}
+            </button>
+          </div>
+        )}
+      </section>
 
       {false && (
       <section className="related">

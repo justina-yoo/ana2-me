@@ -83,7 +83,7 @@ async function generate() {
 
 
   // Individual product pages — only visible ones (must match feed.jsx filter)
-  const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11'];
+  const VISIBLE_PRODUCTS = ['skincare-6', 'skincare-7', 'skincare-10', 'skincare-11', 'skincare-12'];
   const visibleProducts = products.filter(p => VISIBLE_PRODUCTS.includes(p.id));
   xml += `
 
