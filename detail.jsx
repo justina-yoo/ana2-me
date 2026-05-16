@@ -245,6 +245,11 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <Tape className="tape" style={{ top: -8, left: 20, transform: 'rotate(-8deg)' }} />
           <Tape className="tape" style={{ bottom: -6, right: 30, transform: 'rotate(6deg)' }} />
           <ProductImg src={product.imageUrl} alt={name} className="detail-img" />
+          {(product.imageUrl || '').includes('placeholder') && (
+            <span style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', fontSize: 11, fontWeight: 500, fontStyle: 'italic', color: 'var(--ink-faint)', opacity: 0.6, whiteSpace: 'nowrap' }}>
+              {t('Photo coming soon', '사진 준비 중')}
+            </span>
+          )}
           <Sticker color="accent" rotate={8} className="detail-sticker">
             {t(catLabel.en, catLabel.ko)}
           </Sticker>
@@ -585,9 +590,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         )}
 
         {reviewCount === 0 && !reviewLoading && !showReviewForm && (
-          <div style={{ textAlign: 'center', padding: '32px 20px', color: 'var(--ink-faint)' }}>
-            <p style={{ fontSize: 14, margin: '0 0 12px' }}>{t('No reviews yet. Be the first to share your experience.', '아직 리뷰가 없어요. 첫 번째 리뷰를 남겨주세요.')}</p>
-          </div>
+          <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: '0 0 8px', textAlign: 'center' }}>{t('No reviews yet. Be the first to share your experience.', '아직 리뷰가 없어요. 첫 번째 리뷰를 남겨주세요.')}</p>
         )}
 
         {/* Review form */}
@@ -670,7 +673,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             </div>
           </div>
         ) : (
-          <div style={{ padding: '16px 0', textAlign: reviewCount > 0 ? 'left' : 'center' }}>
+          <div style={{ padding: '4px 0', textAlign: reviewCount > 0 ? 'left' : 'center' }}>
             <button
               onClick={() => setShowReviewForm(true)}
               style={{

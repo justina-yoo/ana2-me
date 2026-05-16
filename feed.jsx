@@ -102,9 +102,14 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
             </div>
             {filtered.length > 0 ? (
               <div className="product-grid">
-                {filtered.map((p, i) => {
+                {[...filtered].sort((a, b) => {
+                  const aPlaceholder = (a.imageUrl || '').includes('placeholder');
+                  const bPlaceholder = (b.imageUrl || '').includes('placeholder');
+                  return aPlaceholder - bPlaceholder;
+                }).map((p, i) => {
                   const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
-                  return <Reveal key={p.id}><ProductCard product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} /></Reveal>;
+                  const isPlaceholder = (p.imageUrl || '').includes('placeholder');
+                  return <Reveal key={p.id}><ProductCard product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} isPlaceholder={isPlaceholder} /></Reveal>;
                 })}
               </div>
             ) : (
@@ -121,7 +126,7 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
   );
 };
 
-window.ProductCard = function ProductCard({ product, lang, onClick, href, index }) {
+window.ProductCard = function ProductCard({ product, lang, onClick, href, index, isPlaceholder }) {
   const t = useL(lang);
   const name = lang === 'ko' && product.nameKo ? product.nameKo : product.name;
   const tag = lang === 'ko' && product.summary?.taglineKo ? product.summary.taglineKo : product.summary?.tagline;
@@ -130,7 +135,12 @@ window.ProductCard = function ProductCard({ product, lang, onClick, href, index 
     <a className="pcard" href={href || '#'} onClick={onClick} style={{ '--i': index, textDecoration: 'none', color: 'inherit' }}>
       <div className="pcard-img-wrap">
         <ProductImg src={product.imageUrl} alt={name} className="pcard-img" />
-        {topIng && (
+        {isPlaceholder && (
+          <span style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: 9, fontWeight: 500, fontStyle: 'italic', color: 'var(--ink-faint)', opacity: 0.6, whiteSpace: 'nowrap' }}>
+            {t('Photo coming soon', '사진 준비 중')}
+          </span>
+        )}
+        {!isPlaceholder && topIng && (
           <span className="pcard-ing-pill">
             <span className="pcard-ing-sym">{topIng.symbol}</span>
             <span>{lang === 'ko' && topIng.nameKo ? topIng.nameKo : topIng.name}</span>
