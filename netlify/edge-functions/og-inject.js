@@ -103,13 +103,6 @@ export default async function (request, context) {
         ]
       });
 
-      // Build FAQPage JSON-LD from question-format section headings
-      const faqItems = buildFAQItems(a.body_blocks);
-      faqLd = faqItems.length > 0 ? JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqItems
-      }) : null;
 
       ssrContent = renderArticleHTML(a);
 
@@ -131,7 +124,17 @@ export default async function (request, context) {
       image = p.image_url || '';
       pageUrl = `${SITE}/products/${slug}`;
 
-      jsonLd = JSON.stringify({
+      // Fetch reviews for aggregateRating
+      let reviewData = [];
+      try {
+        const revRes = await fetchWithTimeout(
+          `${SUPABASE_URL}/rest/v1/reviews?product_id=eq.${p.id}&select=rating`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+        );
+        reviewData = await revRes.json();
+      } catch(e) {}
+
+      const productLd = {
         "@context": "https://schema.org",
         "@type": "Product",
         "@id": `${pageUrl}#product`,
@@ -141,7 +144,18 @@ export default async function (request, context) {
         "image": image.startsWith('/') ? SITE + image : image,
         "url": pageUrl,
         "category": p.category || ''
-      });
+      };
+      if (reviewData.length > 0) {
+        const avg = reviewData.reduce((s, r) => s + r.rating, 0) / reviewData.length;
+        productLd.aggregateRating = {
+          "@type": "AggregateRating",
+          "ratingValue": avg.toFixed(1),
+          "reviewCount": reviewData.length,
+          "bestRating": "5",
+          "worstRating": "1"
+        };
+      }
+      jsonLd = JSON.stringify(productLd);
 
       breadcrumbLd = JSON.stringify({
         "@context": "https://schema.org",
@@ -249,9 +263,6 @@ export default async function (request, context) {
   }
   if (breadcrumbLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${breadcrumbLd}</script>\n</head>`);
-  }
-  if (faqLd) {
-    newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${faqLd}</script>\n</head>`);
   }
 
   // Inject SSR content AFTER root div for crawlers (outside React's control)
