@@ -71,24 +71,25 @@ window.Admin = function Admin() {
     });
   };
 
-  const handleSetRole = (id, role) => {
-    // role: 'hero', 'featured', or false
-    // If setting hero, unset any existing hero first
-    const updates = [];
-    if (role === 'hero') {
-      const currentHero = articles.find(a => a.featured === 'hero');
-      if (currentHero && currentHero.id !== id) {
-        updates.push(window.__supabase.toggleFeatured(currentHero.id, 'featured'));
-      }
+  const handleSetPin = (id, num) => {
+    if (!num) {
+      // Unpin
+      window.__supabase.toggleFeatured(id, null).then(function() {
+        setArticles(prev => prev.map(a => a.id === id ? { ...a, featured: null } : a));
+      });
+    } else {
+      // If another article has this number, swap it out
+      const existing = articles.find(a => a.featured === num && a.id !== id);
+      const updates = [window.__supabase.toggleFeatured(id, num)];
+      if (existing) updates.push(window.__supabase.toggleFeatured(existing.id, null));
+      Promise.all(updates).then(function() {
+        setArticles(prev => prev.map(a => {
+          if (a.id === id) return { ...a, featured: num };
+          if (existing && a.id === existing.id) return { ...a, featured: null };
+          return a;
+        }));
+      });
     }
-    updates.push(window.__supabase.toggleFeatured(id, role));
-    Promise.all(updates).then(function() {
-      setArticles(prev => prev.map(a => {
-        if (a.id === id) return { ...a, featured: role };
-        if (role === 'hero' && a.featured === 'hero') return { ...a, featured: 'featured' };
-        return a;
-      }));
-    });
   };
 
   return (
@@ -103,61 +104,47 @@ window.Admin = function Admin() {
             border: tab === t ? '1px solid var(--ink)' : '1px solid var(--line)',
             background: tab === t ? 'var(--ink)' : 'var(--cream-card)',
             color: tab === t ? '#fff' : 'var(--ink-soft)', cursor: 'pointer', textTransform: 'capitalize',
-          }}>{t === 'featured' ? 'Featured Articles' : 'Reviews'}</button>
+          }}>{t === 'featured' ? 'Homepage Pins' : 'Reviews'}</button>
         ))}
       </div>
 
-      {/* Featured Articles Tab */}
+      {/* Homepage Pins Tab */}
       {tab === 'featured' && (
         <div>
           <p style={{ fontSize: 13, color: 'var(--ink-faint)', marginBottom: 16 }}>
-            Star articles to feature them. Then use the dropdown to assign one as <strong>Hero</strong> and up to 3 as <strong>Featured</strong>.
+            Pin up to 4 articles. <strong>#1</strong> = hero (big card). <strong>#2-4</strong> = "Read these first" section below.
           </p>
           {loading ? <p style={{ color: 'var(--ink-faint)' }}>Loading...</p> : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {(() => {
-                const starred = articles.filter(a => a.featured);
-                const unstarred = articles.filter(a => !a.featured);
-                return [...starred, ...unstarred].map(a => {
-                  const isStarred = !!a.featured;
-                  const role = a.featured; // 'hero', 'featured', or false
+                const pinned = articles.filter(a => a.featured).sort((a, b) => parseInt(a.featured) - parseInt(b.featured));
+                const unpinned = articles.filter(a => !a.featured);
+                return [...pinned, ...unpinned].map(a => {
+                  const num = a.featured ? parseInt(a.featured) : 0;
+                  const isPinned = num > 0;
                   return (
                     <div key={a.id} style={{
                       display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
-                      background: role === 'hero' ? 'rgba(245,166,35,0.08)' : isStarred ? 'rgba(45,90,61,0.06)' : 'var(--cream-card)',
-                      border: role === 'hero' ? '1px solid rgba(245,166,35,0.4)' : isStarred ? '1px solid rgba(45,90,61,0.3)' : '1px solid var(--line)',
+                      background: num === 1 ? 'rgba(245,166,35,0.08)' : isPinned ? 'rgba(45,90,61,0.06)' : 'var(--cream-card)',
+                      border: num === 1 ? '1px solid rgba(245,166,35,0.4)' : isPinned ? '1px solid rgba(45,90,61,0.3)' : '1px solid var(--line)',
                       borderRadius: 'var(--radius-sm)',
                     }}>
-                      <button onClick={() => {
-                        if (isStarred) {
-                          // Unstar
-                          window.__supabase.toggleFeatured(a.id, false).then(function() {
-                            setArticles(prev => prev.map(x => x.id === a.id ? { ...x, featured: false } : x));
-                          });
-                        } else {
-                          // Star as featured by default
-                          window.__supabase.toggleFeatured(a.id, 'featured').then(function() {
-                            setArticles(prev => prev.map(x => x.id === a.id ? { ...x, featured: 'featured' } : x));
-                          });
-                        }
-                      }} style={{
-                        fontSize: 20, background: 'none', border: 'none', cursor: 'pointer',
-                        color: isStarred ? '#f5a623' : 'var(--line)',
-                      }}>{isStarred ? '\u2605' : '\u2606'}</button>
-                      {isStarred && (
-                        <select
-                          value={role || 'featured'}
-                          onChange={(e) => handleSetRole(a.id, e.target.value)}
-                          style={{
-                            fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
-                            border: '1px solid var(--line)', background: role === 'hero' ? '#f5a623' : 'var(--accent)',
-                            color: '#fff', cursor: 'pointer', flexShrink: 0, appearance: 'auto',
-                          }}
-                        >
-                          <option value="hero">Hero</option>
-                          <option value="featured">Featured</option>
-                        </select>
-                      )}
+                      <select
+                        value={a.featured || ''}
+                        onChange={(e) => handleSetPin(a.id, e.target.value || null)}
+                        style={{
+                          fontSize: 12, fontWeight: 700, padding: '4px 6px', borderRadius: 6,
+                          border: '1px solid var(--line)', cursor: 'pointer', flexShrink: 0, width: 44,
+                          background: num === 1 ? '#f5a623' : isPinned ? 'var(--accent)' : 'var(--cream-card)',
+                          color: isPinned ? '#fff' : 'var(--ink-faint)',
+                        }}
+                      >
+                        <option value="">—</option>
+                        <option value="1">#1</option>
+                        <option value="2">#2</option>
+                        <option value="3">#3</option>
+                        <option value="4">#4</option>
+                      </select>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: a.tagColor }}>{a.tag.en}</span>
                         <h4 style={{ fontSize: 14, fontWeight: 500, margin: '2px 0 0', color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.title.en}</h4>

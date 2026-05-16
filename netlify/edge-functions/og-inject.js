@@ -115,7 +115,7 @@ export default async function (request, context) {
 
     } else if (productMatch) {
       const slug = productMatch[1];
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13'];
+      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,name_ko,brand,summary,image_url,category,ingredients,notes,bio_values`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
@@ -168,7 +168,7 @@ export default async function (request, context) {
 
     } else if (isProductListing) {
       // SSR product listing — only show visible products (must match feed.jsx filter)
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13'];
+      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&id=in.(${VISIBLE_PRODUCTS.join(',')})&order=updated_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }

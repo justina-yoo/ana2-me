@@ -12,17 +12,18 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
       window.__supabase.fetchFeaturedArticles(),
       window.__supabase.fetchLatestArticles(20)
     ]).then(function([feat, recent]) {
-      // Hero = article with featured='hero', Featured = articles with featured='featured'
-      const heroArticle = feat.find(a => a.featured === 'hero');
-      const featArticles = feat.filter(a => a.featured === 'featured').slice(0, 3);
-      if (heroArticle) {
-        setHero(heroArticle);
-      } else if (feat.length > 0) {
-        setHero(feat[0]);
+      // #1 = hero, #2-4 = featured section
+      const sorted = feat.sort((a, b) => parseInt(a.featured) - parseInt(b.featured));
+      const pin1 = sorted.find(a => a.featured === '1');
+      const pins234 = sorted.filter(a => ['2','3','4'].includes(a.featured));
+      if (pin1) {
+        setHero(pin1);
+      } else if (sorted.length > 0) {
+        setHero(sorted[0]);
       } else if (recent.length > 0) {
         setHero(recent[0]);
       }
-      setFeatured(featArticles);
+      setFeatured(pins234);
       setArticles(recent);
       setLoading(false);
     });
@@ -119,7 +120,11 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
             paddingBottom: 8, paddingRight: 40,
             WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none',
           }}>
-            {products.map(p => {
+            {[...products].sort((a, b) => {
+              const aP = (a.imageUrl || '').includes('placeholder');
+              const bP = (b.imageUrl || '').includes('placeholder');
+              return aP - bP;
+            }).map(p => {
               const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
               const name = isKo && p.nameKo ? p.nameKo : p.name;
               return (

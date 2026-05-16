@@ -709,7 +709,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
 
         {/* Related products — matched by content overlap */}
         {window.PRODUCTS && (() => {
-          const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13'];
+          const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
           // Build haystack from all article text
           const texts = [post.keywords || '', post.title.en || '', post.title.ko || '', post.excerpt.en || '', post.excerpt.ko || ''];
           (post.bodyBlocks || []).forEach(function extractText(b) {
