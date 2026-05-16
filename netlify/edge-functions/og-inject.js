@@ -199,14 +199,14 @@ export default async function (request, context) {
     const response = await context.next();
     const html = await response.text();
     const fallbackContent = articleMatch
-      ? `<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading article…</p><p><a href="/insights">Browse all articles</a></p></main>`
+      ? `<div id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading article…</p><p><a href="/insights">Browse all articles</a></p></div>`
       : productMatch
-      ? `<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading product…</p><p><a href="/products">Browse all products</a></p></main>`
+      ? `<div id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p>Loading product…</p><p><a href="/products">Browse all products</a></p></div>`
       : isListing
-      ? `<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p><a href="/insights">Insights</a> · <a href="/products">Products</a> · <a href="/about">About</a></p></main>`
+      ? `<div id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px"><p><a href="/insights">Insights</a> · <a href="/products">Products</a> · <a href="/about">About</a></p></div>`
       : '';
     const newHtml = fallbackContent
-      ? html.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1${fallbackContent}</div>`)
+      ? html.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1</div>${fallbackContent}<script>document.getElementById('ssr').style.display='none'</script>`)
       : html;
     return new Response(newHtml, { headers: response.headers });
   }
@@ -254,10 +254,11 @@ export default async function (request, context) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${faqLd}</script>\n</head>`);
   }
 
-  // Inject SSR content inside <div id="root"> for crawlers
-  // React removes it on mount via useEffect in App component
+  // Inject SSR content AFTER root div for crawlers (outside React's control)
+  // Script immediately hides it for JS users; crawlers (no JS) see it
   if (ssrContent) {
-    newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1<main id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</main></div>`);
+    const ssrBlock = `<div id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</div><script>document.getElementById('ssr').style.display='none'</script>`;
+    newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1</div>${ssrBlock}`);
   }
 
   // Set cache headers based on page type

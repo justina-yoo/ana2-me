@@ -15,7 +15,7 @@ function postSlug(post) {
 
 const PAGE_SIZE = 10;
 
-window.Insights = function Insights({ lang, density, query, onResultCount }) {
+window.Insights = function Insights({ lang, density, query }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const [POSTS, setPOSTS] = useState([]);
@@ -130,13 +130,6 @@ window.Insights = function Insights({ lang, density, query, onResultCount }) {
     });
   }
 
-  // If URL points to an article but it hasn't resolved yet, show skeleton instead of flashing the feed
-  const pathNow = window.location.pathname;
-  if (pathNow.startsWith('/article/') && !notFound) {
-    return React.createElement('div', { style: { maxWidth: 720, margin: '0 auto', padding: '40px 28px' } },
-      React.createElement(ArticleSkeleton)
-    );
-  }
 
   const q = (query || '').trim().toLowerCase();
   let filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;
@@ -153,13 +146,6 @@ window.Insights = function Insights({ lang, density, query, onResultCount }) {
     });
   }
 
-  // Report result count to parent for search page logic
-  useEffect(() => {
-    if (onResultCount && q) onResultCount(filteredPosts.length);
-  }, [filteredPosts.length, q]);
-
-  // If searching and no article results, don't render anything (parent handles empty state)
-  if (q && filteredPosts.length === 0 && !loading) return null;
 
   if (fetchError) {
     return <ErrorCard icon="📡" title={isKo ? '글을 불러올 수 없어요' : 'Couldn\u2019t load articles'} message={isKo ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />;

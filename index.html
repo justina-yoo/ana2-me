@@ -253,9 +253,6 @@
         setView(p ? 'detail' : 'feed');
       };
 
-      // Search result tracking
-      const [articleResultCount, setArticleResultCount] = useState(null);
-
       // Tweaks
       const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
       const [tweaksOpen, setTweaksOpen] = useState(false);
@@ -265,12 +262,6 @@
         setTweaks(next);
         window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
       };
-
-      // Remove SSR content now that React has mounted
-      useEffect(() => {
-        const ssr = document.getElementById('ssr');
-        if (ssr) ssr.remove();
-      }, []);
 
       // Handle direct URL navigation (e.g. /about, /insights)
       useEffect(() => {
@@ -363,14 +354,10 @@
               (p.ingredients || []).some(ing => ing.name.toLowerCase().includes(q) || (ing.nameKo || '').toLowerCase().includes(q)) ||
               (p.summary?.tagline || '').toLowerCase().includes(q)
             ) : [];
-            const hasProducts = matchedProducts.length > 0;
-            const hasArticles = articleResultCount === null || articleResultCount > 0;
-            const noResults = q && !hasProducts && !hasArticles;
 
             return (
               <>
-                {/* Product results (shown first) */}
-                {q && hasProducts && (
+                {q && matchedProducts.length > 0 && (
                   <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 28px 24px' }}>
                     <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
                       {lang === 'ko' ? '관련 제품' : 'Related products'}
@@ -395,26 +382,7 @@
                     </div>
                   </div>
                 )}
-
-                {/* Article results */}
-                <Insights lang={lang} density={density} query={query} onResultCount={setArticleResultCount} />
-
-                {/* No results for both */}
-                {noResults && (
-                  <div style={{ maxWidth: 720, margin: '0 auto', padding: '48px 28px', textAlign: 'center' }}>
-                    <p style={{ fontSize: 15, color: 'var(--ink-faint)', margin: '0 0 24px' }}>
-                      {lang === 'ko' ? `"${query}"에 대한 검색 결과가 없어요.` : `No results found for "${query}".`}
-                    </p>
-                    <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-                      <a href="/insights" onClick={(e) => { e.preventDefault(); setQuery(''); history.pushState({}, '', '/insights'); }} style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--accent)', borderRadius: 'var(--radius-pill)' }}>
-                        {lang === 'ko' ? '인사이트 보기' : 'Browse Insights'}
-                      </a>
-                      <a href="/products" onClick={(e) => { e.preventDefault(); setQuery(''); setView('feed'); history.pushState({}, '', '/products'); }} style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--accent)', borderRadius: 'var(--radius-pill)' }}>
-                        {lang === 'ko' ? '제품 보기' : 'Browse Products'}
-                      </a>
-                    </div>
-                  </div>
-                )}
+                <Insights lang={lang} density={density} query={query} />
               </>
             );
           })()}

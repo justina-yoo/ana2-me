@@ -6,6 +6,23 @@ Persistent archive of every X post drafted by the X Post Writer agent. Newest at
 
 ## 2026-05-16 — Manual (X Post Writer)
 
+### Your Brain Stops Smelling Your Perfume After 20 Minutes
+- **Article:** https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing
+- **Tag:** fragrance · **Pub date:** 2026-05-06
+- **Overlap check:** not in posted-to-x.md, not previously drafted — safe to post
+
+**Link post (utm_source=twitter) — one sentence, flat factual hook:**
+> Twenty minutes is all it takes for your brain to start filtering out your own perfume.
+> https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing?utm_source=twitter
+
+**Alternative hooks (one sentence each, varied structure):**
+> Nobody wears the same outfit every day, and your nose feels the same way about your signature scent.
+> Why does your perfume disappear after 20 minutes when it's still strong on someone else?
+
+**Status:** drafted (shown in chat)
+
+---
+
 ### Sugar Is Aging Your Skin Faster Than the Sun
 - **Article:** https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging
 - **Tag:** skincare · **Pub date:** 2026-05-06
