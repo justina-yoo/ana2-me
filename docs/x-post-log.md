@@ -6,6 +6,23 @@ Persistent archive of every X post drafted by the X Post Writer agent. Newest at
 
 ## 2026-05-16 — Manual (X Post Writer)
 
+### Rejuran Started as a $500 Clinic Injection. Now It's a $30 Ampoule.
+- **Article:** https://ana2-me.com/article/skincare/2026-05-16/rejuran-clinic-injection-to-ampoule-topical
+- **Tag:** skincare · **Pub date:** 2026-05-16
+- **Overlap check:** not in posted-to-x.md, not previously drafted — safe to post
+
+**Link post (utm_source=twitter) — one sentence, price-gap comparative:**
+> The $30 Rejuran ampoule and the $500 Rejuran injection contain different molecules entirely.
+> https://ana2-me.com/article/skincare/2026-05-16/rejuran-clinic-injection-to-ampoule-topical?utm_source=twitter
+
+**Alternative hooks (one sentence each, varied structure):**
+> Kim Kardashian's "salmon sperm facial" is the same treatment Koreans pay $500 a session for in clinics.
+> Topical Rejuran can't reach the layer where injectable Rejuran works, because almost every active in the bottle is too big to cross your skin.
+
+**Status:** drafted (shown in chat)
+
+---
+
 ### Korean Dermatologists Have Been Injecting Salmon DNA for Decades
 - **Article:** https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna
 - **Tag:** skincare · **Pub date:** 2026-05-06
