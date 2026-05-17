@@ -3,13 +3,13 @@
   <!-- Home / Insights -->
   <url>
     <loc>https://ana2-me.com/</loc>
-    <lastmod>2026-05-16</lastmod>
+    <lastmod>2026-05-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/insights</loc>
-    <lastmod>2026-05-16</lastmod>
+    <lastmod>2026-05-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,24 +17,48 @@
   <!-- Static pages -->
   <url>
     <loc>https://ana2-me.com/about</loc>
-    <lastmod>2026-05-16</lastmod>
+    <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/products</loc>
-    <lastmod>2026-05-16</lastmod>
+    <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/privacy</loc>
-    <lastmod>2026-05-16</lastmod>
+    <lastmod>2026-05-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- Articles -->
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-17/glutathione-oral-strips-brightening-korea</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-17/heartleaf-houttuynia-cordata-oily-sensitive-skin</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-17/oily-dehydrated-skin-barrier-stripping</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-17/jungkook-womens-perfume-gendered-fragrance-myth</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-16/snail-mucin-molecular-what-it-does</loc>
     <lastmod>2026-05-16</lastmod>
@@ -198,37 +222,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/skin-barrier-2026</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -246,18 +240,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/k-fragrance-skin-scents</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -270,6 +252,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/tropical-fruit-fragrance</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -277,12 +265,6 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -312,12 +294,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -335,8 +311,62 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/skin-barrier-2026</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Products -->
+  <url>
+    <loc>https://ana2-me.com/products/standard-seoul-firming-bouncy-boost-serum</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://ana2-me.com/products/cosrx-advanced-snail-92-all-in-one-cream</loc>
     <lastmod>2026-05-16</lastmod>

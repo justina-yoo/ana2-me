@@ -47,7 +47,7 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
           <ArtSection key={idx}>
             {(block.heading || block.title) && <ArtSectionHeading>{txt(block.heading || block.title)}</ArtSectionHeading>}
             {hasBody && <ArtBody key={idx+'-body'} dangerouslySetInnerHTML={html(block.body)} />}
-            {block.children && block.children.map((child, ci) => renderBlock(child, `${idx}-${ci}`))}
+            {block.children && <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>{block.children.map((child, ci) => renderBlock(child, `${idx}-${ci}`))}</div>}
           </ArtSection>
         );
       }
