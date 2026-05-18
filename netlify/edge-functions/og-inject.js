@@ -161,7 +161,7 @@ export default async function (request, context) {
 
       title = p.brand + ' ' + p.name + ' | ana2me';
       description = p.summary?.tagline || '';
-      image = p.image_url || '';
+      image = (p.image_url || '').startsWith('/') ? SITE + p.image_url : (p.image_url || '');
       pageUrl = `${SITE}/products/${slug}`;
 
       // Fetch reviews for aggregateRating
@@ -301,7 +301,9 @@ export default async function (request, context) {
       ssrContent = html;
 
     } else if (isProductListing) {
-      // SSR product listing
+      title = 'Products | ana2me';
+      description = `Independent ingredient analysis of Korean skincare products. Every molecule decoded — browse ${SITE}/products.`;
+      pageUrl = `${SITE}/products`;
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&category=eq.skincare&order=created_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
@@ -309,11 +311,42 @@ export default async function (request, context) {
       const products = await res.json();
       if (products && products.length) {
         ssrContent = renderProductListing(products);
+        jsonLd = JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          'name': title,
+          'description': description,
+          'url': pageUrl,
+          'numberOfItems': products.length,
+          'isPartOf': { '@type': 'WebSite', 'name': 'ana2me', 'url': SITE },
+        });
       }
     } else if (brandMatch) {
       const brandSlug = brandMatch[1];
       const brandName = brandSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
       pageUrl = `${SITE}/brands/${brandSlug}`;
+
+      // Brand descriptions for SSR + AI crawlers
+      const BRAND_DESC = {
+        'arencia': 'A vegan Korean brand that blends sustainability with artisanal skincare methods, rooted in traditional herbal care.',
+        'biodance': 'A Seoul-based biotech skincare brand fusing biotechnology with dermatological science. Known for the viral Real Deep Collagen Mask.',
+        'cosrx': "One of K-beauty's most recognized brands globally, focused on proven actives like snail mucin, BHA, and centella.",
+        'chanel': 'The French luxury house whose fragrance division has shaped modern perfumery since No. 5 debuted in 1921.',
+        'diptyque': 'A Parisian fragrance maison founded in 1961, known for sophisticated unisex compositions balancing botanical precision with artistic storytelling.',
+        'dr-jart': 'A Korean dermocosmetic brand bridging dermatology clinics and daily skincare with clinical-grade actives.',
+        'eiom': "A microbiome-focused K-beauty brand for acne-prone and sensitive skin, centered on fermented biotics and tea tree biome complexes.",
+        'jo-malone-london': 'A British fragrance house known for elegant simplicity and the art of layering.',
+        'la-roche-posay': 'A French dermocosmetic brand recommended by over 90,000 dermatologists worldwide.',
+        'lavida': 'A Korean anti-aging brand by Coreana Cosmetics applying cell signaling science to skincare.',
+        'medicube': 'A Korean beauty-tech brand bringing dermatology clinic technology into at-home devices and skincare.',
+        'mediheal': "Korea's #1 sheet mask brand selling over 1 billion masks globally.",
+        'medion': 'A Japanese skincare brand pioneering carbonated beauty with CO2 gel masks.',
+        'round-lab': "A Korean skincare brand built around Korea's natural water sources — Dokdo deep sea water, birch juice, mugwort.",
+        'standard-seoul': 'A K-beauty brand redefining fast-acting skincare with patented capsule formulas and encapsulated actives.',
+        'tamburins': "A Korean fragrance brand under Gentle Monster's parent company, blending minimalist aesthetics with art-forward storytelling.",
+        'beplain': 'A Korean clean beauty pioneer with award-winning Mung Bean line, built on a philosophy of returning to nature.',
+        'mixsoon': 'A Korean skincare brand built around minimalism and single-core ingredients at maximum concentration.',
+      };
 
       // Fetch brand's products for rich SSR
       const res = await fetchWithTimeout(
@@ -332,16 +365,20 @@ export default async function (request, context) {
       }));
       const topIngs = Object.values(ingCounts).sort((a, b) => b.count - a.count).slice(0, 6);
 
+      const brandDesc = BRAND_DESC[brandSlug] || '';
       title = `${actualBrandName} | ana2me`;
-      description = `Independent ingredient analysis of ${actualBrandName} products on ana2me. ${brandProducts.length} products analyzed.`;
+      description = brandDesc || `Independent ingredient analysis of ${actualBrandName} products on ana2me. ${brandProducts.length} products analyzed.`;
+      image = `${SITE}/og-default.png`;
 
       // Build rich SSR content
       let ssrParts = [`<article><h1>${escHtml(actualBrandName)}</h1>`];
-      ssrParts.push(`<p>${escHtml(description)}</p>`);
+      if (brandDesc) ssrParts.push(`<p>${escHtml(brandDesc)}</p>`);
+      ssrParts.push(`<p>${brandProducts.length} products analyzed on ana2me. Independent ingredient analysis — not affiliated with ${escHtml(actualBrandName)}.</p>`);
       if (brandProducts.length > 0) {
         ssrParts.push(`<h2>Products (${brandProducts.length})</h2><ul>`);
         brandProducts.forEach(p => {
-          ssrParts.push(`<li><strong>${escHtml(p.name)}</strong>${p.summary?.tagline ? ' — ' + escHtml(p.summary.tagline) : ''}</li>`);
+          const pSlug = ((p.brand || '').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + (p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
+          ssrParts.push(`<li><a href="/products/${pSlug}"><strong>${escHtml(p.name)}</strong></a>${p.summary?.tagline ? ' — ' + escHtml(p.summary.tagline) : ''}</li>`);
         });
         ssrParts.push('</ul>');
       }
@@ -352,18 +389,32 @@ export default async function (request, context) {
         });
         ssrParts.push('</ul>');
       }
-      ssrParts.push(`<nav><a href="/brands">All brands</a> · <a href="/products">Products</a></nav></article>`);
+      ssrParts.push(`<nav><a href="/brands">All brands</a> · <a href="/products">Products</a> · <a href="/insights">Articles</a></nav></article>`);
       ssrContent = ssrParts.join('');
 
-      jsonLd = JSON.stringify({
+      const brandLdObj = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
         'name': title,
         'description': description,
         'url': pageUrl,
         'numberOfItems': brandProducts.length,
+        'about': {
+          '@type': 'Brand',
+          'name': actualBrandName,
+          'description': brandDesc || description,
+        },
         'isPartOf': { '@type': 'WebSite', 'name': 'ana2me', 'url': SITE },
-      });
+      };
+      if (topIngs.length > 0) {
+        brandLdObj.mainEntity = topIngs.map(i => ({
+          '@type': 'DefinedTerm',
+          'name': i.name,
+          'description': i.science,
+          'inDefinedTermSet': 'Skincare Ingredients'
+        }));
+      }
+      jsonLd = JSON.stringify(brandLdObj);
     } else if (isBrands) {
       title = 'Brands | ana2me';
       description = 'Browse skincare, fragrance, and wellness brands with independent ingredient analysis on ana2me.';
@@ -380,7 +431,47 @@ export default async function (request, context) {
       title = 'About | ana2me';
       description = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';
       pageUrl = `${SITE}/about`;
-      ssrContent = `<article><h1>About ana2me</h1><p>${escHtml(description)}</p><p>We break down ingredients using molecular data so you can make informed decisions about skincare, fragrance, and wellness products.</p><nav><a href="/insights">Read our articles</a> · <a href="/products">Browse products</a></nav></article>`;
+
+      // Rich SSR with FAQ
+      let aboutHtml = `<article><h1>About ana2me</h1>`;
+      aboutHtml += `<p>${escHtml(description)}</p>`;
+      aboutHtml += `<p>We break down ingredients using molecular data so you can make informed decisions about skincare, fragrance, and wellness products.</p>`;
+      aboutHtml += `<section><h2>Frequently Asked Questions</h2>`;
+      const faqs = [
+        { q: "What does 'ana2me' mean?", a: "It's a play on three words: anatomy, analyze, and 'to me'. Understanding what's inside a product is half the equation — understanding your own body is the other half." },
+        { q: "Who is this for?", a: "For anyone who has bought something because an ad was convincing or an influencer raved about it — and then it didn't work. We cut through the noise and tell you what's actually in the bottle." },
+        { q: "What is the Analyzer?", a: "A tool that lets you paste any ingredient list and get a plain-language breakdown of what's in it, what it does, and whether the formula makes sense for your concerns." },
+        { q: "Why do products work differently on different people?", a: "Because your skin microbiome, pH, sebum production, hormones, and diet are unique. A product for combination skin in humid weather behaves differently on dry skin in cold weather." },
+        { q: "Will there be more features?", a: "Yes — we're building toward exploring products by ingredient, tracking what works for your body over time, and getting recommendations grounded in molecular data rather than marketing." },
+      ];
+      for (const f of faqs) {
+        aboutHtml += `<h3>${escHtml(f.q)}</h3><p>${escHtml(f.a)}</p>`;
+      }
+      aboutHtml += `</section>`;
+      aboutHtml += `<nav><a href="/insights">Read our articles</a> · <a href="/products">Browse products</a> · <a href="/brands">Browse brands</a></nav>`;
+      aboutHtml += `</article>`;
+      ssrContent = aboutHtml;
+
+      // FAQ JSON-LD
+      faqLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': faqs.map(f => ({
+          '@type': 'Question',
+          'name': f.q,
+          'acceptedAnswer': { '@type': 'Answer', 'text': f.a }
+        }))
+      });
+
+      // AboutPage JSON-LD
+      jsonLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        'name': title,
+        'description': description,
+        'url': pageUrl,
+        'isPartOf': { '@type': 'WebSite', 'name': 'ana2me', 'url': SITE },
+      });
     } else if (isAnalyzer) {
       title = 'Ingredient Analyzer | ana2me';
       description = 'Paste any skincare, supplement, or wellness ingredient list and get a plain-language breakdown of what works for your body — powered by molecular data.';
@@ -456,7 +547,7 @@ export default async function (request, context) {
   // Inject SSR content AFTER root div for crawlers (outside React's control)
   // Script immediately hides it for JS users; crawlers (no JS) see it
   if (ssrContent) {
-    const ssrBlock = `<div id="ssr" style="max-width:720px;margin:0 auto;padding:0 28px 80px">${ssrContent}</div><script>document.getElementById('ssr').style.display='none'</script>`;
+    const ssrBlock = `<div id="ssr" style="display:none">${ssrContent}</div><noscript><style>#ssr{display:block!important;max-width:720px;margin:0 auto;padding:0 28px 80px}</style></noscript>`;
     newHtml = newHtml.replace(/(<div\s+id="root"[^>]*>)<\/div>/, `$1</div>${ssrBlock}`);
   }
 
@@ -692,6 +783,15 @@ function renderProductHTML(p) {
     }
     html += `</dl></section>`;
   }
+
+  // Navigation links for crawlers
+  const brandSlug = (p.brand || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+  html += `<nav>`;
+  html += `<a href="/brands/${brandSlug}">More from ${escHtml(p.brand || '')}</a>`;
+  html += ` · <a href="/products">All products</a>`;
+  html += ` · <a href="/brands">All brands</a>`;
+  html += ` · <a href="/insights">Articles</a>`;
+  html += `</nav>`;
 
   html += `</article>`;
   return html;

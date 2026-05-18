@@ -186,7 +186,7 @@ window.ProductCard = function ProductCard({ product, lang, onClick, href, index,
         )}
       </div>
       <div className="pcard-body">
-        <a className="pcard-brand" href={'/brands/' + product.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')} onClick={(e) => { e.stopPropagation(); e.preventDefault(); history.pushState({}, '', '/brands/' + product.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ textDecoration: 'none', color: 'inherit' }} onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'} onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}>{product.brand}</a>
+        <span className="pcard-brand">{product.brand}</span>
         <h3 className="pcard-name">{name}</h3>
       </div>
       <span className="pcard-arrow"><Icon name="arrow" size={16} /></span>
