@@ -203,6 +203,36 @@ export default async function (request, context) {
           "reviewBody": description
         };
       }
+      // Ingredient schema — structured data for AI engines
+      const ingredients = p.ingredients || [];
+      if (ingredients.length > 0) {
+        productLd.additionalProperty = ingredients.map((ing, i) => ({
+          "@type": "PropertyValue",
+          "name": ing.name || '',
+          "description": ing.science || ing.description || '',
+        }));
+
+        // Separate ItemList for richer ingredient discovery
+        const ingredientListLd = {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": `Key Ingredients in ${p.brand} ${p.name}`,
+          "numberOfItems": ingredients.length,
+          "itemListElement": ingredients.map((ing, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "DefinedTerm",
+              "name": ing.name || '',
+              "description": ing.science || ing.description || '',
+              "inDefinedTermSet": "Skincare Ingredients"
+            }
+          }))
+        };
+        // Inject as separate JSON-LD block (reuse faqLd slot since products don't have FAQ)
+        faqLd = JSON.stringify(ingredientListLd);
+      }
+
       jsonLd = JSON.stringify(productLd);
 
       breadcrumbLd = JSON.stringify({
