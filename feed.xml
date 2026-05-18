@@ -5,13 +5,31 @@
     <link>https://ana2-me.com</link>
     <description>Deep molecular analysis of skincare, fragrance, and wellness ingredients.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 18 May 2026 12:08:03 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 18 May 2026 12:31:00 GMT</lastBuildDate>
     <atom:link href="https://ana2-me.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://ana2-me.com/og-default.png</url>
       <title>ana2me</title>
       <link>https://ana2-me.com</link>
     </image>
+    <item>
+      <title>Jisoo Is a Dior Ambassador Who Uses a ¥900 Japanese Toner. Here's Why Arbutin Is Her Smartest Skincare Choice.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-18/jisoo-blackpink-drugstore-skincare-arbutin</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-18/jisoo-blackpink-drugstore-skincare-arbutin</guid>
+      <description>BLACKPINK's Jisoo has access to every luxury product on the planet. Yet her daily routine centers on Hada Labo's arbutin toner, Laneige Cream Skin, and Vaseline. The science says she's making the right call.</description>
+      <pubDate>Sun, 17 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://upload.wikimedia.org/wikipedia/commons/9/93/Jisoo_in_2022.jpg" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Azelaic Acid Is the Only Ingredient That Fights Acne, Rosacea, and Pigmentation at Once. Why Isn't Everyone Using It?</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-18/azelaic-acid-acne-rosacea-pigmentation</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-18/azelaic-acid-acne-rosacea-pigmentation</guid>
+      <description>Azelaic acid is antibacterial, anti-inflammatory, and anti-melanogenic — all at once. It's pregnancy-safe, works at every skin tone, and outperforms hydroquinone without the side effects. Yet most people have never heard of it.</description>
+      <pubDate>Sun, 17 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.pexels.com/photos/7670764/pexels-photo-7670764.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
     <item>
       <title>Copper Peptides Activate 4,000 Genes. Here's Why GHK-Cu Is 2026's Most Overhyped — and Underrated — Ingredient.</title>
       <link>https://ana2-me.com/article/skincare/2026-05-18/copper-peptide-ghk-cu-overhyped-underrated</link>
@@ -319,15 +337,6 @@
       <enclosure url="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
-      <title>&quot;Microneedling in a Bottle&quot; Is K-Beauty's Most Controversial New Ingredient. Here's the Science.</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</guid>
-      <description>Spicules are microscopic needles from freshwater sponges that create micro-channels in skin, boosting active ingredient penetration and triggering collagen production. Same principle as professional microneedling — but at home. K-beauty's hottest ingredient of 2026.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
       <title>Probiotics Were Just the Beginning. Postbiotics Are What Your Skin Barrier Actually Needs.</title>
       <link>https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</link>
       <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</guid>
@@ -335,6 +344,15 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Wellness</category>
       <enclosure url="https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</guid>
+      <description>PDRN — Polydeoxyribonucleotide — is a DNA fragment from salmon that activates your skin's A2A adenosine receptors, triggering a collagen repair cascade used in Korean clinics for decades. Topical delivery just caught up.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Sugar Is Aging Your Skin Faster Than the Sun. The Science of Glycation.</title>
@@ -355,15 +373,6 @@
       <enclosure url="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
-      <title>Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</guid>
-      <description>PDRN — Polydeoxyribonucleotide — is a DNA fragment from salmon that activates your skin's A2A adenosine receptors, triggering a collagen repair cascade used in Korean clinics for decades. Topical delivery just caught up.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
       <title>Galactomyces Started in a Sake Brewery. Now It's One of Skincare's Most Studied Actives.</title>
       <link>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</link>
       <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</guid>
@@ -382,6 +391,15 @@
       <enclosure url="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
+      <title>Why Your Perfume Smells Different on You Than in the Bottle.</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</guid>
+      <description>The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
       <title>Korea Is Eating Its Skincare Now. The Gut-Skin Science Says They're Right.</title>
       <link>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</link>
       <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</guid>
@@ -398,15 +416,6 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Fragrance</category>
       <enclosure url="https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Why Your Perfume Smells Different on You Than in the Bottle.</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</guid>
-      <description>The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Pistachio Is Up 852%. Here's Why Your Nose Can't Resist It.</title>
@@ -515,6 +524,15 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Skincare</category>
       <enclosure url="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>&quot;Microneedling in a Bottle&quot; Is K-Beauty's Most Controversial New Ingredient. Here's the Science.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</guid>
+      <description>Spicules are microscopic needles from freshwater sponges that create micro-channels in skin, boosting active ingredient penetration and triggering collagen production. Same principle as professional microneedling — but at home. K-beauty's hottest ingredient of 2026.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Jjimjilbangs Are Going Global. The Science Behind Korea's Oldest Wellness Ritual.</title>
