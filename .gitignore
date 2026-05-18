@@ -3,3 +3,4 @@ Thumbs.db
 .wrangler/
 node_modules/
 test-*.png
+.claude/settings.local.json
