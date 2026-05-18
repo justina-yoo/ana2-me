@@ -5,11 +5,12 @@
   <base href="/" />
   <title>ana2me — Know What's In Your Bottle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="naver-site-verification" content="07d956961a38e53b17bd59a8339fc4faeb25bf87" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="alternate" type="application/rss+xml" title="ana2me Insights" href="/feed.xml" />
-  <meta name="description" content="Deep molecular analysis of skincare, fragrance, and wellness ingredients. Evidence-based editorial for people who read labels." />
+  <meta name="description" content="Skincare, fragrance &amp; wellness — decoded at the molecular level." />
   <link rel="canonical" href="https://ana2-me.com/" />
   <link rel="alternate" hreflang="en" href="https://ana2-me.com/" />
   <link rel="alternate" hreflang="ko" href="https://ana2-me.com/" />
@@ -239,7 +240,7 @@
 
       const [products, setProducts] = useState(window.PRODUCTS || []);
       const [fetchError, setFetchError] = useState(null);
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
+      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14', 'skincare-15'];
       useEffect(() => {
         window.__supabase.fetchProducts().then(function(data) {
           window.PRODUCTS = data;
