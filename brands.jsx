@@ -231,7 +231,9 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
                   display: 'flex', alignItems: 'center', gap: 14, padding: '14px 0',
                   borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
                 }}>
-                  <ProductImg src={p.imageUrl} alt={name} style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: '6%' }} />
+                  <div style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', flexShrink: 0, background: 'var(--cream-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <img src={p.imageUrl} alt={name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.3, margin: '0 0 3px', color: 'var(--ink)' }}>{name}</h4>
                     {tagline && <p style={{ fontSize: 12, color: 'var(--ink-faint)', margin: '0 0 3px', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tagline}</p>}
