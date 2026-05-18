@@ -619,7 +619,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
                   )}
                 </div>
                 <button onClick={() => setShowReviewForm(true)} style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 600, color: '#fff', cursor: 'pointer', padding: '6px 14px', borderRadius: 'var(--radius-pill)', border: 'none', background: 'var(--accent)', transition: 'opacity 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
-                  {t('Write a review', '리뷰 작성하기')}
+                  {t('Rate & Review', '평가 및 리뷰')}
                 </button>
               </div>
             </>
@@ -678,7 +678,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           <div className="sheet-back" onClick={() => { setShowReviewForm(false); setReviewError(''); }}>
             <div className="sheet" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 420, padding: '28px 24px' }}>
               <button className="sheet-close" onClick={() => { setShowReviewForm(false); setReviewError(''); }}><Icon name="x" size={16} /></button>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, color: 'var(--ink)', margin: '0 0 20px' }}>{t('Write a Review', '리뷰 작성')}</h3>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, color: 'var(--ink)', margin: '0 0 20px' }}>{t('Rate & Review', '평가 및 리뷰')}</h3>
 
               <input id="rev-hp" type="text" style={{ position: 'absolute', left: '-9999px', tabIndex: -1 }} autoComplete="off" />
 

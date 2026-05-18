@@ -92,6 +92,16 @@ export default async function (request, context) {
         };
       }
 
+      // FAQ schema from article sections with "?" headings
+      const faqItems = buildFAQItems(a.body_blocks);
+      if (faqItems.length > 0) {
+        faqLd = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": faqItems
+        });
+      }
+
       jsonLd = JSON.stringify(articleLd);
 
       breadcrumbLd = JSON.stringify({
@@ -339,6 +349,9 @@ export default async function (request, context) {
   }
   if (breadcrumbLd) {
     newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${breadcrumbLd}</script>\n</head>`);
+  }
+  if (faqLd) {
+    newHtml = newHtml.replace('</head>', `<script type="application/ld+json">${faqLd}</script>\n</head>`);
   }
 
   // Inject SSR content AFTER root div for crawlers (outside React's control)

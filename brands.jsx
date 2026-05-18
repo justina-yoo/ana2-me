@@ -312,6 +312,10 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
           )}
         </p>
 
+        <a href="/brands" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/brands'); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ fontSize: 12, fontWeight: 500, textDecoration: 'underline', textUnderlineOffset: 3, color: '#a07850', display: 'inline-block', marginTop: 12 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+          {t('See all brands', '모든 브랜드 보기')}
+        </a>
+
         {(() => {
           const brandIngs = new Set(brandProducts.flatMap(p => (p.ingredients || []).map(i => i.name)));
           const scored = brands
