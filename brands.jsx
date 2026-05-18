@@ -430,12 +430,9 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
                     }}
                   >
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, color: 'var(--ink)', margin: '0 0 3px' }}>
+                      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, color: 'var(--ink)', margin: 0 }}>
                         {brand.name}
                       </h3>
-                      <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>
-                        {brand.products.length} {t('products', '\uac1c \uc81c\ud488')}
-                      </span>
                     </div>
                   </a>
                 </div>
