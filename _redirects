@@ -8,6 +8,9 @@
 /privacy/   /privacy     301
 /analyzer   /index.html  200
 /analyzer/  /analyzer    301
+/brands     /index.html  200
+/brands/    /brands      301
+/brands/:slug  /index.html  200
 /products   /index.html  200
 /products/  /products    301
 /products/:id  /index.html  200

@@ -128,7 +128,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'feed' && 'page-tab-active')}>
               {t('Products', '제품')}
             </a>
-            <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
+<a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
               {t('About', '소개')}
             </a>
             <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 8, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>

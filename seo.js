@@ -461,5 +461,50 @@
         'category': product.category,
       });
     },
+
+    setBrands: function () {
+      var title = 'Brands | ana2me';
+      var desc = 'Browse skincare, fragrance, and wellness brands with independent ingredient analysis on ana2me.';
+      var url = BASE_URL + '/brands';
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'website');
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setArticleJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': title,
+        'description': desc,
+        'url': url,
+      });
+    },
+
+    setBrand: function (brandName) {
+      var slug = brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+      var title = brandName + ' | ana2me';
+      var desc = 'Independent ingredient analysis of ' + brandName + ' products on ana2me.';
+      var url = BASE_URL + '/brands/' + slug;
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'website');
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setArticleJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': title,
+        'description': desc,
+        'url': url,
+      });
+    },
   };
 })();

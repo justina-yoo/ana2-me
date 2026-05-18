@@ -82,13 +82,12 @@ async function generate() {
 
 
 
-  // Individual product pages — only visible ones (must match feed.jsx filter)
-  const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
-  const visibleProducts = products.filter(p => VISIBLE_PRODUCTS.includes(p.id));
+  // Products
+  const skincareProducts = products.filter(p => (p.category || 'skincare') === 'skincare');
   xml += `
 
   <!-- Products -->`;
-  for (const p of visibleProducts) {
+  for (const p of skincareProducts) {
     const slug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
     const lastmod = p.updated_at ? p.updated_at.slice(0, 10) : today;
     xml += `
@@ -100,12 +99,34 @@ async function generate() {
   </url>`;
   }
 
+  // Brands
+  const brands = [...new Set(skincareProducts.map(p => p.brand))].sort();
+  xml += `
+
+  <!-- Brands -->
+  <url>
+    <loc>${SITE}/brands</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+  for (const brand of brands) {
+    const slug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+    xml += `
+  <url>
+    <loc>${SITE}/brands/${slug}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+  }
+
   xml += `
 </urlset>
 `;
 
   writeFileSync('sitemap.xml', xml);
-  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${visibleProducts.length} products + 5 static pages`);
+  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${skincareProducts.length} products + ${brands.length} brands + 5 static pages`);
 }
 
 generate();

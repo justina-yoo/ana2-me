@@ -21,7 +21,9 @@ export default async function (request, context) {
   const isAbout = path === '/about' || path === '/about/';
   const isAnalyzer = path === '/analyzer' || path === '/analyzer/';
   const isPrivacy = path === '/privacy' || path === '/privacy/';
-  const isStaticPage = isAbout || isAnalyzer || isPrivacy;
+  const isBrands = path === '/brands' || path === '/brands/';
+  const brandMatch = path.match(/^\/brands\/([^/]+)\/?$/);
+  const isStaticPage = isAbout || isAnalyzer || isPrivacy || isBrands || !!brandMatch;
   if (!articleMatch && !productMatch && !isListing && !isProductListing && !isStaticPage) {
     return context.next();
   }
@@ -108,7 +110,7 @@ export default async function (request, context) {
 
     } else if (productMatch) {
       const slug = productMatch[1];
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
+      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14', 'skincare-15'];
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,name_ko,brand,summary,image_url,category,ingredients,notes,bio_values`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
@@ -190,7 +192,7 @@ export default async function (request, context) {
 
     } else if (isProductListing) {
       // SSR product listing — only show visible products (must match feed.jsx filter)
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14'];
+      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14', 'skincare-15'];
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&id=in.(${VISIBLE_PRODUCTS.join(',')})&order=updated_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
@@ -199,6 +201,72 @@ export default async function (request, context) {
       if (products && products.length) {
         ssrContent = renderProductListing(products);
       }
+    } else if (brandMatch) {
+      const brandSlug = brandMatch[1];
+      const brandName = brandSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      pageUrl = `${SITE}/brands/${brandSlug}`;
+
+      // Fetch brand's products for rich SSR
+      const res = await fetchWithTimeout(
+        `${SUPABASE_URL}/rest/v1/products?select=name,brand,summary,ingredients&category=eq.skincare&order=created_at.asc`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const allProducts = await res.json();
+      const brandProducts = (allProducts || []).filter(p => p.brand && p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '') === brandSlug);
+      const actualBrandName = brandProducts.length > 0 ? brandProducts[0].brand : brandName;
+
+      // Aggregate top ingredients
+      const ingCounts = {};
+      brandProducts.forEach(p => (p.ingredients || []).forEach(i => {
+        if (!ingCounts[i.name]) ingCounts[i.name] = { name: i.name, science: i.science || '', count: 0 };
+        ingCounts[i.name].count++;
+      }));
+      const topIngs = Object.values(ingCounts).sort((a, b) => b.count - a.count).slice(0, 6);
+
+      title = `${actualBrandName} | ana2me`;
+      description = `Independent ingredient analysis of ${actualBrandName} products on ana2me. ${brandProducts.length} products analyzed.`;
+
+      // Build rich SSR content
+      let ssrParts = [`<article><h1>${escHtml(actualBrandName)}</h1>`];
+      ssrParts.push(`<p>${escHtml(description)}</p>`);
+      if (brandProducts.length > 0) {
+        ssrParts.push(`<h2>Products (${brandProducts.length})</h2><ul>`);
+        brandProducts.forEach(p => {
+          ssrParts.push(`<li><strong>${escHtml(p.name)}</strong>${p.summary?.tagline ? ' — ' + escHtml(p.summary.tagline) : ''}</li>`);
+        });
+        ssrParts.push('</ul>');
+      }
+      if (topIngs.length > 0) {
+        ssrParts.push('<h2>Notable Ingredients</h2><ul>');
+        topIngs.forEach(i => {
+          ssrParts.push(`<li><strong>${escHtml(i.name)}</strong>${i.science ? ' — ' + escHtml(i.science) : ''}</li>`);
+        });
+        ssrParts.push('</ul>');
+      }
+      ssrParts.push(`<nav><a href="/brands">All brands</a> · <a href="/products">Products</a></nav></article>`);
+      ssrContent = ssrParts.join('');
+
+      jsonLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': title,
+        'description': description,
+        'url': pageUrl,
+        'numberOfItems': brandProducts.length,
+        'isPartOf': { '@type': 'WebSite', 'name': 'ana2me', 'url': SITE },
+      });
+    } else if (isBrands) {
+      title = 'Brands | ana2me';
+      description = 'Browse skincare, fragrance, and wellness brands with independent ingredient analysis on ana2me.';
+      pageUrl = `${SITE}/brands`;
+      ssrContent = `<article><h1>Brands</h1><p>${escHtml(description)}</p></article>`;
+      jsonLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': title,
+        'description': description,
+        'url': pageUrl,
+      });
     } else if (isAbout) {
       title = 'About | ana2me';
       description = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';

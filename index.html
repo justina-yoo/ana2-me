@@ -98,6 +98,7 @@
   <script type="text/babel" src="header.jsx?v=2"></script>
   <script type="text/babel" src="feed.jsx?v=2"></script>
   <script type="text/babel" src="detail.jsx"></script>
+  <script type="text/babel" src="brands.jsx"></script>
   <script type="text/babel" src="block-renderer.jsx"></script>
   <script type="text/babel" src="insights.jsx"></script>
   <script type="text/babel" src="articles/spicules.jsx"></script>
@@ -240,11 +241,11 @@
 
       const [products, setProducts] = useState(window.PRODUCTS || []);
       const [fetchError, setFetchError] = useState(null);
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14', 'skincare-15'];
+      const [brandSlug, setBrandSlug] = useState(null);
       useEffect(() => {
         window.__supabase.fetchProducts().then(function(data) {
           window.PRODUCTS = data;
-          setProducts(data.filter(p => VISIBLE_PRODUCTS.includes(p.id)));
+          setProducts(data.filter(p => p.category === 'skincare'));
         }).catch(function() {
           setFetchError('products');
         });
@@ -300,6 +301,17 @@
         else if (path.startsWith('/article/')) {
           setView('insights'); setProductId(null); setQuery('');
           window.dispatchEvent(new CustomEvent('ana2me:navigate-article'));
+          window.scrollTo(0, 0);
+        }
+        else if (path === '/brands') {
+          setView('brands'); setBrandSlug(null); setProductId(null); setQuery('');
+          if (window.SEO) window.SEO.setBrands();
+          window.scrollTo(0, 0);
+        }
+        else if (path.startsWith('/brands/')) {
+          const slug = path.split('/').pop();
+          setView('brands'); setBrandSlug(slug); setProductId(null); setQuery('');
+          if (window.SEO) window.SEO.setBrand(slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
           window.scrollTo(0, 0);
         }
         else if (path === '/search') {
@@ -412,6 +424,7 @@
               </>
             );
           })()}
+          {view === 'brands' && <Brands lang={lang} products={products} setView={setView} setProduct={setProduct} density={density} brandSlug={brandSlug} />}
           {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
           {view === 'about' && <About lang={lang} density={density} />}
           {view === 'privacy' && <Privacy lang={lang} />}
@@ -426,18 +439,19 @@
                 {lang === 'ko' ? '개인정보처리방침' : 'Privacy'}
               </a>
               <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
-              <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>ana2me2026@gmail.com</span>
+              <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>Contact: ana2me2026@gmail.com</span>
               <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
-              <a href="https://x.com/ana2me2026" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-faint)', display: 'flex' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </a>
-              <a href="https://medium.com/@ana2me2026" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-faint)', display: 'flex' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
-              </a>
-              <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
-              <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: '0.04em' }}>
-                {lang === 'ko' ? 'EN' : '한국어'}
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <a href="https://x.com/ana2me2026" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', background: 'var(--ink)', color: 'var(--cream)', transition: 'opacity 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/ana2me.official/" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', background: 'var(--ink)', color: 'var(--cream)', transition: 'opacity 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://medium.com/@ana2me2026" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', background: 'var(--ink)', color: 'var(--cream)', transition: 'opacity 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+                </a>
+              </div>
             </div>
             <span style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.5 }}>© {new Date().getFullYear()} ana2me</span>
           </footer>

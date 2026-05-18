@@ -16,6 +16,14 @@
 
 [[edge_functions]]
   function = "og-inject"
+  path = "/brands"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/brands/*"
+
+[[edge_functions]]
+  function = "og-inject"
   path = "/products"
 
 [[edge_functions]]

@@ -257,24 +257,26 @@ body.night {
 /* ---------- Chip ---------- */
 .chip {
   display: inline-flex; align-items: center; gap: 6px;
-  background: var(--cream-card);
-  border: 1px solid var(--line);
-  color: var(--ink-soft);
+  background: rgba(45,90,61,0.06);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  white-space: nowrap;
   padding: 9px 16px;
   border-radius: var(--radius-pill);
   font-size: 14px;
   font-weight: 500;
   transition: all .15s ease;
 }
-.chip:hover { color: var(--ink); border-color: var(--ink); }
-.chip-active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+.chip:hover { color: #fff; background: var(--accent); border-color: var(--accent); }
+.chip-active { background: var(--accent); color: #fff !important; border-color: var(--accent); }
+.chip-active:hover { color: #fff !important; }
 .chip-sm { padding: 6px 12px; font-size: 13px; }
 
 /* ---------- Card ---------- */
 .card { background: var(--cream-card); border-radius: var(--radius); border: 1px solid var(--line); }
 
 /* ---------- FEED ---------- */
-.feed { padding-top: 0; max-width: 720px; margin: 0 auto; }
+.feed { padding-top: 8px; max-width: 720px; margin: 0 auto; }
 .feed-cats { display: flex; gap: 8px; margin-bottom: 20px; }
 .feed-cat-btn {
   padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;
@@ -399,7 +401,7 @@ body.night {
   width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff;
   display: grid; place-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0;
 }
-.pcard-body { display: flex; flex-direction: column; gap: 4px; }
+.pcard-body { display: flex; flex-direction: column; gap: 4px; padding-right: 40px; flex: 1; }
 .pcard-brand { font-size: 11px; color: var(--ink-faint); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
 .pcard-name {
   font-family: var(--font-display); font-weight: 500; font-size: 19px; line-height: 1.15;
@@ -446,7 +448,7 @@ body.night {
 .foot-mark em { font-family: var(--font-display); color: var(--ink-soft); }
 
 /* ---------- DETAIL ---------- */
-.detail { padding: 14px 0 60px; }
+.detail { padding: 8px 0 60px; }
 .back-btn {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 14px; color: var(--ink-soft);
@@ -616,7 +618,7 @@ body.night {
 .ing-card:nth-child(10n+9) .ing-sym { background: #6B5B7B; }
 .ing-card:nth-child(10n+10) .ing-sym { background: #7A7570; }
 .ing-body { display: flex; align-items: center; gap: 10px; min-width: 0; width: 100%; }
-.ing-name { font-size: 15px; font-weight: 600; margin: 0; white-space: nowrap; }
+.ing-name { font-size: 15px; font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .ing-bar-wrap { height: 4px; background: var(--cream-2); border-radius: 4px; overflow: hidden; width: 60px; flex-shrink: 0; margin-left: auto; }
 .ing-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--butter)); border-radius: 4px; }
 .ing-pct { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 600; min-width: 32px; text-align: right; }
@@ -890,7 +892,7 @@ body.night {
 
 /* ---------- INSIGHTS ---------- */
 .insights { padding: 0 0 60px; }
-.ins-hero { text-align: left; padding: 0 0 8px; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.ins-hero { text-align: left; padding: 8px 0 8px; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 /* Hide save/bookmark UI (temporarily) */
 .save-btn, .act-btn, [class*="save-btn"], [class*="ing-save"] { display: none !important; }
 /* Hide ingredient percentage bars and numbers (temporarily) */
@@ -1461,6 +1463,14 @@ body.night {
 #root { overflow-x: clip; }
 
 /* ─── Skeleton loader ──────────────────────────────────────────────────────── */
+@keyframes starPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
 @keyframes shimmer {
   from { background-position: -200% 0; }
   to   { background-position:  200% 0; }

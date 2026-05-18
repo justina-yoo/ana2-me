@@ -182,7 +182,18 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
   const [reviewBody, setReviewBody] = useState('');
   const [reviewError, setReviewError] = useState('');
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewsShown, setReviewsShown] = useState(3);
   const reviewCount = reviews.length;
+
+  // Quick rating — autofills review form and scrolls to it
+  const [quickRated, setQuickRated] = useState(0);
+  const submitQuickRating = (stars) => {
+    if (quickRated) return;
+    setQuickRated(stars);
+    setReviewRating(stars);
+    setShowReviewForm(true);
+    setTimeout(() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' }), 100);
+  };
 
   useEffect(() => {
     setReviewLoading(true);
@@ -235,9 +246,13 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
 
   return (
     <div ref={detailRef} className={cn('detail', `dens-${density}`)}>
-      <button className="back-btn" onClick={() => { setProduct(null); setView('feed'); }}>
-        <Icon name="back" size={16} /> {t('Back', '뒤로')}
-      </button>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 500, color: 'var(--ink-faint)', margin: '6px 0 18px' }}>
+        <a href="/products" onClick={(e) => { e.preventDefault(); setProduct(null); setView('feed'); history.pushState({}, '', '/products'); }} style={{ color: 'var(--ink-faint)', textDecoration: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--ink)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--ink-faint)'}>{t('Products', '제품')}</a>
+        <span style={{ opacity: 0.35 }}>/</span>
+        <a href={'/brands/' + product.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')} onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/brands/' + product.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ color: 'var(--ink-faint)', textDecoration: 'none', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--ink)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--ink-faint)'}>{product.brand}</a>
+        <span style={{ opacity: 0.35 }}>/</span>
+        <span style={{ color: 'var(--ink-soft)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lang === 'ko' && product.nameKo ? product.nameKo : product.name}</span>
+      </nav>
 
       {/* ---------- HERO ---------- */}
       <section className="detail-hero">
@@ -255,12 +270,46 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           </Sticker>
         </div>
         <div className="detail-head">
-          <span className="detail-brand">{product.brand}</span>
+          <a className="detail-brand" href={'/brands/' + product.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')} onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/brands/' + product.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ textDecoration: 'none', color: 'inherit' }} onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'} onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}>{product.brand}</a>
           <h1 className="detail-name">{name}</h1>
+          {/* Rating — average if exists, or "be first" prompt */}
+          {(() => {
+            if (reviewCount > 0) {
+              const avg = reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviewCount;
+              return (
+                <div onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })} style={{ display: 'flex', alignItems: 'center', gap: 6, margin: '6px 0 0', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', gap: 2 }}>
+                    {[1,2,3,4,5].map(s => (
+                      <span key={s} style={{ fontSize: 14, color: s <= Math.round(avg) ? '#f5a623' : 'var(--line)' }}>★</span>
+                    ))}
+                  </div>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)' }}>{avg.toFixed(1)}</span>
+                  <span style={{ fontSize: 12, color: 'var(--ink-faint)', textDecoration: 'underline', textUnderlineOffset: 3 }}>({reviewCount} {t('ratings', '개 평가')})</span>
+                </div>
+              );
+            }
+            return (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '6px 0 0' }}>
+                <div style={{ display: 'flex', gap: 4 }}>
+                  {[1,2,3,4,5].map(s => (
+                    <button key={s} onClick={() => submitQuickRating(s)} style={{
+                      background: 'none', border: 'none', cursor: quickRated ? 'default' : 'pointer',
+                      fontSize: 16, color: s <= quickRated ? '#f5a623' : 'var(--line)',
+                      transition: 'color 0.15s, transform 0.15s', padding: 0, lineHeight: 1,
+                      animation: !quickRated ? `starPulse 2s ease ${s * 0.15}s infinite` : 'none',
+                    }} onMouseEnter={(e) => { if (!quickRated) { e.currentTarget.style.color = '#f5a623'; e.currentTarget.style.transform = 'scale(1.2)'; } }}
+                       onMouseLeave={(e) => { if (!quickRated && s > quickRated) { e.currentTarget.style.color = 'var(--line)'; } e.currentTarget.style.transform = 'scale(1)'; }}>
+                      ★
+                    </button>
+                  ))}
+                </div>
+                <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>{t('Be the first to rate', '첫 번째 평가를 남겨주세요')}</span>
+              </div>
+            );
+          })()}
           <p className="detail-tag">{tag}</p>
-          <div style={{ fontSize: 'clamp(10px, 2.5vw, 12px)', color: 'var(--ink-faint)', lineHeight: 1.6, margin: '12px 0 16px', padding: '10px 14px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)' }}>
-            {lang === 'ko' ? '이 페이지의 공식 제품 정보의 저작권은 해당 브랜드에 있습니다. 본 사이트는 해당 자료에 대한 소유권을 주장하지 않으며, 정보 제공 목적으로만 사용됩니다. 관련 문의는 ana2me2026@gmail.com으로 연락해 주세요.' : 'Official product information on this page are copyrighted by their respective brands. We do not claim ownership of these materials and use them for informational purposes only. For inquiries, contact ana2me2026@gmail.com.'}
-          </div>
+
+
 
           <div className="detail-actions">
             <button
@@ -322,7 +371,6 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             <div>
               <h2 className="sec-h" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 {t('The anatomy', '이 제품의 아나토미')}
-                <span onClick={() => alert(t('Ingredient descriptions are independently written by ana2me.', '성분 설명은 ana2me가 독립적으로 작성했습니다.'))} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 16, height: 16, borderRadius: '50%', border: '1px solid var(--ink-faint)', fontSize: 10, color: 'var(--ink-faint)', cursor: 'pointer', flexShrink: 0 }}>i</span>
               </h2>
               <p className="sec-sub">
                 {t('Tap any ingredient — we\'ll explain exactly what it does.', '성분을 눌러보세요. 정확히 뭘 하는지 알려드려요.')}
@@ -552,138 +600,121 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
 
       {/* ---------- REVIEWS ---------- */}
       <section id="reviews-section" className="reviews-section">
-        <header className="reviews-head">
-          <h2 className="sec-h">{t('Reviews', '리뷰')}</h2>
-          {reviewCount > 0 && <span className="reviews-count">{reviewCount}</span>}
-        </header>
-
-        {reviewCount > 0 && (
-          <div className="reviews-list">
-            {reviews.map((r) => {
-              const stars = r.rating || 5;
-              const d = new Date(r.created_at);
-              const dateStr = d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
-              const avatarColors = ['#2d5a3d','#a44a3f','#2e3d8f','#6b3a5c','#a07850','#3a6b5c','#8f5a2e'];
-              const charCode = (r.author || 'A').charCodeAt(0);
-              const avatarColor = avatarColors[charCode % avatarColors.length];
-              return (
-                <article key={r.id} className="review-card">
-                  <div className="review-top">
-                    <div className="review-author">
-                      <span className="review-avatar" style={{ background: avatarColor }}>{(r.author || 'A')[0].toUpperCase()}</span>
-                      <div>
-                        <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
-                        <span className="review-date">{dateStr}</span>
-                      </div>
-                    </div>
-                    <div className="review-stars">
-                      {Array.from({ length: 5 }, (_, si) => (
-                        <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="review-body">{filterProfanity(r.body)}</p>
-                </article>
-              );
-            })}
-          </div>
-        )}
-
-        {reviewCount === 0 && !reviewLoading && !showReviewForm && (
-          <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: '0 0 8px', textAlign: 'center' }}>{t('No reviews yet. Be the first to share your experience.', '아직 리뷰가 없어요. 첫 번째 리뷰를 남겨주세요.')}</p>
-        )}
-
-        {/* Review form */}
-        {showReviewForm ? (
-          <div style={{ padding: '20px 0', borderTop: reviewCount > 0 ? '1px solid var(--line)' : 'none' }}>
-            {/* Honeypot */}
-            <input id="rev-hp" type="text" style={{ position: 'absolute', left: '-9999px', tabIndex: -1 }} autoComplete="off" />
-
-            {/* Star picker */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 8 }}>{t('Rating', '별점')}</label>
-              <div style={{ display: 'flex', gap: 4 }}>
-                {[1,2,3,4,5].map(s => (
-                  <button key={s} onClick={() => setReviewRating(s)} style={{
-                    fontSize: 24, background: 'none', border: 'none', cursor: 'pointer',
-                    color: s <= reviewRating ? '#f5a623' : 'var(--line)', transition: 'color 0.1s',
-                  }}>★</button>
-                ))}
+        {/* Rating summary + write link */}
+        {(() => {
+          const avg = reviewCount > 0 ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviewCount : 0;
+          return (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 22, color: '#f5a623' }}>★</span>
+                  {reviewCount > 0 ? (
+                    <>
+                      <span style={{ fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-display)', color: 'var(--ink)' }}>{avg.toFixed(1)}</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>|</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>{t('Reviews', '리뷰')} {reviewCount}{t('', '건')}</span>
+                    </>
+                  ) : (
+                    <span style={{ fontSize: 14, color: 'var(--ink-soft)' }}>{t('Reviews', '리뷰')}</span>
+                  )}
+                </div>
+                <button onClick={() => setShowReviewForm(true)} style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 600, color: '#fff', cursor: 'pointer', padding: '6px 14px', borderRadius: 'var(--radius-pill)', border: 'none', background: 'var(--accent)', transition: 'opacity 0.15s' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                  {t('Write a review', '리뷰 작성하기')}
+                </button>
               </div>
-            </div>
+            </>
+          );
+        })()}
 
-            {/* Name */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>{t('Name (optional)', '이름 (선택)')}</label>
-              <input
-                value={reviewAuthor}
-                onChange={e => setReviewAuthor(e.target.value)}
-                placeholder={t('Anonymous', '익명')}
-                maxLength={30}
-                style={{
-                  width: '100%', padding: '10px 14px', fontSize: 14, border: '1px solid var(--line)',
-                  borderRadius: 'var(--radius-sm)', background: 'var(--cream-card)', color: 'var(--ink)',
-                  outline: 'none', boxSizing: 'border-box',
-                }}
-              />
-            </div>
+        {/* Text reviews — paginated */}
+        {(() => {
+          const textReviews = reviews.filter(r => r.body && r.body.trim());
+          if (!textReviews.length) return null;
+          const visible = textReviews.slice(0, reviewsShown);
+          const hasMore = textReviews.length > reviewsShown;
+          return (
+            <>
+              <div className="reviews-list">
+                {visible.map((r) => {
+                  const stars = r.rating || 5;
+                  const d = new Date(r.created_at);
+                  const dateStr = d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+                  const avatarColors = ['#2d5a3d','#a44a3f','#2e3d8f','#6b3a5c','#a07850','#3a6b5c','#8f5a2e'];
+                  const charCode = (r.author || 'A').charCodeAt(0);
+                  const avatarColor = avatarColors[charCode % avatarColors.length];
+                  return (
+                    <article key={r.id} className="review-card">
+                      <div className="review-top">
+                        <div className="review-author">
+                          <span className="review-avatar" style={{ background: avatarColor }}>{(r.author || 'A')[0].toUpperCase()}</span>
+                          <div>
+                            <span className="review-name">{r.author || t('Anonymous', '익명')}</span>
+                            <span className="review-date">{dateStr}</span>
+                          </div>
+                        </div>
+                        <div className="review-stars">
+                          {Array.from({ length: 5 }, (_, si) => (
+                            <span key={si} className={cn('review-star', si < stars && 'review-star-on')}>★</span>
+                          ))}
+                        </div>
+                      </div>
+                      <p className="review-body">{filterProfanity(r.body)}</p>
+                    </article>
+                  );
+                })}
+              </div>
+              {hasMore && (
+                <button onClick={() => setReviewsShown(n => n + 3)} style={{ display: 'block', margin: '16px auto 0', padding: '8px 20px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--line)', background: 'var(--cream-card)', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer' }}>
+                  {t('Show more reviews', '리뷰 더 보기')} ({textReviews.length - reviewsShown})
+                </button>
+              )}
+            </>
+          );
+        })()}
 
-            {/* Body */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>{t('Your review', '리뷰 내용')}</label>
-              <textarea
-                value={reviewBody}
-                onChange={e => setReviewBody(e.target.value)}
-                placeholder={t('Share your experience with this product (min 10 characters)', '이 제품에 대한 경험을 공유해주세요 (최소 10자)')}
-                rows={4}
-                maxLength={1000}
-                style={{
-                  width: '100%', padding: '10px 14px', fontSize: 14, border: '1px solid var(--line)',
-                  borderRadius: 'var(--radius-sm)', background: 'var(--cream-card)', color: 'var(--ink)',
-                  outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box',
-                }}
-              />
-              <span style={{ fontSize: 11, color: 'var(--ink-faint)', marginTop: 4, display: 'block' }}>{reviewBody.length}/1000</span>
-            </div>
 
-            {reviewError && <p style={{ fontSize: 13, color: '#c0392b', margin: '0 0 12px' }}>{reviewError}</p>}
+        {/* Review form modal */}
+        {showReviewForm && (
+          <div className="sheet-back" onClick={() => { setShowReviewForm(false); setReviewError(''); }}>
+            <div className="sheet" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 420, padding: '28px 24px' }}>
+              <button className="sheet-close" onClick={() => { setShowReviewForm(false); setReviewError(''); }}><Icon name="x" size={16} /></button>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, color: 'var(--ink)', margin: '0 0 20px' }}>{t('Write a Review', '리뷰 작성')}</h3>
 
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button
-                onClick={submitReview}
-                disabled={reviewSubmitting}
-                style={{
-                  padding: '10px 24px', borderRadius: 'var(--radius-pill)', border: 'none',
-                  background: 'var(--ink)', color: '#fff', fontSize: 13, fontWeight: 600,
-                  cursor: reviewSubmitting ? 'not-allowed' : 'pointer', opacity: reviewSubmitting ? 0.6 : 1,
-                }}
-              >
-                {reviewSubmitting ? t('Submitting...', '제출 중...') : t('Submit', '제출')}
+              <input id="rev-hp" type="text" style={{ position: 'absolute', left: '-9999px', tabIndex: -1 }} autoComplete="off" />
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 8 }}>{t('Rating', '별점')}</label>
+                <div style={{ display: 'flex', gap: 4 }}>
+                  {[1,2,3,4,5].map(s => (
+                    <button key={s} onClick={() => setReviewRating(s)} style={{
+                      fontSize: 28, background: 'none', border: 'none', cursor: 'pointer',
+                      color: s <= reviewRating ? '#f5a623' : 'var(--line)', transition: 'color 0.1s',
+                    }}>★</button>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>{t('Name (optional)', '이름 (선택)')}</label>
+                <input value={reviewAuthor} onChange={e => setReviewAuthor(e.target.value)} placeholder={t('Anonymous', '익명')} maxLength={30} style={{ width: '100%', padding: '10px 14px', fontSize: 14, border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)', background: 'var(--cream-card)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }} />
+              </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>{t('Your review', '리뷰 내용')}</label>
+                <textarea value={reviewBody} onChange={e => setReviewBody(e.target.value)} placeholder={t('Share your experience with this product (min 5 characters)', '이 제품에 대한 경험을 공유해주세요 (최소 5자)')} rows={4} maxLength={1000} style={{ width: '100%', padding: '10px 14px', fontSize: 14, border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)', background: 'var(--cream-card)', color: 'var(--ink)', outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box' }} />
+                <span style={{ fontSize: 11, color: 'var(--ink-faint)', marginTop: 4, display: 'block' }}>{reviewBody.length}/1000</span>
+              </div>
+
+              {reviewError && <p style={{ fontSize: 13, color: '#c0392b', margin: '0 0 12px' }}>{reviewError}</p>}
+
+              <p style={{ fontSize: 11, color: 'var(--ink-faint)', margin: '0 0 14px', lineHeight: 1.5 }}>
+                {t('By submitting, you agree that your review may be displayed publicly on ana2me. Do not include personal information.', '제출 시 리뷰가 ana2me에 공개적으로 표시될 수 있음에 동의합니다. 개인정보를 포함하지 마세요.')}
+              </p>
+
+              <button onClick={submitReview} disabled={reviewSubmitting} style={{ width: '100%', padding: '12px', borderRadius: 'var(--radius-pill)', border: 'none', background: 'var(--ink)', color: '#fff', fontSize: 14, fontWeight: 600, cursor: reviewSubmitting ? 'not-allowed' : 'pointer', opacity: reviewSubmitting ? 0.6 : 1 }}>
+                {reviewSubmitting ? t('Submitting...', '제출 중...') : t('Submit Review', '리뷰 제출')}
               </button>
-              <button
-                onClick={() => { setShowReviewForm(false); setReviewError(''); }}
-                style={{
-                  padding: '10px 24px', borderRadius: 'var(--radius-pill)',
-                  border: '1px solid var(--line)', background: 'var(--cream-card)',
-                  fontSize: 13, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer',
-                }}
-              >
-                {t('Cancel', '취소')}
-              </button>
             </div>
-          </div>
-        ) : (
-          <div style={{ padding: '4px 0', textAlign: reviewCount > 0 ? 'left' : 'center' }}>
-            <button
-              onClick={() => setShowReviewForm(true)}
-              style={{
-                padding: '10px 24px', borderRadius: 'var(--radius-pill)',
-                border: '1px solid var(--line)', background: 'var(--cream-card)',
-                fontSize: 13, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer',
-              }}
-            >
-              {t('Write a review', '리뷰 작성하기')}
-            </button>
           </div>
         )}
       </section>
@@ -775,6 +806,11 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
           </section>
         );
       })()}
+
+      {/* ---------- DISCLAIMER ---------- */}
+      <p style={{ fontSize: 11, color: 'var(--ink-faint)', margin: '40px 0 0', lineHeight: 1.6, fontStyle: 'italic' }}>
+        {lang === 'ko' ? '성분 설명은 ana2me가 독립적으로 작성했습니다. 이 페이지의 공식 제품 정보의 저작권은 해당 브랜드에 있습니다. 본 사이트는 해당 자료에 대한 소유권을 주장하지 않으며, 정보 제공 목적으로만 사용됩니다. 관련 문의는 ana2me2026@gmail.com으로 연락해 주세요.' : 'Ingredient descriptions are independently written by ana2me. Official product information on this page are copyrighted by their respective brands. We do not claim ownership of these materials and use them for informational purposes only. For inquiries, contact ana2me2026@gmail.com.'}
+      </p>
 
       {/* ---------- INGREDIENT SHEET ---------- */}
       {selIng && (

@@ -34,7 +34,8 @@
             performance: r.performance,
             funFacts: r.fun_facts,
             bioValues: r.bio_values,
-            reviews: r.reviews
+            reviews: r.reviews,
+            createdAt: r.created_at
           };
         });
       });
