@@ -775,9 +775,17 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
 
         {/* Related articles */}
         {allPosts && (() => {
+          const postWords = new Set(((post.keywords || '') + ' ' + post.title.en).toLowerCase().split(/[\s,]+/).filter(w => w.length > 3));
           const related = allPosts
             .filter(p => p.id !== post.id)
-            .sort((a, b) => (a.tag.en === post.tag.en ? -1 : 1) - (b.tag.en === post.tag.en ? -1 : 1))
+            .map(p => {
+              const pWords = ((p.keywords || '') + ' ' + p.title.en).toLowerCase().split(/[\s,]+/).filter(w => w.length > 3);
+              let score = 0;
+              pWords.forEach(w => { if (postWords.has(w)) score++; });
+              if (p.tag.en === post.tag.en) score += 3;
+              return { ...p, _score: score };
+            })
+            .sort((a, b) => b._score - a._score)
             .slice(0, 3);
           return (
             <section style={{ marginTop: 48, paddingTop: 32, borderTop: '1px solid var(--line)' }}>

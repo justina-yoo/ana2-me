@@ -116,7 +116,35 @@ export default async function (request, context) {
       });
 
 
+      // Fetch all articles for related links
+      const allArticlesRes = await fetchWithTimeout(
+        `${SUPABASE_URL}/rest/v1/articles?select=id,title,tag,date,keywords&order=created_at.desc`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const allArticles = await allArticlesRes.json();
+      const postWords = new Set(((a.keywords || '') + ' ' + a.title.en).toLowerCase().split(/[\s,]+/).filter(w => w.length > 3));
+      const related = (allArticles || [])
+        .filter(p => p.id !== a.id)
+        .map(p => {
+          const pWords = ((p.keywords || '') + ' ' + (p.title?.en || '')).toLowerCase().split(/[\s,]+/).filter(w => w.length > 3);
+          let score = 0;
+          pWords.forEach(w => { if (postWords.has(w)) score++; });
+          if (p.tag?.en === a.tag?.en) score += 3;
+          return { ...p, _score: score };
+        })
+        .sort((x, y) => y._score - x._score)
+        .slice(0, 3);
+
       ssrContent = renderArticleHTML(a);
+      if (related.length > 0) {
+        ssrContent += '<nav><h3>Read next</h3><ul>';
+        for (const r of related) {
+          const rTag = (r.tag?.en || 'skincare').toLowerCase().replace(/\s+/g, '-');
+          const rDate = (() => { const d = new Date(r.date); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); })();
+          ssrContent += `<li><a href="${SITE}/article/${rTag}/${rDate}/${r.id}">${escHtml(r.title?.en || '')}</a></li>`;
+        }
+        ssrContent += '</ul></nav>';
+      }
 
     } else if (productMatch) {
       const slug = productMatch[1];
@@ -190,21 +218,62 @@ export default async function (request, context) {
       ssrContent = renderProductHTML(p);
 
     } else if (isListing) {
-      // SSR article listing — gives crawlers links to every article
-      const res = await fetchWithTimeout(
-        `${SUPABASE_URL}/rest/v1/articles?select=id,title,excerpt,tag,date&order=created_at.desc`,
-        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-      );
-      const articles = await res.json();
+      // SSR — rich content for homepage and /insights
+      const [articlesRes, productsRes] = await Promise.all([
+        fetchWithTimeout(
+          `${SUPABASE_URL}/rest/v1/articles?select=id,title,excerpt,tag,date&order=created_at.desc`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+        ),
+        fetchWithTimeout(
+          `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&category=eq.skincare&order=created_at.desc`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+        )
+      ]);
+      const articles = await articlesRes.json();
+      const products = await productsRes.json();
+      const brands = [...new Set((products || []).map(p => p.brand))].sort();
+
+      let html = `<article>`;
+      html += `<h1>ana2me — Know What's In Your Bottle</h1>`;
+      html += `<p>Skincare, fragrance &amp; wellness — decoded at the molecular level. Independent ingredient analysis for people who read labels.</p>`;
+      html += `<nav><a href="/insights">Articles</a> · <a href="/products">Products</a> · <a href="/brands">Brands</a> · <a href="/about">About</a> · <a href="/analyzer">Ingredient Analyzer</a></nav>`;
+
       if (articles && articles.length) {
-        ssrContent = renderArticleListing(articles);
+        html += `<section><h2>Latest Articles (${articles.length})</h2><ul>`;
+        for (const a of articles.slice(0, 20)) {
+          const tag = (a.tag?.en || '').toLowerCase().replace(/\s+/g, '-');
+          const d = new Date(a.date);
+          const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          html += `<li><a href="/article/${tag}/${iso}/${a.id}">${escHtml(a.title?.en || '')}</a> — ${escHtml(a.excerpt?.en || '')}</li>`;
+        }
+        html += `</ul></section>`;
       }
 
+      if (products && products.length) {
+        html += `<section><h2>Products Analyzed (${products.length})</h2><ul>`;
+        for (const p of products.slice(0, 15)) {
+          const slug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
+          html += `<li><a href="/products/${slug}">${escHtml(p.brand)} ${escHtml(p.name)}</a>${p.summary?.tagline ? ' — ' + escHtml(p.summary.tagline) : ''}</li>`;
+        }
+        html += `</ul></section>`;
+      }
+
+      if (brands.length) {
+        html += `<section><h2>Brands (${brands.length})</h2><ul>`;
+        for (const b of brands) {
+          const slug = b.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+          html += `<li><a href="/brands/${slug}">${escHtml(b)}</a></li>`;
+        }
+        html += `</ul></section>`;
+      }
+
+      html += `</article>`;
+      ssrContent = html;
+
     } else if (isProductListing) {
-      // SSR product listing — only show visible products (must match feed.jsx filter)
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14', 'skincare-15'];
+      // SSR product listing
       const res = await fetchWithTimeout(
-        `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&id=in.(${VISIBLE_PRODUCTS.join(',')})&order=updated_at.desc`,
+        `${SUPABASE_URL}/rest/v1/products?select=id,name,brand,summary&category=eq.skincare&order=created_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       const products = await res.json();

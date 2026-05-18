@@ -18,7 +18,7 @@
   // Fetch products and map snake_case → camelCase to match existing components
   window.__supabase = {
     fetchProducts: function() {
-      return query('products', 'order=created_at.asc').then(function(rows) {
+      return query('products', 'order=created_at.desc').then(function(rows) {
         return rows.map(function(r) {
           return {
             id: r.id,

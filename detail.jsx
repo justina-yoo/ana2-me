@@ -388,7 +388,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
               >
                 <Icon name="bookmark" size={14} /> {product.ingredients.every(ing => savedIngs[ing.id]) ? t('Unsave all', '전체 해제') : t('Save all', '전체 저장')}
               </button>
-              <Sticker color="butter" rotate={-5}>{product.ingredients.length} {t('actives', '성분')}</Sticker>
+              <Sticker color="butter" rotate={-5}>{product.ingredients.length} {t('key ingredients', '핵심 성분')}</Sticker>
             </div>
           </header>
 
@@ -486,7 +486,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
               >
                 <Icon name="bookmark" size={14} /> {product.bioValues.every(bv => savedIngs[bv.id]) ? t('Unsave all', '전체 해제') : t('Save all', '전체 저장')}
               </button>
-              <Sticker color="butter" rotate={-5}>{product.bioValues.length} {t('actives', '성분')}</Sticker>
+              <Sticker color="butter" rotate={-5}>{product.bioValues.length} {t('key ingredients', '핵심 성분')}</Sticker>
             </div>
           </header>
 

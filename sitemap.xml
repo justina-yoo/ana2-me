@@ -404,6 +404,12 @@
 
   <!-- Products -->
   <url>
+    <loc>https://ana2-me.com/products/standard-seoul-barrier-glass-gel-cream</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/eiom-trouble-patch-mask</loc>
     <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
@@ -454,12 +460,6 @@
   <url>
     <loc>https://ana2-me.com/products/mixsoon-bean-essence</loc>
     <lastmod>2026-05-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
-    <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -531,6 +531,12 @@
   </url>
   <url>
     <loc>https://ana2-me.com/products/chanel-coco-mademoiselle</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
