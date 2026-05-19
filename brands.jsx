@@ -84,6 +84,11 @@ const BRAND_INFO = {
     ko: '코리아나 화장품의 안티에이징 브랜드로, 세포 신호 과학을 스킨케어에 적용해요. 안티에이징 부문에서 12년 연속 올해의 브랜드상을 수상했어요.',
     origin: 'Seoul, Korea'
   },
+  'Meditherapy': {
+    en: 'A Korean dermocosmetic brand specializing in professional-grade lifting and firming treatments for home use. Their Inmotox Tension Up Mask became Olive Young\'s #1 in its category, using elastic hydrogel technology that physically lifts facial contours during wear.',
+    ko: '전문가급 리프팅·탄력 트리트먼트를 홈케어로 구현한 한국 더마코스메틱 브랜드예요. 인모톡스 텐션 업 마스크가 올리브영 카테고리 1위를 차지했고, 착용 시 얼굴 윤곽을 물리적으로 리프팅하는 탄력 하이드로젤 기술을 사용해요.',
+    origin: 'Seoul, Korea'
+  },
   'Medicube': {
     en: 'A Korean beauty-tech brand that brings dermatology clinic technology into at-home devices and skincare. Known for their AGE-R device line and zero-pore formulations.',
     ko: '피부과 클리닉 기술을 홈케어 디바이스와 스킨케어에 접목한 한국 뷰티테크 브랜드예요. AGE-R 디바이스 라인과 제로포어 제형으로 유명해요.',
