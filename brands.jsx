@@ -44,6 +44,11 @@ const BRAND_INFO = {
     ko: '심플하고 효과적이며 합리적인 스킨케어라는 철학으로 세계적으로 인정받는 K-뷰티 브랜드예요. 스네일 뮤신, BHA, 센텔라 같은 검증된 활성 성분 중심이에요.',
     origin: 'Seoul, Korea', founded: '2013'
   },
+  'Centellian24': {
+    en: 'Dongguk Pharmaceutical\'s dermocosmetic brand, built on over 50 years of centella asiatica research since 1968. Their Madeca Cream line uses proprietary fermented centella technology and clinical-grade concentrations of madecassic acid for barrier repair and firming.',
+    ko: '동국제약의 더마코스메틱 브랜드로, 1968년부터 이어온 50년 이상의 병풀 연구를 기반으로 해요. 마데카크림 라인은 독자적인 발효 센텔라 기술과 임상 등급 마데카식산 농도로 장벽 복구와 탄력을 잡아요.',
+    origin: 'Seoul, Korea', founded: '2015'
+  },
   'Chanel': {
     en: 'The French luxury house whose fragrance division has shaped modern perfumery since No. 5 debuted in 1921. Their in-house perfumers work with some of the rarest raw materials in the industry.',
     ko: '1921년 No. 5 출시 이후 현대 향수의 역사를 만들어 온 프랑스 럭셔리 하우스예요. 업계에서 가장 희귀한 원료를 사용하는 전속 조향사를 두고 있어요.',
