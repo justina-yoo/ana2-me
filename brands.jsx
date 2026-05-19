@@ -45,8 +45,8 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2013'
   },
   'Centellian24': {
-    en: 'Dongguk Pharmaceutical\'s dermocosmetic brand, built on over 50 years of centella asiatica research since 1968. Their Madeca Cream line uses proprietary fermented centella technology and clinical-grade concentrations of madecassic acid for barrier repair and firming.',
-    ko: '동국제약의 더마코스메틱 브랜드로, 1968년부터 이어온 50년 이상의 병풀 연구를 기반으로 해요. 마데카크림 라인은 독자적인 발효 센텔라 기술과 임상 등급 마데카식산 농도로 장벽 복구와 탄력을 잡아요.',
+    en: 'Dongguk Pharmaceutical\'s dermocosmetic brand, built on over 50 years of centella asiatica research since 1968. Their Madeca Cream line uses proprietary fermented centella technology and concentrated madecassic acid for barrier support and firming.',
+    ko: '동국제약의 더마코스메틱 브랜드로, 1968년부터 이어온 50년 이상의 병풀 연구를 기반으로 해요. 마데카크림 라인은 독자적인 발효 센텔라 기술과 고농도 마데카식산으로 장벽 지원과 탄력을 잡아요.',
     origin: 'Seoul, Korea', founded: '2015'
   },
   'Chanel': {
@@ -60,8 +60,8 @@ const BRAND_INFO = {
     origin: 'Paris, France', founded: '1961'
   },
   'Dr. Jart+': {
-    en: 'A Korean dermocosmetic brand that bridges the gap between dermatology clinics and daily skincare. Their Ceramidin and Cicapair lines are built on clinical-grade actives made accessible for everyday use.',
-    ko: '피부과 클리닉과 일상 스킨케어의 간극을 잇는 한국 더모코스메틱 브랜드예요. 세라마이딘과 시카페어 라인은 임상 등급 활성 성분을 일상에서 쉽게 쓸 수 있게 만든 거예요.',
+    en: 'A Korean dermocosmetic brand that bridges the gap between professional skincare and daily routines. Their Ceramidin and Cicapair lines are built on potent actives made accessible for everyday use.',
+    ko: '전문 스킨케어와 일상 루틴의 간극을 잇는 한국 더모코스메틱 브랜드예요. 세라마이딘과 시카페어 라인은 고효능 활성 성분을 일상에서 쉽게 쓸 수 있게 만든 거예요.',
     origin: 'Seoul, Korea', founded: '2004'
   },
   'EIoM': {
@@ -85,23 +85,23 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea'
   },
   'Meditherapy': {
-    en: 'A Korean dermocosmetic brand specializing in professional-grade lifting and firming treatments for home use. Their Inmotox Tension Up Mask became Olive Young\'s #1 in its category, using elastic hydrogel technology that physically lifts facial contours during wear.',
-    ko: '전문가급 리프팅·탄력 트리트먼트를 홈케어로 구현한 한국 더마코스메틱 브랜드예요. 인모톡스 텐션 업 마스크가 올리브영 카테고리 1위를 차지했고, 착용 시 얼굴 윤곽을 물리적으로 리프팅하는 탄력 하이드로젤 기술을 사용해요.',
+    en: 'A Korean dermocosmetic brand specializing in lifting and firming treatments for home use. Their Inmotox Tension Up Mask uses elastic hydrogel technology that physically lifts facial contours during wear.',
+    ko: '리프팅·탄력 트리트먼트를 홈케어로 구현한 한국 더마코스메틱 브랜드예요. 인모톡스 텐션 업 마스크는 착용 시 얼굴 윤곽을 물리적으로 리프팅하는 탄력 하이드로젤 기술을 사용해요.',
     origin: 'Seoul, Korea'
   },
   'Medicube': {
-    en: 'A Korean beauty-tech brand that brings dermatology clinic technology into at-home devices and skincare. Known for their AGE-R device line and zero-pore formulations.',
-    ko: '피부과 클리닉 기술을 홈케어 디바이스와 스킨케어에 접목한 한국 뷰티테크 브랜드예요. AGE-R 디바이스 라인과 제로포어 제형으로 유명해요.',
+    en: 'A Korean beauty-tech brand that brings advanced skincare technology into at-home devices and formulations. Known for their AGE-R device line and pore-focused products.',
+    ko: '첨단 스킨케어 기술을 홈케어 디바이스와 제형에 접목한 한국 뷰티테크 브랜드예요. AGE-R 디바이스 라인과 모공 중심 제품으로 유명해요.',
     origin: 'Seoul, Korea', founded: '2015'
   },
   'Mediheal': {
-    en: 'Korea\'s #1 sheet mask brand that sells over 1 billion masks globally. Their mask technology delivers concentrated actives through bio-cellulose and hydrogel formats developed with dermatologists.',
-    ko: '전 세계 누적 판매 10억 장 이상의 한국 1위 마스크팩 브랜드예요. 피부과 전문의와 함께 개발한 바이오셀룰로스, 하이드로젤 형태로 고농축 활성 성분을 전달해요.',
+    en: 'A leading Korean sheet mask brand that has sold over 1 billion masks globally. Their mask technology delivers concentrated actives through bio-cellulose and hydrogel formats.',
+    ko: '전 세계 누적 판매 10억 장 이상의 한국 대표 마스크팩 브랜드예요. 바이오셀룰로스, 하이드로젤 형태로 고농축 활성 성분을 전달해요.',
     origin: 'Seoul, Korea', founded: '2009'
   },
   'Medion': {
-    en: 'A Japanese skincare brand founded by Dr. Masato Hiki, pioneer of carbonated beauty. Their CO2 gel masks use dissolved carbon dioxide to boost microcirculation and oxygen delivery to skin cells.',
-    ko: '탄산 뷰티의 선구자 히키 마사토 박사가 설립한 일본 스킨케어 브랜드예요. CO2 젤 마스크가 용해된 이산화탄소로 미세순환과 피부 세포 산소 공급을 촉진해요.',
+    en: 'A Japanese skincare brand founded by Dr. Masato Hiki, pioneer of carbonated beauty. Their CO2 gel masks use dissolved carbon dioxide for a refreshing, energizing skincare experience.',
+    ko: '탄산 뷰티의 선구자 히키 마사토 박사가 설립한 일본 스킨케어 브랜드예요. CO2 젤 마스크가 용해된 이산화탄소로 상쾌하고 활력 있는 스킨케어 경험을 제공해요.',
     origin: 'Osaka, Japan'
   },
   'Round Lab': {
@@ -110,8 +110,8 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2019'
   },
   'Standard Seoul': {
-    en: 'A K-beauty brand redefining fast-acting skincare with patented capsule formulas. Each product delivers visible clinical results through encapsulated actives that burst on contact with skin.',
-    ko: '특허 캡슐 포뮬러로 빠른 효과의 스킨케어를 재정의하는 K-뷰티 브랜드예요. 피부에 닿으면 터지는 캡슐화 활성 성분으로 눈에 보이는 임상 결과를 전달해요.',
+    en: 'A K-beauty brand redefining fast-acting skincare with patented capsule formulas. Each product delivers visible results through encapsulated actives that burst on contact with skin.',
+    ko: '특허 캡슐 포뮬러로 빠른 효과의 스킨케어를 재정의하는 K-뷰티 브랜드예요. 피부에 닿으면 터지는 캡슐화 활성 성분으로 눈에 보이는 결과를 전달해요.',
     origin: 'Seoul, Korea'
   },
   'Tamburins': {
