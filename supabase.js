@@ -18,8 +18,46 @@
   // Fetch products and map snake_case → camelCase to match existing components
   window.__supabase = {
     fetchProducts: function() {
-      return query('products', 'order=created_at.desc').then(function(rows) {
+      // Junction-primary: read hero ingredients from products_ingredients → ingredients catalog
+      // TODO: remove JSONB fallback after 2026-05-27 if junction is stable
+      return query('products', 'select=*,products_ingredients(sort_order,is_hero,display_group,display_copy,ingredient:ingredients(id,name,name_ko,symbol,category,is_known_sensitizer,irritation_risk,contains_flagged_component,flagged_component_reasons))&order=created_at.desc').then(function(rows) {
         return rows.map(function(r) {
+          // Build hero ingredients from junction if available, fallback to JSONB
+          var piRows = r.products_ingredients;
+          var heroIngs;
+          if (piRows && piRows.length > 0) {
+            heroIngs = piRows
+              .filter(function(pi) { return pi.is_hero; })
+              .sort(function(a, b) { return (a.sort_order || 999) - (b.sort_order || 999); })
+              .filter(function(pi) {
+                // For display groups, only show the primary row (the one with display_copy)
+                if (pi.display_group != null && !pi.display_copy) return false;
+                return true;
+              })
+              .map(function(pi) {
+                var ing = pi.ingredient || {};
+                var dc = pi.display_copy || {};
+                return {
+                  id: ing.id,
+                  name: ing.name,
+                  nameKo: ing.name_ko,
+                  symbol: dc.symbol || ing.symbol,
+                  percentage: dc.percentage,
+                  description: dc.description || ing.description,
+                  descriptionKo: dc.descriptionKo || ing.description_ko,
+                  science: dc.science || ing.science,
+                  scienceKo: dc.scienceKo || ing.science_ko,
+                  category: ing.category,
+                  isSensitizer: ing.is_known_sensitizer,
+                  irritationRisk: ing.irritation_risk,
+                  containsFlaggedComponent: ing.contains_flagged_component,
+                  flaggedComponentReasons: ing.flagged_component_reasons
+                };
+              });
+          } else {
+            // JSONB fallback — same shape as before
+            heroIngs = r.ingredients;
+          }
           return {
             id: r.id,
             category: r.category,
@@ -28,7 +66,7 @@
             brand: r.brand,
             imageUrl: r.image_url,
             summary: r.summary,
-            ingredients: r.ingredients,
+            ingredients: heroIngs,
             accords: r.accords,
             notes: r.notes,
             performance: r.performance,

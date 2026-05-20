@@ -346,6 +346,14 @@ export default async function (request, context) {
         'tamburins': "A Korean fragrance brand under Gentle Monster's parent company, blending minimalist aesthetics with art-forward storytelling.",
         'beplain': 'A Korean clean beauty pioneer with award-winning Mung Bean line, built on a philosophy of returning to nature.',
         'mixsoon': 'A Korean skincare brand built around minimalism and single-core ingredients at maximum concentration.',
+        'anua': 'A Korean skincare brand built around heartleaf (어성초), a traditional herb for calming irritated skin. Their toner is the #1 bestseller on Amazon.',
+        'beauty-of-joseon': 'A Korean skincare brand reinterpreting Joseon Dynasty beauty rituals — propolis, ginseng, rice — with modern formulation science.',
+        'goodal': "A Korean skincare brand by Club Clio harnessing Jeju Island's green tangerines as a natural vitamin C source for brightening.",
+        'numbuzin': 'A Korean skincare brand that numbers products by skin concern. Known for multi-vitamin formulations with glutathione, tranexamic acid, and niacinamide.',
+        'skin1004': 'A Korean skincare brand specializing in Madagascar-sourced Centella Asiatica. Their minimalist 7-ingredient ampoule has sold over 15 million units.',
+        'ollocdam': 'A Korean wellness brand focused on premium extra virgin olive oil supplements rich in polyphenols.',
+        'centellian24': "Dongguk Pharmaceutical's dermocosmetic brand built on 50+ years of centella asiatica research since 1968.",
+        'meditherapy': 'A Korean dermocosmetic brand specializing in lifting and firming treatments using elastic hydrogel technology.',
       };
 
       // Fetch brand's products for rich SSR

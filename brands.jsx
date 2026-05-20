@@ -129,6 +129,36 @@ const BRAND_INFO = {
     ko: '미니멀리즘과 단일 핵심 성분을 중심으로 만든 한국 스킨케어 브랜드예요. 이름은 mix와 순(純)의 결합으로, 각 제품이 하나의 히어로 추출물을 최대 농도로 담아요.',
     origin: 'Seoul, Korea', founded: '2020'
   },
+  'Anua': {
+    en: 'A Korean skincare brand built around heartleaf (어성초, Houttuynia Cordata), a traditional Korean herb used for centuries to calm irritated skin. Their Heartleaf 77% Soothing Toner became the #1 bestselling facial toner on Amazon.',
+    ko: '한국 전통 약초 어성초를 중심으로 만든 스킨케어 브랜드예요. 어성초 77% 수딩 토너가 아마존 페이셜 토너 부문 1위를 기록했어요.',
+    origin: 'Seoul, Korea', founded: '2020'
+  },
+  'Beauty of Joseon': {
+    en: 'A Korean skincare brand that reinterprets Joseon Dynasty (조선시대) beauty rituals with modern formulation science. Their hero ingredients — propolis, ginseng, rice — are drawn from historical Korean beauty texts.',
+    ko: '조선시대 미용 비법을 현대 제형 과학으로 재해석한 한국 스킨케어 브랜드예요. 프로폴리스, 인삼, 쌀 등 한국 전통 미용서에서 영감받은 히어로 성분을 사용해요.',
+    origin: 'Seoul, Korea', founded: '2017'
+  },
+  'goodal': {
+    en: 'A Korean skincare brand by Club Clio known for harnessing Jeju Island\'s green tangerines as a natural source of vitamin C. Their Green Tangerine Vita C line is one of Korea\'s best-selling brightening ranges.',
+    ko: '클럽클리오 산하의 한국 스킨케어 브랜드로, 제주도 청귤을 천연 비타민 C 원료로 활용해요. 청귤 비타C 라인은 한국에서 가장 많이 팔리는 브라이트닝 라인 중 하나예요.',
+    origin: 'Seoul, Korea', founded: '2012'
+  },
+  'numbuzin': {
+    en: 'A Korean skincare brand that numbers each product by skin concern — No.3 for pores, No.5 for brightening. Their multi-vitamin formulations combine glutathione, tranexamic acid, and niacinamide for a data-driven approach to tone evening.',
+    ko: '피부 고민별로 제품에 번호를 매기는 한국 스킨케어 브랜드예요 — 3번은 모공, 5번은 브라이트닝. 글루타치온, 트라넥삼산, 나이아신아마이드를 조합한 멀티비타민 제형으로 피부톤 관리에 집중해요.',
+    origin: 'Seoul, Korea', founded: '2022'
+  },
+  'SKIN1004': {
+    en: 'A Korean skincare brand specializing in Centella Asiatica sourced from Madagascar, where the plant develops higher concentrations of its key actives. Their Madagascar Centella Ampoule — a minimalist 7-ingredient formula — has sold over 15 million units.',
+    ko: '마다가스카르산 센텔라 아시아티카를 전문으로 하는 한국 스킨케어 브랜드예요. 핵심 활성 성분 농도가 더 높은 마다가스카르 원산지 원료를 사용해요. 7성분 미니멀 포뮬러인 센텔라 앰플이 누적 1500만 개 이상 판매됐어요.',
+    origin: 'Seoul, Korea', founded: '2017'
+  },
+  'Ollocdam': {
+    en: 'A Korean wellness brand focused on premium extra virgin olive oil supplements. Their Olive3 capsules use cold-pressed EVOO rich in polyphenols and oleocanthal for daily antioxidant support.',
+    ko: '프리미엄 엑스트라 버진 올리브 오일 건강기능식품에 집중하는 한국 웰니스 브랜드예요. 올리브3 캡슐은 폴리페놀과 올레오칸탈이 풍부한 냉압착 EVOO를 사용해요.',
+    origin: 'Seoul, Korea'
+  },
 };
 
 window.Brands = function Brands({ lang, products, setView, setProduct, density, brandSlug }) {
