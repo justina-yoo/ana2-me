@@ -127,6 +127,7 @@
   <script type="text/babel" src="articles/grown-up-gourmand.jsx"></script>
   <script type="text/babel" src="articles/sleep-wellness-snacks.jsx"></script>
   <script type="text/babel" src="landing.jsx"></script>
+  <script type="text/babel" src="try.jsx"></script>
   <script type="text/babel" src="analyzer.jsx"></script>
   <script type="text/babel" src="about.jsx"></script>
   <script type="text/babel" src="privacy.jsx"></script>
@@ -330,7 +331,7 @@
           if (window.SEO) window.SEO.setHome();
         }
         else if (path === '/admin') { setView('admin'); }
-        else if (path === '/analyzer') { setView('analyzer'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setAnalyzer(); window.scrollTo(0, 0); }
+        else if (path === '/analyze' || path === '/analyzer') { setView('analyze'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
         else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setAbout(); window.scrollTo(0, 0); }
         else if (path === '/privacy') { setView('privacy'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setPrivacy(); window.scrollTo(0, 0); }
       };
@@ -344,7 +345,7 @@
       useEffect(() => {
         if (!window.SEO) return;
         if (view === 'privacy') window.SEO.setPrivacy();
-        if (view === 'analyzer') window.SEO.setAnalyzer();
+        if (view === 'analyze') window.SEO.setAnalyzer();
       }, [view]);
 
       // Edit-mode protocol
@@ -435,7 +436,8 @@
             );
           })()}
           {view === 'brands' && <Brands lang={lang} products={products} setView={setView} setProduct={setProduct} density={density} brandSlug={brandSlug} />}
-          {view === 'analyzer' && <Analyzer lang={lang} density={density} />}
+          {view === 'analyze' && <Try lang={lang} products={products} setView={setView} setProduct={setProduct} />}
+          {/* old Analyzer replaced by data-driven Try engine at /analyze */}
           {view === 'about' && <About lang={lang} density={density} />}
           {view === 'privacy' && <Privacy lang={lang} />}
           {view === 'admin' && <Admin />}

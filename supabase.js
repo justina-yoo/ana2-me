@@ -130,6 +130,19 @@
         body: JSON.stringify({ featured: value })
       });
     },
+    // Fetch full junction data for analysis — ALL products, ALL ingredients (not just heroes)
+    fetchAnalyzeData: function(productIds) {
+      // 1) Full junction rows for the input products
+      var piQuery = 'product_id=in.(' + productIds.join(',') + ')&select=product_id,ingredient_id,sort_order,is_hero,ingredient:ingredients(id,name,name_ko,symbol,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc,sort_order.asc';
+      // 2) All junction rows (for recommendation scoring)
+      var allPiQuery = 'select=product_id,ingredient_id,is_hero,ingredient:ingredients(id,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc';
+      return Promise.all([
+        query('products_ingredients', piQuery),
+        query('products_ingredients', allPiQuery)
+      ]).then(function(results) {
+        return { inputRows: results[0], allRows: results[1] };
+      });
+    },
     fetchArticles: function(limit, offset) {
       var params = 'order=created_at.desc';
       if (limit) params += '&limit=' + limit;
