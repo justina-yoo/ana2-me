@@ -167,7 +167,7 @@ window.ProductCard = function ProductCard({ product, lang, onClick, href, index,
   return (
     <a className="pcard" href={href || '#'} onClick={onClick} style={{ '--i': index, textDecoration: 'none', color: 'inherit' }}>
       <div className="pcard-img-wrap">
-        <ProductImg src={product.imageUrl} alt={name} className="pcard-img" />
+        <ProductImg src={product.imageUrl} alt={product.brand + ' ' + name} className="pcard-img" />
         {isNew && (
           <span style={{ position: 'absolute', top: 8, right: 8, fontSize: 9, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#fff', background: 'var(--accent)', padding: '3px 8px', borderRadius: 'var(--radius-pill)' }}>
             {t('New', '신규')}

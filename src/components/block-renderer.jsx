@@ -28,8 +28,8 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
         return (
           <ArtTlDr key={idx}>
             {items
-              ? <><strong>{block.icon || '🧠'} {t('TL;DR:', '요약:')}</strong> {items}</>
-              : <span dangerouslySetInnerHTML={{ __html: '<strong>' + (block.icon || '🧠') + ' ' + t('TL;DR:', '요약:') + '</strong> ' + content }} />
+              ? <><strong>{block.icon || '🧠'} {t('Summary:', '요약:')}</strong> {items}</>
+              : <span dangerouslySetInnerHTML={{ __html: '<strong>' + (block.icon || '🧠') + ' ' + t('Summary:', '요약:') + '</strong> ' + content }} />
             }
           </ArtTlDr>
         );

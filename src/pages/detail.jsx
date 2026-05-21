@@ -259,7 +259,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
         <div className="detail-img-wrap">
           <Tape className="tape" style={{ top: -8, left: 20, transform: 'rotate(-8deg)' }} />
           <Tape className="tape" style={{ bottom: -6, right: 30, transform: 'rotate(6deg)' }} />
-          <ProductImg src={product.imageUrl} alt={name} className="detail-img" />
+          <ProductImg src={product.imageUrl} alt={product.brand + ' ' + name} className="detail-img" />
           {(product.imageUrl || '').includes('placeholder') && (
             <span style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', fontSize: 11, fontWeight: 500, fontStyle: 'italic', color: 'var(--ink-faint)', opacity: 0.6, whiteSpace: 'nowrap' }}>
               {t('Photo coming soon', '사진 준비 중')}

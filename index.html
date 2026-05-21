@@ -241,9 +241,24 @@
       );
     }
 
+    // Derive initial view from URL to prevent flash on direct/UTM article links
+    function getInitialView() {
+      const p = window.location.pathname.replace(/\/$/, '');
+      if (p === '') return 'landing';
+      if (p === '/insights' || p.startsWith('/article/')) return 'insights';
+      if (p === '/products' || p.startsWith('/products/')) return p === '/products' ? 'feed' : 'detail';
+      if (p === '/brands' || p.startsWith('/brands/')) return 'brands';
+      if (p === '/about') return 'about';
+      if (p === '/privacy') return 'privacy';
+      if (p === '/admin') return 'admin';
+      if (p === '/analyze' || p === '/analyzer') return 'analyze';
+      if (p === '/search') return 'insights';
+      try { return JSON.parse(localStorage.getItem('view')) || 'insights'; } catch(e) { return 'insights'; }
+    }
+
     function App() {
       // Persistent UI state
-      const [view, setView] = window.useLocalState('view', 'insights'); // feed | detail | insights | analyzer
+      const [view, setView] = window.useLocalState('view', getInitialView()); // feed | detail | insights | analyzer
       const [category, setCategory] = window.useLocalState('cat', 'skincare');
       const [productId, setProductId] = window.useLocalState('pid', null);
       const [query, setQuery] = window.useLocalState('q', '');
@@ -420,7 +435,7 @@
                             display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0',
                             borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
                           }}>
-                            <ProductImg src={p.imageUrl} alt={name} style={{ width: 56, height: 56, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: '6%' }} />
+                            <ProductImg src={p.imageUrl} alt={p.brand + ' ' + name} style={{ width: 56, height: 56, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: '6%' }} />
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{p.brand}</span>
                               <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: '2px 0 0', color: 'var(--ink)' }}>{name}</h4>

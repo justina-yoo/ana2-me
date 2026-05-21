@@ -166,7 +166,7 @@ If you don't recognize a product, skip it and work with the ones you do know. Be
             <button key={p.id} className="prof-suggest-chip" onClick={() => addProduct({
               name: p.name, nameKo: p.nameKo, image: p.imageUrl, brand: p.brand
             })}>
-              {p.imageUrl && <ProductImg src={p.imageUrl} alt="" className="prof-suggest-img" />}
+              {p.imageUrl && <ProductImg src={p.imageUrl} alt={p.brand + ' ' + (isKo && p.nameKo ? p.nameKo : p.name)} className="prof-suggest-img" />}
               <span>{isKo && p.nameKo ? p.nameKo : p.name}</span>
             </button>
           ))}
@@ -183,7 +183,7 @@ If you don't recognize a product, skip it and work with the ones you do know. Be
           <div className="prof-slots">
             {works.map(item => (
               <div key={item.name} className="prof-slot prof-slot-works">
-                {item.image && <ProductImg src={item.image} alt="" className="prof-slot-img" />}
+                {item.image && <ProductImg src={item.image} alt={(item.brand || '') + ' ' + label(item)} className="prof-slot-img" />}
                 <div className="prof-slot-info">
                   {item.brand && <span className="prof-slot-brand">{item.brand}</span>}
                   <span className="prof-slot-name">{label(item)}</span>
@@ -206,7 +206,7 @@ If you don't recognize a product, skip it and work with the ones you do know. Be
           <div className="prof-slots">
             {doesnt.map(item => (
               <div key={item.name} className="prof-slot prof-slot-doesnt">
-                {item.image && <ProductImg src={item.image} alt="" className="prof-slot-img" />}
+                {item.image && <ProductImg src={item.image} alt={(item.brand || '') + ' ' + label(item)} className="prof-slot-img" />}
                 <div className="prof-slot-info">
                   {item.brand && <span className="prof-slot-brand">{item.brand}</span>}
                   <span className="prof-slot-name">{label(item)}</span>

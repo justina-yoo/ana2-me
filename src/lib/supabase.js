@@ -105,7 +105,7 @@
         return rows.map(function(r) {
           return {
             id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
-            readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
+            summary: r.summary, readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
             imageUrl: r.image_url, keywords: r.keywords, bodyBlocks: r.body_blocks,
             featured: r.featured
           };
@@ -117,7 +117,7 @@
         return rows.map(function(r) {
           return {
             id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
-            readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
+            summary: r.summary, readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
             imageUrl: r.image_url, keywords: r.keywords
           };
         });
@@ -168,6 +168,7 @@
             category: r.category,
             title: r.title,
             excerpt: r.excerpt,
+            summary: r.summary,
             readTime: r.read_time,
             date: r.date,
             tag: r.tag,

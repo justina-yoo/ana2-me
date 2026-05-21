@@ -136,7 +136,7 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
                     border: '1px solid var(--line)', borderRadius: 'var(--radius)',
                     textDecoration: 'none', color: 'inherit',
                   }}>
-                  <ProductImg src={p.imageUrl} alt={name}
+                  <ProductImg src={p.imageUrl} alt={p.brand + ' ' + name}
                     style={{ width: 80, height: 80, objectFit: 'contain' }} />
                   <div style={{ textAlign: 'center' }}>
                     <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)', display: 'block' }}>{p.brand}</span>

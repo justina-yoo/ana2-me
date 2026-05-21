@@ -331,7 +331,7 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
                   borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
                 }}>
                   <div style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', flexShrink: 0, background: 'var(--cream-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    <img src={p.imageUrl} alt={name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                    <img src={p.imageUrl} alt={p.brand + ' ' + name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.3, margin: '0 0 3px', color: 'var(--ink)' }}>{name}</h4>

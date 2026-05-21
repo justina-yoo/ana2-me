@@ -28,13 +28,13 @@ export default async function (request, context) {
     return context.next();
   }
 
-  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate, faqLd;
+  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate, faqLd, summaryText;
 
   try {
     if (articleMatch) {
       const articleId = articleMatch[1];
       const res = await fetchWithTimeout(
-        `${SUPABASE_URL}/rest/v1/articles?id=eq.${articleId}&select=id,title,excerpt,tag,category,date,image_url,keywords,body_blocks,read_time`,
+        `${SUPABASE_URL}/rest/v1/articles?id=eq.${articleId}&select=id,title,excerpt,summary,tag,category,date,image_url,keywords,body_blocks,read_time`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       const data = await res.json();
@@ -81,6 +81,12 @@ export default async function (request, context) {
         "mainEntityOfPage": { "@type": "WebPage", "@id": pageUrl },
         "isPartOf": { "@id": `${SITE}/#website` }
       };
+
+      // Add abstract from summary column (top-level field, AEO-friendly)
+      summaryText = a.summary?.en || tldrText || '';
+      if (summaryText) {
+        articleLd.abstract = summaryText.replace(/<[^>]*>/g, '');
+      }
 
       if (citations.length > 0) {
         articleLd.citation = citations;
@@ -536,9 +542,12 @@ export default async function (request, context) {
       .replace(/(<meta\s+name="twitter:image:alt"\s+content=")[^"]*"/, `$1${escAttr(title)}"`);
   }
 
-  // Inject article:published_time for articles
+  // Inject article:published_time and summary meta for articles
   if (articleMatch && publishedDate) {
     newHtml = newHtml.replace('</head>', `<meta property="article:published_time" content="${publishedDate}" />\n</head>`);
+  }
+  if (articleMatch && typeof summaryText === 'string' && summaryText) {
+    newHtml = newHtml.replace('</head>', `<meta name="summary" content="${escAttr(summaryText.replace(/<[^>]*>/g, ''))}" />\n</head>`);
   }
 
   // Inject JSON-LD before </head>

@@ -18,7 +18,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     }
   }, [result]);
 
-  const MAX_PER_SIDE = 10;
+  const MAX_PER_SIDE = 3;
   const allSelected = [...works, ...doesnt].map(function(p) { return p.id; });
   const totalCount = works.length + doesnt.length;
   const canAnalyze = totalCount >= 1;
@@ -571,10 +571,11 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   }
 
   // ── Product Picker ──
-  function ProductPicker({ label, labelKo, selected, setSelected, max, icon }) {
+  function ProductPicker({ label, labelKo, selected, setSelected, max, icon, accent }) {
     var [q, setQ] = useState('');
     var [open, setOpen] = useState(false);
     var inputRef = useRef(null);
+    var accentClass = accent === 'rose' ? 'try-picker--rose' : 'try-picker--green';
 
     var filtered = (products || []).filter(function(p) {
       if (p.category !== 'skincare') return false;
@@ -597,26 +598,44 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       setResult(null); setError(null);
     };
 
-    return React.createElement('div', { className: 'try-picker' },
+    // Progress dots
+    var dots = [];
+    for (var di = 0; di < max; di++) {
+      dots.push(React.createElement('span', {
+        key: di,
+        className: 'try-dot' + (di < selected.length ? ' try-dot--filled' : '')
+      }));
+    }
+
+    var focusSearch = function() { if (inputRef.current) inputRef.current.focus(); };
+
+    return React.createElement('div', { className: 'try-picker ' + accentClass, onClick: focusSearch, style: { cursor: selected.length < max ? 'text' : 'default' } },
       React.createElement('h3', { className: 'try-picker-label' },
-        React.createElement('span', { className: 'try-picker-icon' }, icon),
+        React.createElement('span', { className: 'try-picker-icon-wrap' }, icon),
         ' ',
         t(label, labelKo),
-        React.createElement('span', { className: 'try-picker-count' }, selected.length + '/' + max)
+        React.createElement('span', { className: 'try-picker-dots' }, dots)
       ),
       selected.map(function(p) {
         var name = isKo && p.nameKo ? p.nameKo : p.name;
         return React.createElement('div', { key: p.id, className: 'try-chip' },
           React.createElement('div', { className: 'try-chip-img' },
-            React.createElement(ProductImg, { src: p.imageUrl, alt: name })
+            React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
           ),
-          React.createElement('span', { className: 'try-chip-brand' }, p.brand),
-          React.createElement('span', { className: 'try-chip-name' }, name),
+          React.createElement('div', { className: 'try-chip-text' },
+            React.createElement('span', { className: 'try-chip-brand' }, p.brand),
+            React.createElement('span', { className: 'try-chip-name' }, name)
+          ),
           React.createElement('button', { className: 'try-chip-x', onClick: function() { remove(p.id); }, 'aria-label': 'Remove' },
             React.createElement(Icon, { name: 'x', size: 12 })
           )
         );
       }),
+      selected.length === 0 && selected.length < max && React.createElement('div', { className: 'try-empty' },
+        React.createElement('span', { className: 'try-empty-text' },
+          t('Search and add up to ' + max + ' products', '제품을 검색해서 최대 ' + max + '개 추가하세요')
+        )
+      ),
       selected.length < max && React.createElement('div', { className: 'try-search-wrap', style: { position: 'relative' } },
         React.createElement('div', { className: 'try-search' },
           React.createElement(Icon, { name: 'search', size: 14 }),
@@ -639,7 +658,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
               onClick: function() { add(p); }
             },
               React.createElement('div', { className: 'try-dd-img' },
-                React.createElement(ProductImg, { src: p.imageUrl, alt: name })
+                React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
               ),
               React.createElement('div', { style: { flex: 1, minWidth: 0 } },
                 React.createElement('span', { className: 'try-dd-brand' }, p.brand),
@@ -683,7 +702,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       }
     },
       React.createElement('div', { className: 'try-rec-img' },
-        React.createElement(ProductImg, { src: p.imageUrl, alt: name })
+        React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
       ),
       React.createElement('div', { style: { flex: 1, minWidth: 0 } },
         React.createElement('span', { className: 'try-rec-brand' }, p.brand),
@@ -708,8 +727,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       ),
       React.createElement('p', { className: 'try-subtitle' },
         t(
-          'Add one product for a quick ingredient breakdown. Or add products to both lists — what works for your skin and what doesn\u2019t — and we\u2019ll find the patterns. The more products you add, the sharper the analysis.',
-          '제품 1개를 추가하면 성분을 빠르게 분석해 드립니다. 또는 양쪽 목록에 제품을 추가하세요 — 피부에 잘 맞는 것과 맞지 않는 것 — 패턴을 찾아드립니다. 제품을 많이 추가할수록 분석이 정확해집니다.'
+          'Tell us which products work for your skin and which don\u2019t. We\u2019ll find the ingredient patterns behind both.',
+          '어떤 제품이 맞고 안 맞는지 알려주세요. 그 뒤에 숨겨진 성분 패턴을 찾아드려요.'
         )
       )
     ),
@@ -718,11 +737,11 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     React.createElement('section', { className: 'try-pickers' },
       React.createElement(ProductPicker, {
         label: 'Products that suit you', labelKo: '잘 맞는 제품',
-        selected: works, setSelected: setWorks, max: MAX_PER_SIDE, icon: '\u2764\uFE0F'
+        selected: works, setSelected: setWorks, max: MAX_PER_SIDE, icon: '\u2705', accent: 'green'
       }),
       React.createElement(ProductPicker, {
         label: 'Products that don\u2019t suit you', labelKo: '맞지 않는 제품',
-        selected: doesnt, setSelected: setDoesnt, max: MAX_PER_SIDE, icon: '\uD83D\uDEAB'
+        selected: doesnt, setSelected: setDoesnt, max: MAX_PER_SIDE, icon: '\uD83D\uDEAB', accent: 'rose'
       })
     ),
 

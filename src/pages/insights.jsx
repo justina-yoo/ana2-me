@@ -16,6 +16,8 @@ function postSlug(post) {
 const PAGE_SIZE = 10;
 
 window.Insights = function Insights({ lang, density, query }) {
+  // Detect if we're landing on an article URL — suppress listing flash while resolving
+  const isArticleUrl = window.location.pathname.replace(/\/$/, '').startsWith('/article/');
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const [POSTS, setPOSTS] = useState([]);
@@ -24,6 +26,7 @@ window.Insights = function Insights({ lang, density, query }) {
   const [fetchError, setFetchError] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [navTrigger, setNavTrigger] = useState(0);
+  const [urlResolving, setUrlResolving] = useState(isArticleUrl);
   const isKo = lang === 'ko';
 
   // Fetch first page of articles
@@ -93,7 +96,7 @@ window.Insights = function Insights({ lang, density, query }) {
   useEffect(() => {
     if (urlResolved.current) return;
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
-    if (!path || path === 'insights') { urlResolved.current = true; return; }
+    if (!path || path === 'insights') { urlResolved.current = true; setUrlResolving(false); return; }
     const parts = path.split('/');
     const articleId = parts[parts.length - 1];
 
@@ -102,6 +105,7 @@ window.Insights = function Insights({ lang, density, query }) {
     if (inLoaded) {
       urlResolved.current = true;
       setSelectedPost(inLoaded);
+      setUrlResolving(false);
       if (window.SEO) window.SEO.setArticle(inLoaded);
       return;
     }
@@ -118,8 +122,10 @@ window.Insights = function Insights({ lang, density, query }) {
       } else {
         setNotFound(true);
       }
+      setUrlResolving(false);
     }).catch(function() {
       setNotFound(true);
+      setUrlResolving(false);
     });
   }, [POSTS, navTrigger]);
 
@@ -151,6 +157,8 @@ window.Insights = function Insights({ lang, density, query }) {
     });
   }
 
+  // Suppress listing flash while resolving a direct article URL
+  if (urlResolving) return null;
 
   const q = (query || '').trim().toLowerCase();
   let filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;

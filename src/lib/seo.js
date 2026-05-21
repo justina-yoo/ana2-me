@@ -399,12 +399,23 @@
       setMeta('meta[name="twitter:description"]', m.description);
       setMeta('meta[name="twitter:image"]', m.image);
       setMeta('meta[name="twitter:image:alt"]', m.imageAlt);
+      // Summary meta for AEO — create if missing
+      var summaryVal = (typeof articleIdOrObj === 'object' && articleIdOrObj.summary)
+        ? ((l === 'ko' && articleIdOrObj.summary.ko) ? articleIdOrObj.summary.ko : articleIdOrObj.summary.en)
+        : '';
+      if (summaryVal) {
+        var sumEl = document.querySelector('meta[name="summary"]');
+        if (!sumEl) { sumEl = document.createElement('meta'); sumEl.name = 'summary'; document.head.appendChild(sumEl); }
+        sumEl.setAttribute('content', summaryVal.replace(/<[^>]*>/g, ''));
+      }
+      var abstractVal = summaryVal ? summaryVal.replace(/<[^>]*>/g, '') : '';
       setArticleJsonLd({
         '@context': 'https://schema.org',
         '@type': 'NewsArticle',
         '@id': url + '#article',
         'headline': m.title,
         'description': m.description,
+        'abstract': abstractVal || m.description,
         'url': url,
         'datePublished': m.datePublished,
         'dateModified': m.dateModified,
