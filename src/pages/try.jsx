@@ -8,6 +8,15 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [selIng, setSelIng] = useState(null);
+  const resultsRef = useRef(null);
+  useEffect(function() {
+    if (result && resultsRef.current) {
+      setTimeout(function() {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [result]);
 
   const MAX_PER_SIDE = 10;
   const allSelected = [...works, ...doesnt].map(function(p) { return p.id; });
@@ -199,6 +208,10 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
             name_ko: ing.name_ko,
             symbol: ing.symbol || (ing.name || '').substring(0, 2).toUpperCase(),
             category: ing.category || 'uncategorized',
+            description: ing.description,
+            description_ko: ing.description_ko,
+            science: ing.science,
+            science_ko: ing.science_ko,
             is_hero: r.is_hero,
             sort_order: r.sort_order,
             flagged: isFlagged,
@@ -207,24 +220,35 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           };
         }).filter(Boolean);
 
-        // Group by category for breakdown
-        var catGroups = {};
+        // Group into user-intent sections
+        var ACTIVE_CATS = { 'active': true, 'peptide': true, 'antioxidant': true, 'ferment': true };
+        var COMFORT_CATS = { 'humectant': true, 'emollient': true, 'barrier-lipid': true, 'soothing-botanical': true };
+
+        var activeIngs = [];
+        var comfortIngs = [];
         allIngs.forEach(function(ing) {
-          var cat = ing.category;
-          if (!catGroups[cat]) catGroups[cat] = [];
-          catGroups[cat].push(ing);
+          if (ACTIVE_CATS[ing.category]) activeIngs.push(ing);
+          else if (COMFORT_CATS[ing.category]) comfortIngs.push(ing);
+          // Everything else (thickeners, emulsifiers, pH adjusters, solvents, etc.) is hidden
         });
 
-        var breakdown = Object.entries(catGroups)
-          .sort(function(a, b) { return b[1].length - a[1].length; })
-          .map(function(entry) {
-            var cat = entry[0], ings = entry[1];
-            return {
-              theme_name: catLabel(cat),
-              function_category: cat,
-              ingredients: ings
-            };
+        var breakdown = [];
+        if (activeIngs.length > 0) {
+          breakdown.push({
+            theme_name: t('\u2728 What makes it special', '\u2728 이 제품을 특별하게 만드는 성분'),
+            subtitle: t('The active ingredients doing the heavy lifting.', '핵심적인 역할을 하는 활성 성분들.'),
+            function_category: '_active',
+            ingredients: activeIngs
           });
+        }
+        if (comfortIngs.length > 0) {
+          breakdown.push({
+            theme_name: t('\uD83E\uDEE7 What makes it gentle', '\uD83E\uDEE7 왜 편안한지'),
+            subtitle: t('Hydration, barrier support, and soothing ingredients.', '보습, 장벽 지원, 진정 성분들.'),
+            function_category: '_comfort',
+            ingredients: comfortIngs
+          });
+        }
 
         // Flag sensitizers / allergens
         var flags = allIngs.filter(function(ing) { return ing.flagged; }).map(function(ing) {
@@ -249,7 +273,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           }
         });
 
-        var productCats = new Set(Object.keys(catGroups).filter(function(c) { return c !== 'uncategorized' && c !== 'other'; }));
+        var productCats = new Set(Object.keys(ACTIVE_CATS).concat(Object.keys(COMFORT_CATS)));
         var recs;
 
         if (singleIsWorks) {
@@ -286,7 +310,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         var seenBrands = new Set();
         var recIds = [];
         recs.forEach(function(item) {
-          if (recIds.length >= 5) return;
+          if (recIds.length >= 3) return;
           if (seenBrands.has(item.product.brand)) return;
           seenBrands.add(item.product.brand);
           recIds.push(item.product.id);
@@ -358,12 +382,21 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         .slice(0, 5)
         .map(function(item) {
           var totalD = doesntIds.length;
+          var ing = item.ing;
           var conf = item.count >= totalD ? 'high' : item.count >= Math.ceil(totalD / 2) ? 'medium' : 'low';
           return {
-            ingredient_name_en: item.ing.name,
-            ingredient_name_ko: item.ing.name_ko,
-            reason: negativeReason(item.ing, item.count, totalD),
-            confidence: conf
+            ingredient_name_en: ing.name,
+            ingredient_name_ko: ing.name_ko,
+            symbol: ing.symbol || (ing.name || '').substring(0, 2).toUpperCase(),
+            category: ing.category,
+            flag_type: ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil' : ing.is_known_sensitizer ? 'sensitizer' : 'irritant',
+            description: ing.description,
+            description_ko: ing.description_ko,
+            science: ing.science,
+            science_ko: ing.science_ko,
+            reason: negativeReason(ing, item.count, totalD),
+            confidence: conf,
+            flagged: true
           };
         });
 
@@ -407,30 +440,39 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         }
       }
 
-      // Aggregate by function category
-      var categoryGroups = {};
+      // Aggregate into intent groups (same as single mode)
+      var ACTIVE_CATS_C = { 'active': true, 'peptide': true, 'antioxidant': true, 'ferment': true };
+      var COMFORT_CATS_C = { 'humectant': true, 'emollient': true, 'barrier-lipid': true, 'soothing-botanical': true };
+      var posActives = [], posComfort = [];
       positiveIngredients.forEach(function(item) {
-        var cat = item.ing.category || 'uncategorized';
-        if (cat === 'other' || cat === 'uncategorized') return;
-        if (!categoryGroups[cat]) categoryGroups[cat] = [];
-        categoryGroups[cat].push(item.ing);
+        var ig = item.ing;
+        var enriched = {
+          id: ig.id, name: ig.name, name_ko: ig.name_ko,
+          symbol: ig.symbol || (ig.name || '').substring(0, 2).toUpperCase(),
+          category: ig.category,
+          description: ig.description, description_ko: ig.description_ko,
+          science: ig.science, science_ko: ig.science_ko,
+          flagged: false
+        };
+        if (ACTIVE_CATS_C[ig.category]) posActives.push(enriched);
+        else if (COMFORT_CATS_C[ig.category]) posComfort.push(enriched);
       });
 
-      var positiveThemes = Object.entries(categoryGroups)
-        .sort(function(a, b) { return b[1].length - a[1].length; })
-        .slice(0, 5)
-        .map(function(entry) {
-          var cat = entry[0], ings = entry[1];
-          var examples = ings.slice(0, 3).map(function(ig) { return isKo ? (ig.name_ko || ig.name) : ig.name; });
-          return { theme_name: catLabel(cat), example_ingredients_seen: examples, function_category: cat };
-        });
-
-      if (positiveThemes.length === 0 && positiveIngredients.length > 0) {
-        var examples = positiveIngredients.slice(0, 5).map(function(item) { return isKo ? (item.ing.name_ko || item.ing.name) : item.ing.name; });
+      var positiveThemes = [];
+      if (posActives.length > 0) {
         positiveThemes.push({
-          theme_name: t('Ingredients your skin responded well to', '피부에 잘 맞은 성분'),
-          example_ingredients_seen: examples,
-          function_category: 'mixed'
+          theme_name: t('\u2728 What makes it special', '\u2728 이 제품을 특별하게 만드는 성분'),
+          subtitle: t('Active ingredients shared across your "works" products.', '잘 맞는 제품들에 공통으로 포함된 활성 성분.'),
+          function_category: '_active',
+          ingredients: posActives
+        });
+      }
+      if (posComfort.length > 0) {
+        positiveThemes.push({
+          theme_name: t('\uD83E\uDEE7 What makes it gentle', '\uD83E\uDEE7 왜 편안한지'),
+          subtitle: t('Hydration and soothing ingredients shared across your "works" products.', '잘 맞는 제품들에 공통으로 포함된 보습 및 진정 성분.'),
+          function_category: '_comfort',
+          ingredients: posComfort
         });
       }
 
@@ -459,7 +501,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       var seenBrands = new Set();
       var recommendations = [];
       productScores.forEach(function(item) {
-        if (recommendations.length >= 5) return;
+        if (recommendations.length >= 3) return;
         if (seenBrands.has(item.product.brand)) return;
         seenBrands.add(item.product.brand);
         recommendations.push(item.product.id);
@@ -502,6 +544,30 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       setError(t('Something went wrong. Please try again.', '오류가 발생했습니다. 다시 시도해 주세요.'));
     }
     setBusy(false);
+  }
+
+  // ── Scrollable ingredient list (matches product page pattern) ──
+  function TryIngScroll({ children }) {
+    var wrapRef = useRef(null);
+    var scrollRef = useRef(null);
+    var items = React.Children.toArray(children);
+    var needsFade = items.length > 4;
+
+    useEffect(function() {
+      var el = scrollRef.current;
+      var wrap = wrapRef.current;
+      if (!el || !wrap || !needsFade) return;
+      var onScroll = function() {
+        var atEnd = el.scrollHeight - el.scrollTop - el.clientHeight < 10;
+        wrap.classList.toggle('scrolled-end', atEnd);
+      };
+      el.addEventListener('scroll', onScroll, { passive: true });
+      return function() { el.removeEventListener('scroll', onScroll); };
+    }, [needsFade]);
+
+    return React.createElement('div', { ref: wrapRef, className: cn('try-ing-scroll-wrap', !needsFade && 'scrolled-end') },
+      React.createElement('div', { className: 'try-ing-scroll', ref: scrollRef }, children)
+    );
   }
 
   // ── Product Picker ──
@@ -600,24 +666,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   }
 
   // ── Nudge message ──
-  function NudgeMessage() {
-    if (!result) return null;
-    var w = works.length, d = doesnt.length;
-    if (w >= 3 && d >= 3) return null;
-    var msg;
-    if (isSingleMode) {
-      msg = t(
-        'Add products to both lists for a comparative pattern analysis.',
-        '양쪽 목록에 제품을 추가하면 비교 패턴 분석을 할 수 있습니다.'
-      );
-    } else {
-      msg = t(
-        'Add more products for a sharper analysis. Best results with 3+ in each list.',
-        '더 많은 제품을 추가하면 더 정확한 분석이 가능합니다. 각 목록에 3개 이상이면 최적입니다.'
-      );
-    }
-    return React.createElement('p', { className: 'try-nudge' }, msg);
-  }
 
   // ── Render helpers for result cards ──
   function renderProductLink(pid) {
@@ -660,8 +708,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       ),
       React.createElement('p', { className: 'try-subtitle' },
         t(
-          'Add one product for a quick breakdown, or compare products that suit you vs. ones that don\u2019t for a full pattern analysis.',
-          '제품 1개를 추가하면 성분 분석을, 잘 맞는 제품과 맞지 않는 제품을 비교하면 전체 패턴 분석을 해드립니다.'
+          'Add one product for a quick ingredient breakdown. Or add products to both lists — what works for your skin and what doesn\u2019t — and we\u2019ll find the patterns. The more products you add, the sharper the analysis.',
+          '제품 1개를 추가하면 성분을 빠르게 분석해 드립니다. 또는 양쪽 목록에 제품을 추가하세요 — 피부에 잘 맞는 것과 맞지 않는 것 — 패턴을 찾아드립니다. 제품을 많이 추가할수록 분석이 정확해집니다.'
         )
       )
     ),
@@ -701,16 +749,21 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     error && React.createElement('div', { className: 'try-error' }, error),
 
     // Results
-    result && React.createElement('section', { className: 'try-results' },
+    result && React.createElement('section', { className: 'try-results', ref: resultsRef },
 
-      // Mode badge + confidence
+      // Result headline + data quality
       React.createElement(Reveal, null,
-        React.createElement('div', { className: 'try-mode-badge' },
-          React.createElement(ConfBadge, { level: getConfidenceLevel() }),
-          React.createElement('span', { className: 'try-mode-label' },
-            result.mode === 'single'
-              ? t('Single product analysis', '단일 제품 분석')
-              : t('Comparative pattern analysis', '비교 패턴 분석')
+        React.createElement('h2', { className: 'try-results-headline' },
+          result.mode === 'single'
+            ? (singleIsWorks
+                ? t('Here\u2019s what\u2019s inside ', '이 제품의 성분 분석: ') + (isKo ? (singleProduct && singleProduct.nameKo || '') : (singleProduct && singleProduct.name || ''))
+                : t('Here\u2019s why this might not suit you', '이 제품이 맞지 않을 수 있는 이유'))
+            : t('Your ingredient pattern', '나의 성분 패턴')
+        ),
+        React.createElement('p', { className: 'try-quality-inline' },
+          result.data_quality.confidence_note + ' ' + t(
+            'This analysis is based on ingredient data, not clinical testing. Individual results vary.',
+            '이 분석은 성분 데이터에 기반하며, 임상 테스트 결과가 아닙니다. 개인차가 있습니다.'
           )
         )
       ),
@@ -724,38 +777,43 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 t('The anatomy', '이 제품의 아나토미')
               ),
               React.createElement('p', { className: 'sec-sub' },
-                t('Full ingredient breakdown by function.', '기능별 전체 성분 분석.')
+                t('Scroll each section to see all ingredients.', '각 섹션을 스크롤하여 모든 성분을 확인하세요.')
               )
             ),
-            React.createElement(Sticker, { color: 'butter', rotate: -5 },
-              (result.all_ingredients || []).length + ' ' + t('ingredients', '성분')
-            )
+            null
           ),
-          // Ingredient cards grouped by category
-          (result.positive_themes || []).map(function(group, gi) {
-            return React.createElement('div', { key: gi, className: 'try-cat-group' },
-              React.createElement('h4', { className: 'try-cat-label' }, group.theme_name),
-              React.createElement('div', { className: 'try-ing-list' },
-                (group.ingredients || []).map(function(ing, ii) {
-                  var name = isKo ? (ing.name_ko || ing.name) : ing.name;
-                  var flagLabel = ing.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 알레르겐')
-                    : ing.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
-                    : ing.flag_type === 'sensitizer' ? t('Sensitizer', '민감 성분')
-                    : ing.flag_type === 'irritant' ? t('Irritant', '자극 성분')
-                    : null;
-                  return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged'), style: { '--i': gi * 10 + ii } },
-                    React.createElement('div', { className: 'ing-card-main' },
-                      React.createElement('span', { className: 'ing-sym' }, ing.symbol),
-                      React.createElement('div', { className: 'ing-body' },
-                        React.createElement('p', { className: 'ing-name' }, name),
-                        flagLabel && React.createElement('span', { className: 'try-flag-badge' }, flagLabel)
+          // Intent groups — active story + comfort layer
+          (function() {
+            var SYM_COLORS = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
+            var colorIdx = 0;
+            return (result.positive_themes || []).map(function(group, gi) {
+              return React.createElement('div', { key: gi, className: 'try-cat-group' },
+                React.createElement('h4', { className: 'try-cat-label' }, group.theme_name),
+                React.createElement('p', { className: 'try-cat-sub' }, group.subtitle),
+                React.createElement(TryIngScroll, null,
+                  (group.ingredients || []).map(function(ing) {
+                    var name = isKo ? (ing.name_ko || ing.name) : ing.name;
+                    var flagLabel = ing.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 알레르겐')
+                      : ing.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
+                      : ing.flag_type === 'sensitizer' ? t('Sensitizer', '민감 성분')
+                      : ing.flag_type === 'irritant' ? t('Irritant', '자극 성분')
+                      : null;
+                    var symBg = ing.flagged ? '#c0392b' : SYM_COLORS[colorIdx % SYM_COLORS.length];
+                    colorIdx++;
+                    return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged') },
+                      React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng(ing); } },
+                        React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, ing.symbol),
+                        React.createElement('div', { className: 'ing-body' },
+                          React.createElement('p', { className: 'ing-name' }, name),
+                          flagLabel && React.createElement('span', { className: 'try-flag-badge' }, flagLabel)
+                        )
                       )
-                    )
-                  );
-                })
-              )
-            );
-          }),
+                    );
+                  })
+                )
+              );
+            });
+          })(),
           // Flagged ingredients callout (if any)
           result.avoid_ingredients.length > 0 && React.createElement('div', { className: 'try-flags-callout' },
             React.createElement('h4', { className: 'try-flags-title' },
@@ -784,7 +842,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
 
       // ── Comparative mode: avoid card ──
       result.mode !== 'single' && React.createElement(Reveal, { delay: 50 },
-        React.createElement('div', { className: 'try-result-card' },
+        React.createElement('div', { className: 'try-result-card try-card-avoid' },
           React.createElement('h2', { className: 'try-result-title' },
             t('What you may want to avoid', '주의가 필요한 성분')
           ),
@@ -793,21 +851,46 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 t('No commonly flagged irritants were detected. Triggers may be in ingredients our database doesn\u2019t fully cover yet.',
                     '일반적으로 알려진 자극 성분이 감지되지 않았습니다. 아직 전성분 데이터가 완전하지 않아 원인 성분이 누락되었을 수 있습니다.')
               )
-            : result.avoid_ingredients.map(function(item, i) {
-                return React.createElement('div', { key: i, className: 'try-avoid-item' },
-                  React.createElement('div', { className: 'try-avoid-head' },
-                    React.createElement('strong', null, isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en),
-                    React.createElement(ConfBadge, { level: item.confidence })
-                  ),
-                  React.createElement('p', { className: 'try-avoid-reason' }, item.reason)
-                );
-              })
+            : React.createElement(TryIngScroll, null,
+                result.avoid_ingredients.map(function(item, i) {
+                  var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
+                  return React.createElement('div', { key: i, className: 'ing-card try-ing-flagged' },
+                    React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
+                      name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
+                      symbol: item.symbol, category: item.category, flagged: true, flag_type: item.flag_type,
+                      description: item.description, description_ko: item.description_ko,
+                      science: item.science, science_ko: item.science_ko
+                    }); } },
+                      React.createElement('span', { className: 'ing-sym', style: { background: '#c0392b' } }, item.symbol),
+                      React.createElement('div', { className: 'ing-body' },
+                        React.createElement('p', { className: 'ing-name' }, name),
+                        React.createElement('span', { className: 'try-flag-badge' },
+                          item.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 알레르겐')
+                          : item.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
+                          : item.flag_type === 'sensitizer' ? t('Sensitizer', '민감 성분')
+                          : t('Irritant', '자극 성분')
+                        )
+                      ),
+                      React.createElement(ConfBadge, { level: item.confidence })
+                    )
+                  );
+                })
+              ),
+          // Show reasons below the cards
+          result.avoid_ingredients.length > 0 && React.createElement('div', { style: { marginTop: 12 } },
+            result.avoid_ingredients.map(function(item, i) {
+              return React.createElement('p', { key: i, className: 'try-avoid-reason', style: { margin: '6px 0' } },
+                React.createElement('strong', null, isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en),
+                ' — ', item.reason
+              );
+            })
+          )
         )
       ),
 
       // ── Comparative mode: positive themes card ──
       result.mode !== 'single' && React.createElement(Reveal, { delay: 150 },
-        React.createElement('div', { className: 'try-result-card' },
+        React.createElement('div', { className: 'try-result-card try-card-positive' },
           React.createElement('h2', { className: 'try-result-title' },
             t('What your skin responds to', '피부가 반응하는 성분')
           ),
@@ -815,16 +898,31 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
             ? React.createElement('p', { className: 'try-result-empty' },
                 t('No strong ingredient patterns found.', '강한 성분 패턴이 발견되지 않았습니다.')
               )
-            : result.positive_themes.map(function(theme, i) {
-                return React.createElement('div', { key: i, className: 'try-theme-item' },
-                  React.createElement('h4', { className: 'try-theme-name' }, theme.theme_name),
-                  React.createElement('div', { className: 'try-theme-examples' },
-                    (theme.example_ingredients_seen || []).map(function(ex, j) {
-                      return React.createElement('span', { key: j, className: 'try-theme-pill' }, ex);
-                    })
-                  )
-                );
-              })
+            : (function() {
+                var SYM_COLORS = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
+                var cIdx = 0;
+                return result.positive_themes.map(function(theme, i) {
+                  return React.createElement('div', { key: i, className: 'try-cat-group' },
+                    React.createElement('h4', { className: 'try-cat-label' }, theme.theme_name),
+                    theme.subtitle && React.createElement('p', { className: 'try-cat-sub' }, theme.subtitle),
+                    React.createElement(TryIngScroll, null,
+                      (theme.ingredients || []).map(function(ing) {
+                        var name = isKo ? (ing.name_ko || ing.name) : ing.name;
+                        var symBg = SYM_COLORS[cIdx % SYM_COLORS.length];
+                        cIdx++;
+                        return React.createElement('div', { key: ing.id, className: 'ing-card' },
+                          React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng(ing); } },
+                            React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, ing.symbol),
+                            React.createElement('div', { className: 'ing-body' },
+                              React.createElement('p', { className: 'ing-name' }, name)
+                            )
+                          )
+                        );
+                      })
+                    )
+                  );
+                });
+              })()
         )
       ),
 
@@ -854,18 +952,30 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         )
       ),
 
-      // Nudge
-      React.createElement(NudgeMessage),
+    ),
 
-      // Data quality
-      React.createElement(Reveal, { delay: 350 },
-        React.createElement('div', { className: 'try-quality' },
-          React.createElement('p', null, result.data_quality.confidence_note),
-          React.createElement('p', { style: { marginTop: 6, fontSize: 11 } },
-            t(
-              'This analysis is based on ingredient data, not clinical testing. Individual results vary. This is not medical advice.',
-              '이 분석은 성분 데이터에 기반하며, 임상 테스트 결과가 아닙니다. 개인차가 있으며 의료 조언이 아닙니다.'
-            )
+    // ── Ingredient detail sheet (reuses product-page sheet UI) ──
+    selIng && React.createElement('div', { className: 'sheet-back', onClick: function() { setSelIng(null); } },
+      React.createElement('div', { className: 'sheet', onClick: function(e) { e.stopPropagation(); } },
+        React.createElement('button', { className: 'sheet-close', onClick: function() { setSelIng(null); } },
+          React.createElement(Icon, { name: 'x', size: 16 })
+        ),
+        React.createElement('div', { className: 'sheet-sym', style: selIng.flagged ? { background: '#c0392b' } : undefined }, selIng.symbol),
+        React.createElement('h3', { className: 'sheet-name' }, isKo ? (selIng.name_ko || selIng.name) : selIng.name),
+        React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-faint)', margin: '4px 0 12px', textTransform: 'uppercase', letterSpacing: '0.04em' } }, catLabel(selIng.category)),
+        (isKo ? (selIng.science_ko || selIng.science) : selIng.science)
+          ? React.createElement('p', { className: 'sheet-sci' }, isKo ? (selIng.science_ko || selIng.science) : selIng.science)
+          : (isKo ? (selIng.description_ko || selIng.description) : selIng.description)
+            ? React.createElement('p', { className: 'sheet-sci' }, isKo ? (selIng.description_ko || selIng.description) : selIng.description)
+            : React.createElement('p', { className: 'sheet-sci', style: { color: 'var(--ink-faint)', fontStyle: 'italic' } },
+                t('No description available yet for this ingredient.', '아직 이 성분에 대한 설명이 없습니다.')
+              ),
+        selIng.flagged && React.createElement('div', { style: { marginTop: 12, padding: '10px 14px', background: 'rgba(192,57,44,0.06)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(192,57,44,0.15)' } },
+          React.createElement('span', { className: 'try-flag-badge', style: { marginBottom: 6, display: 'inline-block' } },
+            selIng.flag_type === 'eu26' ? t('EU-26 fragrance allergen', 'EU-26 향료 알레르겐')
+            : selIng.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
+            : selIng.flag_type === 'sensitizer' ? t('Known sensitizer', '알려진 민감 성분')
+            : t('Irritation potential', '자극 가능성')
           )
         )
       )

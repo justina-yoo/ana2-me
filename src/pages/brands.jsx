@@ -35,23 +35,31 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea'
   },
   'Biodance': {
-    en: 'A Seoul-based biotech skincare brand founded in 2021 that fuses biotechnology with dermatological science. Known for their viral Real Deep Collagen Mask and barrier-focused formulations using EWG-certified ingredients.',
-    ko: '2021년 서울에서 설립된 바이오테크 스킨케어 브랜드예요. 바이럴 리얼 딥 콜라겐 마스크와 EWG 인증 성분을 사용한 장벽 중심 제형으로 유명해요.',
-    origin: 'Seoul, Korea', founded: '2021'
+    en: 'A Seoul-based skincare brand founded in 2021 by Mihwa Kim under Beautyselection Co. Their flagship Bio-Collagen Real Deep Mask uses low-molecular-weight collagen and EWG Verified\u2122 ingredients, with a focus on barrier-supportive formulations.',
+    ko: '2021\ub144 \uae40\ubbf8\ud654\uac00 \ubdf0\ud2f0\uc140\ub809\uc158 \uc0b0\ud558\ub85c \uc124\ub9bd\ud55c \uc11c\uc6b8 \uae30\ubc18 \uc2a4\ud0a8\ucf00\uc5b4 \ube0c\ub79c\ub4dc\uc608\uc694. \ub300\ud45c \uc81c\ud488\uc778 \ubc14\uc774\uc624\ucf5c\ub77c\uac90 \ub9ac\uc5bc \ub525 \ub9c8\uc2a4\ud06c\ub294 \uc800\ubd84\uc790 \ucf5c\ub77c\uac90\uacfc EWG Verified\u2122 \uc131\ubd84\uc744 \uc0ac\uc6a9\ud574\uc694.',
+    origin: 'Seoul, Korea', founded: '2021',
+    sources: [
+      { label: 'Biodance Brand Story \u2014 Mistia Shop', url: 'https://mistiashop.ca/blogs/news/brand-story-biodance' },
+      { label: 'Biodance Official Site', url: 'https://biodance.com/' },
+    ]
   },
   'COSRX': {
-    en: 'One of K-beauty\'s most recognized brands globally, built on the philosophy that skincare should be simple, effective, and affordable. Their ingredient-first approach focuses on proven actives like snail mucin, BHA, and centella.',
-    ko: '심플하고 효과적이며 합리적인 스킨케어라는 철학으로 세계적으로 인정받는 K-뷰티 브랜드예요. 스네일 뮤신, BHA, 센텔라 같은 검증된 활성 성분 중심이에요.',
-    origin: 'Seoul, Korea', founded: '2013'
+    en: 'A Korean skincare brand founded in 2013 by Jun Sang-hun, now a subsidiary of Amorepacific Group. The name stands for "Cosmetics + RX (Prescription)," reflecting their ingredient-first approach built on actives like snail mucin, BHA, and centella.',
+    ko: '2013\ub144 \uc804\uc0c1\ud6c8\uc774 \uc124\ub9bd\ud55c \uc2a4\ud0a8\ucf00\uc5b4 \ube0c\ub79c\ub4dc\ub85c, \ud604\uc7ac \uc544\ubaa8\ub808\ud37c\uc2dc\ud53d \uadf8\ub8f9 \uc0b0\ud558\uc608\uc694. \uc774\ub984\uc740 "Cosmetics + RX(\ucc98\ubc29)"\uc758 \uc57d\uc790\ub85c, \uc2a4\ub124\uc77c \ubba4\uc2e0, BHA, \uc13c\ud154\ub77c \uac19\uc740 \ud65c\uc131 \uc131\ubd84 \uc911\uc2ec\uc758 \ucca0\ud559\uc744 \ub2f4\uace0 \uc788\uc5b4\uc694.',
+    origin: 'Seoul, Korea', founded: '2013',
+    sources: [
+      { label: 'Amorepacific acquires COSRX \u2014 PR Newswire', url: 'https://www.prnewswire.com/news-releases/amorepacific-incorporates-cosrx-as-a-subsidiary-through-additional-stake-acquisition-301972048.html' },
+      { label: 'History of COSRX \u2014 Arktastic', url: 'https://www.arktastic.com/blog/skincare/history-of-cosrx' },
+    ]
   },
   'Centellian24': {
-    en: 'Dongguk Pharmaceutical\'s dermocosmetic brand, built on over 50 years of centella asiatica research since 1968. Their Madeca Cream line uses proprietary fermented centella technology and concentrated madecassic acid for barrier support and firming.',
-    ko: '동국제약의 더마코스메틱 브랜드로, 1968년부터 이어온 50년 이상의 병풀 연구를 기반으로 해요. 마데카크림 라인은 독자적인 발효 센텔라 기술과 고농도 마데카식산으로 장벽 지원과 탄력을 잡아요.',
+    en: 'Dongguk Pharmaceutical\'s dermocosmetic brand, drawing on the company\'s centella asiatica expertise since 1968. Their Madeca Cream line uses proprietary fermented centella technology and madecassic acid for barrier support.',
+    ko: '\ub3d9\uad6d\uc81c\uc57d\uc758 \ub354\ub9c8\ucf54\uc2a4\uba54\ud2f1 \ube0c\ub79c\ub4dc\ub85c, 1968\ub144\ubd80\ud130 \uc774\uc5b4\uc628 \ubcd1\ud480 \uc5f0\uad6c \ub178\ud558\uc6b0\ub97c \uae30\ubc18\uc73c\ub85c \ud574\uc694. \ub9c8\ub370\uce74\ud06c\ub9bc \ub77c\uc778\uc740 \ub3c5\uc790\uc801\uc778 \ubc1c\ud6a8 \uc13c\ud154\ub77c \uae30\uc220\uacfc \ub9c8\ub370\uce74\uc2dd\uc0b0\uc73c\ub85c \uc7a5\ubcbd\uc744 \ub3c4\uc640\uc918\uc694.',
     origin: 'Seoul, Korea', founded: '2015'
   },
   'Chanel': {
-    en: 'The French luxury house whose fragrance division has shaped modern perfumery since No. 5 debuted in 1921. Their in-house perfumers work with some of the rarest raw materials in the industry.',
-    ko: '1921년 No. 5 출시 이후 현대 향수의 역사를 만들어 온 프랑스 럭셔리 하우스예요. 업계에서 가장 희귀한 원료를 사용하는 전속 조향사를 두고 있어요.',
+    en: 'The French luxury house whose fragrance division dates back to No. 5 in 1921. Their in-house perfumers (including Olivier Polge, house perfumer since 2013) work with dedicated flower fields in Grasse, France.',
+    ko: '1921\ub144 No. 5\ub85c \uc2dc\uc791\ub41c \ud5a5\uc218 \ubd80\ubb38\uc744 \uac00\uc9c4 \ud504\ub791\uc2a4 \ub7ed\uc154\ub9ac \ud558\uc6b0\uc2a4\uc608\uc694. 2013\ub144\ubd80\ud130 \uc804\uc18d \uc870\ud5a5\uc0ac\uc778 \uc62c\ub9ac\ube44\uc5d0 \ud3f4\uc8fc\uac00 \uadf8\ub77c\uc2a4 \uc9c0\uc5ed \uc804\uc6a9 \uaf43\ubc2d\uc5d0\uc11c \uc6d0\ub8cc\ub97c \uc870\ub2ec\ud574\uc694.',
     origin: 'Paris, France', founded: '1910'
   },
   'Diptyque': {
@@ -65,8 +73,8 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2004'
   },
   'EIoM': {
-    en: 'A microbiome-focused K-beauty brand designed for acne-prone and sensitive skin. Their formulations center on fermented biotics and tea tree biome complexes to restore the skin\'s natural ecosystem.',
-    ko: '여드름성, 민감성 피부를 위한 마이크로바이옴 중심 K-뷰티 브랜드예요. 발효 바이오틱스와 티트리 바이옴 복합체로 피부의 자연 생태계를 회복시키는 데 집중해요.',
+    en: 'A microbiome-focused K-beauty brand designed for blemish-prone and sensitive skin. Their formulations center on fermented biotics and tea tree biome complexes to support the skin\'s natural balance.',
+    ko: '트러블성, 민감성 피부를 위한 마이크로바이옴 중심 K-뷰티 브랜드예요. 발효 바이오틱스와 티트리 바이옴 복합체로 피부의 자연 밸런스를 돕는 데 집중해요.',
     origin: 'Seoul, Korea'
   },
   'Jo Malone London': {
@@ -75,13 +83,13 @@ const BRAND_INFO = {
     origin: 'London, UK', founded: '1994'
   },
   'La Roche-Posay': {
-    en: 'A French dermocosmetic brand recommended by over 90,000 dermatologists worldwide. Every product is formulated with their proprietary thermal spring water and tested on sensitive skin.',
-    ko: '전 세계 9만 명 이상의 피부과 전문의가 추천하는 프랑스 더모코스메틱 브랜드예요. 모든 제품이 독자적인 온천수로 제형화되고 민감성 피부에서 테스트돼요.',
+    en: 'A French dermocosmetic brand widely used in dermatological practice. Every product is formulated with their proprietary La Roche-Posay thermal spring water and tested on sensitive skin.',
+    ko: '피부과에서 널리 사용되는 프랑스 더모코스메틱 브랜드예요. 모든 제품이 독자적인 라로슈포제 온천수로 제형화되고 민감성 피부에서 테스트돼요.',
     origin: 'La Roche-Posay, France', founded: '1975'
   },
   'Lavida': {
-    en: 'A Korean anti-aging brand by Coreana Cosmetics that applies cell signaling science to skincare. Recognized with 12 consecutive Brand of the Year awards in the anti-aging category.',
-    ko: '코리아나 화장품의 안티에이징 브랜드로, 세포 신호 과학을 스킨케어에 적용해요. 안티에이징 부문에서 12년 연속 올해의 브랜드상을 수상했어요.',
+    en: 'A Korean skincare brand by Coreana Cosmetics focused on age-care formulations. Their product lines combine traditional Korean herbal ingredients with modern delivery systems.',
+    ko: '코리아나 화장품의 에이지 케어 스킨케어 브랜드예요. 한국 전통 한방 원료와 현대적 전달 기술을 결합한 제품 라인을 선보여요.',
     origin: 'Seoul, Korea'
   },
   'Meditherapy': {
@@ -95,14 +103,21 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2015'
   },
   'Mediheal': {
-    en: 'A leading Korean sheet mask brand that has sold over 1 billion masks globally. Their mask technology delivers concentrated actives through bio-cellulose and hydrogel formats.',
-    ko: '전 세계 누적 판매 10억 장 이상의 한국 대표 마스크팩 브랜드예요. 바이오셀룰로스, 하이드로젤 형태로 고농축 활성 성분을 전달해요.',
-    origin: 'Seoul, Korea', founded: '2009'
+    en: 'A Korean sheet mask brand founded in 2009 by Kwon Oh-sub under L&P Cosmetic. Their masks use bio-cellulose and hydrogel formats to deliver concentrated actives.',
+    ko: '2009\ub144 \uad8c\uc624\uc12d\uc774 L&P \ucf54\uc2a4\uba54\ud2f1 \uc0b0\ud558\ub85c \uc124\ub9bd\ud55c \ub9c8\uc2a4\ud06c\ud329 \ube0c\ub79c\ub4dc\uc608\uc694. \ubc14\uc774\uc624\uc140\ub8f0\ub85c\uc2a4\uc640 \ud558\uc774\ub4dc\ub85c\uac94 \ud615\ud0dc\ub85c \uace0\ub18d\ucd95 \ud65c\uc131 \uc131\ubd84\uc744 \uc804\ub2ec\ud574\uc694.',
+    origin: 'Seoul, Korea', founded: '2009',
+    sources: [
+      { label: 'Mediheal US Launch \u2014 PR Newswire', url: 'https://www.prnewswire.com/news-releases/mediheal-koreas-1-sheet-mask-brand-launches-in-united-states-300887933.html' },
+      { label: 'Mediheal Founder \u2014 Korea Times', url: 'https://www.koreatimes.co.kr/www/tech/2025/01/129_223052.html' },
+    ]
   },
   'Medion': {
-    en: 'A Japanese skincare brand founded by Dr. Masato Hiki, pioneer of carbonated beauty. Their CO2 gel masks use dissolved carbon dioxide for a refreshing, energizing skincare experience.',
-    ko: '탄산 뷰티의 선구자 히키 마사토 박사가 설립한 일본 스킨케어 브랜드예요. CO2 젤 마스크가 용해된 이산화탄소로 상쾌하고 활력 있는 스킨케어 경험을 제공해요.',
-    origin: 'Osaka, Japan'
+    en: 'A Japanese skincare brand founded by Dr. Masato Hiki (MD/PhD, Osaka City University), who developed the first dermatology-grade carbonated gel mask. Their CO2 gel masks use dissolved carbon dioxide based on carboxytherapy principles.',
+    ko: '\uc624\uc0ac\uce74 \uc2dc\ub9bd\ub300 \uc758\ud559\ubc15\uc0ac \ud788\ud0a4 \ub9c8\uc0ac\ud1a0\uac00 \uc124\ub9bd\ud55c \uc77c\ubcf8 \uc2a4\ud0a8\ucf00\uc5b4 \ube0c\ub79c\ub4dc\uc608\uc694. \ud53c\ubd80\uacfc \uc6a9 \ud0c4\uc0b0 \uc824 \ub9c8\uc2a4\ud06c\ub97c \ucd5c\ucd08\ub85c \uac1c\ubc1c\ud588\uc73c\uba70, CO2 \uc824 \ub9c8\uc2a4\ud06c\ub294 \uce74\ubcf5\uc2dc\ud14c\ub77c\ud53c \uc6d0\ub9ac\ub97c \uae30\ubc18\uc73c\ub85c \ud574\uc694.',
+    origin: 'Osaka, Japan',
+    sources: [
+      { label: 'About Dr. Medion \u2014 Official EU Site', url: 'https://drmedion.eu/en/about-us/' },
+    ]
   },
   'Round Lab': {
     en: 'A Korean skincare brand built around Korea\'s natural water sources. Each line is formulated with a different regional mineral water \u2014 Dokdo deep sea water, Birch juice, Mugwort \u2014 for targeted hydration.',
@@ -110,8 +125,8 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2019'
   },
   'Standard Seoul': {
-    en: 'A K-beauty brand redefining fast-acting skincare with patented capsule formulas. Each product delivers visible results through encapsulated actives that burst on contact with skin.',
-    ko: '특허 캡슐 포뮬러로 빠른 효과의 스킨케어를 재정의하는 K-뷰티 브랜드예요. 피부에 닿으면 터지는 캡슐화 활성 성분으로 눈에 보이는 결과를 전달해요.',
+    en: 'A K-beauty brand known for their patented capsule formulas. Each product uses encapsulated actives that release on contact with skin for targeted delivery.',
+    ko: '\ud2b9\ud5c8 \uce85\uc290 \ud3ec\ubbac\ub7ec\ub85c \uc54c\ub824\uc9c4 K-\ubdf0\ud2f0 \ube0c\ub79c\ub4dc\uc608\uc694. \ud53c\ubd80\uc5d0 \ub2ff\uc73c\uba74 \ud130\uc9c0\ub294 \uce85\uc290\ud654 \ud65c\uc131 \uc131\ubd84\uc73c\ub85c \ud0c0\uae43 \uc804\ub2ec\uc744 \ub3c4\uc640\uc918\uc694.',
     origin: 'Seoul, Korea'
   },
   'Tamburins': {
@@ -120,9 +135,12 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2017'
   },
   'beplain': {
-    en: 'A Korean clean beauty pioneer committed to gentle, gender-neutral formulations. Their award-winning Mung Bean line earned over 20 beauty awards, built on a philosophy of returning to nature.',
-    ko: '순하고 젠더 뉴트럴한 제형에 전념하는 한국 클린 뷰티 선구자예요. 자연으로 돌아간다는 철학 아래 녹두 라인이 20개 이상의 뷰티 어워드를 수상했어요.',
-    origin: 'Seoul, Korea', founded: '2019'
+    en: 'A Korean clean beauty brand under Moments Company, an affiliate of Birdview (operator of the Hwahae beauty review platform). Their formulations emphasize gentle, gender-neutral ingredients, with the Mung Bean line as their signature range.',
+    ko: '\ud654\ud574 \uc6b4\uc601\uc0ac \ubc84\ub4dc\ubdf0 \uacc4\uc5f4 \ubaa8\uba3c\uce20\ucef4\ud37c\ub2c8 \uc0b0\ud558\uc758 \ud55c\uad6d \ud074\ub9b0 \ubdf0\ud2f0 \ube0c\ub79c\ub4dc\uc608\uc694. \uc21c\ud558\uace0 \uc820\ub354 \ub274\ud2b8\ub7f4\ud55c \uc131\ubd84\uc744 \uac15\uc870\ud558\uba70, \ub179\ub450 \ub77c\uc778\uc774 \ub300\ud45c \uc81c\ud488\uad70\uc774\uc5d0\uc694.',
+    origin: 'Seoul, Korea', founded: '2019',
+    sources: [
+      { label: 'beplain Brand Deep Dive \u2014 Hey K-Beauty', url: 'https://heykbeauty.com/brand-deep-dive-beplain/' },
+    ]
   },
   'mixsoon': {
     en: 'A Korean skincare brand built around minimalism and single-core ingredients. The name combines "mix" with the Korean word soon (\u7d14), meaning pure \u2014 each product features one hero extract at maximum concentration.',
@@ -130,9 +148,13 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2020'
   },
   'Anua': {
-    en: 'A Korean skincare brand built around heartleaf (어성초, Houttuynia Cordata), a traditional Korean herb used for centuries to calm irritated skin. Their Heartleaf 77% Soothing Toner became the #1 bestselling facial toner on Amazon.',
-    ko: '한국 전통 약초 어성초를 중심으로 만든 스킨케어 브랜드예요. 어성초 77% 수딩 토너가 아마존 페이셜 토너 부문 1위를 기록했어요.',
-    origin: 'Seoul, Korea', founded: '2020'
+    en: 'A Korean skincare brand founded in 2019 by The Founders, a brand incubator led by Lee Sunhyung and Lee Changjoo. Built around heartleaf (\uc5b4\uc131\ucd08, Houttuynia Cordata) and birch juice, the brand was designed from inception for global DTC distribution.',
+    ko: '2019\ub144 \ube0c\ub79c\ub4dc \uc778\ud050\ubca0\uc774\ud130 \ub354\ud30c\uc6b4\ub354\uc2a4\uac00 \ub9cc\ub4e0 \uc2a4\ud0a8\ucf00\uc5b4 \ube0c\ub79c\ub4dc\uc608\uc694. \uc5b4\uc131\ucd08\uc640 \uc790\uc791\ub098\ubb34 \uc218\uc561\uc744 \ud575\uc2ec \uc131\ubd84\uc73c\ub85c, \ucc98\uc74c\ubd80\ud130 \uae00\ub85c\ubc8c DTC \uc720\ud1b5\uc744 \uc704\ud574 \uc124\uacc4\ub41c \ube0c\ub79c\ub4dc\uc608\uc694.',
+    origin: 'Seoul, Korea', founded: '2020',
+    sources: [
+      { label: 'History of Anua \u2014 Arktastic', url: 'https://www.arktastic.com/blog/skincare/the-history-of-anua' },
+      { label: 'Anua lands at every Ulta store \u2014 GCI Magazine', url: 'https://www.gcimagazine.com/brands-products/skin-care/news/22929488/kbeauty-brand-anua-is-landing-at-every-ulta-store-in-2025' },
+    ]
   },
   'Beauty of Joseon': {
     en: 'A Korean skincare brand that reinterprets Joseon Dynasty (조선시대) beauty rituals with modern formulation science. Their hero ingredients — propolis, ginseng, rice — are drawn from historical Korean beauty texts.',
@@ -140,9 +162,13 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2017'
   },
   'goodal': {
-    en: 'A Korean skincare brand by Club Clio known for harnessing Jeju Island\'s green tangerines as a natural source of vitamin C. Their Green Tangerine Vita C line is one of Korea\'s best-selling brightening ranges.',
-    ko: '클럽클리오 산하의 한국 스킨케어 브랜드로, 제주도 청귤을 천연 비타민 C 원료로 활용해요. 청귤 비타C 라인은 한국에서 가장 많이 팔리는 브라이트닝 라인 중 하나예요.',
-    origin: 'Seoul, Korea', founded: '2012'
+    en: 'A Korean skincare brand under Clio Cosmetics (a publicly traded company also behind Peripera). Their Green Tangerine Vita C line uses organic green tangerine extract from Jeju Island as a natural vitamin C source.',
+    ko: '\uc0c1\uc7a5\uc0ac \ud074\ub9ac\uc624 \ucf54\uc2a4\uba54\ud2f1(\ud398\ub9ac\ud398\ub77c \ub4f1 \uc6b4\uc601) \uc0b0\ud558\uc758 \ud55c\uad6d \uc2a4\ud0a8\ucf00\uc5b4 \ube0c\ub79c\ub4dc\uc608\uc694. \uccad\uadc0 \ube44\ud0c0C \ub77c\uc778\uc740 \uc81c\uc8fc\ub3c4 \uc720\uae30\ub18d \uccad\uadc0 \ucd94\ucd9c\ubb3c\uc744 \ucc9c\uc5f0 \ube44\ud0c0\ubbfc C \uc6d0\ub8cc\ub85c \ud65c\uc6a9\ud574\uc694.',
+    origin: 'Seoul, Korea', founded: '2012',
+    sources: [
+      { label: 'goodal Green Tangerine line upgrade \u2014 PR Newswire', url: 'https://www.prnewswire.com/news-releases/goodal-leans-into-advanced-korean-skincare-technology-with-upgraded-green-tangerine-line-building-us-leadership-302704341.html' },
+      { label: 'Clio Cosmetics \u2014 Wikipedia', url: 'https://en.wikipedia.org/wiki/Clio_Cosmetics' },
+    ]
   },
   'numbuzin': {
     en: 'A Korean skincare brand that numbers each product by skin concern — No.3 for pores, No.5 for brightening. Their multi-vitamin formulations combine glutathione, tranexamic acid, and niacinamide for a data-driven approach to tone evening.',
@@ -150,9 +176,13 @@ const BRAND_INFO = {
     origin: 'Seoul, Korea', founded: '2022'
   },
   'SKIN1004': {
-    en: 'A Korean skincare brand specializing in Centella Asiatica sourced from Madagascar, where the plant develops higher concentrations of its key actives. Their Madagascar Centella Ampoule — a minimalist 7-ingredient formula — has sold over 15 million units.',
-    ko: '마다가스카르산 센텔라 아시아티카를 전문으로 하는 한국 스킨케어 브랜드예요. 핵심 활성 성분 농도가 더 높은 마다가스카르 원산지 원료를 사용해요. 7성분 미니멀 포뮬러인 센텔라 앰플이 누적 1500만 개 이상 판매됐어요.',
-    origin: 'Seoul, Korea', founded: '2017'
+    en: 'A Korean skincare brand founded by Kim Yoonjin, specializing in Centella Asiatica sourced from Madagascar. Their Madagascar Centella Ampoule is a minimal-ingredient formula built around a single-origin centella extract.',
+    ko: '\uae40\uc724\uc9c4\uc774 \uc124\ub9bd\ud55c \ud55c\uad6d \uc2a4\ud0a8\ucf00\uc5b4 \ube0c\ub79c\ub4dc\ub85c, \ub9c8\ub2e4\uac00\uc2a4\uce74\ub974\uc0b0 \uc13c\ud154\ub77c \uc544\uc2dc\uc544\ud2f0\uce74\ub97c \uc804\ubb38\uc73c\ub85c \ud574\uc694. \ub300\ud45c \uc81c\ud488\uc778 \uc13c\ud154\ub77c \uc568\ud480\uc740 \ub2e8\uc77c \uc0b0\uc9c0 \uc13c\ud154\ub77c \ucd94\ucd9c\ubb3c\uc744 \uc911\uc2ec\uc73c\ub85c \ud55c \ubbf8\ub2c8\ub9d0 \ud3ec\ubbac\ub7ec\uc608\uc694.',
+    origin: 'Seoul, Korea', founded: '2017',
+    sources: [
+      { label: 'SKIN1004 K-beauty range \u2014 Arktastic', url: 'https://www.arktastic.com/blog/skincare/skin1004-kbeauty-range' },
+      { label: 'Madagascar Centella Ampoule \u2014 Mirai Skin', url: 'https://www.mirai-skin.com/blogs/news/skin-1004-madagascar-centella-ampoule' },
+    ]
   },
   'Ollocdam': {
     en: 'A Korean wellness brand focused on premium extra virgin olive oil supplements. Their Olive3 capsules use cold-pressed EVOO rich in polyphenols and oleocanthal for daily antioxidant support.',
@@ -250,10 +280,39 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
             )}
           </div>
           {info && (
-            <p style={{ fontSize: 14, color: 'var(--ink-soft)', margin: '0 0 28px', lineHeight: 1.65 }}>
+            <p style={{ fontSize: 14, color: 'var(--ink-soft)', margin: '0 0 12px', lineHeight: 1.65 }}>
               {t(info.en, info.ko)}
             </p>
           )}
+          {info && info.sources && info.sources.length > 0 && (
+            <details style={{ margin: '0 0 28px' }}>
+              <summary style={{
+                fontSize: 11, fontWeight: 600, letterSpacing: '0.08em',
+                textTransform: 'uppercase', color: 'var(--ink-faint)',
+                cursor: 'pointer', listStyle: 'none', display: 'flex',
+                alignItems: 'center', gap: 6, userSelect: 'none',
+              }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                  style={{ transition: 'transform 0.2s', flexShrink: 0 }}
+                  className="sources-chevron">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+                {t('Sources', '\ucd9c\ucc98')}
+              </summary>
+              <ol style={{
+                margin: 0, padding: '10px 0 0 16px',
+                display: 'flex', flexDirection: 'column', gap: 4,
+              }}>
+                {info.sources.map((src, si) => (
+                  <li key={si} style={{ fontSize: 12, lineHeight: 1.5, color: 'var(--ink-faint)' }}>
+                    <a href={src.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-faint)', textDecoration: 'underline', textUnderlineOffset: 2 }}>{src.label}</a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          )}
+          {info && !info.sources && <div style={{ marginBottom: 16 }} />}
         </Reveal>
 
         {/* Products */}

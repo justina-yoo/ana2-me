@@ -131,16 +131,30 @@
       });
     },
     // Fetch full junction data for analysis — ALL products, ALL ingredients (not just heroes)
+    _analyzeCache: {},
+    _allRowsCache: null,
     fetchAnalyzeData: function(productIds) {
+      var self = this;
+      var cacheKey = productIds.slice().sort().join(',');
+      if (self._analyzeCache[cacheKey]) {
+        return Promise.resolve(self._analyzeCache[cacheKey]);
+      }
       // 1) Full junction rows for the input products
-      var piQuery = 'product_id=in.(' + productIds.join(',') + ')&select=product_id,ingredient_id,sort_order,is_hero,ingredient:ingredients(id,name,name_ko,symbol,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc,sort_order.asc';
-      // 2) All junction rows (for recommendation scoring)
-      var allPiQuery = 'select=product_id,ingredient_id,is_hero,ingredient:ingredients(id,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc';
+      var piQuery = 'product_id=in.(' + productIds.join(',') + ')&select=product_id,ingredient_id,sort_order,is_hero,ingredient:ingredients(id,name,name_ko,symbol,category,description,description_ko,science,science_ko,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc,sort_order.asc';
+      // 2) All junction rows — cached after first fetch (doesn't change per analysis)
+      var allRowsPromise = self._allRowsCache
+        ? Promise.resolve(self._allRowsCache)
+        : query('products_ingredients', 'select=product_id,ingredient_id,is_hero,ingredient:ingredients(id,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc').then(function(rows) {
+            self._allRowsCache = rows;
+            return rows;
+          });
       return Promise.all([
         query('products_ingredients', piQuery),
-        query('products_ingredients', allPiQuery)
+        allRowsPromise
       ]).then(function(results) {
-        return { inputRows: results[0], allRows: results[1] };
+        var data = { inputRows: results[0], allRows: results[1] };
+        self._analyzeCache[cacheKey] = data;
+        return data;
       });
     },
     fetchArticles: function(limit, offset) {
