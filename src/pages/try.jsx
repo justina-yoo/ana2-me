@@ -455,15 +455,45 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         setCatalogIngs(catalog);
       }
 
-      // Merge pasted ingredient rows into inputRows
+      // Merge pasted ingredient rows into inputRows + collect match stats
       var inputRows = data.inputRows.slice();
+      var pasteStats = { total: 0, catalog: 0, mfds: 0, hardcoded: 0, unknown: 0 };
+      var mfdsOnlyNames = []; // flywheel: ingredients recognized by MFDS but not in active catalog
       pastedEntries.forEach(function(entry) {
         var matched = matchParsedIngredients(entry._rawIngredients, catalog || []);
         matched.forEach(function(row) {
           row.product_id = entry.id;
           inputRows.push(row);
+          pasteStats.total++;
+          if (row.matchTier === 'catalog') pasteStats.catalog++;
+          else if (row.matchTier === 'mfds') {
+            pasteStats.mfds++;
+            // Flywheel: log MFDS-recognized ingredients not yet in active catalog
+            mfdsOnlyNames.push(row.ingredient.name);
+          }
+          else if (row.matchTier === 'hardcoded') pasteStats.hardcoded++;
+          else pasteStats.unknown++;
         });
       });
+
+      // Part 7: Flywheel — log MFDS-only ingredients to queue (deduped, anonymous)
+      if (mfdsOnlyNames.length > 0) {
+        try {
+          var uniqueNames = [...new Set(mfdsOnlyNames)];
+          var queueRows = uniqueNames.map(function(name) {
+            return { ingredient_name: name, source: 'paste-analyzer', status: 'ready-to-classify' };
+          });
+          fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/ingredient_classify_queue', {
+            method: 'POST',
+            headers: {
+              apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY,
+              'Content-Type': 'application/json', 'Prefer': 'return=minimal',
+              'on_conflict': 'ingredient_name'
+            },
+            body: JSON.stringify(queueRows)
+          }).catch(function() {}); // fire-and-forget, don't block analysis
+        } catch(e) {}
+      }
 
       var allRows = data.allRows;
 
@@ -624,12 +654,26 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         });
 
         var total = inputIds.length;
+        var pasteNote = '';
+        if (pasteStats.total > 0) {
+          var recognized = pasteStats.catalog + pasteStats.mfds;
+          pasteNote = t(
+            ' Recognized ' + recognized + ' of ' + pasteStats.total + ' pasted ingredients' +
+            (pasteStats.hardcoded > 0 ? '; flagged ' + pasteStats.hardcoded + ' by safety lists' : '') +
+            (pasteStats.mfds > 0 ? '; ' + pasteStats.mfds + ' recognized via MFDS reference (detailed profiles in progress)' : '') +
+            (pasteStats.unknown > 0 ? '; ' + pasteStats.unknown + ' not yet in our database' : '') + '.',
+            ' 붙여넣기 성분 ' + pasteStats.total + '개 중 ' + recognized + '개 인식' +
+            (pasteStats.hardcoded > 0 ? ', ' + pasteStats.hardcoded + '개 안전성 목록에서 플래그' : '') +
+            (pasteStats.mfds > 0 ? ', ' + pasteStats.mfds + '개 MFDS 참조 인식 (상세 프로필 준비 중)' : '') +
+            (pasteStats.unknown > 0 ? ', ' + pasteStats.unknown + '개 미등록' : '') + '.'
+          );
+        }
         var cNote = mfdsSafe(t(
           'Single product mode. ' + totalIngredientsAnalyzed + ' ingredients analyzed. ' +
           (heroOnlyCount > 0 ? 'This product has key-ingredient data only (not the full formula).' : 'Full ingredient list available.'),
           '단일 제품 모드. ' + totalIngredientsAnalyzed + '개 성분 분석. ' +
           (heroOnlyCount > 0 ? '이 제품은 주요 성분 데이터만 보유하고 있습니다 (전성분 아님).' : '전성분 데이터 사용.')
-        ));
+        ) + pasteNote);
 
         setResult({
           mode: 'single',
@@ -832,6 +876,20 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           'All ' + total + ' products had only key ingredient data (' + totalIngredientsAnalyzed + ' ingredients). Results are approximate.',
           total + '개 제품 모두 주요 성분 데이터만 보유 (' + totalIngredientsAnalyzed + '개 성분). 참고 수준의 결과입니다.'
         ));
+      }
+      // Append paste match stats
+      if (pasteStats.total > 0) {
+        var recognized = pasteStats.catalog + pasteStats.mfds;
+        confidenceNote += ' ' + t(
+          'Recognized ' + recognized + ' of ' + pasteStats.total + ' pasted ingredients' +
+          (pasteStats.hardcoded > 0 ? '; flagged ' + pasteStats.hardcoded + ' by safety lists' : '') +
+          (pasteStats.mfds > 0 ? '; ' + pasteStats.mfds + ' recognized via MFDS reference (detailed profiles in progress)' : '') +
+          (pasteStats.unknown > 0 ? '; ' + pasteStats.unknown + ' not yet in our database' : '') + '.',
+          '붙여넣기 성분 ' + pasteStats.total + '개 중 ' + recognized + '개 인식' +
+          (pasteStats.hardcoded > 0 ? ', ' + pasteStats.hardcoded + '개 안전성 목록에서 플래그' : '') +
+          (pasteStats.mfds > 0 ? ', ' + pasteStats.mfds + '개 MFDS 참조 인식 (상세 프로필 준비 중)' : '') +
+          (pasteStats.unknown > 0 ? ', ' + pasteStats.unknown + '개 미등록' : '') + '.'
+        );
       }
 
       setResult({
@@ -1179,8 +1237,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                     var flagLabel = ing.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 알레르겐')
                       : ing.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
                       : ing.flag_type === 'sensitizer' ? t('Sensitizer', '민감 성분')
-                      : ing.flag_type === 'irritant' ? t('Irritant', '자극 성분')
-                      : null;
+                      : null; // irritation_risk badge removed — not calibrated enough to display yet
                     var symBg = ing.flagged ? '#c0392b' : SYM_COLORS[colorIdx % SYM_COLORS.length];
                     colorIdx++;
                     return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged') },
@@ -1247,14 +1304,13 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                       React.createElement('span', { className: 'ing-sym', style: { background: '#c0392b' } }, item.symbol),
                       React.createElement('div', { className: 'ing-body' },
                         React.createElement('p', { className: 'ing-name' }, name),
-                        React.createElement('span', { className: 'try-flag-badge' },
-                          item.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 알레르겐')
-                          : item.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
-                          : item.flag_type === 'sensitizer' ? t('Sensitizer', '민감 성분')
-                          : t('Irritant', '자극 성분')
-                        )
-                      ),
-                      React.createElement(ConfBadge, { level: item.confidence })
+                        (item.flag_type === 'eu26' || item.flag_type === 'essential-oil' || item.flag_type === 'sensitizer') &&
+                          React.createElement('span', { className: 'try-flag-badge' },
+                            item.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 알레르겐')
+                            : item.flag_type === 'essential-oil' ? t('Essential oil', '에센셜 오일')
+                            : t('Sensitizer', '민감 성분')
+                          )
+                      )
                     )
                   );
                 })
