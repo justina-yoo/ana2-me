@@ -20,7 +20,7 @@
     fetchProducts: function() {
       // Junction-primary: read hero ingredients from products_ingredients → ingredients catalog
       // TODO: remove JSONB fallback after 2026-05-27 if junction is stable
-      return query('products', 'select=*,products_ingredients(sort_order,is_hero,display_group,display_copy,ingredient:ingredients(id,name,name_ko,symbol,category,is_known_sensitizer,irritation_risk,contains_flagged_component,flagged_component_reasons))&order=created_at.desc').then(function(rows) {
+      return query('products', 'select=*,products_ingredients(sort_order,is_hero,display_group,display_copy,ingredient:ingredients(id,name,name_ko,symbol,category,description,description_ko,science,science_ko,is_known_sensitizer,irritation_risk,contains_flagged_component,flagged_component_reasons))&order=created_at.desc').then(function(rows) {
         return rows.map(function(r) {
           // Build hero ingredients from junction if available, fallback to JSONB
           var piRows = r.products_ingredients;
@@ -37,16 +37,19 @@
               .map(function(pi) {
                 var ing = pi.ingredient || {};
                 var dc = pi.display_copy || {};
+                // TODO: drop display_copy column after 2026-06-22 (1 week grace period)
+                // Use GENERIC catalog descriptions, NOT per-product display_copy prose.
+                // Keep structural data from display_copy: symbol, percentage.
                 return {
                   id: ing.id,
                   name: ing.name,
                   nameKo: ing.name_ko,
                   symbol: dc.symbol || ing.symbol,
                   percentage: dc.percentage,
-                  description: dc.description || ing.description,
-                  descriptionKo: dc.descriptionKo || ing.description_ko,
-                  science: dc.science || ing.science,
-                  scienceKo: dc.scienceKo || ing.science_ko,
+                  description: ing.description,
+                  descriptionKo: ing.description_ko,
+                  science: ing.science,
+                  scienceKo: ing.science_ko,
                   category: ing.category,
                   isSensitizer: ing.is_known_sensitizer,
                   irritationRisk: ing.irritation_risk,

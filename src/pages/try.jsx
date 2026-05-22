@@ -1,14 +1,190 @@
+// ── Hardcoded safety lists for pasted ingredient matching ──
+var EU26_ALLERGENS = new Set([
+  'limonene','linalool','citronellol','geraniol','citral','eugenol','coumarin',
+  'benzyl alcohol','benzyl salicylate','benzyl benzoate','benzyl cinnamate',
+  'cinnamal','cinnamyl alcohol','farnesol','hexyl cinnamal','hydroxycitronellal',
+  'hydroxyisohexyl 3-cyclohexene carboxaldehyde','isoeugenol','butylphenyl methylpropional',
+  'alpha-isomethyl ionone','amyl cinnamal','amylcinnamyl alcohol','anise alcohol',
+  'evernia prunastri extract','evernia furfuracea extract','methyl 2-octynoate'
+].map(function(s) { return s.toLowerCase(); }));
+
+var ESSENTIAL_OILS = new Set([
+  'tea tree oil','melaleuca alternifolia leaf oil','lavender oil','lavandula angustifolia oil',
+  'peppermint oil','mentha piperita oil','eucalyptus oil','eucalyptus globulus leaf oil',
+  'rosemary oil','rosmarinus officinalis leaf oil','lemon oil','citrus limon peel oil',
+  'orange oil','citrus aurantium dulcis peel oil','bergamot oil','citrus aurantium bergamia fruit oil',
+  'ylang ylang oil','cananga odorata flower oil','clove oil','eugenia caryophyllus bud oil',
+  'cinnamon oil','cinnamomum zeylanicum bark oil','thyme oil','thymus vulgaris oil',
+  'geranium oil','pelargonium graveolens oil','chamomile oil','anthemis nobilis flower oil'
+].map(function(s) { return s.toLowerCase(); }));
+
+var KNOWN_SENSITIZERS = new Set([
+  'methylisothiazolinone','methylchloroisothiazolinone','dmdm hydantoin',
+  'imidazolidinyl urea','diazolidinyl urea','quaternium-15','bronopol',
+  'sodium lauryl sulfate','sls','alcohol denat','alcohol denat.',
+  'hydroquinone','benzoyl peroxide','formaldehyde','2-bromo-2-nitropropane-1,3-diol'
+].map(function(s) { return s.toLowerCase(); }));
+
+// ── Parse pasted ingredient list ──
+function parseIngredientList(text) {
+  if (!text || !text.trim()) return [];
+  // Strip leading labels
+  var cleaned = text.replace(/^(전성분\s*[:：]?|ingredients?\s*[:：]?|성분\s*[:：]?|full\s+ingredients?\s*[:：]?)/i, '').trim();
+  // Split on commas or newlines, but preserve commas inside ingredient names like "1,2-Hexanediol"
+  // Strategy: replace number-comma-number patterns temporarily, split, restore
+  var preserved = cleaned.replace(/(\d),(\d)/g, '$1\u00A7$2');
+  var tokens = preserved.split(/[,\n]+/).map(function(t) { return t.replace(/\u00A7/g, ','); });
+  var seen = new Set();
+  return tokens.map(function(tok) {
+    var t = tok.trim();
+    if (!t) return null;
+    // Strip trailing percentage noise like "(2%)" or "[15%]" but keep parenthetical common names
+    // Heuristic: remove parens that contain ONLY a number + % sign
+    t = t.replace(/\s*[\(\[]\s*\d+[\d.]*\s*%?\s*[\)\]]\s*$/, '').trim();
+    // Strip leading numbers/bullets
+    t = t.replace(/^\d+[\.\)]\s*/, '').trim();
+    if (!t) return null;
+    var key = t.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+    if (seen.has(key)) return null;
+    seen.add(key);
+    return t;
+  }).filter(Boolean);
+}
+
+// ── MFDS reference cache (loaded from Supabase on first paste) ──
+var _mfdsCache = null;
+var _mfdsLookupEn = null;
+var _mfdsLookupKo = null;
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhreWZnZ2FwaWpnZWRzaXpmcWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzY5MDksImV4cCI6MjA5MzY1MjkwOX0.huZi2uDRI0EnVWkg6HTo-VK1V3fz3DyR-ZNGpMd0yLQ';
+
+async function loadMfdsCache() {
+  if (_mfdsCache) return;
+  try {
+    // Fetch all 21K rows from mfds_ingredient_reference
+    var allRows = [];
+    var limit = 1000;
+    var offset = 0;
+    while (true) {
+      var res = await fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/mfds_ingredient_reference?select=standard_name_ko,inci_name,alternate_names_json&limit=' + limit + '&offset=' + offset, {
+        headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY }
+      });
+      var batch = await res.json();
+      allRows = allRows.concat(batch);
+      if (batch.length < limit) break;
+      offset += limit;
+    }
+    _mfdsCache = allRows;
+    _mfdsLookupEn = {};
+    _mfdsLookupKo = {};
+    allRows.forEach(function(entry) {
+      if (entry.standard_name_ko) {
+        var koKey = entry.standard_name_ko.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+        _mfdsLookupKo[koKey] = entry;
+      }
+      if (entry.inci_name) {
+        var enKey = entry.inci_name.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+        if (enKey) _mfdsLookupEn[enKey] = entry;
+      }
+      if (entry.alternate_names_json && Array.isArray(entry.alternate_names_json)) {
+        entry.alternate_names_json.forEach(function(syn) {
+          var synKey = syn.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+          if (synKey) _mfdsLookupKo[synKey] = entry;
+        });
+      }
+    });
+    console.log('MFDS cache loaded:', allRows.length, 'ingredients');
+  } catch (e) {
+    console.warn('MFDS cache not available:', e);
+    _mfdsCache = [];
+    _mfdsLookupEn = {};
+    _mfdsLookupKo = {};
+  }
+}
+
+// ── Match parsed ingredients against catalog + MFDS + hardcoded lists ──
+function matchParsedIngredients(names, catalogIngredients) {
+  // Build lookup maps from active catalog (189 ingredients)
+  var byNameEn = {};
+  var byNameKo = {};
+  catalogIngredients.forEach(function(ing) {
+    byNameEn[ing.name.toLowerCase().replace(/[\s\-]+/g, ' ').trim()] = ing;
+    if (ing.name_ko) byNameKo[ing.name_ko.toLowerCase().replace(/[\s\-]+/g, ' ').trim()] = ing;
+  });
+
+  return names.map(function(rawName, idx) {
+    var norm = rawName.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+
+    // Tier A: Match against active catalog (full metadata)
+    if (byNameEn[norm]) {
+      var ing = byNameEn[norm];
+      return { product_id: '__pasted__', ingredient_id: ing.id, sort_order: idx + 1, is_hero: false,
+        ingredient: ing, matched: true, matchTier: 'catalog' };
+    }
+    if (byNameKo[norm]) {
+      var ing = byNameKo[norm];
+      return { product_id: '__pasted__', ingredient_id: ing.id, sort_order: idx + 1, is_hero: false,
+        ingredient: ing, matched: true, matchTier: 'catalog' };
+    }
+
+    // Tier B: Match against MFDS reference (21K, gives canonical names)
+    var mfdsMatch = (_mfdsLookupEn && _mfdsLookupEn[norm]) || (_mfdsLookupKo && _mfdsLookupKo[norm]);
+    if (mfdsMatch) {
+      var inciName = mfdsMatch.inci_name || rawName;
+      var koName = mfdsMatch.standard_name_ko || rawName;
+      // Check hardcoded lists for flagging even though it's MFDS-recognized
+      var inciNorm = inciName.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+      var flagType = null, isSensitizer = false, isEu26 = false, isEO = false, irritRisk = 'low';
+      if (EU26_ALLERGENS.has(inciNorm) || EU26_ALLERGENS.has(norm)) { isEu26 = true; flagType = 'eu26'; irritRisk = 'medium'; }
+      else if (ESSENTIAL_OILS.has(inciNorm) || ESSENTIAL_OILS.has(norm)) { isEO = true; flagType = 'essential-oil'; irritRisk = 'medium'; }
+      else if (KNOWN_SENSITIZERS.has(inciNorm) || KNOWN_SENSITIZERS.has(norm)) { isSensitizer = true; flagType = 'sensitizer'; irritRisk = 'high'; }
+
+      return {
+        product_id: '__pasted__', ingredient_id: 'mfds-' + idx, sort_order: idx + 1, is_hero: false,
+        ingredient: {
+          id: 'mfds-' + idx, name: inciName, name_ko: koName,
+          symbol: inciName.substring(0, 2).toUpperCase(),
+          category: flagType ? (isEO ? 'essential-oil' : isEu26 ? 'fragrance-allergen' : 'active') : 'uncategorized',
+          description: null, description_ko: null, science: null, science_ko: null,
+          is_known_sensitizer: isSensitizer, is_eu_26_fragrance_allergen: isEu26,
+          is_essential_oil: isEO, irritation_risk: irritRisk
+        },
+        matched: true, matchTier: 'mfds', mfdsEntry: mfdsMatch
+      };
+    }
+
+    // Tier C: Hardcoded safety lists only
+    var flagType = null, isSensitizer = false, isEu26 = false, isEO = false, irritRisk = 'low';
+    if (EU26_ALLERGENS.has(norm)) { isEu26 = true; flagType = 'eu26'; irritRisk = 'medium'; }
+    else if (ESSENTIAL_OILS.has(norm)) { isEO = true; flagType = 'essential-oil'; irritRisk = 'medium'; }
+    else if (KNOWN_SENSITIZERS.has(norm)) { isSensitizer = true; flagType = 'sensitizer'; irritRisk = 'high'; }
+
+    return {
+      product_id: '__pasted__', ingredient_id: 'pasted-' + idx, sort_order: idx + 1, is_hero: false,
+      ingredient: {
+        id: 'pasted-' + idx, name: rawName, name_ko: rawName, symbol: rawName.substring(0, 2).toUpperCase(),
+        category: flagType ? (isEO ? 'essential-oil' : isEu26 ? 'fragrance-allergen' : 'active') : 'uncategorized',
+        description: null, description_ko: null, science: null, science_ko: null,
+        is_known_sensitizer: isSensitizer, is_eu_26_fragrance_allergen: isEu26,
+        is_essential_oil: isEO, irritation_risk: irritRisk
+      },
+      matched: false, matchTier: flagType ? 'hardcoded' : 'unknown'
+    };
+  });
+}
+
 // Analyze — Ingredient Pattern Analysis (no login, no persistence)
 // Mode 1: single-product breakdown | Mode 2: comparative pattern analysis
 window.Try = function Try({ lang, products, setView, setProduct }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
-  const [works, setWorks] = useState([]);
+  const [works, setWorks] = useState([]);     // Array of { id, name, ... } OR { id: 'pasted-X', name, _pasted: true, _rawIngredients: [...] }
   const [doesnt, setDoesnt] = useState([]);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [selIng, setSelIng] = useState(null);
+  const [catalogIngs, setCatalogIngs] = useState(null);
+  var pastedCounter = useRef(0);
   const resultsRef = useRef(null);
   useEffect(function() {
     if (result && resultsRef.current) {
@@ -84,70 +260,156 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     return isKo ? entry.ko : entry.en;
   }
 
-  // ── Reason templates (MFDS-safe) ──
-  function negativeReason(ing, count, totalDoesnt) {
-    var name = isKo ? (ing.name_ko || ing.name) : ing.name;
-    var freq = count >= totalDoesnt
-      ? t('appeared in all ' + totalDoesnt + ' products', totalDoesnt + '개 제품 모두에 포함')
-      : count === 1
-        ? t('appeared in 1 product', '1개 제품에 포함')
-        : t('appeared in ' + count + ' of ' + totalDoesnt + ' products', totalDoesnt + '개 중 ' + count + '개 제품에 포함');
+  // ── Potent actives list (high-strength ingredients that can irritate) ──
+  var POTENT_ACTIVES = new Set(['retinol', 'retinal', 'tretinoin', 'glycolic acid', 'salicylic acid',
+    'lactic acid', 'mandelic acid', 'l-ascorbic acid', 'ascorbic acid', 'benzoyl peroxide', 'hydroquinone']);
+
+  // ── Resolve product IDs to display names ──
+  function productNamesFromIds(pids) {
+    return pids.map(function(pid) {
+      // Check doesnt list first, then works
+      var entry = doesnt.find(function(p) { return p.id === pid; }) || works.find(function(p) { return p.id === pid; });
+      if (!entry) return pid;
+      if (entry._pasted) return isKo ? entry.nameKo : entry.name;
+      return (entry.brand ? entry.brand + ' ' : '') + (isKo && entry.nameKo ? entry.nameKo : entry.name);
+    });
+  }
+
+  // ── Check if ingredient is a compound containing a flagged component ──
+  function getFlaggedComponent(ing) {
+    if (ing.contains_flagged_component && ing.flagged_component_reasons) {
+      var reasons = ing.flagged_component_reasons;
+      if (Array.isArray(reasons) && reasons.length > 0) return reasons[0];
+      if (typeof reasons === 'string') return reasons;
+    }
+    // Heuristic: check if name contains known irritant substrings
+    var n = (ing.name || '').toLowerCase();
+    if (/tea\s*tree|melaleuca/.test(n)) return 'Tea Tree';
+    if (/lavender|lavandula/.test(n)) return 'Lavender';
+    if (/eucalyptus/.test(n)) return 'Eucalyptus';
+    if (/peppermint|mentha/.test(n)) return 'Peppermint';
+    if (/citrus|lemon|orange|bergamot|lime/.test(n) && /oil|peel/.test(n)) return 'Citrus Oil';
+    return null;
+  }
+
+  // ── Reason templates (MFDS-safe, specific, metadata-driven) ──
+  function negativeReason(ing, count, totalDoesnt, productIds) {
+    var prodNames = productNamesFromIds(productIds || []);
+    var foundIn = prodNames.length === 1
+      ? t('Found in ' + prodNames[0] + ', which you marked as not suiting you.', prodNames[0] + '에 포함되어 있으며, 맞지 않는 제품으로 표시하셨어요.')
+      : t('Found in ' + prodNames.join(' and ') + ', which you marked as not suiting you.', prodNames.join(', ') + '에 포함되어 있으며, 맞지 않는 제품으로 표시하셨어요.');
+
+    // Check for compound ingredient with flagged component
+    var component = getFlaggedComponent(ing);
+
+    if (component && ing.is_essential_oil) {
+      return mfdsSafe(t(
+        'Contains ' + component + ', an essential oil that can irritate reactive skin. ' + foundIn,
+        component + '을(를) 함유하며, 반응성 피부를 자극할 수 있는 에센셜 오일이에요. ' + foundIn
+      ));
+    }
 
     if (ing.is_eu_26_fragrance_allergen) {
       return mfdsSafe(t(
-        name + ' is an EU-listed fragrance allergen that may cause sensitivity in some skin types. ' + freq + ' that did not suit you.',
-        name + '은(는) EU 지정 향료 알레르겐으로, 일부 피부 유형에서 민감 반응을 유발할 수 있습니다. ' + freq + '.'
+        'A fragrance compound on the EU allergen disclosure list. ' + foundIn,
+        'EU 향료 알레르겐 공개 목록에 있는 향료 화합물이에요. ' + foundIn
       ));
     }
     if (ing.is_essential_oil) {
       return mfdsSafe(t(
-        name + ' is an essential oil that may cause sensitivity in some skin types. ' + freq + ' that did not suit you.',
-        name + '은(는) 에센셜 오일로, 일부 피부 유형에서 민감 반응을 유발할 수 있습니다. ' + freq + '.'
+        'An essential oil \u2014 a common irritant for sensitive or reactive skin. ' + foundIn,
+        '에센셜 오일로, 민감하거나 반응성이 높은 피부에 자극이 될 수 있어요. ' + foundIn
+      ));
+    }
+    // Potent actives
+    if (POTENT_ACTIVES.has((ing.name || '').toLowerCase()) || POTENT_ACTIVES.has((ing.id || '').toLowerCase())) {
+      return mfdsSafe(t(
+        'A potent active \u2014 effective but can irritate sensitive or compromised skin. ' + foundIn,
+        '강력한 활성 성분으로, 효과적이지만 민감하거나 손상된 피부를 자극할 수 있어요. ' + foundIn
       ));
     }
     if (ing.is_known_sensitizer) {
+      // Distinguish preservatives vs other sensitizers
+      var cat = (ing.category || '').toLowerCase();
+      if (cat === 'preservative') {
+        return mfdsSafe(t(
+          'A preservative associated with sensitivity in some skin. ' + foundIn,
+          '일부 피부에서 민감 반응과 관련된 방부제예요. ' + foundIn
+        ));
+      }
+      if (cat === 'surfactant') {
+        return mfdsSafe(t(
+          'A surfactant that may be too stripping for sensitive skin types. ' + foundIn,
+          '민감한 피부에 너무 강할 수 있는 계면활성제예요. ' + foundIn
+        ));
+      }
       return mfdsSafe(t(
-        name + ' is a commonly flagged ingredient that may cause sensitivity. ' + freq + ' that did not suit you.',
-        name + '은(는) 일반적으로 민감 반응이 보고된 성분입니다. ' + freq + '.'
+        'An ingredient commonly flagged for sensitivity in some skin types. ' + foundIn,
+        '일부 피부 유형에서 민감 반응이 보고된 성분이에요. ' + foundIn
       ));
     }
-    if (ing.irritation_risk === 'high' || ing.irritation_risk === 'medium') {
+    if (ing.irritation_risk === 'high') {
       return mfdsSafe(t(
-        name + ' has a ' + ing.irritation_risk + ' irritation potential for some skin types. ' + freq + ' that did not suit you.',
-        name + '은(는) ' + (ing.irritation_risk === 'high' ? '높은' : '중간') + ' 자극 가능성이 있는 성분입니다. ' + freq + '.'
+        'Has high irritation potential for some skin types. ' + foundIn,
+        '일부 피부 유형에서 높은 자극 가능성이 있어요. ' + foundIn
+      ));
+    }
+    if (ing.irritation_risk === 'medium') {
+      return mfdsSafe(t(
+        'May cause irritation in sensitive skin. ' + foundIn,
+        '민감한 피부에 자극을 유발할 수 있어요. ' + foundIn
       ));
     }
     return mfdsSafe(t(
-      name + ' ' + freq + ' that did not suit you and is worth monitoring.',
-      name + ' ' + freq + '. 주의가 필요한 성분일 수 있습니다.'
+      'Worth monitoring \u2014 ' + foundIn.charAt(0).toLowerCase() + foundIn.slice(1),
+      '주의가 필요한 성분이에요. ' + foundIn
     ));
   }
 
   function singleFlagReason(ing) {
-    var name = isKo ? (ing.name_ko || ing.name) : ing.name;
-    // Support both raw Supabase shape (is_eu_26_fragrance_allergen) and enriched shape (flag_type)
     var ft = ing.flag_type || (ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil' : ing.is_known_sensitizer ? 'sensitizer' : 'irritant');
+    var component = getFlaggedComponent(ing);
+
+    if (component && ft === 'essential-oil') {
+      return mfdsSafe(t(
+        'Contains ' + component + ', an essential oil that can irritate reactive skin.',
+        component + '을(를) 함유하며, 반응성 피부를 자극할 수 있는 에센셜 오일이에요.'
+      ));
+    }
     if (ft === 'eu26') {
       return mfdsSafe(t(
-        name + ' is an EU-listed fragrance allergen — if you\u2019ve reacted to similar ingredients before, be aware.',
-        name + '은(는) EU 지정 향료 알레르겐입니다. 유사 성분에 민감 반응 경험이 있다면 참고하세요.'
+        'A fragrance compound on the EU allergen disclosure list \u2014 worth noting if you\u2019ve reacted to fragrances before.',
+        'EU 향료 알레르겐 공개 목록에 있는 향료 화합물이에요. 향료에 민감 반응 경험이 있다면 참고하세요.'
       ));
     }
     if (ft === 'essential-oil') {
       return mfdsSafe(t(
-        name + ' is an essential oil — a likely candidate if you experience sensitivity with this product.',
-        name + '은(는) 에센셜 오일입니다. 이 제품에서 민감 반응이 있다면 주요 원인 후보입니다.'
+        'An essential oil \u2014 a likely candidate if you experience sensitivity with this product.',
+        '에센셜 오일이에요. 이 제품에서 민감 반응이 있다면 주요 원인 후보예요.'
       ));
     }
     if (ft === 'sensitizer') {
+      var cat = (ing.category || '').toLowerCase();
+      if (cat === 'preservative') {
+        return mfdsSafe(t(
+          'A preservative that some skin types react to \u2014 worth checking if this product doesn\u2019t suit you.',
+          '일부 피부 유형이 반응하는 방부제예요. 이 제품이 맞지 않다면 확인해 볼 가치가 있어요.'
+        ));
+      }
       return mfdsSafe(t(
-        name + ' is a commonly flagged sensitizer — a likely candidate if this product doesn\u2019t suit you.',
-        name + '은(는) 일반적으로 민감 반응이 보고된 성분입니다. 이 제품이 맞지 않는다면 주요 원인 후보입니다.'
+        'A commonly flagged sensitizer \u2014 a likely candidate if this product doesn\u2019t suit you.',
+        '민감 반응이 자주 보고되는 성분이에요. 이 제품이 맞지 않는다면 주요 원인 후보예요.'
+      ));
+    }
+    if (POTENT_ACTIVES.has((ing.name || '').toLowerCase()) || POTENT_ACTIVES.has((ing.id || '').toLowerCase())) {
+      return mfdsSafe(t(
+        'A potent active ingredient \u2014 effective but can irritate sensitive or compromised skin.',
+        '강력한 활성 성분으로, 효과적이지만 민감하거나 손상된 피부를 자극할 수 있어요.'
       ));
     }
     return mfdsSafe(t(
-      name + ' has ' + (ing.irritation_risk || 'moderate') + ' irritation potential for some skin types.',
-      name + '은(는) ' + (ing.irritation_risk === 'high' ? '높은' : '중간') + ' 자극 가능성이 있는 성분입니다.'
+      'Has ' + (ing.irritation_risk === 'high' ? 'high' : 'moderate') + ' irritation potential for some skin types.',
+      (ing.irritation_risk === 'high' ? '높은' : '중간') + ' 자극 가능성이 있는 성분이에요.'
     ));
   }
 
@@ -155,9 +417,54 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   async function runAnalysis() {
     setBusy(true); setError(null); setResult(null);
     try {
-      var inputIds = [...works, ...doesnt].map(function(p) { return p.id; });
-      var data = await window.__supabase.fetchAnalyzeData(inputIds);
-      var inputRows = data.inputRows;
+      var allEntries = [...works, ...doesnt];
+      var pickedEntries = allEntries.filter(function(p) { return !p._pasted; });
+      var pastedEntries = allEntries.filter(function(p) { return p._pasted; });
+      var pickedIds = pickedEntries.map(function(p) { return p.id; });
+      var inputIds = allEntries.map(function(p) { return p.id; });
+
+      // Fetch catalog data for picked products (if any)
+      var data = pickedIds.length > 0
+        ? await window.__supabase.fetchAnalyzeData(pickedIds)
+        : { inputRows: [], allRows: window.__supabase._allRowsCache || [] };
+
+      // If allRows not cached yet, fetch it via a dummy product call
+      if (!data.allRows || data.allRows.length === 0) {
+        if (pickedIds.length > 0) {
+          data.allRows = (await window.__supabase.fetchAnalyzeData(pickedIds)).allRows;
+        } else {
+          // Force cache load by fetching with first available product
+          var firstProd = (products || [])[0];
+          if (firstProd) {
+            data.allRows = (await window.__supabase.fetchAnalyzeData([firstProd.id])).allRows;
+          } else {
+            data.allRows = [];
+          }
+        }
+      }
+
+      // Load MFDS reference + ingredient catalog for pasted matching
+      if (pastedEntries.length > 0) await loadMfdsCache();
+      var catalog = catalogIngs;
+      if (!catalog && pastedEntries.length > 0) {
+        var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhreWZnZ2FwaWpnZWRzaXpmcWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzY5MDksImV4cCI6MjA5MzY1MjkwOX0.huZi2uDRI0EnVWkg6HTo-VK1V3fz3DyR-ZNGpMd0yLQ';
+        var res = await fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/ingredients?select=*&limit=1000', {
+          headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+        });
+        catalog = await res.json();
+        setCatalogIngs(catalog);
+      }
+
+      // Merge pasted ingredient rows into inputRows
+      var inputRows = data.inputRows.slice();
+      pastedEntries.forEach(function(entry) {
+        var matched = matchParsedIngredients(entry._rawIngredients, catalog || []);
+        matched.forEach(function(row) {
+          row.product_id = entry.id;
+          inputRows.push(row);
+        });
+      });
+
       var allRows = data.allRows;
 
       // Group input rows by product
@@ -394,7 +701,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
             description_ko: ing.description_ko,
             science: ing.science,
             science_ko: ing.science_ko,
-            reason: negativeReason(ing, item.count, totalD),
+            reason: negativeReason(ing, item.count, totalD, item.products),
             confidence: conf,
             flagged: true
           };
@@ -574,6 +881,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   function ProductPicker({ label, labelKo, selected, setSelected, max, icon, accent }) {
     var [q, setQ] = useState('');
     var [open, setOpen] = useState(false);
+    var [pasteMode, setPasteMode] = useState(false);
+    var [pasteText, setPasteText] = useState('');
     var inputRef = useRef(null);
     var accentClass = accent === 'rose' ? 'try-picker--rose' : 'try-picker--green';
 
@@ -597,6 +906,26 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       setSelected(function(prev) { return prev.filter(function(p) { return p.id !== id; }); });
       setResult(null); setError(null);
     };
+    var submitPaste = function() {
+      var parsed = parseIngredientList(pasteText);
+      if (parsed.length === 0) return;
+      if (selected.length >= max) return;
+      pastedCounter.current++;
+      var pastedId = 'pasted-' + pastedCounter.current;
+      var entry = {
+        id: pastedId,
+        name: t('Pasted list (' + parsed.length + ' ingredients)', '붙여넣기 (' + parsed.length + '개 성분)'),
+        nameKo: '붙여넣기 (' + parsed.length + '개 성분)',
+        brand: '',
+        imageUrl: null,
+        _pasted: true,
+        _rawIngredients: parsed
+      };
+      setSelected(function(prev) { return prev.concat([entry]); });
+      setPasteText('');
+      setPasteMode(false);
+      setResult(null); setError(null);
+    };
 
     // Progress dots
     var dots = [];
@@ -618,13 +947,20 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       ),
       selected.map(function(p) {
         var name = isKo && p.nameKo ? p.nameKo : p.name;
-        return React.createElement('div', { key: p.id, className: 'try-chip' },
-          React.createElement('div', { className: 'try-chip-img' },
-            React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
-          ),
+        var isPasted = !!p._pasted;
+        return React.createElement('div', { key: p.id, className: 'try-chip' + (isPasted ? ' try-chip--pasted' : '') },
+          isPasted
+            ? React.createElement('div', { className: 'try-chip-paste-icon' }, '\uD83D\uDCCB')
+            : React.createElement('div', { className: 'try-chip-img' },
+                React.createElement(ProductImg, { src: p.imageUrl, alt: (p.brand || '') + ' ' + name })
+              ),
           React.createElement('div', { className: 'try-chip-text' },
-            React.createElement('span', { className: 'try-chip-brand' }, p.brand),
-            React.createElement('span', { className: 'try-chip-name' }, name)
+            isPasted
+              ? React.createElement('span', { className: 'try-chip-name' }, name)
+              : [
+                  React.createElement('span', { key: 'b', className: 'try-chip-brand' }, p.brand),
+                  React.createElement('span', { key: 'n', className: 'try-chip-name' }, name)
+                ]
           ),
           React.createElement('button', { className: 'try-chip-x', onClick: function() { remove(p.id); }, 'aria-label': 'Remove' },
             React.createElement(Icon, { name: 'x', size: 12 })
@@ -666,6 +1002,34 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
               )
             );
           })
+        )
+      ),
+      // Paste fallback link + textarea
+      selected.length < max && !pasteMode && React.createElement('button', {
+        className: 'try-paste-link',
+        onClick: function(e) { e.stopPropagation(); setPasteMode(true); }
+      }, t("Can't find your product? Paste its ingredient list.", '제품을 찾을 수 없나요? 성분 목록을 붙여넣으세요.')),
+      selected.length < max && pasteMode && React.createElement('div', {
+        className: 'try-paste-area',
+        onClick: function(e) { e.stopPropagation(); }
+      },
+        React.createElement('textarea', {
+          className: 'try-paste-textarea',
+          value: pasteText,
+          onChange: function(e) { setPasteText(e.target.value); },
+          placeholder: t('Paste ingredient list here...\ne.g. Water, Glycerin, Niacinamide, ...', '성분 목록을 여기에 붙여넣으세요...\n예: 정제수, 글리세린, 나이아신아마이드, ...'),
+          rows: 4
+        }),
+        React.createElement('div', { className: 'try-paste-actions' },
+          React.createElement('button', {
+            className: 'try-paste-cancel',
+            onClick: function() { setPasteMode(false); setPasteText(''); }
+          }, t('Cancel', '취소')),
+          React.createElement('button', {
+            className: 'try-paste-submit',
+            disabled: !pasteText.trim(),
+            onClick: submitPaste
+          }, t('Add', '추가'))
         )
       )
     );

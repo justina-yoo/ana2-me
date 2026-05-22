@@ -819,8 +819,17 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             <button className="sheet-close" onClick={() => setSelIng(null)}><Icon name="x" size={16} /></button>
             <div className="sheet-sym">{selIng.symbol}</div>
             <h3 className="sheet-name">{lang === 'ko' && selIng.nameKo ? selIng.nameKo : selIng.name}</h3>
-            <p className="sheet-pct">{selIng.percentage}% {t('of formula', '포뮬러 중')}</p>
-            <p className="sheet-sci">{lang === 'ko' && selIng.scienceKo ? selIng.scienceKo : selIng.science}</p>
+            {selIng.percentage != null && <p className="sheet-pct">{selIng.percentage}% {t('of formula', '포뮬러 중')}</p>}
+            {(lang === 'ko' ? (selIng.descriptionKo || selIng.description) : selIng.description) && (
+              <p className="sheet-desc">{lang === 'ko' && selIng.descriptionKo ? selIng.descriptionKo : selIng.description}</p>
+            )}
+            {(lang === 'ko' ? (selIng.scienceKo || selIng.science) : selIng.science) && (
+              <>
+                <div className="sheet-divider" />
+                <p className="sheet-sci-label">{t('The science', '과학적으로는')}</p>
+                <p className="sheet-sci">{lang === 'ko' && selIng.scienceKo ? selIng.scienceKo : selIng.science}</p>
+              </>
+            )}
           </div>
         </div>
       )}

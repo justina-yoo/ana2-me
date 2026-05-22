@@ -154,7 +154,8 @@ export default async function (request, context) {
 
     } else if (productMatch) {
       const slug = productMatch[1];
-      const VISIBLE_PRODUCTS = ['skincare-3', 'skincare-4', 'skincare-5', 'skincare-6', 'skincare-7', 'skincare-8', 'skincare-9', 'skincare-10', 'skincare-11', 'skincare-12', 'skincare-13', 'skincare-14', 'skincare-15'];
+      // All skincare products — dynamically accept any skincare-* ID
+      const VISIBLE_PRODUCTS = null; // null = accept all products
       const res = await fetchWithTimeout(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,name_ko,brand,summary,image_url,category,ingredients,notes,bio_values`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
@@ -163,7 +164,7 @@ export default async function (request, context) {
       if (!data) return context.next();
       const p = data.find(x => x.id === slug) ||
                 data.find(x => (x.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + x.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '') === slug);
-      if (!p || !VISIBLE_PRODUCTS.includes(p.id)) return context.next();
+      if (!p) return context.next();
 
       title = p.brand + ' ' + p.name + ' | ana2me';
       description = p.summary?.tagline || '';
@@ -200,15 +201,8 @@ export default async function (request, context) {
           "bestRating": "5",
           "worstRating": "1"
         };
-      } else {
-        // No reviews yet — use review field with editorial review to satisfy Google
-        productLd.review = {
-          "@type": "Review",
-          "author": { "@type": "Organization", "name": "ana2me" },
-          "reviewRating": { "@type": "Rating", "ratingValue": "4", "bestRating": "5" },
-          "reviewBody": description
-        };
       }
+      // No reviews = no review or aggregateRating in JSON-LD (avoids Google structured data warning)
       // Ingredient schema — structured data for AI engines
       const ingredients = p.ingredients || [];
       if (ingredients.length > 0) {
