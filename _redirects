@@ -6,8 +6,10 @@
 /about/     /about       301
 /privacy    /index.html  200
 /privacy/   /privacy     301
-/analyzer   /index.html  200
-/analyzer/  /analyzer    301
+/analyzer   /404.html    404
+/analyzer/  /404.html    404
+/analyze    /404.html    404
+/analyze/   /404.html    404
 /brands     /index.html  200
 /brands/    /brands      301
 /brands/:slug  /index.html  200
