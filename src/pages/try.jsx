@@ -186,6 +186,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   const [expandedProducts, setExpandedProducts] = useState([]);
   const [catalogIngs, setCatalogIngs] = useState(null);
   var pastedCounter = useRef(0);
+  var autoAnalyze = useRef(false);
   const resultsRef = useRef(null);
   useEffect(function() {
     if (result && resultsRef.current) {
@@ -194,6 +195,13 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       }, 100);
     }
   }, [result]);
+
+  useEffect(function() {
+    if (autoAnalyze.current && works.length + doesnt.length > 0) {
+      autoAnalyze.current = false;
+      runAnalysis();
+    }
+  }, [works, doesnt]);
 
   const [pasteMode, setPasteMode] = useState(false);
   const [pasteText, setPasteText] = useState('');
@@ -223,6 +231,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     setPasteText('');
     setPasteMode(false);
     setResult(null); setError(null);
+    autoAnalyze.current = true;
   }
 
   // Confidence level based on input counts
@@ -1174,7 +1183,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         onClick: function() { setPasteMode(true); }
       },
         React.createElement('span', { className: 'try-paste-link-icon' }, '\uD83D\uDCCB'),
-        t("Can\u2019t find your product? Paste its ingredient list.", '제품을 찾을 수 없나요? 성분 목록을 붙여넣으세요.')
+        t('Or paste any ingredient list to analyze it instantly.', '또는 성분 목록을 붙여넣어서 바로 분석해 보세요.')
       ),
       pasteMode && React.createElement('div', { className: 'try-paste-area try-paste-area--standalone' },
         React.createElement('textarea', {
@@ -1194,12 +1203,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
             className: 'try-paste-submit',
             disabled: !pasteText.trim() || works.length >= MAX_PER_SIDE,
             onClick: function() { submitPasteToList(setWorks); }
-          }, '\u2705 ' + t('Suits me', '잘 맞아요')),
-          React.createElement('button', {
-            className: 'try-paste-submit try-paste-submit--doesnt',
-            disabled: !pasteText.trim() || doesnt.length >= MAX_PER_SIDE,
-            onClick: function() { submitPasteToList(setDoesnt); }
-          }, '\uD83D\uDEAB ' + t("Doesn\u2019t suit me", '안 맞아요'))
+          }, t('Analyze', '분석하기'))
         )
       )
     ),
