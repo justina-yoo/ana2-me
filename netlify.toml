@@ -42,13 +42,13 @@
   function = "og-inject"
   path = "/about/"
 
-# /analyzer disabled — not ready for production yet
-# [[edge_functions]]
-#   function = "og-inject"
-#   path = "/analyzer"
-# [[edge_functions]]
-#   function = "og-inject"
-#   path = "/analyzer/"
+[[edge_functions]]
+  function = "og-inject"
+  path = "/analyzer"
+
+[[edge_functions]]
+  function = "og-inject"
+  path = "/analyzer/"
 
 [[edge_functions]]
   function = "og-inject"

@@ -1554,6 +1554,23 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-paste-cancel { background: none; border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 6px 16px; font-size: 12px; font-weight: 500; color: var(--ink-faint); cursor: pointer; }
 .try-paste-submit { background: var(--accent); border: none; border-radius: var(--radius-pill); padding: 6px 16px; font-size: 12px; font-weight: 600; color: #fff; cursor: pointer; }
 .try-paste-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+.try-paste-submit--doesnt { background: var(--ink-soft); }
+.try-paste-standalone { max-width: 640px; margin: 0 auto 24px; padding: 0 var(--page-pad); text-align: center; }
+.try-paste-link--standalone { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; text-align: center; margin: 0 auto; }
+.try-paste-link-icon { font-size: 15px; }
+.try-paste-area--standalone { text-align: left; }
+.try-product-breakdown { border-top: 1px solid var(--line); }
+.try-product-breakdown:first-child { border-top: none; }
+.try-product-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 0; background: none; border: none; cursor: pointer; gap: 12px; text-align: left; }
+.try-product-toggle-left { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+.try-product-brand { font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0; }
+.try-product-name { font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.try-product-badge { font-size: 12px; flex-shrink: 0; }
+.try-product-toggle-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.try-product-count { font-size: 11px; color: var(--ink-faint); }
+.try-product-chevron { font-size: 18px; color: var(--ink-faint); transition: transform 0.2s; display: inline-block; }
+.try-product-chevron--open { transform: rotate(90deg); }
+.try-product-body { padding: 0 0 16px; }
 .try-error { text-align: center; color: #c0392b; font-size: 14px; padding: 16px 0; }
 .try-results { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
 .try-result-card { background: var(--cream-card); border-radius: var(--radius); padding: 24px; border: 1px solid var(--line); }

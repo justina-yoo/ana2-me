@@ -183,6 +183,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [selIng, setSelIng] = useState(null);
+  const [expandedProducts, setExpandedProducts] = useState([]);
   const [catalogIngs, setCatalogIngs] = useState(null);
   var pastedCounter = useRef(0);
   const resultsRef = useRef(null);
@@ -194,6 +195,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     }
   }, [result]);
 
+  const [pasteMode, setPasteMode] = useState(false);
+  const [pasteText, setPasteText] = useState('');
   const MAX_PER_SIDE = 3;
   const allSelected = [...works, ...doesnt].map(function(p) { return p.id; });
   const totalCount = works.length + doesnt.length;
@@ -201,6 +204,26 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   const isSingleMode = totalCount === 1;
   var singleProduct = isSingleMode ? (works[0] || doesnt[0]) : null;
   var singleIsWorks = isSingleMode && works.length === 1;
+
+  function submitPasteToList(setter) {
+    var parsed = parseIngredientList(pasteText);
+    if (parsed.length === 0) return;
+    pastedCounter.current++;
+    var pastedId = 'pasted-' + pastedCounter.current;
+    var entry = {
+      id: pastedId,
+      name: t('Pasted list (' + parsed.length + ' ingredients)', '붙여넣기 (' + parsed.length + '개 성분)'),
+      nameKo: '붙여넣기 (' + parsed.length + '개 성분)',
+      brand: '',
+      imageUrl: null,
+      _pasted: true,
+      _rawIngredients: parsed
+    };
+    setter(function(prev) { return prev.concat([entry]); });
+    setPasteText('');
+    setPasteMode(false);
+    setResult(null); setError(null);
+  }
 
   // Confidence level based on input counts
   function getConfidenceLevel() {
@@ -413,6 +436,38 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     ));
   }
 
+  // ── Resolve Korean name from MFDS reference ──
+  function resolveKoName(ing) {
+    if (ing.name_ko) return ing.name_ko;
+    if (!_mfdsLookupEn) return null;
+    var norm = (ing.name || '').toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+    var entry = _mfdsLookupEn[norm];
+    return entry ? entry.standard_name_ko : null;
+  }
+
+  // ── Enrich ingredient row into display object ──
+  function enrichIngredient(r) {
+    var ing = r.ingredient; if (!ing) return null;
+    var isFlagged = ing.is_known_sensitizer || ing.is_eu_26_fragrance_allergen ||
+                    ing.is_essential_oil || ing.irritation_risk === 'high' || ing.irritation_risk === 'medium';
+    return {
+      id: ing.id,
+      name: ing.name,
+      name_ko: ing.name_ko || resolveKoName(ing),
+      symbol: ing.symbol || (ing.name || '').substring(0, 2).toUpperCase(),
+      category: ing.category || 'uncategorized',
+      description: ing.description,
+      description_ko: ing.description_ko,
+      science: ing.science,
+      science_ko: ing.science_ko,
+      is_hero: r.is_hero,
+      sort_order: r.sort_order,
+      flagged: isFlagged,
+      flag_type: ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil' : ing.is_known_sensitizer ? 'sensitizer' : (ing.irritation_risk === 'high' || ing.irritation_risk === 'medium') ? 'irritant' : null,
+      irritation_risk: ing.irritation_risk
+    };
+  }
+
   // ── ENGINE ──
   async function runAnalysis() {
     setBusy(true); setError(null); setResult(null);
@@ -443,8 +498,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         }
       }
 
-      // Load MFDS reference + ingredient catalog for pasted matching
-      if (pastedEntries.length > 0) await loadMfdsCache();
+      // Load MFDS reference (for pasted matching + Korean name fallback)
+      await loadMfdsCache();
       var catalog = catalogIngs;
       if (!catalog && pastedEntries.length > 0) {
         var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhreWZnZ2FwaWpnZWRzaXpmcWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzY5MDksImV4cCI6MjA5MzY1MjkwOX0.huZi2uDRI0EnVWkg6HTo-VK1V3fz3DyR-ZNGpMd0yLQ';
@@ -535,27 +590,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         var rows = byProduct[pid] || [];
 
         // Build full ingredient list with metadata for card rendering
-        var allIngs = rows.map(function(r) {
-          var ing = r.ingredient; if (!ing) return null;
-          var isFlagged = ing.is_known_sensitizer || ing.is_eu_26_fragrance_allergen ||
-                          ing.is_essential_oil || ing.irritation_risk === 'high' || ing.irritation_risk === 'medium';
-          return {
-            id: ing.id,
-            name: ing.name,
-            name_ko: ing.name_ko,
-            symbol: ing.symbol || (ing.name || '').substring(0, 2).toUpperCase(),
-            category: ing.category || 'uncategorized',
-            description: ing.description,
-            description_ko: ing.description_ko,
-            science: ing.science,
-            science_ko: ing.science_ko,
-            is_hero: r.is_hero,
-            sort_order: r.sort_order,
-            flagged: isFlagged,
-            flag_type: ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil' : ing.is_known_sensitizer ? 'sensitizer' : (ing.irritation_risk === 'high' || ing.irritation_risk === 'medium') ? 'irritant' : null,
-            irritation_risk: ing.irritation_risk
-          };
-        }).filter(Boolean);
+        var allIngs = rows.map(enrichIngredient).filter(Boolean);
 
         // Group into user-intent sections
         var ACTIVE_CATS = { 'active': true, 'peptide': true, 'antioxidant': true, 'ferment': true };
@@ -858,6 +893,32 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         recommendations.push(item.product.id);
       });
 
+      // ── Per-product ingredient breakdowns ──
+      var ACTIVE_CATS_BD = { 'active': true, 'peptide': true, 'antioxidant': true, 'ferment': true };
+      var COMFORT_CATS_BD = { 'humectant': true, 'emollient': true, 'barrier-lipid': true, 'soothing-botanical': true };
+      var productBreakdowns = inputIds.map(function(pid) {
+        var rows = byProduct[pid] || [];
+        var entry = works.find(function(p) { return p.id === pid; }) || doesnt.find(function(p) { return p.id === pid; });
+        if (!entry) return null;
+        var allIngs = rows.map(enrichIngredient).filter(Boolean);
+        var activeIngs = [], comfortIngs = [];
+        allIngs.forEach(function(ing) {
+          if (ACTIVE_CATS_BD[ing.category]) activeIngs.push(ing);
+          else if (COMFORT_CATS_BD[ing.category]) comfortIngs.push(ing);
+        });
+        return {
+          id: pid,
+          name: entry.name,
+          nameKo: entry.nameKo,
+          brand: entry.brand || '',
+          isPasted: !!entry._pasted,
+          isWorks: worksIds.indexOf(pid) >= 0,
+          activeIngs: activeIngs,
+          comfortIngs: comfortIngs,
+          totalCount: allIngs.length
+        };
+      }).filter(Boolean);
+
       // Data quality note
       var total = inputIds.length;
       var confidenceNote;
@@ -892,10 +953,12 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         );
       }
 
+      setExpandedProducts([]);
       setResult({
         mode: 'comparative',
         avoid_ingredients: negatives,
         positive_themes: positiveThemes,
+        product_breakdowns: productBreakdowns,
         recommended_products: recommendations,
         data_quality: {
           full_inci_products: fullInciCount,
@@ -939,8 +1002,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   function ProductPicker({ label, labelKo, selected, setSelected, max, icon, accent }) {
     var [q, setQ] = useState('');
     var [open, setOpen] = useState(false);
-    var [pasteMode, setPasteMode] = useState(false);
-    var [pasteText, setPasteText] = useState('');
     var inputRef = useRef(null);
     var accentClass = accent === 'rose' ? 'try-picker--rose' : 'try-picker--green';
 
@@ -964,27 +1025,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       setSelected(function(prev) { return prev.filter(function(p) { return p.id !== id; }); });
       setResult(null); setError(null);
     };
-    var submitPaste = function() {
-      var parsed = parseIngredientList(pasteText);
-      if (parsed.length === 0) return;
-      if (selected.length >= max) return;
-      pastedCounter.current++;
-      var pastedId = 'pasted-' + pastedCounter.current;
-      var entry = {
-        id: pastedId,
-        name: t('Pasted list (' + parsed.length + ' ingredients)', '붙여넣기 (' + parsed.length + '개 성분)'),
-        nameKo: '붙여넣기 (' + parsed.length + '개 성분)',
-        brand: '',
-        imageUrl: null,
-        _pasted: true,
-        _rawIngredients: parsed
-      };
-      setSelected(function(prev) { return prev.concat([entry]); });
-      setPasteText('');
-      setPasteMode(false);
-      setResult(null); setError(null);
-    };
-
     // Progress dots
     var dots = [];
     for (var di = 0; di < max; di++) {
@@ -1062,34 +1102,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           })
         )
       ),
-      // Paste fallback link + textarea
-      selected.length < max && !pasteMode && React.createElement('button', {
-        className: 'try-paste-link',
-        onClick: function(e) { e.stopPropagation(); setPasteMode(true); }
-      }, t("Can't find your product? Paste its ingredient list.", '제품을 찾을 수 없나요? 성분 목록을 붙여넣으세요.')),
-      selected.length < max && pasteMode && React.createElement('div', {
-        className: 'try-paste-area',
-        onClick: function(e) { e.stopPropagation(); }
-      },
-        React.createElement('textarea', {
-          className: 'try-paste-textarea',
-          value: pasteText,
-          onChange: function(e) { setPasteText(e.target.value); },
-          placeholder: t('Paste ingredient list here...\ne.g. Water, Glycerin, Niacinamide, ...', '성분 목록을 여기에 붙여넣으세요...\n예: 정제수, 글리세린, 나이아신아마이드, ...'),
-          rows: 4
-        }),
-        React.createElement('div', { className: 'try-paste-actions' },
-          React.createElement('button', {
-            className: 'try-paste-cancel',
-            onClick: function() { setPasteMode(false); setPasteText(''); }
-          }, t('Cancel', '취소')),
-          React.createElement('button', {
-            className: 'try-paste-submit',
-            disabled: !pasteText.trim(),
-            onClick: submitPaste
-          }, t('Add', '추가'))
-        )
-      )
     );
   }
 
@@ -1151,6 +1163,43 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         t(
           'Tell us which products work for your skin and which don\u2019t. We\u2019ll find the ingredient patterns behind both.',
           '어떤 제품이 맞고 안 맞는지 알려주세요. 그 뒤에 숨겨진 성분 패턴을 찾아드려요.'
+        )
+      )
+    ),
+
+    // Standalone paste section
+    React.createElement('section', { className: 'try-paste-standalone' },
+      !pasteMode && React.createElement('button', {
+        className: 'try-paste-link try-paste-link--standalone',
+        onClick: function() { setPasteMode(true); }
+      },
+        React.createElement('span', { className: 'try-paste-link-icon' }, '\uD83D\uDCCB'),
+        t("Can\u2019t find your product? Paste its ingredient list.", '제품을 찾을 수 없나요? 성분 목록을 붙여넣으세요.')
+      ),
+      pasteMode && React.createElement('div', { className: 'try-paste-area try-paste-area--standalone' },
+        React.createElement('textarea', {
+          className: 'try-paste-textarea',
+          value: pasteText,
+          onChange: function(e) { setPasteText(e.target.value); },
+          placeholder: t('Paste ingredient list here...\ne.g. Water, Glycerin, Niacinamide, ...', '성분 목록을 여기에 붙여넣으세요...\n예: 정제수, 글리세린, 나이아신아마이드, ...'),
+          rows: 4,
+          autoFocus: true
+        }),
+        React.createElement('div', { className: 'try-paste-actions' },
+          React.createElement('button', {
+            className: 'try-paste-cancel',
+            onClick: function() { setPasteMode(false); setPasteText(''); }
+          }, t('Cancel', '취소')),
+          React.createElement('button', {
+            className: 'try-paste-submit',
+            disabled: !pasteText.trim() || works.length >= MAX_PER_SIDE,
+            onClick: function() { submitPasteToList(setWorks); }
+          }, '\u2705 ' + t('Suits me', '잘 맞아요')),
+          React.createElement('button', {
+            className: 'try-paste-submit try-paste-submit--doesnt',
+            disabled: !pasteText.trim() || doesnt.length >= MAX_PER_SIDE,
+            onClick: function() { submitPasteToList(setDoesnt); }
+          }, '\uD83D\uDEAB ' + t("Doesn\u2019t suit me", '안 맞아요'))
         )
       )
     ),
@@ -1218,7 +1267,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 t('The anatomy', '이 제품의 아나토미')
               ),
               React.createElement('p', { className: 'sec-sub' },
-                t('Scroll each section to see all ingredients.', '각 섹션을 스크롤하여 모든 성분을 확인하세요.')
+                t('Tap any ingredient to read what it does.', '성분을 탭하면 설명을 볼 수 있어요.')
               )
             ),
             null
@@ -1364,6 +1413,97 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
               })()
         )
       ),
+
+      // ── Comparative mode: per-product ingredient breakdowns ──
+      result.mode !== 'single' && result.product_breakdowns && result.product_breakdowns.length > 0 &&
+        React.createElement(Reveal, { delay: 200 },
+          React.createElement('div', { className: 'try-result-card' },
+            React.createElement('h2', { className: 'try-result-title' },
+              t('Ingredients by product', '제품별 성분')
+            ),
+            React.createElement('p', { className: 'try-result-disclaimer' },
+              t('Tap a product to expand its ingredient list. Tap any ingredient to read what it does.',
+                '제품을 탭하면 성분 목록이 펼쳐져요. 성분을 탭하면 설명을 볼 수 있어요.')
+            ),
+            result.product_breakdowns.map(function(pb) {
+              var isExpanded = expandedProducts.indexOf(pb.id) >= 0;
+              var displayName = isKo ? (pb.nameKo || pb.name) : pb.name;
+              var toggleExpand = function() {
+                setExpandedProducts(function(prev) {
+                  return isExpanded
+                    ? prev.filter(function(id) { return id !== pb.id; })
+                    : prev.concat([pb.id]);
+                });
+              };
+              var SYM_COLORS_PB = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
+              var pbColorIdx = 0;
+
+              return React.createElement('div', { key: pb.id, className: 'try-product-breakdown' },
+                React.createElement('button', { className: 'try-product-toggle', onClick: toggleExpand },
+                  React.createElement('div', { className: 'try-product-toggle-left' },
+                    !pb.isPasted && pb.brand && React.createElement('span', { className: 'try-product-brand' }, pb.brand),
+                    React.createElement('span', { className: 'try-product-name' }, displayName),
+                    React.createElement('span', {
+                      className: 'try-product-badge' + (pb.isWorks ? ' try-product-badge--works' : ' try-product-badge--doesnt')
+                    }, pb.isWorks ? '\u2705' : '\uD83D\uDEAB')
+                  ),
+                  React.createElement('div', { className: 'try-product-toggle-right' },
+                    React.createElement('span', { className: 'try-product-count' },
+                      pb.totalCount + ' ' + t('ingredients', '성분')
+                    ),
+                    React.createElement('span', { className: 'try-product-chevron' + (isExpanded ? ' try-product-chevron--open' : '') }, '\u203A')
+                  )
+                ),
+                isExpanded && React.createElement('div', { className: 'try-product-body' },
+                  pb.activeIngs.length > 0 && React.createElement('div', { className: 'try-cat-group' },
+                    React.createElement('h4', { className: 'try-cat-label' },
+                      t('\u2728 Active ingredients', '\u2728 활성 성분')
+                    ),
+                    React.createElement(TryIngScroll, null,
+                      pb.activeIngs.map(function(ing) {
+                        var name = isKo ? (ing.name_ko || ing.name) : ing.name;
+                        var symBg = ing.flagged ? '#c0392b' : SYM_COLORS_PB[pbColorIdx % SYM_COLORS_PB.length];
+                        pbColorIdx++;
+                        return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged') },
+                          React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng(ing); } },
+                            React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, ing.symbol),
+                            React.createElement('div', { className: 'ing-body' },
+                              React.createElement('p', { className: 'ing-name' }, name)
+                            )
+                          )
+                        );
+                      })
+                    )
+                  ),
+                  pb.comfortIngs.length > 0 && React.createElement('div', { className: 'try-cat-group' },
+                    React.createElement('h4', { className: 'try-cat-label' },
+                      t('\uD83E\uDEE7 Comfort & hydration', '\uD83E\uDEE7 보습 & 진정')
+                    ),
+                    React.createElement(TryIngScroll, null,
+                      pb.comfortIngs.map(function(ing) {
+                        var name = isKo ? (ing.name_ko || ing.name) : ing.name;
+                        var symBg = ing.flagged ? '#c0392b' : SYM_COLORS_PB[pbColorIdx % SYM_COLORS_PB.length];
+                        pbColorIdx++;
+                        return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged') },
+                          React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng(ing); } },
+                            React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, ing.symbol),
+                            React.createElement('div', { className: 'ing-body' },
+                              React.createElement('p', { className: 'ing-name' }, name)
+                            )
+                          )
+                        );
+                      })
+                    )
+                  ),
+                  pb.activeIngs.length === 0 && pb.comfortIngs.length === 0 &&
+                    React.createElement('p', { className: 'try-result-empty' },
+                      t('Only base/filler ingredients found for this product.', '이 제품은 기본/충전 성분만 확인됐어요.')
+                    )
+                )
+              );
+            })
+          )
+        ),
 
       // Card 3: Recommendations
       React.createElement(Reveal, { delay: 250 },
