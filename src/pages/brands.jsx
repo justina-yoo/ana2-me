@@ -189,6 +189,31 @@ const BRAND_INFO = {
     ko: '프리미엄 엑스트라 버진 올리브 오일 건강기능식품에 집중하는 한국 웰니스 브랜드예요. 올리브3 캡슐은 폴리페놀과 올레오칸탈이 풍부한 냉압착 EVOO를 사용해요.',
     origin: 'Seoul, Korea'
   },
+  'AESTURA': {
+    en: 'A Korean dermocosmetic brand by Amore Pacific focused on barrier care for dry and sensitive skin. Their patented DermaON® technology uses multi-lamellar ceramide capsules that mimic the skin\'s own lipid structure. The Atobarrier365 line is widely recommended in Korean dermatology clinics.',
+    ko: '아모레퍼시픽 산하의 한국 더모코스메틱 브랜드로, 건성·민감 피부의 장벽 케어에 집중해요. 특허 DermaON® 기술은 피부 자체 지질 구조를 모방하는 다중층 세라마이드 캡슐을 사용해요. 아토배리어365 라인은 한국 피부과에서 널리 추천돼요.',
+    origin: 'Seoul, Korea'
+  },
+  'AP Beauty': {
+    en: 'Amore Pacific\'s prestige skincare brand, backed by 70+ years of Korean skin research. Their formulations feature patented ingredients like PDRN and EXOYNE, combining traditional Korean botanical science with advanced biotechnology.',
+    ko: '70년 이상의 한국 피부 연구를 기반으로 한 아모레퍼시픽의 프레스티지 스킨케어 브랜드예요. PDRN, 엑소인 등 특허 성분을 활용해 한국 전통 식물 과학과 첨단 바이오 기술을 결합해요.',
+    origin: 'Seoul, Korea', founded: '1945'
+  },
+  'The Ordinary': {
+    en: 'A Canadian skincare brand under DECIEM, known for single-ingredient, high-concentration formulas at accessible prices. Their clinical approach strips away marketing and focuses on active percentages, pH levels, and formulation transparency.',
+    ko: 'DECIEM 산하의 캐나다 스킨케어 브랜드로, 합리적인 가격에 단일 성분 고농축 포뮬라로 유명해요. 마케팅을 걷어내고 활성 성분 함량, pH, 제형 투명성에 집중하는 클리니컬 접근 방식이에요.',
+    origin: 'Toronto, Canada', founded: '2016'
+  },
+  'Torriden': {
+    en: 'A Korean skincare brand specializing in low-molecular-weight hyaluronic acid hydration. Their DIVE IN line uses 5 types of hyaluronic acid at different molecular weights for multi-depth moisture delivery.',
+    ko: '저분자 히알루론산 보습을 전문으로 하는 한국 스킨케어 브랜드예요. DIVE IN 라인은 5종의 다른 분자량 히알루론산으로 다층 깊이 수분 전달을 해요.',
+    origin: 'Seoul, Korea', founded: '2020'
+  },
+  'celimax': {
+    en: 'A Korean skincare brand that combines clinical-grade actives with gentle, non-irritating formulas. Their Vita-A Retinal Shot uses proprietary A-Shot™ microparticles — 16x smaller than pores — for deeper active delivery without the irritation.',
+    ko: '클리니컬 등급 활성 성분과 순한 제형을 결합한 한국 스킨케어 브랜드예요. 비타-A 레티날 샷은 모공보다 16배 작은 독자 A-Shot™ 마이크로 입자로 자극 없이 깊은 전달을 해요.',
+    origin: 'Seoul, Korea'
+  },
 };
 
 window.Brands = function Brands({ lang, products, setView, setProduct, density, brandSlug }) {
