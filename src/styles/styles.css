@@ -1490,7 +1490,7 @@ details summary::-webkit-details-marker { display: none; }
 details[open] .sources-chevron { transform: rotate(90deg); }
 
 /* ─── Try page ─────────────────────────────────────────────────────────────── */
-.try-page { padding-bottom: 80px; }
+.try-page { padding-bottom: 120px; }
 .try-hero { padding: 32px 0 28px; }
 .try-subtitle { font-size: 15px; color: var(--ink-soft); line-height: 1.6; margin: 16px 0 0; max-width: 520px; }
 .try-pickers { display: flex; flex-direction: column; gap: 28px; margin: 8px 0 0; }
