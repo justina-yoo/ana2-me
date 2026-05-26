@@ -36,6 +36,12 @@
 
   <!-- Articles -->
   <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-26/dupe-culture-killing-your-nose-cheap-perfume-copies</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/beauty-science/2026-05-26/skincare-ingredients-expiration-problem-nobody-talks-about</loc>
     <lastmod>2026-05-26</lastmod>
     <changefreq>monthly</changefreq>
@@ -414,12 +420,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -450,6 +450,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -457,12 +469,6 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -487,12 +493,6 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -547,6 +547,12 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/grown-up-gourmand-matcha-pistachio</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
