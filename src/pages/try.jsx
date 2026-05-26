@@ -273,6 +273,9 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   const [error, setError] = useState(null);
   const [selIng, setSelIng] = useState(null);
   const [expandedProducts, setExpandedProducts] = useState([]);
+  const [fbState, setFbState] = useState('idle'); // idle | rated | commented | done
+  const [fbRating, setFbRating] = useState(null);
+  const [fbComment, setFbComment] = useState('');
   const [catalogIngs, setCatalogIngs] = useState(null);
   var pastedCounter = useRef(0);
   var autoAnalyze = useRef(false);
@@ -601,7 +604,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
 
   // ── ENGINE ──
   async function runAnalysis() {
-    setBusy(true); setError(null); setResult(null);
+    setBusy(true); setError(null); setResult(null); setFbState('idle'); setFbRating(null); setFbComment('');
     try {
       var allEntries = [...works, ...doesnt];
       var pickedEntries = allEntries.filter(function(p) { return !p._pasted; });
@@ -1749,6 +1752,93 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 t('No recommendations available with current data.', '현재 데이터로는 추천을 제공할 수 없습니다.')
               )
             : result.recommended_products.map(renderProductLink)
+        )
+      ),
+
+      // ── Feedback prompt ──
+      fbState !== 'done' && React.createElement(Reveal, { delay: 400 },
+        React.createElement('div', { className: 'try-feedback' },
+          fbState === 'idle' && [
+            React.createElement('p', { key: 'q', className: 'try-feedback-q' },
+              t('Did this tell you something useful about your skin?', '피부에 대해 유용한 정보를 알게 됐나요?')
+            ),
+            React.createElement('div', { key: 'btns', className: 'try-feedback-btns' },
+              React.createElement('button', {
+                className: 'try-feedback-btn',
+                onClick: function() {
+                  setFbRating('helpful'); setFbState('rated');
+                  fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                    method: 'POST',
+                    headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                    body: JSON.stringify({
+                      rating: 'helpful',
+                      input_count: totalCount,
+                      confidence_level: result.data_quality ? (result.mode === 'single' ? 'single' : (works.length >= 2 && doesnt.length >= 2 ? 'high' : 'low')) : null
+                    })
+                  }).catch(function() {});
+                }
+              }, '\uD83D\uDC4D ' + t('Yes', '네')),
+              React.createElement('button', {
+                className: 'try-feedback-btn',
+                onClick: function() {
+                  setFbRating('not_helpful'); setFbState('rated');
+                  fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                    method: 'POST',
+                    headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                    body: JSON.stringify({
+                      rating: 'not_helpful',
+                      input_count: totalCount,
+                      confidence_level: result.data_quality ? (result.mode === 'single' ? 'single' : (works.length >= 2 && doesnt.length >= 2 ? 'high' : 'low')) : null
+                    })
+                  }).catch(function() {});
+                }
+              }, '\uD83D\uDC4E ' + t('Not really', '별로요'))
+            )
+          ],
+          fbState === 'rated' && [
+            React.createElement('p', { key: 'q2', className: 'try-feedback-q' },
+              t('Anything we got wrong or missed? (optional)', '잘못되거나 빠진 부분이 있나요? (선택)')
+            ),
+            React.createElement('div', { key: 'input', className: 'try-feedback-comment' },
+              React.createElement('input', {
+                className: 'try-feedback-input',
+                value: fbComment,
+                onChange: function(e) { setFbComment(e.target.value); },
+                onKeyDown: function(e) {
+                  if (e.key === 'Enter' && fbComment.trim()) {
+                    fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                      method: 'POST',
+                      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                      body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() })
+                    }).catch(function() {});
+                    setFbState('done');
+                  }
+                },
+                placeholder: t('Type here...', '여기에 입력...')
+              }),
+              React.createElement('button', {
+                className: 'try-feedback-submit',
+                onClick: function() {
+                  if (fbComment.trim()) {
+                    fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                      method: 'POST',
+                      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                      body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() })
+                    }).catch(function() {});
+                  }
+                  setFbState('done');
+                }
+              }, t('Submit', '보내기'))
+            ),
+            React.createElement('button', { key: 'skip', className: 'try-feedback-skip', onClick: function() { setFbState('done'); } },
+              t('Skip', '건너뛰기')
+            )
+          ]
+        )
+      ),
+      fbState === 'done' && React.createElement(Reveal, null,
+        React.createElement('p', { className: 'try-feedback-thanks' },
+          t('Thanks for your feedback!', '피드백 감사합니다!')
         )
       ),
 

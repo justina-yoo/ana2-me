@@ -1616,6 +1616,18 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-product-chevron { font-size: 18px; color: var(--ink-faint); transition: transform 0.2s; display: inline-block; }
 .try-product-chevron--open { transform: rotate(90deg); }
 .try-product-body { padding: 0 0 16px; }
+.try-feedback { text-align: center; padding: 24px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--cream-card); }
+.try-feedback-q { font-size: 14px; font-weight: 500; color: var(--ink); margin: 0 0 14px; }
+.try-feedback-btns { display: flex; gap: 10px; justify-content: center; }
+.try-feedback-btn { background: none; border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 8px 20px; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.try-feedback-btn:hover { border-color: var(--accent); background: rgba(45,90,61,0.04); }
+.try-feedback-comment { display: flex; gap: 8px; }
+.try-feedback-input { flex: 1; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 12px; font-family: var(--font-text); color: var(--ink); background: var(--cream); outline: none; }
+.try-feedback-input:focus { border-color: var(--accent); }
+.try-feedback-input::placeholder { color: var(--ink-faint); }
+.try-feedback-submit { background: var(--accent); color: #fff; border: none; border-radius: var(--radius-pill); padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+.try-feedback-skip { background: none; border: none; font-size: 11px; color: var(--ink-faint); cursor: pointer; margin-top: 8px; text-decoration: underline; text-underline-offset: 2px; }
+.try-feedback-thanks { text-align: center; font-size: 13px; color: var(--ink-faint); padding: 16px 0; }
 .try-error { text-align: center; color: #c0392b; font-size: 14px; padding: 16px 0; }
 .try-results { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
 .try-result-card { background: var(--cream-card); border-radius: var(--radius); padding: 24px; border: 1px solid var(--line); }
