@@ -25,30 +25,119 @@ var KNOWN_SENSITIZERS = new Set([
   'hydroquinone','benzoyl peroxide','formaldehyde','2-bromo-2-nitropropane-1,3-diol'
 ].map(function(s) { return s.toLowerCase(); }));
 
+// ── Build known-ingredient name sets for freeform matching ──
+var _knownNames = null; // sorted longest-first array of { norm, display }
+function getKnownNames(catalogIngredients) {
+  if (_knownNames) return _knownNames;
+  var nameMap = {}; // norm -> display
+  // Hardcoded safety lists
+  [EU26_ALLERGENS, ESSENTIAL_OILS, KNOWN_SENSITIZERS].forEach(function(s) {
+    s.forEach(function(n) { if (!nameMap[n]) nameMap[n] = n; });
+  });
+  // MFDS reference
+  if (_mfdsLookupEn) Object.keys(_mfdsLookupEn).forEach(function(k) {
+    if (!nameMap[k]) nameMap[k] = _mfdsLookupEn[k].inci_name || k;
+  });
+  if (_mfdsLookupKo) Object.keys(_mfdsLookupKo).forEach(function(k) {
+    if (!nameMap[k]) nameMap[k] = _mfdsLookupKo[k].standard_name_ko || k;
+  });
+  // Active catalog
+  if (catalogIngredients) catalogIngredients.forEach(function(ing) {
+    var enNorm = (ing.name || '').toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+    if (enNorm && !nameMap[enNorm]) nameMap[enNorm] = ing.name;
+    var koNorm = (ing.name_ko || '').toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+    if (koNorm && !nameMap[koNorm]) nameMap[koNorm] = ing.name_ko;
+  });
+  // Sort longest-first for greedy matching
+  _knownNames = Object.keys(nameMap).map(function(norm) {
+    return { norm: norm, display: nameMap[norm] };
+  }).sort(function(a, b) { return b.norm.length - a.norm.length; });
+  return _knownNames;
+}
+
+// ── Freeform parser: longest-match-first against known ingredients ──
+function parseFreeformIngredients(text, catalogIngredients) {
+  var known = getKnownNames(catalogIngredients);
+  var input = text.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+  var results = [];
+  var seen = new Set();
+  var pos = 0;
+  while (pos < input.length) {
+    // Skip whitespace
+    if (input[pos] === ' ') { pos++; continue; }
+    var matched = false;
+    for (var i = 0; i < known.length; i++) {
+      var n = known[i].norm;
+      if (input.substring(pos, pos + n.length) === n) {
+        // Ensure word boundary (not mid-word)
+        var afterEnd = pos + n.length;
+        if (afterEnd < input.length && /[a-z0-9]/.test(input[afterEnd])) continue;
+        if (!seen.has(n)) {
+          seen.add(n);
+          results.push({ name: known[i].display, recognized: true });
+        }
+        pos = afterEnd;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      // Collect unrecognized chunk until next known match or end
+      var start = pos;
+      pos++;
+      while (pos < input.length) {
+        if (input[pos] === ' ') {
+          // Check if anything starting at next word matches
+          var nextWord = pos + 1;
+          var foundNext = false;
+          for (var j = 0; j < known.length; j++) {
+            if (input.substring(nextWord, nextWord + known[j].norm.length) === known[j].norm) {
+              foundNext = true; break;
+            }
+          }
+          if (foundNext) break;
+        }
+        pos++;
+      }
+      var chunk = text.substring(start, pos).trim();
+      if (chunk && !seen.has(chunk.toLowerCase().replace(/[\s\-]+/g, ' ').trim())) {
+        seen.add(chunk.toLowerCase().replace(/[\s\-]+/g, ' ').trim());
+        results.push({ name: chunk, recognized: false });
+      }
+    }
+  }
+  return results;
+}
+
 // ── Parse pasted ingredient list ──
-function parseIngredientList(text) {
+function parseIngredientList(text, catalogIngredients) {
   if (!text || !text.trim()) return [];
   // Strip leading labels
   var cleaned = text.replace(/^(전성분\s*[:：]?|ingredients?\s*[:：]?|성분\s*[:：]?|full\s+ingredients?\s*[:：]?)/i, '').trim();
-  // Split on commas or newlines, but preserve commas inside ingredient names like "1,2-Hexanediol"
-  // Strategy: replace number-comma-number patterns temporarily, split, restore
-  var preserved = cleaned.replace(/(\d),(\d)/g, '$1\u00A7$2');
-  var tokens = preserved.split(/[,\n]+/).map(function(t) { return t.replace(/\u00A7/g, ','); });
-  var seen = new Set();
-  return tokens.map(function(tok) {
-    var t = tok.trim();
-    if (!t) return null;
-    // Strip trailing percentage noise like "(2%)" or "[15%]" but keep parenthetical common names
-    // Heuristic: remove parens that contain ONLY a number + % sign
-    t = t.replace(/\s*[\(\[]\s*\d+[\d.]*\s*%?\s*[\)\]]\s*$/, '').trim();
-    // Strip leading numbers/bullets
-    t = t.replace(/^\d+[\.\)]\s*/, '').trim();
-    if (!t) return null;
-    var key = t.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-    if (seen.has(key)) return null;
-    seen.add(key);
-    return t;
-  }).filter(Boolean);
+
+  // Detect if input has standard delimiters
+  var hasDelimiters = /[,\n\u00B7\uFF1B]/.test(cleaned);
+
+  if (hasDelimiters) {
+    // Delimited path — split normally
+    var preserved = cleaned.replace(/(\d),(\d)/g, '$1\u00A7$2');
+    var tokens = preserved.split(/[,\n\u00B7\uFF1B]+/).map(function(t) { return t.replace(/\u00A7/g, ','); });
+    var seen = new Set();
+    return tokens.map(function(tok) {
+      var t = tok.trim();
+      if (!t) return null;
+      t = t.replace(/\s*[\(\[]\s*\d+[\d.]*\s*%?\s*[\)\]]\s*$/, '').trim();
+      t = t.replace(/^\d+[\.\)]\s*/, '').trim();
+      if (!t) return null;
+      var key = t.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
+      if (seen.has(key)) return null;
+      seen.add(key);
+      return { name: t, recognized: true };
+    }).filter(Boolean);
+  } else {
+    // Freeform path — longest-match-first
+    return parseFreeformIngredients(cleaned, catalogIngredients);
+  }
 }
 
 // ── MFDS reference cache (loaded from Supabase on first paste) ──
@@ -205,6 +294,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
 
   const [pasteMode, setPasteMode] = useState(false);
   const [pasteText, setPasteText] = useState('');
+  const [pasteConfirm, setPasteConfirm] = useState(null); // { chips: [{name, recognized}], addText: '' }
+  const [pasteConfirmAdd, setPasteConfirmAdd] = useState('');
   const MAX_PER_SIDE = 3;
   const allSelected = [...works, ...doesnt].map(function(p) { return p.id; });
   const totalCount = works.length + doesnt.length;
@@ -213,23 +304,54 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   var singleProduct = isSingleMode ? (works[0] || doesnt[0]) : null;
   var singleIsWorks = isSingleMode && works.length === 1;
 
-  function submitPasteToList(setter) {
-    var parsed = parseIngredientList(pasteText);
+  async function submitPasteToConfirm() {
+    // Ensure caches are loaded for freeform matching
+    await loadMfdsCache();
+    var catalog = catalogIngs;
+    if (!catalog) {
+      var res = await fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/ingredients?select=*&limit=1000', {
+        headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY }
+      });
+      catalog = await res.json();
+      setCatalogIngs(catalog);
+    }
+    _knownNames = null; // Reset so it rebuilds with fresh data
+    var parsed = parseIngredientList(pasteText, catalog);
     if (parsed.length === 0) return;
+    setPasteConfirm(parsed);
+    setPasteConfirmAdd('');
+  }
+
+  function confirmPasteRemoveChip(idx) {
+    setPasteConfirm(function(prev) { return prev.filter(function(_, i) { return i !== idx; }); });
+  }
+
+  function confirmPasteAddChip() {
+    var name = pasteConfirmAdd.trim();
+    if (!name) return;
+    setPasteConfirm(function(prev) { return prev.concat([{ name: name, recognized: false }]); });
+    setPasteConfirmAdd('');
+  }
+
+  function confirmPasteFinalize(targetSetter) {
+    if (!pasteConfirm || pasteConfirm.length === 0) return;
+    var names = pasteConfirm.map(function(c) { return c.name; });
     pastedCounter.current++;
     var pastedId = 'pasted-' + pastedCounter.current;
     var entry = {
       id: pastedId,
-      name: t('Pasted list (' + parsed.length + ' ingredients)', '붙여넣기 (' + parsed.length + '개 성분)'),
-      nameKo: '붙여넣기 (' + parsed.length + '개 성분)',
+      name: t('Pasted product \u00B7 ' + names.length + ' ingredients', '붙여넣기 제품 \u00B7 ' + names.length + '개 성분'),
+      nameKo: '붙여넣기 제품 \u00B7 ' + names.length + '개 성분',
       brand: '',
       imageUrl: null,
       _pasted: true,
-      _rawIngredients: parsed
+      _rawIngredients: names
     };
-    setter(function(prev) { return prev.concat([entry]); });
+    (targetSetter || setWorks)(function(prev) { return prev.concat([entry]); });
     setPasteText('');
     setPasteMode(false);
+    setPasteConfirm(null);
+    setPasteConfirmAdd('');
     setResult(null); setError(null);
     autoAnalyze.current = true;
   }
@@ -616,7 +738,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         var breakdown = [];
         if (activeIngs.length > 0) {
           breakdown.push({
-            theme_name: t('\u2728 What makes it special', '\u2728 이 제품을 특별하게 만드는 성분'),
+            theme_name: t('\u2728 Key Actives', '\u2728 핵심 활성 성분'),
             subtitle: t('The active ingredients doing the heavy lifting.', '핵심적인 역할을 하는 활성 성분들.'),
             function_category: '_active',
             ingredients: activeIngs
@@ -624,7 +746,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         }
         if (comfortIngs.length > 0) {
           breakdown.push({
-            theme_name: t('\uD83E\uDEE7 What makes it gentle', '\uD83E\uDEE7 왜 편안한지'),
+            theme_name: t('\uD83E\uDEE7 Soothing Layer', '\uD83E\uDEE7 진정 레이어'),
             subtitle: t('Hydration, barrier support, and soothing ingredients.', '보습, 장벽 지원, 진정 성분들.'),
             function_category: '_comfort',
             ingredients: comfortIngs
@@ -856,7 +978,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       var positiveThemes = [];
       if (posActives.length > 0) {
         positiveThemes.push({
-          theme_name: t('\u2728 What makes it special', '\u2728 이 제품을 특별하게 만드는 성분'),
+          theme_name: t('\u2728 Key Actives', '\u2728 핵심 활성 성분'),
           subtitle: t('Active ingredients shared across your "works" products.', '잘 맞는 제품들에 공통으로 포함된 활성 성분.'),
           function_category: '_active',
           ingredients: posActives
@@ -864,7 +986,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       }
       if (posComfort.length > 0) {
         positiveThemes.push({
-          theme_name: t('\uD83E\uDEE7 What makes it gentle', '\uD83E\uDEE7 왜 편안한지'),
+          theme_name: t('\uD83E\uDEE7 Soothing Layer', '\uD83E\uDEE7 진정 레이어'),
           subtitle: t('Hydration and soothing ingredients shared across your "works" products.', '잘 맞는 제품들에 공통으로 포함된 보습 및 진정 성분.'),
           function_category: '_comfort',
           ingredients: posComfort
@@ -1011,8 +1133,71 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   function ProductPicker({ label, labelKo, selected, setSelected, max, icon, accent }) {
     var [q, setQ] = useState('');
     var [open, setOpen] = useState(false);
+    var [showCount, setShowCount] = useState(8);
+    var [pickerPaste, setPickerPaste] = useState(false);
+    var [pickerPasteText, setPickerPasteText] = useState('');
+    var [pickerChips, setPickerChips] = useState([]);
     var inputRef = useRef(null);
+    var pasteRef = useRef(null);
     var accentClass = accent === 'rose' ? 'try-picker--rose' : 'try-picker--green';
+
+    var handlePasteInput = function(e) {
+      var val = e.target.value;
+      // If pasted content has delimiters, auto-parse into chips immediately
+      if (/[,\n\u00B7\uFF1B]/.test(val)) {
+        var parsed = parseIngredientList(val, catalogIngs);
+        if (parsed.length > 0) {
+          var newNames = parsed.map(function(c) { return c.name; });
+          var existing = new Set(pickerChips.map(function(c) { return c.toLowerCase(); }));
+          var unique = newNames.filter(function(n) { return !existing.has(n.toLowerCase()); });
+          setPickerChips(function(prev) { return prev.concat(unique); });
+          setPickerPasteText('');
+          return;
+        }
+      }
+      setPickerPasteText(val);
+    };
+
+    var addChipFromInput = function() {
+      var name = pickerPasteText.trim();
+      if (!name) return;
+      var existing = new Set(pickerChips.map(function(c) { return c.toLowerCase(); }));
+      if (!existing.has(name.toLowerCase())) {
+        setPickerChips(function(prev) { return prev.concat([name]); });
+      }
+      setPickerPasteText('');
+    };
+
+    var removeChip = function(idx) {
+      setPickerChips(function(prev) { return prev.filter(function(_, i) { return i !== idx; }); });
+    };
+
+    var submitPickerPaste = function() {
+      var names = pickerChips;
+      if (names.length === 0) return;
+      pastedCounter.current++;
+      var pastedId = 'pasted-' + pastedCounter.current;
+      var entry = {
+        id: pastedId,
+        name: t('Pasted product \u00B7 ' + names.length + ' ingredients', '붙여넣기 제품 \u00B7 ' + names.length + '개 성분'),
+        nameKo: '붙여넣기 제품 \u00B7 ' + names.length + '개 성분',
+        brand: '',
+        imageUrl: null,
+        _pasted: true,
+        _rawIngredients: names
+      };
+      setSelected(function(prev) { return prev.concat([entry]); });
+      setPickerPasteText('');
+      setPickerChips([]);
+      setPickerPaste(false);
+      setResult(null); setError(null);
+    };
+
+    var openPaste = function() {
+      setPickerPaste(true);
+      setQ(''); setOpen(false);
+      setTimeout(function() { if (pasteRef.current) pasteRef.current.focus(); }, 50);
+    };
 
     var filtered = (products || []).filter(function(p) {
       if (p.category !== 'skincare') return false;
@@ -1023,6 +1208,10 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
              (p.nameKo || '').toLowerCase().includes(lower) ||
              p.brand.toLowerCase().includes(lower);
     });
+    // When no query, reverse to show newest first (products array comes sorted by created_at asc)
+    if (!q.trim()) filtered = filtered.slice().reverse();
+    var visibleFiltered = filtered.slice(0, showCount);
+    var hasMore = filtered.length > showCount;
 
     var add = function(p) {
       if (selected.length >= max) return;
@@ -1034,23 +1223,13 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       setSelected(function(prev) { return prev.filter(function(p) { return p.id !== id; }); });
       setResult(null); setError(null);
     };
-    // Progress dots
-    var dots = [];
-    for (var di = 0; di < max; di++) {
-      dots.push(React.createElement('span', {
-        key: di,
-        className: 'try-dot' + (di < selected.length ? ' try-dot--filled' : '')
-      }));
-    }
-
     var focusSearch = function() { if (inputRef.current) inputRef.current.focus(); };
 
     return React.createElement('div', { className: 'try-picker ' + accentClass, onClick: focusSearch, style: { cursor: selected.length < max ? 'text' : 'default' } },
       React.createElement('h3', { className: 'try-picker-label' },
         React.createElement('span', { className: 'try-picker-icon-wrap' }, icon),
         ' ',
-        t(label, labelKo),
-        React.createElement('span', { className: 'try-picker-dots' }, dots)
+        t(label, labelKo)
       ),
       selected.map(function(p) {
         var name = isKo && p.nameKo ? p.nameKo : p.name;
@@ -1074,31 +1253,29 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           )
         );
       }),
-      selected.length === 0 && selected.length < max && React.createElement('div', { className: 'try-empty' },
-        React.createElement('span', { className: 'try-empty-text' },
-          t('Search and add up to ' + max + ' products', '제품을 검색해서 최대 ' + max + '개 추가하세요')
-        )
-      ),
       selected.length < max && React.createElement('div', { className: 'try-search-wrap', style: { position: 'relative' } },
         React.createElement('div', { className: 'try-search' },
           React.createElement(Icon, { name: 'search', size: 14 }),
           React.createElement('input', {
             ref: inputRef,
             value: q,
-            onChange: function(e) { setQ(e.target.value); setOpen(true); },
+            onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
             onFocus: function() { setOpen(true); },
             onBlur: function() { setTimeout(function() { setOpen(false); }, 200); },
             placeholder: t('Search products...', '제품 검색...'),
             className: 'try-search-input'
           })
         ),
-        open && filtered.length > 0 && React.createElement('div', { className: 'try-dropdown', onMouseDown: function(e) { e.preventDefault(); } },
-          filtered.map(function(p) {
+        open && React.createElement('div', {
+          className: 'try-dropdown' + (q.trim().length > 0 && filtered.length === 0 ? ' try-dropdown--empty' : ''),
+          onMouseDown: function(e) { e.preventDefault(); }
+        },
+          visibleFiltered.map(function(p) {
             var name = isKo && p.nameKo ? p.nameKo : p.name;
             return React.createElement('button', {
               key: p.id, className: 'try-dropdown-item',
               onMouseDown: function(e) { e.preventDefault(); },
-              onClick: function() { add(p); }
+              onClick: function() { add(p); setShowCount(8); }
             },
               React.createElement('div', { className: 'try-dd-img' },
                 React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
@@ -1108,27 +1285,74 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 React.createElement('span', { className: 'try-dd-name' }, name)
               )
             );
-          })
-        ),
-        // Empty-state CTA — search has text but no results
-        open && q.trim().length > 1 && filtered.length === 0 && React.createElement('div', {
-          className: 'try-dropdown try-dropdown--empty',
-          onMouseDown: function(e) { e.preventDefault(); }
-        },
-          React.createElement('p', { className: 'try-empty-search-text' },
-            t('No results for "' + q + '"', '"' + q + '" 검색 결과가 없어요')
+          }),
+          hasMore && React.createElement('button', {
+            className: 'try-dropdown-more',
+            onMouseDown: function(e) { e.preventDefault(); },
+            onClick: function() { setShowCount(function(c) { return c + 8; }); }
+          }, t('Show more...', '더 보기...')),
+          q.trim().length > 0 && filtered.length === 0 && React.createElement('p', { className: 'try-empty-search-text' },
+            t('No results for \u201C' + q + '\u201D', '\u201C' + q + '\u201D 검색 결과가 없어요')
           ),
           React.createElement('button', {
             className: 'try-empty-search-paste',
             onMouseDown: function(e) { e.preventDefault(); },
-            onClick: function() { setQ(''); setOpen(false); setPasteMode(true); }
+            onClick: openPaste
           },
             '\uD83D\uDCCB ' + t('Paste its ingredient list instead \u2192', '성분 목록을 대신 붙여넣기 \u2192')
           )
         ),
         // Persistent hint below search
-        React.createElement('p', { className: 'try-search-hint' },
-          t('Can\u2019t find a product? You can paste its ingredient list.', '제품을 찾을 수 없나요? 성분 목록을 붙여넣을 수 있어요.')
+        !pickerPaste && React.createElement('p', { className: 'try-search-hint' },
+          t('Can\u2019t find a product? ', '제품을 찾을 수 없나요? '),
+          React.createElement('button', {
+            className: 'try-search-hint-link',
+            onClick: function(e) { e.stopPropagation(); openPaste(); }
+          }, t('Paste its ingredient list.', '성분 목록을 붙여넣으세요.'))
+        )
+      ),
+      // Inline chip-based paste input
+      selected.length < max && pickerPaste && React.createElement('div', { className: 'try-chip-input-area', onClick: function(e) { e.stopPropagation(); if (pasteRef.current) pasteRef.current.focus(); } },
+        React.createElement('div', { className: 'try-chip-input-field' },
+          pickerChips.map(function(name, idx) {
+            return React.createElement('span', { key: idx, className: 'try-paste-chip' },
+              React.createElement('span', { className: 'try-paste-chip-name' }, name),
+              React.createElement('button', {
+                className: 'try-paste-chip-x',
+                onClick: function(e) { e.stopPropagation(); removeChip(idx); },
+                'aria-label': 'Remove'
+              }, '\u00D7')
+            );
+          }),
+          React.createElement('input', {
+            ref: pasteRef,
+            className: 'try-chip-input',
+            value: pickerPasteText,
+            onChange: handlePasteInput,
+            onKeyDown: function(e) {
+              if (e.key === 'Enter') { e.preventDefault(); addChipFromInput(); }
+              if (e.key === 'Backspace' && !pickerPasteText && pickerChips.length > 0) { removeChip(pickerChips.length - 1); }
+            },
+            placeholder: pickerChips.length === 0
+              ? t('Paste ingredient list or type one at a time...', '성분 목록을 붙여넣거나 하나씩 입력하세요...')
+              : t('Add more...', '더 추가...')
+          }),
+          // Inline + button for adding one ingredient
+          pickerPasteText.trim() && React.createElement('button', {
+            className: 'try-chip-input-add',
+            onClick: function(e) { e.stopPropagation(); addChipFromInput(); }
+          }, '+')
+        ),
+        React.createElement('div', { className: 'try-paste-actions' },
+          React.createElement('button', {
+            className: 'try-paste-cancel',
+            onClick: function() { setPickerPaste(false); setPickerPasteText(''); setPickerChips([]); }
+          }, t('Cancel', '취소')),
+          React.createElement('button', {
+            className: 'try-paste-submit',
+            disabled: pickerChips.length === 0,
+            onClick: submitPickerPaste
+          }, t('Done', '완료') + (pickerChips.length > 0 ? ' (' + pickerChips.length + ')' : ''))
         )
       ),
     );
@@ -1196,38 +1420,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       )
     ),
 
-    // Standalone paste section
-    React.createElement('section', { className: 'try-paste-standalone' },
-      !pasteMode && React.createElement('button', {
-        className: 'try-paste-link try-paste-link--standalone',
-        onClick: function() { setPasteMode(true); }
-      },
-        React.createElement('span', { className: 'try-paste-link-icon' }, '\uD83D\uDCCB'),
-        t('Or paste any ingredient list to analyze it instantly.', '또는 성분 목록을 붙여넣어서 바로 분석해 보세요.')
-      ),
-      pasteMode && React.createElement('div', { className: 'try-paste-area try-paste-area--standalone' },
-        React.createElement('textarea', {
-          className: 'try-paste-textarea',
-          value: pasteText,
-          onChange: function(e) { setPasteText(e.target.value); },
-          placeholder: t('Paste the full ingredient list from your product\u2019s packaging or its online listing.\ne.g. Water, Glycerin, Niacinamide, Centella Asiatica Extract, ...', '제품 패키징이나 온라인 제품 페이지의 전성분 목록을 붙여넣으세요.\n예: 정제수, 글리세린, 나이아신아마이드, 센텔라아시아티카추출물, ...'),
-          rows: 4,
-          autoFocus: true
-        }),
-        React.createElement('div', { className: 'try-paste-actions' },
-          React.createElement('button', {
-            className: 'try-paste-cancel',
-            onClick: function() { setPasteMode(false); setPasteText(''); }
-          }, t('Cancel', '취소')),
-          React.createElement('button', {
-            className: 'try-paste-submit',
-            disabled: !pasteText.trim() || works.length >= MAX_PER_SIDE,
-            onClick: function() { submitPasteToList(setWorks); }
-          }, t('Analyze', '분석하기'))
-        )
-      )
-    ),
-
     // Pickers
     React.createElement('section', { className: 'try-pickers' },
       React.createElement(ProductPicker, {
@@ -1240,23 +1432,28 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       })
     ),
 
-    // Analyze button
-    React.createElement('div', { className: 'try-action' },
+    // Sticky analyze bar — hidden when results are showing
+    !result && React.createElement('div', { className: 'try-action-sticky' },
       React.createElement('button', {
         className: 'try-btn',
         disabled: !canAnalyze || busy,
         onClick: runAnalysis
       },
         busy
-          ? t('Analyzing...', '분석 중...')
-          : isSingleMode
-            ? t('Analyze this product', '이 제품 분석하기')
-            : t('Analyze my ingredient pattern', '내 성분 패턴 분석하기')
-      ),
-      totalCount === 0 &&
-        React.createElement('p', { className: 'try-hint' },
-          t('Add at least one product to begin.', '시작하려면 제품을 1개 이상 추가하세요.')
-        )
+          ? React.createElement('span', { className: 'try-btn-loading' },
+              t('Analyzing', '분석 중'),
+              React.createElement('span', { className: 'try-btn-dots' },
+                React.createElement('span', null, '.'),
+                React.createElement('span', null, '.'),
+                React.createElement('span', null, '.')
+              )
+            )
+          : canAnalyze
+            ? (isSingleMode
+                ? t('\u{1F449} Analyze this product', '\u{1F449} 이 제품 분석하기')
+                : '\u{1F449} ' + t('Analyze', '분석하기') + ' (' + totalCount + ')')
+            : t('Add a product to begin', '제품을 추가하세요')
+      )
     ),
 
     // Error

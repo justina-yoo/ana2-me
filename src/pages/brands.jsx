@@ -209,6 +209,11 @@ const BRAND_INFO = {
     ko: '저분자 히알루론산 보습을 전문으로 하는 한국 스킨케어 브랜드예요. DIVE IN 라인은 5종의 다른 분자량 히알루론산으로 다층 깊이 수분 전달을 해요.',
     origin: 'Seoul, Korea', founded: '2020'
   },
+  'Dr.G': {
+    en: 'A Korean dermocosmetic brand founded by dermatologist Dr. Ahn Gun-young. Their R.E.D Blemish line is built around a 5-CICA complex and portulaca oleracea for sensitive, redness-prone skin — widely recommended in Korean dermatology clinics.',
+    ko: '피부과 전문의 안건영 박사가 설립한 한국 더모코스메틱 브랜드예요. R.E.D 블레미쉬 라인은 5-시카 복합체와 쇠비름을 중심으로 민감하고 홍조가 쉬운 피부를 위해 만들어졌어요. 한국 피부과에서 널리 추천돼요.',
+    origin: 'Seoul, Korea', founded: '2003'
+  },
   'Sulwhasoo': {
     en: 'Amore Pacific\'s flagship luxury brand, rooted in over 50 years of Korean herbal medicine (한방) research. Their formulations blend traditional hanbang ingredients — ginseng, plum, lotus — with modern skin science. The Gentle Cleansing Oil and First Care Activating Serum are category benchmarks.',
     ko: '50년 이상의 한방 연구를 기반으로 한 아모레퍼시픽의 대표 럭셔리 브랜드예요. 인삼, 매실, 연꽃 등 전통 한방 원료를 현대 피부 과학과 결합한 제형을 선보여요. 순행 클렌징 오일과 퍼스트 케어 액티베이팅 세럼은 카테고리 벤치마크예요.',

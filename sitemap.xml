@@ -566,6 +566,12 @@
 
   <!-- Products -->
   <url>
+    <loc>https://ana2-me.com/products/dr-g-r-e-d-blemish-clear-soothing-toner</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/sulwhasoo-gentle-cleansing-oil</loc>
     <lastmod>2026-05-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -728,24 +734,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/chanel-coco-mademoiselle</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/chanel-n-5</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/jo-malone-london-peony-blush-suede</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/products/tamburins-chamo</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -776,13 +764,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/la-roche-posay-cicaplast-balm-b5</loc>
+    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
+    <loc>https://ana2-me.com/products/la-roche-posay-cicaplast-balm-b5</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -801,6 +789,24 @@
   </url>
   <url>
     <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/chanel-coco-mademoiselle</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/chanel-n-5</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/jo-malone-london-peony-blush-suede</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -875,6 +881,12 @@
   </url>
   <url>
     <loc>https://ana2-me.com/brands/dr-jart</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/brands/dr-g</loc>
     <lastmod>2026-05-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
