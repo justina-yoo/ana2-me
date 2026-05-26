@@ -30,9 +30,11 @@ window.Admin = function Admin() {
     });
   }, [authed]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const pw = prompt('Admin password:');
-    if (pw === 'ana2me2026') {
+    if (!pw) return;
+    const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)))).map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hash === '037ed56b33ef8a0fdfc0f7209bded3eba9c9b0579707cc22e484dfebe8b95577') {
       setAuthed(true);
       sessionStorage.setItem('admin_auth', 'true');
     } else {
