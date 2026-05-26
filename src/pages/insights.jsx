@@ -725,6 +725,26 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
           </p>
         )}
 
+        {/* Analyzer CTA — contextual */}
+        <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
+          style={{
+            display: 'flex', gap: 14, alignItems: 'flex-start',
+            padding: '20px 22px', margin: '32px 0',
+            background: 'rgba(45,90,61,0.04)', border: '1px solid rgba(45,90,61,0.15)',
+            borderRadius: 'var(--radius)', textDecoration: 'none', color: 'inherit',
+            transition: 'all .15s ease',
+          }}>
+          <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>🔬</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 16, color: 'var(--ink)', lineHeight: 1.3 }}>
+              {isKo ? '이 성분들이 내 제품에도 들어있을까?' : 'Want to check if YOUR products contain these ingredients?'}
+            </span>
+            <span style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.5 }}>
+              {isKo ? '성분 분석기로 확인해 보세요' : 'Try the ingredient analyzer'} →
+            </span>
+          </div>
+        </a>
+
         {/* Related products — matched by content overlap */}
         {window.PRODUCTS && (() => {
           // Build haystack from all article text
