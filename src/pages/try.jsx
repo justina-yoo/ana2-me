@@ -1109,6 +1109,26 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
               )
             );
           })
+        ),
+        // Empty-state CTA — search has text but no results
+        open && q.trim().length > 1 && filtered.length === 0 && React.createElement('div', {
+          className: 'try-dropdown try-dropdown--empty',
+          onMouseDown: function(e) { e.preventDefault(); }
+        },
+          React.createElement('p', { className: 'try-empty-search-text' },
+            t('No results for "' + q + '"', '"' + q + '" 검색 결과가 없어요')
+          ),
+          React.createElement('button', {
+            className: 'try-empty-search-paste',
+            onMouseDown: function(e) { e.preventDefault(); },
+            onClick: function() { setQ(''); setOpen(false); setPasteMode(true); }
+          },
+            '\uD83D\uDCCB ' + t('Paste its ingredient list instead \u2192', '성분 목록을 대신 붙여넣기 \u2192')
+          )
+        ),
+        // Persistent hint below search
+        React.createElement('p', { className: 'try-search-hint' },
+          t('Can\u2019t find a product? You can paste its ingredient list.', '제품을 찾을 수 없나요? 성분 목록을 붙여넣을 수 있어요.')
         )
       ),
     );
@@ -1190,7 +1210,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           className: 'try-paste-textarea',
           value: pasteText,
           onChange: function(e) { setPasteText(e.target.value); },
-          placeholder: t('Paste ingredient list here...\ne.g. Water, Glycerin, Niacinamide, ...', '성분 목록을 여기에 붙여넣으세요...\n예: 정제수, 글리세린, 나이아신아마이드, ...'),
+          placeholder: t('Paste the full ingredient list from your product\u2019s packaging or its online listing.\ne.g. Water, Glycerin, Niacinamide, Centella Asiatica Extract, ...', '제품 패키징이나 온라인 제품 페이지의 전성분 목록을 붙여넣으세요.\n예: 정제수, 글리세린, 나이아신아마이드, 센텔라아시아티카추출물, ...'),
           rows: 4,
           autoFocus: true
         }),

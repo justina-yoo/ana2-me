@@ -209,6 +209,11 @@ const BRAND_INFO = {
     ko: '저분자 히알루론산 보습을 전문으로 하는 한국 스킨케어 브랜드예요. DIVE IN 라인은 5종의 다른 분자량 히알루론산으로 다층 깊이 수분 전달을 해요.',
     origin: 'Seoul, Korea', founded: '2020'
   },
+  'Sulwhasoo': {
+    en: 'Amore Pacific\'s flagship luxury brand, rooted in over 50 years of Korean herbal medicine (한방) research. Their formulations blend traditional hanbang ingredients — ginseng, plum, lotus — with modern skin science. The Gentle Cleansing Oil and First Care Activating Serum are category benchmarks.',
+    ko: '50년 이상의 한방 연구를 기반으로 한 아모레퍼시픽의 대표 럭셔리 브랜드예요. 인삼, 매실, 연꽃 등 전통 한방 원료를 현대 피부 과학과 결합한 제형을 선보여요. 순행 클렌징 오일과 퍼스트 케어 액티베이팅 세럼은 카테고리 벤치마크예요.',
+    origin: 'Seoul, Korea', founded: '1966'
+  },
   'celimax': {
     en: 'A Korean skincare brand that combines clinical-grade actives with gentle, non-irritating formulas. Their Vita-A Retinal Shot uses proprietary A-Shot™ microparticles — 16x smaller than pores — for deeper active delivery without the irritation.',
     ko: '클리니컬 등급 활성 성분과 순한 제형을 결합한 한국 스킨케어 브랜드예요. 비타-A 레티날 샷은 모공보다 16배 작은 독자 A-Shot™ 마이크로 입자로 자극 없이 깊은 전달을 해요.',
