@@ -12,9 +12,11 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
     return '';
   }
 
-  // Render HTML string safely
+  // Render HTML string safely — sanitized with DOMPurify
+  var purify = typeof DOMPurify !== 'undefined' ? DOMPurify : null;
   function html(obj) {
-    return { __html: txt(obj) };
+    var raw = txt(obj);
+    return { __html: purify ? purify.sanitize(raw, { ALLOWED_TAGS: ['strong', 'em', 'mark', 'br', 'a', 'span', 'sub', 'sup'], ALLOWED_ATTR: ['href', 'target', 'rel', 'style', 'class'] }) : raw };
   }
 
   function renderBlock(block, idx) {
@@ -23,13 +25,13 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
       case 'tldr': {
         const content = txt(block.text);
         const items = block.items && Array.isArray((block.items.en || block.items))
-          ? t(block.items.en, block.items.ko).map((s, i) => <span key={i} style={{ display: 'block', marginBottom: 4 }} dangerouslySetInnerHTML={{ __html: s }} />)
+          ? t(block.items.en, block.items.ko).map((s, i) => <span key={i} style={{ display: 'block', marginBottom: 4 }} dangerouslySetInnerHTML={{ __html: purify ? purify.sanitize(s) : s }} />)
           : null;
         return (
           <ArtTlDr key={idx}>
             {items
               ? <><strong>{block.icon || '🧠'} {t('Summary:', '요약:')}</strong> {items}</>
-              : <span dangerouslySetInnerHTML={{ __html: '<strong>' + (block.icon || '🧠') + ' ' + t('Summary:', '요약:') + '</strong> ' + content }} />
+              : <span dangerouslySetInnerHTML={html({ en: '<strong>' + (block.icon || '🧠') + ' ' + t('Summary:', '요약:') + '</strong> ' + content })} />
             }
           </ArtTlDr>
         );
