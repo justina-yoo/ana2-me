@@ -1533,7 +1533,7 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-dd-brand { display: block; font-size: 10px; font-weight: 600; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; }
 .try-dd-name { display: block; font-family: var(--font-display); font-size: 14px; color: var(--ink); margin-top: 1px; }
 .try-action { text-align: center; padding: 28px 0 8px; }
-.try-action-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 90; display: flex; align-items: center; justify-content: center; min-height: 120px; padding: 0 var(--page-pad) env(safe-area-inset-bottom); background: rgba(255,252,247,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
+.try-action-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 90; display: flex; align-items: center; justify-content: center; min-height: 88px; padding: 0 var(--page-pad) env(safe-area-inset-bottom); background: rgba(255,252,247,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
 .try-action-sticky .try-btn { white-space: nowrap; }
 .try-btn { font-family: var(--font-text); font-size: 15px; font-weight: 600; color: #fff; background: var(--accent); border: none; border-radius: var(--radius-pill); padding: 14px 32px; cursor: pointer; transition: opacity 0.15s, box-shadow 0.3s; position: relative; }
 .try-btn:not(:disabled) { animation: try-wiggle 3s ease-in-out infinite; }
