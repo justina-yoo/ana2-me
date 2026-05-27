@@ -158,21 +158,42 @@ window.About = function About({ lang, density }) {
           </p>
         </div>
 
-        {/* Coming soon callout */}
-        <div style={{
-          marginTop: 20,
-          background: 'var(--cream-2)', border: '1px dashed var(--line)',
-          borderRadius: 'var(--radius)', padding: '28px 36px',
-          display: 'flex', gap: 18, alignItems: 'flex-start',
-        }}>
-          <Sticker color="butter" rotate={-3} style={{ flexShrink: 0 }}>{t('coming soon', '곧 출시')}</Sticker>
-          <p style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0 }}>
-            {t(
-              "The Insights library is just the beginning. We're developing a full ingredient Analyzer, personalized product matching, and category databases for skincare, fragrance, and wellness food — built on molecular data, not marketing.",
-              '인사이트 라이브러리는 시작에 불과해요. 전체 성분 Analyzer, 개인화된 제품 매칭, 그리고 스킨케어·향수·웰니스 푸드 카테고리 데이터베이스를 개발 중입니다 — 마케팅이 아닌 분자 데이터 기반으로.'
-            )}
-          </p>
-        </div>
+        {/* Analyzer CTA */}
+        <Reveal>
+          <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
+            style={{
+              display: 'flex', flexDirection: 'column', gap: 10,
+              padding: '24px 22px', marginTop: 20,
+              background: 'var(--accent)', color: '#fff',
+              borderRadius: 'var(--radius)', textDecoration: 'none',
+              transition: 'all .15s ease',
+            }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 20 }}>🔬</span>
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.7 }}>
+                {t('Ingredient Analyzer', '성분 분석기')}
+              </span>
+              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)', opacity: 0.9 }}>
+                Beta
+              </span>
+            </div>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+              {t('Find your ingredient pattern', '나에게 맞는 성분 패턴 찾기')}
+            </span>
+            <span style={{ fontSize: 13, lineHeight: 1.5, opacity: 0.8 }}>
+              {t("Tell us what works and what doesn't for your skin — we'll find the pattern.", '내 피부에 맞는 것과 안 맞는 것을 알려주세요. 패턴을 찾아드립니다.')}
+            </span>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '10px 20px', marginTop: 4,
+              background: '#fff', color: 'var(--accent)',
+              borderRadius: 'var(--radius-pill)',
+              fontSize: 13, fontWeight: 700, alignSelf: 'flex-start',
+            }}>
+              {t('Try the analyzer', '분석기 사용하기')} →
+            </span>
+          </a>
+        </Reveal>
       </section>
 
       {/* FAQ */}
