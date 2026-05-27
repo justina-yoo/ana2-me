@@ -428,6 +428,9 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                 <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)', opacity: 0.9 }}>
                   Beta
                 </span>
+                <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(245,215,110,0.5)', color: 'var(--ink)' }}>
+                  {t('Free', '무료')}
+                </span>
               </div>
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
                 {t('Find your ingredient pattern', '나에게 맞는 성분 패턴 찾기')}
@@ -797,21 +800,39 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
         {/* Analyzer CTA — contextual */}
         <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
           style={{
-            display: 'flex', gap: 14, alignItems: 'flex-start',
-            padding: '20px 22px', margin: '32px 0',
-            background: 'rgba(45,90,61,0.04)', border: '1px solid rgba(45,90,61,0.15)',
-            borderRadius: 'var(--radius)', textDecoration: 'none', color: 'inherit',
+            display: 'flex', flexDirection: 'column', gap: 10,
+            padding: '24px 22px', margin: '32px 0',
+            background: 'var(--accent)', color: '#fff',
+            borderRadius: 'var(--radius)', textDecoration: 'none',
             transition: 'all .15s ease',
           }}>
-          <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>🔬</span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 16, color: 'var(--ink)', lineHeight: 1.3 }}>
-              {isKo ? '이 성분들이 내 제품에도 들어있을까?' : 'Want to check if YOUR products contain these ingredients?'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 20 }}>🔬</span>
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.7 }}>
+              {isKo ? '성분 분석기' : 'Ingredient Analyzer'}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.5 }}>
-              {isKo ? '성분 분석기로 확인해 보세요' : 'Try the ingredient analyzer'} →
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)', opacity: 0.9 }}>
+              Beta
+            </span>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(245,215,110,0.5)', color: 'var(--ink)' }}>
+              {isKo ? '무료' : 'Free'}
             </span>
           </div>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+            {isKo ? '나에게 맞는 성분 패턴 찾기' : 'Find your ingredient pattern'}
+          </span>
+          <span style={{ fontSize: 13, lineHeight: 1.5, opacity: 0.8 }}>
+            {isKo ? '내 피부에 맞는 것과 안 맞는 것을 알려주세요. 패턴을 찾아드립니다.' : "Tell us what works and what doesn't for your skin — we'll find the pattern."}
+          </span>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '10px 20px', marginTop: 4,
+            background: '#fff', color: 'var(--accent)',
+            borderRadius: 'var(--radius-pill)',
+            fontSize: 13, fontWeight: 700, alignSelf: 'flex-start',
+          }}>
+            {isKo ? '분석기 사용하기' : 'Try the analyzer'} →
+          </span>
         </a>
 
         {/* Related products — matched by content overlap */}

@@ -1407,6 +1407,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     // Hero
     React.createElement('header', { className: 'try-hero' },
       React.createElement(Sticker, { color: 'accent', rotate: -3 }, t('Beta', '베타')),
+      React.createElement(Sticker, { color: 'butter', rotate: 2 }, t('Free', '무료')),
       React.createElement('h1', { className: 'display' },
         t('Find your ', '나만의 '),
         React.createElement('br'),
