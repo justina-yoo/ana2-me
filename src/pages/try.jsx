@@ -276,6 +276,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   const [fbState, setFbState] = useState('idle'); // idle | rated | commented | done
   const [fbRating, setFbRating] = useState(null);
   const [fbComment, setFbComment] = useState('');
+  const [showFbModal, setShowFbModal] = useState(false);
+  const pendingNav = useRef(null);
   const [catalogIngs, setCatalogIngs] = useState(null);
   var pastedCounter = useRef(0);
   var autoAnalyze = useRef(false);
@@ -294,6 +296,35 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       runAnalysis();
     }
   }, [works, doesnt]);
+
+  // Intercept navigation when results exist but no feedback given
+  useEffect(function() {
+    function handleNav() {
+      var path = window.location.pathname;
+      if (path === '/analyzer' || path === '/analyze') return; // staying on analyzer
+      if (result && fbState === 'idle') {
+        // Push analyzer URL back to prevent leaving
+        history.pushState({}, '', '/analyzer');
+        pendingNav.current = path;
+        setShowFbModal(true);
+      }
+    }
+    window.addEventListener('popstate', handleNav);
+    return function() { window.removeEventListener('popstate', handleNav); };
+  }, [result, fbState]);
+
+  function dismissFbModal(navigate) {
+    setShowFbModal(false);
+    if (fbState === 'idle') setFbState('done'); // prevent re-intercept
+    if (navigate && pendingNav.current) {
+      var dest = pendingNav.current;
+      pendingNav.current = null;
+      setTimeout(function() {
+        history.pushState({}, '', dest);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }, 0);
+    }
+  }
 
   const [pasteMode, setPasteMode] = useState(false);
   const [pasteText, setPasteText] = useState('');
@@ -1849,6 +1880,55 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         )
       ),
 
+    ),
+
+    // ── Feedback modal on navigate away ──
+    showFbModal && React.createElement('div', { className: 'sheet-back', onClick: function() { dismissFbModal(true); } },
+      React.createElement('div', { className: 'sheet', onClick: function(e) { e.stopPropagation(); }, style: { maxWidth: 420, padding: '32px 28px', textAlign: 'center' } },
+        React.createElement('button', { className: 'sheet-close', onClick: function() { dismissFbModal(true); } },
+          React.createElement(Icon, { name: 'x', size: 16 })
+        ),
+        React.createElement('p', { style: { fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 20, color: 'var(--ink)', margin: '0 0 6px' } },
+          t('Before you go...', '가시기 전에...')
+        ),
+        React.createElement('p', { style: { fontSize: 14, color: 'var(--ink-soft)', margin: '0 0 20px', lineHeight: 1.5 } },
+          t('Did the analyzer tell you something useful?', '분석기가 유용한 정보를 알려줬나요?')
+        ),
+        React.createElement('div', { style: { display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 16 } },
+          React.createElement('button', {
+            className: 'try-feedback-btn',
+            style: { fontSize: 15, padding: '10px 24px' },
+            onClick: function() {
+              setFbRating('helpful'); setFbState('rated');
+              fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                method: 'POST',
+                headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                body: JSON.stringify({ rating: 'helpful', input_count: works.length + doesnt.length })
+              }).catch(function() {});
+              setShowFbModal(false);
+              dismissFbModal(true);
+            }
+          }, '\uD83D\uDC4D ' + t('Yes', '네')),
+          React.createElement('button', {
+            className: 'try-feedback-btn',
+            style: { fontSize: 15, padding: '10px 24px' },
+            onClick: function() {
+              setFbRating('not_helpful'); setFbState('rated');
+              fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                method: 'POST',
+                headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                body: JSON.stringify({ rating: 'not_helpful', input_count: works.length + doesnt.length })
+              }).catch(function() {});
+              setShowFbModal(false);
+              dismissFbModal(true);
+            }
+          }, '\uD83D\uDC4E ' + t('Not really', '별로요'))
+        ),
+        React.createElement('button', {
+          onClick: function() { dismissFbModal(true); },
+          style: { background: 'none', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer', textDecoration: 'underline' }
+        }, t('Skip', '건너뛰기'))
+      )
     ),
 
     // ── Ingredient detail sheet (reuses product-page sheet UI) ──
