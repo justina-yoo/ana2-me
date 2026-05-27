@@ -966,13 +966,16 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
 
       // Step 3: Determine confidence tier + split into positive / negative
       // FIX 2 revised: 3-tier confidence
-      //   'cold-start'  — same-side only (no contrast at all)
-      //   'early-read'  — both sides have ≥1 but at least one side has only 1
-      //   'confident'   — both sides have ≥ MIN_CONFIDENT_PER_SIDE
+      //   'cold-start'  — too little data to show anything (1+0, 0+1)
+      //   'early-read'  — both sides have ≥1 but at least one side has only 1 (1+1, 2+1, 1+3)
+      //   'confident'   — both sides ≥2, OR one side ≥2 with other side 0 (C2/D1 one-sided)
       var hasBothSides = totalW >= 1 && totalD >= 1;
-      var confidenceTier = !hasBothSides ? 'cold-start'
-        : (totalW >= MIN_CONFIDENT_PER_SIDE && totalD >= MIN_CONFIDENT_PER_SIDE) ? 'confident'
-        : 'early-read';
+      var hasOneSideStrong = (totalW >= MIN_CONFIDENT_PER_SIDE || totalD >= MIN_CONFIDENT_PER_SIDE);
+      var confidenceTier =
+        hasBothSides && totalW >= MIN_CONFIDENT_PER_SIDE && totalD >= MIN_CONFIDENT_PER_SIDE ? 'confident'
+        : hasBothSides ? 'early-read'
+        : hasOneSideStrong ? 'confident'  // C2 (3+0) or D1 (0+3) — enough for one-sided analysis
+        : 'cold-start'; // 1+0 or 0+1 — genuinely too little
 
       var minWorksThreshold = totalW > 0 ? Math.ceil(totalW / 2) : 1;
       var minDoesntThreshold = totalD > 0 ? Math.ceil(totalD / 2) : 1;
@@ -1699,7 +1702,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
               ),
               (function() {
                 var SYM_COLORS = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
-                return (result.positive_ingredients || []).map(function(item, i) {
+                var items = (result.positive_ingredients || []).map(function(item, i) {
                   var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
                   return React.createElement('div', { key: 'ep-' + i, className: 'try-evidence-row' },
                     React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
@@ -1715,6 +1718,9 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                     )
                   );
                 });
+                return items.length > 4
+                  ? React.createElement(TryIngScroll, null, items)
+                  : items;
               })()
             ),
             // Watch slot
@@ -1805,46 +1811,59 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           )
         ),
 
-      // ── Comparative mode: D1 — no works products, only doesn't → watch card leads ──
+      // ── Comparative mode: D1 — doesn't-only → hedged flagged candidates, no trigger-grade list ──
       result.mode !== 'single' && result.confidenceTier === 'confident' &&
-        (result.totalWorks || 0) === 0 && result.avoid_ingredients.length > 0 &&
+        (result.totalWorks || 0) === 0 &&
         React.createElement(Reveal, { delay: 50 },
           React.createElement('div', { className: 'try-result-card try-card-avoid' },
             React.createElement('h2', { className: 'try-result-title' },
-              '\u26A0 ' + t('Based on what didn\u2019t suit you, here\u2019s what to watch for', '\ub9de\uc9c0 \uc54a\uc558\ub358 \uc81c\ud488\uc744 \uae30\ubc18\uc73c\ub85c, \uc8fc\uc758\ud560 \uc131\ubd84')
+              t('Flagged ingredients in the products that didn\u2019t suit you', '\ub9de\uc9c0 \uc54a\uc558\ub358 \uc81c\ud488\uc758 \ud50c\ub798\uadf8 \uc131\ubd84')
             ),
             React.createElement('p', { className: 'try-result-disclaimer' },
-              t('Tap any ingredient for details.', '\uc131\ubd84\uc744 \ud0ed\ud558\uba74 \uc124\uba85\uc744 \ubcfc \uc218 \uc788\uc5b4\uc694.')
+              t('These are commonly flagged ingredients that appeared in your didn\u2019t-suit-me products. Without products that work for you to compare against, we can\u2019t confirm whether any of these are actually the factor \u2014 this is a starting point, not a conclusion.',
+                '\ub9de\uc9c0 \uc54a\ub294 \uc81c\ud488\uc5d0\uc11c \ubc1c\uacac\ub41c \uc77c\ubc18\uc801\uc73c\ub85c \ud50c\ub798\uadf8\ub41c \uc131\ubd84\uc774\uc5d0\uc694. \uc798 \ub9de\ub294 \uc81c\ud488\uacfc \ube44\uad50\ud560 \uc218 \uc5c6\uc5b4 \uc2e4\uc81c \uc6d0\uc778\uc778\uc9c0 \ud655\uc778\ud560 \uc218 \uc5c6\uc5b4\uc694 \u2014 \ucd9c\ubc1c\uc810\uc774\uc9c0 \uacb0\ub860\uc740 \uc544\ub2c8\uc5d0\uc694.')
             ),
+            // Show only flagged ingredients — unflagged are suppressed in D1
             (function() {
-              var td = result.totalDoesnt || 0;
-              return result.avoid_ingredients.map(function(item, i) {
-                var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
-                return React.createElement('div', { key: i, className: 'try-evidence-row' },
-                  React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
-                    name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
-                    symbol: item.symbol, category: item.category, flagged: item.flagged, flag_type: item.flag_type,
-                    description: item.description, description_ko: item.description_ko,
-                    science: item.science, science_ko: item.science_ko
-                  }); } },
-                    React.createElement('span', { className: 'ing-sym', style: { background: '#c0392b' } }, item.symbol),
-                    React.createElement('div', { className: 'ing-body' },
-                      React.createElement('p', { className: 'ing-name' }, name),
-                      item.flag_type && React.createElement('span', { className: 'try-flag-badge' },
-                        item.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 \uc54c\ub808\ub974\uac90')
-                        : item.flag_type === 'essential-oil' ? t('Essential oil', '\uc5d0\uc13c\uc15c \uc624\uc77c')
-                        : item.flag_type === 'sensitizer' ? t('Sensitizer', '\ubbfc\uac10 \uc131\ubd84')
-                        : item.flag_type === 'potent-active' ? t('Potent active', '\uac15\ub825 \ud65c\uc131 \uc131\ubd84')
-                        : null
+              var flaggedOnly = (result.avoid_ingredients || []).filter(function(item) { return item.flagged; });
+              return flaggedOnly.length > 0
+                ? flaggedOnly.map(function(item, i) {
+                    var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
+                    return React.createElement('div', { key: i, className: 'try-evidence-row' },
+                      React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
+                        name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
+                        symbol: item.symbol, category: item.category, flagged: true, flag_type: item.flag_type,
+                        description: item.description, description_ko: item.description_ko,
+                        science: item.science, science_ko: item.science_ko
+                      }); } },
+                        React.createElement('span', { className: 'ing-sym', style: { background: '#c0392b' } }, item.symbol),
+                        React.createElement('div', { className: 'ing-body' },
+                          React.createElement('p', { className: 'ing-name' }, name),
+                          item.flag_type && React.createElement('span', { className: 'try-flag-badge' },
+                            item.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 \uc54c\ub808\ub974\uac90')
+                            : item.flag_type === 'essential-oil' ? t('Essential oil', '\uc5d0\uc13c\uc15c \uc624\uc77c')
+                            : item.flag_type === 'sensitizer' ? t('Sensitizer', '\ubbfc\uac10 \uc131\ubd84')
+                            : item.flag_type === 'potent-active' ? t('Potent active', '\uac15\ub825 \ud65c\uc131 \uc131\ubd84')
+                            : null
+                          )
+                        )
                       )
-                    )
-                  )
-                );
-              });
+                    );
+                  })
+                : React.createElement('p', { className: 'try-result-empty' },
+                    t('No commonly flagged ingredients found in these products.',
+                      '\uc774 \uc81c\ud488\ub4e4\uc5d0\uc11c \uc77c\ubc18\uc801\uc73c\ub85c \ud50c\ub798\uadf8\ub41c \uc131\ubd84\uc774 \ubc1c\uacac\ub418\uc9c0 \uc54a\uc558\uc5b4\uc694.')
+                  );
             })(),
-            React.createElement('p', { className: 'try-inline-nudge' },
-              t('Add products that work for you and we\u2019ll also show what your skin seems to like.',
-                '\uc798 \ub9de\ub294 \uc81c\ud488\uc744 \ucd94\uac00\ud558\uba74 \ud53c\ubd80\uac00 \uc88b\uc544\ud558\ub294 \uc131\ubd84\ub3c4 \ud568\uaed8 \ubcf4\uc5ec\ub4dc\ub9b4\uac8c\uc694.')
+            // Unlock nudge — the real value requires contrast
+            React.createElement('div', { key: 'd1-unlock', className: 'try-unlock-nudge' },
+              React.createElement('strong', null,
+                t('Unlock your full pattern', '\ub098\ub9cc\uc758 \ud328\ud134 \ud655\uc778\ud558\uae30')
+              ),
+              React.createElement('p', null,
+                t('Add products that work for your skin and we\u2019ll compare both sides \u2014 that\u2019s how we confirm what your skin actually responds to vs. what it doesn\u2019t.',
+                  '\uc798 \ub9de\ub294 \uc81c\ud488\uc744 \ucd94\uac00\ud558\uba74 \uc591\ucabd\uc744 \ube44\uad50\ud560 \uc218 \uc788\uc5b4\uc694 \u2014 \ud53c\ubd80\uac00 \uc2e4\uc81c\ub85c \uc88b\uc544\ud558\ub294 \uac83\uacfc \uadf8\ub807\uc9c0 \uc54a\uc740 \uac83\uc744 \ud655\uc778\ud558\ub294 \ubc29\ubc95\uc774\uc5d0\uc694.')
+              )
             )
           )
         ),
@@ -1869,33 +1888,41 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 )
               : (function() {
                   var SYM_COLORS = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
-                  return [].concat(
-                    (result.positive_ingredients || []).map(function(item, i) {
-                      var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
-                      var symBg = SYM_COLORS[i % SYM_COLORS.length];
-                      return React.createElement('div', { key: 'pos-' + i, className: 'try-evidence-row' },
-                        React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
-                          name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
-                          symbol: item.symbol, category: item.category, flagged: false,
-                          description: item.description, description_ko: item.description_ko,
-                          science: item.science, science_ko: item.science_ko
-                        }); } },
-                          React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, item.symbol),
-                          React.createElement('div', { className: 'ing-body' },
-                            React.createElement('p', { className: 'ing-name' }, name)
-                          )
+                  var posItems = (result.positive_ingredients || []).map(function(item, i) {
+                    var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
+                    var symBg = SYM_COLORS[i % SYM_COLORS.length];
+                    return React.createElement('div', { key: 'pos-' + i, className: 'try-evidence-row' },
+                      React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
+                        name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
+                        symbol: item.symbol, category: item.category, flagged: false,
+                        description: item.description, description_ko: item.description_ko,
+                        science: item.science, science_ko: item.science_ko
+                      }); } },
+                        React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, item.symbol),
+                        React.createElement('div', { className: 'ing-body' },
+                          React.createElement('p', { className: 'ing-name' }, name)
                         )
-                      );
-                    }),
+                      )
+                    );
+                  });
+                  return [].concat(
+                    posItems.length > 4
+                      ? [React.createElement(TryIngScroll, { key: 'pos-scroll' }, posItems)]
+                      : posItems,
                     // Awareness section — flagged ingredients in works products (all scenarios)
                     (result.awareness_ingredients || []).length > 0 ? [
                       React.createElement('div', { key: 'awareness', className: 'try-awareness-section' },
                         React.createElement('h4', { className: 'try-awareness-title' },
-                          t('Ingredients to be aware of', '\ucc38\uace0\ud560 \uc131\ubd84')
+                          (result.totalDoesnt || 0) === 0
+                            ? t('Good to know', '\uc54c\uc544\ub450\uba74 \uc88b\uc740 \uc131\ubd84')
+                            : t('Ingredients to be aware of', '\ucc38\uace0\ud560 \uc131\ubd84')
                         ),
                         React.createElement('p', { className: 'try-awareness-sub' },
-                          t('These are in your current products \u2014 worth knowing about if your skin ever reacts.',
-                            '\ud604\uc7ac \uc0ac\uc6a9 \uc911\uc778 \uc81c\ud488\uc5d0 \ud3ec\ud568\ub41c \uc131\ubd84\uc774\uc5d0\uc694. \ud53c\ubd80\uac00 \ubc18\uc751\ud560 \uacbd\uc6b0 \ucc38\uace0\ud558\uc138\uc694.')
+                          (result.totalDoesnt || 0) === 0
+                            ? t('These flagged ingredients are in products that work for you \u2014 your skin tolerates them, but they\u2019re worth knowing about.',
+                                '\ud50c\ub798\uadf8\ub41c \uc131\ubd84\uc774\uc9c0\ub9cc \uc798 \ub9de\ub294 \uc81c\ud488\uc5d0 \ud3ec\ud568\ub41c \uc131\ubd84\uc774\uc5d0\uc694 \u2014 \ud53c\ubd80\uac00 \uacac\ub514\uace0 \uc788\uc9c0\ub9cc \uc54c\uc544\ub450\uba74 \uc88b\uc544\uc694.')
+                            : t('These are in your current products \u2014 worth knowing about if your skin ever reacts.',
+                                '\ud604\uc7ac \uc0ac\uc6a9 \uc911\uc778 \uc81c\ud488\uc5d0 \ud3ec\ud568\ub41c \uc131\ubd84\uc774\uc5d0\uc694. \ud53c\ubd80\uac00 \ubc18\uc751\ud560 \uacbd\uc6b0 \ucc38\uace0\ud558\uc138\uc694.')
                         ),
                         (result.awareness_ingredients || []).map(function(item, i) {
                           var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
@@ -1922,10 +1949,15 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                         })
                       )
                     ] : [],
-                    // C2: works-only nudge
-                    (result.totalDoesnt || 0) === 0 ? [React.createElement('p', { key: 'c2-nudge', className: 'try-inline-nudge' },
-                      t('Want to narrow it further? Add a product that didn\u2019t suit you and we\u2019ll show what to watch for.',
-                        '\ub354 \uc88b\ud600\uc9c4 \uacb0\uacfc\ub97c \uc6d0\ud558\uc138\uc694? \ub9de\uc9c0 \uc54a\uc558\ub358 \uc81c\ud488\uc744 \ucd94\uac00\ud558\uba74 \uc8fc\uc758\ud560 \uc131\ubd84\ub3c4 \ubcf4\uc5ec\ub4dc\ub9b4\uac8c\uc694.')
+                    // C2: works-only → unlock nudge for the watch side
+                    (result.totalDoesnt || 0) === 0 ? [React.createElement('div', { key: 'c2-unlock', className: 'try-unlock-nudge' },
+                      React.createElement('strong', null,
+                        t('Unlock "what to watch for"', '"\uc8fc\uc758\ud560 \uc131\ubd84" \ud655\uc778\ud558\uae30')
+                      ),
+                      React.createElement('p', null,
+                        t('Add a product that didn\u2019t suit your skin and we\u2019ll compare both sides \u2014 that\u2019s how we find what your skin consistently reacts to.',
+                          '\ub9de\uc9c0 \uc54a\uc558\ub358 \uc81c\ud488\uc744 \ucd94\uac00\ud558\uba74 \uc591\ucabd\uc744 \ube44\uad50\ud574\uc11c \ud53c\ubd80\uac00 \uc77c\uad00\ub418\uac8c \ubc18\uc751\ud558\ub294 \uc131\ubd84\uc744 \ucc3e\uc544\ub4dc\ub9b4\uac8c\uc694.')
+                      )
                     )] : []
                   );
                 })()
@@ -2070,7 +2102,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           )
         ),
 
-      // Card 3: Recommendations
+      // Card 3: Recommendations — suppress in D1 (no works = no positive signal to match on)
+      !(result.mode === 'comparative' && (result.totalWorks || 0) === 0) &&
       React.createElement(Reveal, { delay: 250 },
         React.createElement('div', { className: 'try-result-card' },
           React.createElement('h2', { className: 'try-result-title' },

@@ -11,6 +11,9 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
     const el = tickerRef.current;
     if (!el) return;
     let pos = 0;
+    var dragging = false;
+    var dragStartX = 0;
+    var dragStartScroll = 0;
     const half = el.scrollWidth / 2;
     const step = () => {
       if (!pausedRef.current) {
@@ -21,16 +24,40 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
       rafRef.current = requestAnimationFrame(step);
     };
     rafRef.current = requestAnimationFrame(step);
-    const onDown = () => { pausedRef.current = true; pos = el.scrollLeft; };
-    const onUp = () => { const half2 = el.scrollWidth / 2; pos = el.scrollLeft % half2; pausedRef.current = false; };
+    var getX = function(e) { return e.touches ? e.touches[0].clientX : e.clientX; };
+    var onDown = function(e) {
+      pausedRef.current = true;
+      dragging = true;
+      dragStartX = getX(e);
+      dragStartScroll = el.scrollLeft;
+      pos = el.scrollLeft;
+      el.style.cursor = 'grabbing';
+    };
+    var onMove = function(e) {
+      if (!dragging) return;
+      var dx = getX(e) - dragStartX;
+      el.scrollLeft = dragStartScroll - dx;
+      pos = el.scrollLeft;
+    };
+    var onUp = function() {
+      if (dragging) el.style.cursor = 'grab';
+      dragging = false;
+      var half2 = el.scrollWidth / 2;
+      pos = el.scrollLeft % half2;
+      pausedRef.current = false;
+    };
     el.addEventListener('mousedown', onDown);
     el.addEventListener('touchstart', onDown, { passive: true });
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('touchmove', onMove, { passive: true });
     window.addEventListener('mouseup', onUp);
     window.addEventListener('touchend', onUp);
     return () => {
       cancelAnimationFrame(rafRef.current);
       el.removeEventListener('mousedown', onDown);
       el.removeEventListener('touchstart', onDown);
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('touchmove', onMove);
       window.removeEventListener('mouseup', onUp);
       window.removeEventListener('touchend', onUp);
     };
