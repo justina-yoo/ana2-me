@@ -1654,7 +1654,7 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-feedback-btns { display: flex; gap: 10px; justify-content: center; }
 .try-feedback-btn { background: none; border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 8px 20px; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; transition: border-color 0.15s, background 0.15s; }
 .try-feedback-btn:hover { border-color: var(--accent); background: rgba(45,90,61,0.04); }
-.try-feedback-comment { display: flex; gap: 8px; }
+.try-feedback-comment { display: flex; gap: 8px; margin-top: 14px; padding: 0 4px; }
 .try-feedback-input { flex: 1; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 12px; font-family: var(--font-text); color: var(--ink); background: var(--cream); outline: none; }
 .try-feedback-input:focus { border-color: var(--accent); }
 .try-feedback-input::placeholder { color: var(--ink-faint); }
