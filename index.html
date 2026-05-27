@@ -259,7 +259,17 @@
 
     function App() {
       // Persistent UI state
-      const [view, setView] = window.useLocalState('view', getInitialView()); // feed | detail | insights | analyzer
+      const [view, _setView] = window.useLocalState('view', getInitialView()); // feed | detail | insights | analyzer
+      const setView = (v) => {
+        if (window.__analyzerFeedbackPending && view === 'analyze' && v !== 'analyze') {
+          window.__analyzerPendingDest = window.location.pathname;
+          window.__analyzerPendingView = v;
+          history.pushState({}, '', '/analyzer');
+          window.dispatchEvent(new CustomEvent('ana2me:show-fb-modal'));
+          return;
+        }
+        _setView(v);
+      };
       const [category, setCategory] = window.useLocalState('cat', 'skincare');
       const [productId, setProductId] = window.useLocalState('pid', null);
       const [query, setQuery] = window.useLocalState('q', '');
@@ -297,6 +307,13 @@
       // Handle URL navigation (initial load + browser back/forward)
       const handleRoute = () => {
         const path = window.location.pathname.replace(/\/$/, '');
+        // Intercept leaving analyzer when feedback is pending
+        if (window.__analyzerFeedbackPending && view === 'analyze' && path !== '/analyze' && path !== '/analyzer') {
+          history.pushState({}, '', '/analyzer');
+          window.__analyzerPendingDest = path;
+          window.dispatchEvent(new CustomEvent('ana2me:show-fb-modal'));
+          return;
+        }
         if (path === '') {
           setView('landing'); setProductId(null); setQuery('');
           if (window.SEO) window.SEO.setHome();

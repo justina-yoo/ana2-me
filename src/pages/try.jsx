@@ -297,31 +297,36 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     }
   }, [works, doesnt]);
 
-  // Intercept navigation when results exist but no feedback given
+  // Set global flag so index.html's handleRoute can intercept navigation
   useEffect(function() {
-    function handleNav() {
-      var path = window.location.pathname;
-      if (path === '/analyzer' || path === '/analyze') return; // staying on analyzer
-      if (result && fbState === 'idle') {
-        // Push analyzer URL back to prevent leaving
-        history.pushState({}, '', '/analyzer');
-        pendingNav.current = path;
-        setShowFbModal(true);
-      }
-    }
-    window.addEventListener('popstate', handleNav);
-    return function() { window.removeEventListener('popstate', handleNav); };
+    window.__analyzerFeedbackPending = !!(result && fbState === 'idle');
+    return function() { window.__analyzerFeedbackPending = false; };
   }, [result, fbState]);
+
+  // Listen for the intercept event from handleRoute
+  useEffect(function() {
+    function onShowModal() { setShowFbModal(true); }
+    window.addEventListener('ana2me:show-fb-modal', onShowModal);
+    return function() { window.removeEventListener('ana2me:show-fb-modal', onShowModal); };
+  }, []);
 
   function dismissFbModal(navigate) {
     setShowFbModal(false);
-    if (fbState === 'idle') setFbState('done'); // prevent re-intercept
-    if (navigate && pendingNav.current) {
-      var dest = pendingNav.current;
-      pendingNav.current = null;
+    window.__analyzerFeedbackPending = false;
+    if (fbState === 'idle') setFbState('done');
+    if (navigate) {
+      var dest = window.__analyzerPendingDest;
+      var pendingView = window.__analyzerPendingView;
+      window.__analyzerPendingDest = null;
+      window.__analyzerPendingView = null;
       setTimeout(function() {
-        history.pushState({}, '', dest);
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        if (dest) {
+          history.pushState({}, '', dest);
+          window.dispatchEvent(new PopStateEvent('popstate'));
+        } else if (pendingView) {
+          history.pushState({}, '', '/' + (pendingView === 'feed' ? 'products' : pendingView === 'landing' ? '' : pendingView));
+          window.dispatchEvent(new PopStateEvent('popstate'));
+        }
       }, 0);
     }
   }
