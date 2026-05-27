@@ -1559,6 +1559,9 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           React.createElement('h2', { className: 'try-result-title' },
             t('What you may want to avoid', '주의가 필요한 성분')
           ),
+          result.avoid_ingredients.length > 0 && React.createElement('p', { className: 'try-result-disclaimer' },
+            t('Tap any ingredient to read what it does.', '성분을 탭하면 설명을 볼 수 있어요.')
+          ),
           result.avoid_ingredients.length === 0
             ? React.createElement('p', { className: 'try-result-empty' },
                 t('No commonly flagged irritants were detected. Triggers may be in ingredients our database doesn\u2019t fully cover yet.',
@@ -1605,6 +1608,9 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         React.createElement('div', { className: 'try-result-card try-card-positive' },
           React.createElement('h2', { className: 'try-result-title' },
             t('What your skin responds to', '피부가 반응하는 성분')
+          ),
+          result.positive_themes.length > 0 && React.createElement('p', { className: 'try-result-disclaimer' },
+            t('Tap any ingredient to read what it does.', '성분을 탭하면 설명을 볼 수 있어요.')
           ),
           result.positive_themes.length === 0
             ? React.createElement('p', { className: 'try-result-empty' },

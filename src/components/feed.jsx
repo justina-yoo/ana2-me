@@ -1,158 +1,214 @@
-// Feed view — home with chat greeting + daily pick + product grid
+// Feed view — product listing grouped by concern
 const { useMemo: _uM1 } = React;
+
+const GRID_PAGE = 4;
 
 window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  const [sort, setSort] = _uS1('default');
-  const [concern, setConcern] = _uS1(null);
+  const [sectionPages, setSectionPages] = useState({});
 
-  // Grouped concern filters — map messy labels to clean categories
   const CONCERN_MAP = {
-    'Acne': ['Acne-prone skin', 'Acne & breakouts', 'Blemishes', 'Post-acne marks', 'Post-breakout redness', 'Excess sebum and oiliness', 'Excess oil', 'Oily skin', 'Clogged pores and surface buildup'],
     'Hydration': ['Dehydration', 'Hydration', 'Dry or very dry skin', 'Post-cleansing dryness', 'Overnight hydration', 'Multi-layer hydration'],
     'Sensitivity': ['Sensitive skin', 'Sensitive & troubled skin', 'Reactive skin', 'Redness', 'Rosacea', 'Eczema & psoriasis', 'Compromised barrier', 'Chapped or cracked skin', 'Microbiome imbalance'],
+    'Acne': ['Acne-prone skin', 'Acne & breakouts', 'Blemishes', 'Post-acne marks', 'Post-breakout redness', 'Excess sebum and oiliness', 'Excess oil', 'Oily skin', 'Clogged pores and surface buildup'],
     'Anti-aging': ['Fine lines', 'Loss of elasticity', 'Early signs of aging', 'Pore firming', 'Pore care', 'Enlarged pores'],
     'Brightening': ['Dull skin', 'Dullness', 'Dark spots', 'Uneven tone', 'Uneven skin tone', 'Brightening', 'Rough texture'],
   };
-  const CONCERN_MAP_KO = { 'Acne': '여드름', 'Hydration': '보습', 'Sensitivity': '민감', 'Anti-aging': '안티에이징', 'Brightening': '미백' };
+  const CONCERN_MAP_KO = { 'Acne': '여드름', 'Hydration': '보습', 'Sensitivity': '민감', 'Anti-aging': '안티에이징', 'Brightening': '브라이트닝' };
 
-  const activeConcerns = useMemo(() => {
-    const available = [];
+  // Group products by concern
+  const sections = _uM1(() => {
+    const result = [];
     Object.entries(CONCERN_MAP).forEach(([group, labels]) => {
-      if (products.some(p => (p.summary?.concerns || []).some(c => labels.includes(c)))) {
-        available.push(group);
-      }
+      const matches = products.filter(p => (p.summary?.concerns || []).some(c => labels.includes(c)));
+      if (matches.length) result.push({ name: group, nameKo: CONCERN_MAP_KO[group] || group, products: matches });
     });
-    return available;
+    return result;
   }, [products]);
 
-  const filtered = useMemo(() => {
-    let list = products;
-    if (query) {
-      const q = query.toLowerCase();
-      list = list.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        (p.nameKo || '').toLowerCase().includes(q) ||
-        p.brand.toLowerCase().includes(q)
-      );
-    }
-    if (concern && CONCERN_MAP[concern]) {
-      const labels = CONCERN_MAP[concern];
-      list = list.filter(p => (p.summary?.concerns || []).some(c => labels.includes(c)));
-    }
-    if (sort === 'brand') list = [...list].sort((a, b) => a.brand.localeCompare(b.brand));
-    else if (sort === 'newest') list = [...list].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-    return list;
-  }, [query, products, sort, concern]);
-
-  const dailyPool = useMemo(
-    () => products.filter(p => p.category === category),
-    [products, category]
-  );
-  const daily = dailyPool[new Date().getDate() % (dailyPool.length || 1)] || products[0];
-
-  const greet = () => {
-    const h = new Date().getHours();
-    if (lang === 'ko') {
-      if (h < 11) return '좋은 아침이에요';
-      if (h < 18) return '안녕, 오늘 컨디션 어때요?';
-      return '오늘 하루 수고했어요';
-    }
-    if (h < 11) return 'Morning, friend';
-    if (h < 18) return 'Hey — how\'s skin today?';
-    return 'Evening wind-down';
-  };
+  // Search filtering
+  const searchResults = _uM1(() => {
+    if (!query) return null;
+    const q = query.toLowerCase();
+    return products.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (p.nameKo || '').toLowerCase().includes(q) ||
+      p.brand.toLowerCase().includes(q)
+    );
+  }, [query, products]);
 
   const catMeta = {
-    'skincare': { en: 'Skincare', ko: '스킨케어', blurb: 'every molecule, demystified', blurbKo: '모든 분자, 쉽게 풀어드려요' },
-    'fragrance': { en: 'Fragrance', ko: '향수', blurb: 'the science of how you smell', blurbKo: '향이 피어나는 과학' },
-    'wellness-food': { en: 'Wellness', ko: '웰니스', blurb: 'supplements that actually absorb', blurbKo: '진짜 흡수되는 보충제' },
+    'skincare': { en: 'Skincare', ko: '스킨케어' },
+    'fragrance': { en: 'Fragrance', ko: '향수' },
+    'wellness-food': { en: 'Wellness', ko: '웰니스' },
   }[category];
 
-  const cats = [
-    { id: 'skincare', en: 'Skincare', ko: '스킨케어' },
-    { id: 'fragrance', en: 'Fragrance', ko: '향수' },
-    { id: 'wellness-food', en: 'Wellness', ko: '웰니스' },
-  ];
+  const renderCard = (p, i) => {
+    const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+    const isPlaceholder = (p.imageUrl || '').includes('placeholder');
+    return <Reveal key={p.id}><ProductCard product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} isPlaceholder={isPlaceholder} /></Reveal>;
+  };
 
   return (
     <div className={cn('feed', `dens-${density}`)}>
-      {/* Hero title */}
+      {/* Hero */}
       {!query && (
         <header className="ins-hero">
           <Sticker color="sage" rotate={-4}>{t('products', '제품')}</Sticker>
           <h1 className="display">
-            {t(`The anatomy of`, '성분 해부:')} <br/>
+            {t('The anatomy of', '성분 해부:')} <br/>
             <span className="display-accent">{t(catMeta.en, catMeta.ko)}<span className="display-dot">.</span></span>
           </h1>
-          <p className="ins-sub">{t(
-            'Every molecule, demystified.',
-            '모든 분자, 쉽게 풀어드려요.'
-          )}</p>
+          <p className="ins-sub">{t('Every molecule, demystified.', '모든 분자, 쉽게 풀어드려요.')}</p>
         </header>
       )}
 
-      {/* Sort + Filter + Browse by brand */}
+      {/* Browse by brand + brand chips */}
       {!query && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '0 0 12px' }}>
           <a href="/brands" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/brands'); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', textDecoration: 'none', color: '#a07850', display: 'inline-flex', alignItems: 'center', gap: 4 }} onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'} onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}>
-            {t('Browse by brand', '브랜드별 보기')} <Icon name="arrow" size={11} />
+            {t('Browse by brand', '브랜드별 보기')} &gt;
           </a>
-          <div style={{ display: 'flex', gap: 16, overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 2 }}>
-            {activeConcerns.map(c => (
-              <button key={c} onClick={() => setConcern(concern === c ? null : c)} style={{
-                background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer',
-                fontSize: 13, fontWeight: concern === c ? 600 : 500, whiteSpace: 'nowrap', flexShrink: 0,
-                color: concern === c ? 'var(--ink)' : 'var(--ink-faint)',
-                borderBottom: concern === c ? '2px solid var(--ink)' : '2px solid transparent',
-                transition: 'all 0.15s',
-              }} onMouseEnter={(e) => { if (concern !== c) e.currentTarget.style.color = 'var(--ink-soft)'; }}
-                 onMouseLeave={(e) => { if (concern !== c) e.currentTarget.style.color = 'var(--ink-faint)'; }}>
-                #{lang === 'ko' ? CONCERN_MAP_KO[c] || c : c}
-              </button>
-            ))}
-          </div>
+          {(() => {
+            const FEATURED = ['COSRX', 'Dr. Jart+', 'Round Lab', 'Sulwhasoo', 'Arencia', 'AESTURA', 'Anua', 'Beauty of Joseon'];
+            const available = FEATURED.filter(b => products.some(p => p.brand === b));
+            if (!available.length) return null;
+            const goToBrand = (name) => { const s = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, ''); history.pushState({}, '', '/brands/' + s); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); };
+            return (
+              <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 2 }}>
+                {available.map(b => (
+                  <button key={b} onClick={() => goToBrand(b)} style={{
+                    padding: '6px 16px 6px 6px', borderRadius: 'var(--radius-pill)', fontSize: 13, fontWeight: 600,
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    background: 'var(--cream-card)', border: '1px solid var(--line)',
+                    color: 'var(--ink-faint)', cursor: 'pointer', transition: 'all .15s ease',
+                    whiteSpace: 'nowrap', flexShrink: 0,
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                  }} onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--ink)'; }}
+                     onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--line)'; e.currentTarget.style.color = 'var(--ink-faint)'; }}>
+                    <span style={{
+                      width: 28, height: 28, borderRadius: '50%', background: 'var(--ink-faint)', color: '#fff',
+                      display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, letterSpacing: 0, flexShrink: 0,
+                    }}>{b.charAt(0).toUpperCase()}</span>
+                    {b}
+                  </button>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       )}
 
-      {/* Grid */}
-      <section className="grid-section">
-        {(category === 'fragrance' || category === 'wellness-food') && !query ? (
-          <div style={{ textAlign: 'center', padding: '60px 24px' }}>
-            <p style={{ fontSize: 18, fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 8px' }}>
-              {t('Coming soon', '곧 공개됩니다')}
-            </p>
-            <p style={{ fontSize: 14, color: 'var(--ink-faint)', margin: 0 }}>
-              {t('We\'re working on adding products for this category.', '이 카테고리의 제품을 준비하고 있어요.')}
-            </p>
+      {/* Content */}
+      {(category === 'fragrance' || category === 'wellness-food') && !query ? (
+        <div style={{ textAlign: 'center', padding: '60px 24px' }}>
+          <p style={{ fontSize: 18, fontFamily: 'var(--font-display)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 8px' }}>
+            {t('Coming soon', '곧 공개됩니다')}
+          </p>
+          <p style={{ fontSize: 14, color: 'var(--ink-faint)', margin: 0 }}>
+            {t('We\'re working on adding products for this category.', '이 카테고리의 제품을 준비하고 있어요.')}
+          </p>
+        </div>
+      ) : query ? (
+        /* Search results */
+        <section className="grid-section">
+          <div className="grid-head">
+            <h2 className="grid-h">{t(`Results for "${query}"`, `"${query}" 검색 결과`)}</h2>
+            <span className="grid-count">{searchResults.length} {t('items', '개')}</span>
           </div>
-        ) : (
-          <>
-            {query && (
-              <div className="grid-head">
-                <h2 className="grid-h">
-                  {t(`Results for "${query}"`, `"${query}" 검색 결과`)}
-                </h2>
-                <span className="grid-count">{filtered.length} {t('items', '개')}</span>
-              </div>
-            )}
-            {filtered.length > 0 ? (
-              <div className="product-grid">
-                {filtered.map((p, i) => {
-                  const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
-                  const isPlaceholder = (p.imageUrl || '').includes('placeholder');
-                  return <Reveal key={p.id}><ProductCard product={p} lang={lang} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} index={i} isPlaceholder={isPlaceholder} /></Reveal>;
-                })}
-              </div>
-            ) : (
-              <div className="empty">
-                <Sticker color="sage" rotate={-4}>{t('nothing here', '결과 없음')}</Sticker>
-                <p>{t("Try another word — we might have it under a different name.", '다른 키워드로 검색해보세요.')}</p>
-              </div>
-            )}
-          </>
-        )}
-      </section>
+          {searchResults.length > 0 ? (
+            <div className="product-grid">
+              {searchResults.map((p, i) => renderCard(p, i))}
+            </div>
+          ) : (
+            <div className="empty">
+              <Sticker color="sage" rotate={-4}>{t('nothing here', '결과 없음')}</Sticker>
+              <p>{t("Try another word — we might have it under a different name.", '다른 키워드로 검색해보세요.')}</p>
+            </div>
+          )}
+        </section>
+      ) : (
+        /* Grouped sections by concern */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
+          {sections.map((section, si) => {
+            const page = sectionPages[section.name] || 0;
+            const total = section.products.length;
+            const totalPages = Math.ceil(total / GRID_PAGE);
+            const visible = section.products.slice(page * GRID_PAGE, (page + 1) * GRID_PAGE);
+            const setPage = (p) => setSectionPages(prev => ({ ...prev, [section.name]: p }));
+            return (
+              <React.Fragment key={section.name}>
+                <section className="grid-section">
+                  <div className="grid-head">
+                    <h2 className="grid-h">#{t(section.name, section.nameKo)}</h2>
+                    <span className="grid-count">{total} {t('items', '개')}</span>
+                  </div>
+                  <div className="product-grid">
+                    {visible.map((p, i) => renderCard(p, page * GRID_PAGE + i))}
+                  </div>
+                  {totalPages > 1 && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 14 }}>
+                      <button onClick={() => setPage(Math.max(0, page - 1))} disabled={page === 0}
+                        style={{ background: 'none', border: 'none', cursor: page === 0 ? 'default' : 'pointer', fontSize: 20, color: page === 0 ? 'var(--line)' : 'var(--ink-soft)', padding: '4px 8px', lineHeight: 1 }}>
+                        ‹
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <button key={i} onClick={() => setPage(i)}
+                          style={{
+                            width: 8, height: 8, borderRadius: '50%', padding: 0, border: 'none', cursor: 'pointer',
+                            background: i === page ? 'var(--ink)' : 'var(--line)', transition: 'background .15s',
+                          }} />
+                      ))}
+                      <button onClick={() => setPage(Math.min(totalPages - 1, page + 1))} disabled={page === totalPages - 1}
+                        style={{ background: 'none', border: 'none', cursor: page === totalPages - 1 ? 'default' : 'pointer', fontSize: 20, color: page === totalPages - 1 ? 'var(--line)' : 'var(--ink-soft)', padding: '4px 8px', lineHeight: 1 }}>
+                        ›
+                      </button>
+                    </div>
+                  )}
+                </section>
+                {/* Analyzer CTA after 2nd section */}
+                {si === 1 && (
+                  <Reveal>
+                    <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
+                      style={{
+                        display: 'flex', flexDirection: 'column', gap: 10,
+                        padding: '24px 22px',
+                        background: 'var(--accent)', color: '#fff',
+                        borderRadius: 'var(--radius)', textDecoration: 'none',
+                        transition: 'all .15s ease',
+                      }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 20 }}>🔬</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.7 }}>
+                          {t('Ingredient Analyzer', '성분 분석기')}
+                        </span>
+                        <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)', opacity: 0.9 }}>
+                          Beta
+                        </span>
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+                        {t('Find your ingredient pattern', '나에게 맞는 성분 패턴 찾기')}
+                      </span>
+                      <span style={{ fontSize: 13, lineHeight: 1.5, opacity: 0.8 }}>
+                        {t("Tell us what works and what doesn't for your skin — we'll find the pattern.", '내 피부에 맞는 것과 안 맞는 것을 알려주세요. 패턴을 찾아드립니다.')}
+                      </span>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        padding: '10px 20px', marginTop: 4,
+                        background: '#fff', color: 'var(--accent)',
+                        borderRadius: 'var(--radius-pill)',
+                        fontSize: 13, fontWeight: 700, alignSelf: 'flex-start',
+                      }}>
+                        {t('Try the analyzer', '분석기 사용하기')} →
+                      </span>
+                    </a>
+                  </Reveal>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      )}
 
     </div>
   );
@@ -161,7 +217,6 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
 window.ProductCard = function ProductCard({ product, lang, onClick, href, index, isPlaceholder }) {
   const t = useL(lang);
   const name = lang === 'ko' && product.nameKo ? product.nameKo : product.name;
-  const tag = lang === 'ko' && product.summary?.taglineKo ? product.summary.taglineKo : product.summary?.tagline;
   const topIng = product.ingredients?.[0];
   const isNew = product.createdAt && (Date.now() - new Date(product.createdAt).getTime()) < 2 * 24 * 60 * 60 * 1000;
   return (
@@ -169,7 +224,7 @@ window.ProductCard = function ProductCard({ product, lang, onClick, href, index,
       <div className="pcard-img-wrap">
         <ProductImg src={product.imageUrl} alt={product.brand + ' ' + name} className="pcard-img" />
         {isNew && (
-          <span style={{ position: 'absolute', top: 8, right: 8, fontSize: 9, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#fff', background: 'var(--accent)', padding: '3px 8px', borderRadius: 'var(--radius-pill)' }}>
+          <span style={{ position: 'absolute', top: 8, right: 8, fontSize: 9, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--ink)', background: 'var(--butter)', padding: '3px 8px', borderRadius: 'var(--radius-pill)' }}>
             {t('New', '신규')}
           </span>
         )}
