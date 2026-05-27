@@ -448,7 +448,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                 borderRadius: 'var(--radius-pill)',
                 fontSize: 13, fontWeight: 700,
                 alignSelf: 'flex-start',
-              }}>
+              }} className="cta-shake">
                 {t('Try the analyzer', '분석기 사용하기')} →
               </span>
             </a>
@@ -830,7 +830,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
             background: '#fff', color: 'var(--accent)',
             borderRadius: 'var(--radius-pill)',
             fontSize: 13, fontWeight: 700, alignSelf: 'flex-start',
-          }}>
+          }} className="cta-shake">
             {isKo ? '분석기 사용하기' : 'Try the analyzer'} →
           </span>
         </a>

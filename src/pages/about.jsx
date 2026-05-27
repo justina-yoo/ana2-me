@@ -192,7 +192,7 @@ window.About = function About({ lang, density }) {
               background: '#fff', color: 'var(--accent)',
               borderRadius: 'var(--radius-pill)',
               fontSize: 13, fontWeight: 700, alignSelf: 'flex-start',
-            }}>
+            }} className="cta-shake">
               {t('Try the analyzer', '분석기 사용하기')} →
             </span>
           </a>
