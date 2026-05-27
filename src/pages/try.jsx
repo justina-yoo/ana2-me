@@ -1801,82 +1801,51 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       // ── Feedback prompt ──
       fbState !== 'done' && React.createElement(Reveal, { delay: 400 },
         React.createElement('div', { className: 'try-feedback' },
-          fbState === 'idle' && [
-            React.createElement('p', { key: 'q', className: 'try-feedback-q' },
-              t('Did this tell you something useful about your skin?', '피부에 대해 유용한 정보를 알게 됐나요?')
-            ),
-            React.createElement('div', { key: 'btns', className: 'try-feedback-btns' },
-              React.createElement('button', {
-                className: 'try-feedback-btn',
-                onClick: function() {
-                  setFbRating('helpful'); setFbState('rated');
+          React.createElement('p', { className: 'try-feedback-q' },
+            t('Did this tell you something useful about your skin?', '피부에 대해 유용한 정보를 알게 됐나요?')
+          ),
+          React.createElement('div', { className: 'try-feedback-btns' },
+            React.createElement('button', {
+              className: 'try-feedback-btn',
+              style: fbRating === 'helpful' ? { background: 'var(--accent)', color: '#fff', borderColor: 'var(--accent)' } : undefined,
+              onClick: function() { setFbRating(fbRating === 'helpful' ? null : 'helpful'); }
+            }, '\uD83D\uDC4D ' + t('Yes', '네')),
+            React.createElement('button', {
+              className: 'try-feedback-btn',
+              style: fbRating === 'not_helpful' ? { background: 'var(--ink)', color: '#fff', borderColor: 'var(--ink)' } : undefined,
+              onClick: function() { setFbRating(fbRating === 'not_helpful' ? null : 'not_helpful'); }
+            }, '\uD83D\uDC4E ' + t('Not really', '별로요'))
+          ),
+          React.createElement('div', { className: 'try-feedback-comment' },
+            React.createElement('input', {
+              className: 'try-feedback-input',
+              value: fbComment,
+              onChange: function(e) { setFbComment(e.target.value); },
+              onKeyDown: function(e) {
+                if (e.key === 'Enter' && (fbComment.trim() || fbRating)) {
                   fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
                     method: 'POST',
                     headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                    body: JSON.stringify({
-                      rating: 'helpful',
-                      input_count: totalCount,
-                      confidence_level: result.data_quality ? (result.mode === 'single' ? 'single' : (works.length >= 2 && doesnt.length >= 2 ? 'high' : 'low')) : null
-                    })
+                    body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: totalCount })
                   }).catch(function() {});
-                }
-              }, '\uD83D\uDC4D ' + t('Yes', '네')),
-              React.createElement('button', {
-                className: 'try-feedback-btn',
-                onClick: function() {
-                  setFbRating('not_helpful'); setFbState('rated');
-                  fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                    method: 'POST',
-                    headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                    body: JSON.stringify({
-                      rating: 'not_helpful',
-                      input_count: totalCount,
-                      confidence_level: result.data_quality ? (result.mode === 'single' ? 'single' : (works.length >= 2 && doesnt.length >= 2 ? 'high' : 'low')) : null
-                    })
-                  }).catch(function() {});
-                }
-              }, '\uD83D\uDC4E ' + t('Not really', '별로요'))
-            )
-          ],
-          fbState === 'rated' && [
-            React.createElement('p', { key: 'q2', className: 'try-feedback-q' },
-              t('Anything we got wrong or missed? (optional)', '잘못되거나 빠진 부분이 있나요? (선택)')
-            ),
-            React.createElement('div', { key: 'input', className: 'try-feedback-comment' },
-              React.createElement('input', {
-                className: 'try-feedback-input',
-                value: fbComment,
-                onChange: function(e) { setFbComment(e.target.value); },
-                onKeyDown: function(e) {
-                  if (e.key === 'Enter' && fbComment.trim()) {
-                    fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                      method: 'POST',
-                      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                      body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() })
-                    }).catch(function() {});
-                    setFbState('done');
-                  }
-                },
-                placeholder: t('Type here...', '여기에 입력...')
-              }),
-              React.createElement('button', {
-                className: 'try-feedback-submit',
-                onClick: function() {
-                  if (fbComment.trim()) {
-                    fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                      method: 'POST',
-                      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                      body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() })
-                    }).catch(function() {});
-                  }
                   setFbState('done');
                 }
-              }, t('Submit', '보내기'))
-            ),
-            React.createElement('button', { key: 'skip', className: 'try-feedback-skip', onClick: function() { setFbState('done'); } },
-              t('Skip', '건너뛰기')
-            )
-          ]
+              },
+              placeholder: t('Any feedback? (optional)', '피드백이 있으신가요? (선택)')
+            }),
+            React.createElement('button', {
+              className: 'try-feedback-submit',
+              disabled: !fbRating && !fbComment.trim(),
+              onClick: function() {
+                fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                  method: 'POST',
+                  headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                  body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: totalCount })
+                }).catch(function() {});
+                setFbState('done');
+              }
+            }, t('Submit', '보내기'))
+          )
         )
       ),
       fbState === 'done' && React.createElement(Reveal, null,
@@ -1899,75 +1868,57 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         React.createElement('p', { style: { fontSize: 14, color: 'var(--ink-soft)', margin: '0 0 20px', lineHeight: 1.5 } },
           t('Did the analyzer tell you something useful?', '분석기가 유용한 정보를 알려줬나요?')
         ),
-        fbState === 'idle' && React.createElement('div', { style: { display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 16 } },
+        React.createElement('div', { style: { display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 16 } },
           React.createElement('button', {
             className: 'try-feedback-btn',
-            style: { fontSize: 15, padding: '10px 24px' },
-            onClick: function() {
-              setFbRating('helpful'); setFbState('rated');
-              fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                method: 'POST',
-                headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                body: JSON.stringify({ rating: 'helpful', input_count: works.length + doesnt.length })
-              }).catch(function() {});
-            }
+            style: { fontSize: 15, padding: '10px 24px', background: fbRating === 'helpful' ? 'var(--accent)' : undefined, color: fbRating === 'helpful' ? '#fff' : undefined, borderColor: fbRating === 'helpful' ? 'var(--accent)' : undefined },
+            onClick: function() { setFbRating(fbRating === 'helpful' ? null : 'helpful'); }
           }, '\uD83D\uDC4D ' + t('Yes', '네')),
           React.createElement('button', {
             className: 'try-feedback-btn',
-            style: { fontSize: 15, padding: '10px 24px' },
-            onClick: function() {
-              setFbRating('not_helpful'); setFbState('rated');
-              fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                method: 'POST',
-                headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                body: JSON.stringify({ rating: 'not_helpful', input_count: works.length + doesnt.length })
-              }).catch(function() {});
-            }
+            style: { fontSize: 15, padding: '10px 24px', background: fbRating === 'not_helpful' ? 'var(--ink)' : undefined, color: fbRating === 'not_helpful' ? '#fff' : undefined, borderColor: fbRating === 'not_helpful' ? 'var(--ink)' : undefined },
+            onClick: function() { setFbRating(fbRating === 'not_helpful' ? null : 'not_helpful'); }
           }, '\uD83D\uDC4E ' + t('Not really', '별로요'))
         ),
-        fbState === 'rated' && React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 } },
-          React.createElement('p', { style: { fontSize: 13, color: 'var(--ink-soft)', margin: 0 } },
-            t('Anything we got wrong or missed? (optional)', '잘못되거나 빠진 부분이 있나요? (선택)')
-          ),
-          React.createElement('div', { className: 'try-feedback-comment' },
-            React.createElement('input', {
-              className: 'try-feedback-input',
-              value: fbComment,
-              onChange: function(e) { setFbComment(e.target.value); },
-              onKeyDown: function(e) {
-                if (e.key === 'Enter' && fbComment.trim()) {
-                  fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                    method: 'POST',
-                    headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                    body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() })
-                  }).catch(function() {});
-                  setFbState('done');
-                  dismissFbModal(true);
-                }
-              },
-              placeholder: t('Type here...', '여기에 입력...'),
-              autoFocus: true
-            }),
-            React.createElement('button', {
-              className: 'try-feedback-submit',
-              onClick: function() {
-                if (fbComment.trim()) {
-                  fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
-                    method: 'POST',
-                    headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                    body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() })
-                  }).catch(function() {});
-                }
+        React.createElement('div', { className: 'try-feedback-comment', style: { marginBottom: 16 } },
+          React.createElement('input', {
+            className: 'try-feedback-input',
+            value: fbComment,
+            onChange: function(e) { setFbComment(e.target.value); },
+            onKeyDown: function(e) {
+              if (e.key === 'Enter' && (fbComment.trim() || fbRating)) {
+                fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                  method: 'POST',
+                  headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                  body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: works.length + doesnt.length })
+                }).catch(function() {});
                 setFbState('done');
                 dismissFbModal(true);
               }
-            }, t('Submit', '보내기'))
-          )
+            },
+            placeholder: t('Any feedback? (optional)', '피드백이 있으신가요? (선택)')
+          })
         ),
-        React.createElement('button', {
-          onClick: function() { dismissFbModal(true); },
-          style: { background: 'none', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer', textDecoration: 'underline' }
-        }, t('Skip', '건너뛰기'))
+        React.createElement('div', { style: { display: 'flex', gap: 12, justifyContent: 'center' } },
+          React.createElement('button', {
+            className: 'try-feedback-submit',
+            style: { padding: '10px 24px', fontSize: 13 },
+            disabled: !fbRating && !fbComment.trim(),
+            onClick: function() {
+              fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
+                method: 'POST',
+                headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: works.length + doesnt.length })
+              }).catch(function() {});
+              setFbState('done');
+              dismissFbModal(true);
+            }
+          }, t('Submit', '보내기')),
+          React.createElement('button', {
+            onClick: function() { dismissFbModal(true); },
+            style: { background: 'none', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer', textDecoration: 'underline', padding: '10px 16px' }
+          }, t('Skip', '건너뛰기'))
+        )
       )
     ),
 
