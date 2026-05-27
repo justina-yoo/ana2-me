@@ -96,7 +96,7 @@ window.Insights = function Insights({ lang, density, query }) {
   useEffect(() => {
     if (urlResolved.current) return;
     const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
-    if (!path || path === 'insights') { urlResolved.current = true; setUrlResolving(false); return; }
+    if (!path || path === 'insights' || path === 'search' || path.startsWith('search?')) { urlResolved.current = true; setUrlResolving(false); return; }
     const parts = path.split('/');
     const articleId = parts[parts.length - 1];
 
@@ -294,7 +294,33 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
             const blockIndex = Math.floor(i / 5);
             const posInBlock = i % 5;
 
-            if (posInBlock === 0) {
+            if (query) {
+              // Search results — always compact row
+              cards.push(
+                <Reveal key={post.id}><a href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{
+                  display: 'flex', alignItems: 'center', gap: 16, width: '100%', textAlign: 'left',
+                  background: 'none', border: 'none', borderBottom: '1px solid var(--line)', cursor: 'pointer', padding: '14px 0',
+                  textDecoration: 'none', color: 'inherit',
+                }}>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(15px, 1.8vw, 18px)', lineHeight: 1.25, letterSpacing: '-0.01em', margin: 0, color: 'var(--ink)', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {post.title[lang] || post.title.en}
+                    </h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span onClick={(e) => { e.stopPropagation(); onTagClick(post.tag.en); }}
+                        style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.tagColor, cursor: 'pointer' }}>
+                        {post.tag[lang] || post.tag.en}
+                      </span>
+                      <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--line)', display: 'inline-block' }} />
+                      <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>{post.date}</span>
+                    </div>
+                  </div>
+                  <ProductImg src={post.imageUrl} alt={post.title[lang] || post.title.en}
+                    style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />
+                </a></Reveal>
+              );
+              i++;
+            } else if (posInBlock === 0) {
               // Hero card — full width with large image
               cards.push(
                 <Reveal key={post.id}><a href={'/' + postSlug(post)} onClick={(e) => { e.preventDefault(); onSelectPost(post); }} style={{

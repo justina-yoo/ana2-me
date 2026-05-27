@@ -176,7 +176,6 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
             <section className="grid-section">
               <div className="grid-head">
                 <h2 className="grid-h">{t('Newly Added', '새로 추가됨')}</h2>
-                <span className="grid-count">{newProducts.length} {t('items', '개')}</span>
               </div>
               <div className="scroll-row">
                 {newProducts.map((p, i) => renderCard(p, i))}
@@ -188,7 +187,6 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
               <section className="grid-section">
                 <div className="grid-head">
                   <h2 className="grid-h">#{t(section.name, section.nameKo)}</h2>
-                  <span className="grid-count">{section.products.length} {t('items', '개')}</span>
                 </div>
                 <div className="scroll-row">
                   {section.products.map((p, i) => renderCard(p, i))}
