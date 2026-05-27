@@ -36,6 +36,18 @@
 
   <!-- Articles -->
   <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-27/skin-changes-every-decade-20s-30s-40s</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-27/jimin-bts-skincare-routine-simplicity</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-27/skin-cycling-korean-active-rotation</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -578,6 +590,18 @@
 
   <!-- Products -->
   <url>
+    <loc>https://ana2-me.com/products/fully--rice-ceramide-moisture-sun-cream-spf-50-pa</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/zeroid-intensive-facial-cream-cleanser</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/dr-g-r-e-d-blemish-clear-soothing-toner</loc>
     <lastmod>2026-05-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -746,48 +770,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/tamburins-chamo</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/dr-jart--cicapair-intensive-soothing-repair-cream</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/mediheal-tea-tree-trouble-calming-toner-pads</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/medicube-pdrn-pink-collagen-capsule-cream</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/arencia-fresh-green-rice-mochi-cleanser</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/la-roche-posay-cicaplast-balm-b5</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/products/medion-supplecare-inositol</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -812,6 +794,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/chanel-n-5</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -819,6 +807,42 @@
   </url>
   <url>
     <loc>https://ana2-me.com/products/jo-malone-london-peony-blush-suede</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/tamburins-chamo</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/mediheal-tea-tree-trouble-calming-toner-pads</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/medicube-pdrn-pink-collagen-capsule-cream</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/arencia-fresh-green-rice-mochi-cleanser</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/dr-jart--cicapair-intensive-soothing-repair-cream</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/la-roche-posay-cicaplast-balm-b5</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -910,6 +934,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/brands/fully</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/brands/jo-malone-london</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -995,6 +1025,12 @@
   </url>
   <url>
     <loc>https://ana2-me.com/brands/torriden</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/brands/zeroid</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

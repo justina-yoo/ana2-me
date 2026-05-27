@@ -375,8 +375,10 @@ body.night {
 
 .scroll-row {
   display: flex;
+  flex-wrap: nowrap;
   gap: 14px;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
