@@ -245,6 +245,7 @@
     }
 
     // Derive initial view from URL to prevent flash on direct/UTM article links
+    // URL always wins over localStorage — prevents flash when opening a direct link
     function getInitialView() {
       const p = window.location.pathname.replace(/\/$/, '');
       if (p === '') return 'landing';
@@ -257,12 +258,15 @@
       if (p === '/admin') return 'admin';
       if (p === '/analyze' || p === '/analyzer') return 'analyze';
       if (p === '/search') return 'insights';
-      try { return JSON.parse(localStorage.getItem('view')) || 'insights'; } catch(e) { return 'insights'; }
+      try { return JSON.parse(localStorage.getItem('view')) || 'landing'; } catch(e) { return 'landing'; }
     }
+    // Force URL-derived view to override localStorage on page load
+    window.__initialViewFromUrl = getInitialView();
 
     function App() {
       // Persistent UI state
-      const [view, _setView] = window.useLocalState('view', getInitialView()); // feed | detail | insights | analyzer
+      const [view, _setView] = useState(window.__initialViewFromUrl); // URL always wins on page load
+      useEffect(() => { try { localStorage.setItem('view', JSON.stringify(view)); } catch {} }, [view]);
       const setView = (v) => {
         if (window.__analyzerFeedbackPending && view === 'analyze' && v !== 'analyze') {
           window.__analyzerPendingDest = window.location.pathname;
