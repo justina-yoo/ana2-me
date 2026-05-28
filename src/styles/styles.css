@@ -265,6 +265,7 @@ body.night {
 .cat-edit-active::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--accent); border-radius: 2px;
 }
+.hdr-catrow::-webkit-scrollbar { display: none; }
 .hdr-pipe { width: 1px; height: 18px; background: var(--line); align-self: center; }
 
 /* ---------- Chip ---------- */
@@ -1489,7 +1490,11 @@ body.night {
   .daily-name { font-size: 22px; }
   .detail-name { font-size: 26px; }
   .hdr-pages { margin-left: 0; }
-  .page-tab { padding: 6px 10px; font-size: 12px; }
+  .page-tab { padding: 5px 6px; font-size: 11px; }
+  .hdr-tabs { gap: 0 !important; }
+  .hdr-catrow { gap: 10px !important; }
+  .cat-edit { font-size: 14px !important; }
+  .hdr-row { gap: 2px !important; }
 }
 
 /* Prevent horizontal scroll */

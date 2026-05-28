@@ -111,6 +111,7 @@
   <script type="text/babel" src="src/components/block-renderer.jsx"></script>
   <script type="text/babel" src="src/pages/detail.jsx"></script>
   <script type="text/babel" src="src/pages/brands.jsx"></script>
+  <script type="text/babel" src="src/components/analyzer-ctas.jsx"></script>
   <script type="text/babel" src="src/pages/insights.jsx"></script>
   <script type="text/babel" src="src/articles/spicules.jsx"></script>
   <script type="text/babel" src="src/articles/myo-inositol.jsx"></script>
@@ -132,6 +133,7 @@
   <script type="text/babel" src="src/pages/analyzer.jsx"></script>
   <script type="text/babel" src="src/pages/about.jsx"></script>
   <script type="text/babel" src="src/pages/privacy.jsx"></script>
+  <script type="text/babel" src="src/pages/terms.jsx?v=1"></script>
   <script type="text/babel" src="src/pages/admin.jsx"></script>
 
   <script type="text/babel">
@@ -251,6 +253,7 @@
       if (p === '/brands' || p.startsWith('/brands/')) return 'brands';
       if (p === '/about') return 'about';
       if (p === '/privacy') return 'privacy';
+      if (p === '/terms') return 'terms';
       if (p === '/admin') return 'admin';
       if (p === '/analyze' || p === '/analyzer') return 'analyze';
       if (p === '/search') return 'insights';
@@ -367,6 +370,7 @@
         else if (path === '/analyze' || path === '/analyzer') { setView('analyze'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
         else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setAbout(); window.scrollTo(0, 0); }
         else if (path === '/privacy') { setView('privacy'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setPrivacy(); window.scrollTo(0, 0); }
+        else if (path === '/terms') { setView('terms'); setProductId(null); setQuery(''); if (window.SEO) window.SEO.setTerms(); window.scrollTo(0, 0); }
       };
       useEffect(() => {
         handleRoute();
@@ -378,6 +382,7 @@
       useEffect(() => {
         if (!window.SEO) return;
         if (view === 'privacy') window.SEO.setPrivacy();
+        if (view === 'terms') window.SEO.setTerms();
         if (view === 'analyze') window.SEO.setAnalyzer();
       }, [view]);
 
@@ -473,6 +478,7 @@
           {/* old Analyzer replaced by data-driven Try engine at /analyze */}
           {view === 'about' && <About lang={lang} density={density} />}
           {view === 'privacy' && <Privacy lang={lang} />}
+          {view === 'terms' && <Terms lang={lang} />}
           {view === 'admin' && <Admin />}
 
           <footer style={{
@@ -480,8 +486,16 @@
             borderTop: '1px solid var(--line)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); window.scrollTo(0, 0); }} style={{ fontSize: 12, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                {lang === 'ko' ? '소개' : 'About'}
+              </a>
+              <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
               <a href="/privacy" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/privacy'); if (window.SEO) window.SEO.setPrivacy(); setView('privacy'); }} style={{ fontSize: 12, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
                 {lang === 'ko' ? '개인정보처리방침' : 'Privacy'}
+              </a>
+              <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
+              <a href="/terms" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/terms'); if (window.SEO) window.SEO.setTerms(); setView('terms'); window.scrollTo(0, 0); }} style={{ fontSize: 12, color: 'var(--ink-faint)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                {lang === 'ko' ? '이용약관' : 'Terms'}
               </a>
               <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-faint)', display: 'inline-block', opacity: 0.4 }} />
               <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>Contact: ana2me2026@gmail.com</span>

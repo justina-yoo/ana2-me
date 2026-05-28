@@ -64,6 +64,12 @@ async function generate() {
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>${SITE}/terms</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 
   <!-- Articles -->`;
 
@@ -126,7 +132,7 @@ async function generate() {
 `;
 
   writeFileSync('sitemap.xml', xml);
-  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${skincareProducts.length} products + ${brands.length} brands + 5 static pages`);
+  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${skincareProducts.length} products + ${brands.length} brands + 6 static pages`);
 }
 
 generate();

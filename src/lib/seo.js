@@ -320,6 +320,21 @@
       setArticleJsonLd(null);
     },
 
+    setTerms: function () {
+      var title = 'Terms of Service \u2014 ana2me';
+      var desc = 'Terms of Service for ana2me, an ingredient-discovery and personalization tool for Korean cosmetic products.';
+      var url = BASE_URL + '/terms';
+      document.title = title;
+      setMeta('meta[name="description"]', desc);
+      setMeta('link[rel="canonical"]', url);
+      setMeta('meta[property="og:type"]', 'website');
+      setMeta('meta[property="og:title"]', title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:url"]', url);
+      setMeta('meta[name="twitter:title"]', title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setArticleJsonLd(null);
+    },
     setPrivacy: function () {
       var title = 'Privacy Policy | ana2me';
       var desc = 'ana2me collects no personal data. We use Google Analytics for anonymous usage stats only. Read our full privacy policy.';

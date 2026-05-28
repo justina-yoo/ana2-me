@@ -1,4 +1,6 @@
 // Landing page — mixed feed with hero + interleaved articles & products
+const LANDING_PAGE_SIZE = 20;
+
 window.Landing = function Landing({ lang, products, setView, setProduct, density }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
@@ -6,11 +8,13 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
   const [featured, setFeatured] = useState([]);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     Promise.all([
       window.__supabase.fetchFeaturedArticles(),
-      window.__supabase.fetchLatestArticles(20)
+      window.__supabase.fetchLatestArticles(LANDING_PAGE_SIZE)
     ]).then(function([feat, recent]) {
       // #1 = hero, #2-4 = featured section
       const sorted = feat.sort((a, b) => parseInt(a.featured) - parseInt(b.featured));
@@ -25,9 +29,34 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
       }
       setFeatured(pins234);
       setArticles(recent);
+      setHasMore(recent.length === LANDING_PAGE_SIZE);
       setLoading(false);
     });
   }, []);
+
+  // Load more articles on scroll
+  const loadMore = () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    window.__supabase.fetchLatestArticles(LANDING_PAGE_SIZE, articles.length).then(function(data) {
+      setArticles(prev => [...prev, ...data]);
+      setHasMore(data.length === LANDING_PAGE_SIZE);
+      setLoadingMore(false);
+    }).catch(function() {
+      setLoadingMore(false);
+    });
+  };
+
+  useEffect(() => {
+    if (!hasMore || loadingMore) return;
+    const onScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 600) {
+        loadMore();
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [hasMore, loadingMore, articles.length]);
 
   function postSlug(post) {
     return 'article/' + post.tag.en.toLowerCase().replace(/\s+/g, '-') + '/' + dateToPrefix(post.date) + '/' + post.id;
@@ -236,11 +265,19 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginTop: 24 }}>
         {(() => {
           const items = [];
+          const CTA = window.AnalyzerCTAs;
+          const goAnalyzer = () => { history.pushState({}, '', '/analyzer'); setView('analyze'); window.scrollTo(0,0); };
+          let ctaCount = 0;
           let i = 0;
           while (i < feedArticles.length) {
             const post = feedArticles[i];
-            const blockIndex = Math.floor(i / 4);
             const posInBlock = i % 4;
+
+            // Insert cycling analyzer CTA every INTERVAL articles
+            if (CTA.shouldInsert(i)) {
+              items.push(CTA.render(ctaCount, t, goAnalyzer));
+              ctaCount++;
+            }
 
             if (posInBlock === 0) {
               // Big card

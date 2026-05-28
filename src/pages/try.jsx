@@ -634,7 +634,9 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       sort_order: r.sort_order,
       flagged: isFlagged,
       flag_type: ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil' : ing.is_known_sensitizer ? 'sensitizer' : (ing.irritation_risk === 'high' || ing.irritation_risk === 'medium') ? 'irritant' : null,
-      irritation_risk: ing.irritation_risk
+      irritation_risk: ing.irritation_risk,
+      contains_flagged_component: ing.contains_flagged_component,
+      flagged_component_reasons: ing.flagged_component_reasons
     };
   }
 
@@ -798,7 +800,12 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
             ingredient_name_en: ing.name,
             ingredient_name_ko: ing.name_ko,
             symbol: ing.symbol,
+            category: ing.category,
             flag_type: ing.flag_type,
+            description: ing.description,
+            description_ko: ing.description_ko,
+            science: ing.science,
+            science_ko: ing.science_ko,
             reason: singleFlagReason(ing),
             confidence: 'single'
           };
@@ -1009,6 +1016,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           science: ing.science, science_ko: ing.science_ko,
           flagged: isFlaggedIng(ing),
           flag_type: flagType,
+          contains_flagged_component: ing.contains_flagged_component,
+          flagged_component_reasons: ing.flagged_component_reasons,
           worksCount: item.worksCount,
           doesntCount: item.doesntCount,
           signal: item.signal,
@@ -1650,7 +1659,12 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 : t('Likely sensitivity candidates', '민감 반응 후보 성분')
             ),
             result.avoid_ingredients.map(function(item, i) {
-              return React.createElement('div', { key: i, className: 'try-avoid-item' },
+              return React.createElement('div', { key: i, className: 'try-avoid-item', style: { cursor: 'pointer' }, onClick: function() { setSelIng({
+                name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
+                symbol: item.symbol, category: item.category, flagged: true, flag_type: item.flag_type,
+                description: item.description, description_ko: item.description_ko,
+                science: item.science, science_ko: item.science_ko
+              }); } },
                 React.createElement('div', { className: 'try-avoid-head' },
                   React.createElement('div', { className: 'ing-sym', style: { width: 32, height: 32, fontSize: 13, borderRadius: 8, background: '#c0392b' } }, item.symbol || '!'),
                   React.createElement('strong', null, isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en)
@@ -2129,6 +2143,18 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         )
       ),
 
+      // ── Disclaimer footnote ──
+      React.createElement('p', {
+        style: {
+          fontSize: 12, color: 'var(--ink-faint)', margin: '32px 0 0',
+          paddingTop: 16, borderTop: '1px solid var(--line)',
+          lineHeight: 1.5, fontStyle: 'italic',
+        }
+      }, t(
+        'For information only \u2014 not medical or dermatological advice. Reactions vary by person.',
+        '\uC815\uBCF4 \uC81C\uACF5 \uBAA9\uC801\uC774\uBA70, \uC758\uD559\uC801 \uC870\uC5B8\uC774 \uC544\uB2D9\uB2C8\uB2E4. \uD53C\uBD80 \uBC18\uC751\uC740 \uAC1C\uC778\uCC28\uAC00 \uC788\uC2B5\uB2C8\uB2E4.'
+      )),
+
       // ── Feedback prompt ──
       fbState !== 'done' && React.createElement(Reveal, { delay: 400 },
         React.createElement('div', { className: 'try-feedback' },
@@ -2157,7 +2183,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                   fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
                     method: 'POST',
                     headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                    body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: totalCount })
+                    body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: result ? (result.totalWorks || 0) + (result.totalDoesnt || 0) : totalCount })
                   }).catch(function() {});
                   setFbState('done');
                 }
@@ -2171,7 +2197,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
                 fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/analyzer_feedback', {
                   method: 'POST',
                   headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                  body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: totalCount })
+                  body: JSON.stringify({ rating: fbRating, comment: fbComment.trim() || null, input_count: result ? (result.totalWorks || 0) + (result.totalDoesnt || 0) : totalCount })
                 }).catch(function() {});
                 setFbState('done');
               }

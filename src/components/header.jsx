@@ -36,17 +36,17 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
             </svg>
           </button>
         </div>
-        <nav className="hdr-catrow" style={{ justifyContent: 'flex-start', gap: 16 }}>
+        <nav className="hdr-catrow" style={{ justifyContent: 'flex-start', gap: 16, flexWrap: 'nowrap', overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
           <a href="/insights" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/insights'); setView('insights'); setQuery(''); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </a>
           <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'feed' && 'cat-edit-active')}>
             {t('Products', '제품')}
           </a>
-          <a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'about' && 'cat-edit-active')}>
-            {t('About', '소개')}
+          <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'analyze' && 'cat-edit-active')}>
+            {t('Analyzer', '분석기')}
           </a>
-          <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
+          <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 'auto', flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
             {lang === 'ko' ? 'EN' : 'KR'}
           </button>
         </nav>
@@ -121,17 +121,17 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
           </>
         )}
         {!searchOpen && (
-          <div className="hdr-tabs" style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: 'auto' }}>
+          <div className="hdr-tabs" style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: 'auto', flexShrink: 1, minWidth: 0 }}>
             <a href="/insights" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/insights'); setView('insights'); setQuery(''); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
               {t('Insights', '인사이트')}
             </a>
             <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'feed' && 'page-tab-active')}>
               {t('Products', '제품')}
             </a>
-<a href="/about" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/about'); if (window.SEO) window.SEO.setAbout(); setView('about'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'about' && 'page-tab-active')}>
-              {t('About', '소개')}
+            <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'analyze' && 'page-tab-active')}>
+              {t('Analyzer', '분석기')}
             </a>
-            <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 8, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
+            <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 4, flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 8px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
               {lang === 'ko' ? 'EN' : 'KR'}
             </button>
           </div>

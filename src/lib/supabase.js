@@ -115,8 +115,10 @@
         });
       });
     },
-    fetchLatestArticles: function(limit) {
-      return query('articles', 'order=created_at.desc&limit=' + (limit || 3)).then(function(rows) {
+    fetchLatestArticles: function(limit, offset) {
+      var params = 'order=created_at.desc&limit=' + (limit || 3);
+      if (offset) params += '&offset=' + offset;
+      return query('articles', params).then(function(rows) {
         return rows.map(function(r) {
           return {
             id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
@@ -143,11 +145,11 @@
         return Promise.resolve(self._analyzeCache[cacheKey]);
       }
       // 1) Full junction rows for the input products
-      var piQuery = 'product_id=in.(' + productIds.join(',') + ')&select=product_id,ingredient_id,sort_order,is_hero,ingredient:ingredients(id,name,name_ko,symbol,category,description,description_ko,science,science_ko,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc,sort_order.asc';
+      var piQuery = 'product_id=in.(' + productIds.join(',') + ')&select=product_id,ingredient_id,sort_order,is_hero,ingredient:ingredients(id,name,name_ko,symbol,category,description,description_ko,science,science_ko,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk,contains_flagged_component,flagged_component_reasons)&order=product_id.asc,sort_order.asc';
       // 2) All junction rows — cached after first fetch (doesn't change per analysis)
       var allRowsPromise = self._allRowsCache
         ? Promise.resolve(self._allRowsCache)
-        : query('products_ingredients', 'select=product_id,ingredient_id,is_hero,ingredient:ingredients(id,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk)&order=product_id.asc').then(function(rows) {
+        : query('products_ingredients', 'select=product_id,ingredient_id,is_hero,ingredient:ingredients(id,category,is_known_sensitizer,is_eu_26_fragrance_allergen,is_essential_oil,irritation_risk,contains_flagged_component,flagged_component_reasons)&order=product_id.asc').then(function(rows) {
             self._allRowsCache = rows;
             return rows;
           });

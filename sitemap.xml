@@ -33,6 +33,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://ana2-me.com/terms</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 
   <!-- Articles -->
   <url>
@@ -614,6 +620,12 @@
 
   <!-- Products -->
   <url>
+    <loc>https://ana2-me.com/products/cosrx-advanced-snail-96-mucin-power-essence</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/it-fu-repair-therapy-soonyuul-cream</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -800,6 +812,24 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/products/diptyque-philosykos</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/chanel-coco-mademoiselle</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -830,12 +860,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/medicube-pdrn-pink-collagen-capsule-cream</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/products/dr-jart--cicapair-intensive-soothing-repair-cream</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -848,31 +872,19 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/products/medicube-pdrn-pink-collagen-capsule-cream</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/arencia-fresh-green-rice-mochi-cleanser</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/products/medion-supplecare-inositol</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/diptyque-philosykos</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
