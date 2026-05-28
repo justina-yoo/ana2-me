@@ -144,11 +144,7 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
               {t('We read the ingredients so you don\u2019t have to.', '성분을 대신 읽어드릴게요.')}
             </p>
           </a>
-          <div style={{
-            display: 'flex', gap: 14, overflowX: 'auto', scrollSnapType: 'x mandatory',
-            paddingBottom: 8, paddingRight: 40,
-            WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none',
-          }}>
+          <ScrollRow>
             {[...products].sort((a, b) => {
               const aP = (a.imageUrl || '').includes('placeholder');
               const bP = (b.imageUrl || '').includes('placeholder');
@@ -174,7 +170,7 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
                 </a>
               );
             })}
-          </div>
+          </ScrollRow>
         </section>
       </Reveal>)}
 

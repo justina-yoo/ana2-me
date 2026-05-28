@@ -137,6 +137,55 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
   );
 };
 
+// Horizontal scroll row with arrow buttons for non-trackpad users
+window.ScrollRow = function ScrollRow({ children }) {
+  const rowRef = useRef(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const updateArrows = () => {
+    const el = rowRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 10);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  };
+
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return;
+    updateArrows();
+    el.addEventListener('scroll', updateArrows, { passive: true });
+    const ro = new ResizeObserver(updateArrows);
+    ro.observe(el);
+    return () => { el.removeEventListener('scroll', updateArrows); ro.disconnect(); };
+  }, [children]);
+
+  const scroll = (dir) => {
+    const el = rowRef.current;
+    if (!el) return;
+    const amount = el.clientWidth * 0.7;
+    el.scrollBy({ left: dir * amount, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="scroll-row-wrap">
+      {canLeft && (
+        <button className="scroll-arrow scroll-arrow-left" onClick={() => scroll(-1)} aria-label="Scroll left">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      )}
+      <div className="scroll-row" ref={rowRef}>
+        {children}
+      </div>
+      {canRight && (
+        <button className="scroll-arrow scroll-arrow-right" onClick={() => scroll(1)} aria-label="Scroll right">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      )}
+    </div>
+  );
+};
+
 // Tape sticker - paper-tape decoration
 window.Tape = function Tape({ className = '', style }) {
   return <span className={cn('tape', className)} style={style} aria-hidden="true" />;

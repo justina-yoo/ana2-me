@@ -42,6 +42,18 @@
 
   <!-- Articles -->
   <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-28/double-cleansing-science-oil-water-ph</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/hair-&-scalp/2026-05-28/glass-hair-korean-engineering-shine</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-28/fermented-rice-water-brightening-korean-secret</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
@@ -492,6 +504,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -504,37 +522,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/grown-up-gourmand-matcha-pistachio</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -546,7 +534,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -558,13 +552,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging</loc>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -594,7 +588,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/grown-up-gourmand-matcha-pistachio</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -606,7 +618,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -619,6 +631,30 @@
   </url>
 
   <!-- Products -->
+  <url>
+    <loc>https://ana2-me.com/products/the-ordinary-retinol-0-5-in-squalane</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/zeroid-pimprove-red-control-cream</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/dr-g-r-e-d-blemish-soothing-up-sun-spf50-pa</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/skin1004-madagascar-centella-hyalu-cica-water-fit-sun-serum-spf50-pa</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://ana2-me.com/products/cosrx-advanced-snail-96-mucin-power-essence</loc>
     <lastmod>2026-05-28</lastmod>
@@ -812,19 +848,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/products/medion-supplecare-inositol</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/products/diptyque-philosykos</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
+    <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/chanel-chance-eau-splendide</loc>
+    <loc>https://ana2-me.com/products/dr-jart--cicapair-intensive-soothing-repair-cream</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/products/la-roche-posay-cicaplast-balm-b5</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -860,13 +908,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/products/dr-jart--cicapair-intensive-soothing-repair-cream</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/la-roche-posay-cicaplast-balm-b5</loc>
+    <loc>https://ana2-me.com/products/ollocdam-olive3-premium-evoo-capsules</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -879,12 +921,6 @@
   </url>
   <url>
     <loc>https://ana2-me.com/products/arencia-fresh-green-rice-mochi-cleanser</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/products/medion-supplecare-inositol</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

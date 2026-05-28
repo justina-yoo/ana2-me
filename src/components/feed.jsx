@@ -204,9 +204,9 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
               <div className="grid-head">
                 <h2 className="grid-h">{t('Newly Added', '새로 추가됨')}</h2>
               </div>
-              <div className="scroll-row">
+              <ScrollRow>
                 {newProducts.map((p, i) => renderCard(p, i))}
-              </div>
+              </ScrollRow>
             </section>
           )}
           {sections.map((section, si) => (
@@ -215,9 +215,9 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
                 <div className="grid-head">
                   <h2 className="grid-h">#{t(section.name, section.nameKo)}</h2>
                 </div>
-                <div className="scroll-row">
+                <ScrollRow>
                   {section.products.map((p, i) => renderCard(p, i))}
-                </div>
+                </ScrollRow>
               </section>
               {/* Analyzer CTA after 2nd section */}
               {si === 1 && (
