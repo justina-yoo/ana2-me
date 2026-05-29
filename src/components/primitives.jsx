@@ -118,7 +118,7 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
           referrerPolicy="no-referrer"
           onError={() => setErr(true)}
           onLoad={(e) => { if (!e.target.naturalWidth) setErr(true); else setLoaded(true); }}
-          loading="lazy"
+          loading="lazy" decoding="async"
         />
       </div>
     );
@@ -132,7 +132,7 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
       style={style}
       referrerPolicy="no-referrer"
       onError={() => setErr(true)}
-      loading="lazy"
+      loading="lazy" decoding="async"
     />
   );
 };

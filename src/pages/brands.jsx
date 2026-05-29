@@ -366,7 +366,7 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
                   borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
                 }}>
                   <div style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', flexShrink: 0, background: 'var(--cream-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    <img src={p.imageUrl} alt={p.brand + ' ' + name} style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                    <img src={p.imageUrl} alt={p.brand + ' ' + name} loading="lazy" decoding="async" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.3, margin: '0 0 3px', color: 'var(--ink)' }}>{name}</h4>
@@ -427,7 +427,7 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
                     <a key={a.id} href={'/article/' + (a.tag?.en || 'skincare').toLowerCase().replace(/\s+/g, '-') + '/' + a.date + '/' + a.id}
                       onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/article/' + (a.tag?.en || 'skincare').toLowerCase().replace(/\s+/g, '-') + '/' + a.date + '/' + a.id); window.dispatchEvent(new PopStateEvent('popstate')); }}
                       style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-                      {a.imageUrl && <img src={a.imageUrl} alt="" style={{ width: 48, height: 48, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />}
+                      {a.imageUrl && <img src={a.imageUrl} alt="" loading="lazy" decoding="async" style={{ width: 48, height: 48, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0 }} />}
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{ fontSize: 14, fontWeight: 500, color: 'var(--ink)', margin: 0, lineHeight: 1.3 }}>{lang === 'ko' ? a.title?.ko : a.title?.en}</p>
                         <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>{a.tag?.[lang === 'ko' ? 'ko' : 'en']}</span>

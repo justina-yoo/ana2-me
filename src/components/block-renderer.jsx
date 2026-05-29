@@ -3,6 +3,7 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
   if (!blocks || !blocks.length) return null;
   const isKo = lang === 'ko';
   const t = (en, ko) => isKo ? ko : en;
+  var firstFigureSeen = false;
 
   // Safe text accessor — handles missing fields, alternate keys, strings vs objects
   function txt(obj) {
@@ -37,8 +38,11 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
         );
       }
 
-      case 'figure':
-        return <ArtFigure key={idx} src={block.src} alt={block.alt || ''} isKo={isKo} />;
+      case 'figure': {
+        var isHero = !firstFigureSeen;
+        firstFigureSeen = true;
+        return <ArtFigure key={idx} src={block.src} alt={block.alt || ''} isKo={isKo} loading={isHero ? 'eager' : 'lazy'} />;
+      }
 
       case 'section': {
         // Hide sections whose only children are prodCards (now hidden)

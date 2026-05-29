@@ -1017,7 +1017,7 @@ function ArtBody({ children, dangerouslySetInnerHTML }) {
   return <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 16px' }}>{children}</p>;
 }
 
-function ArtFigure({ src, alt, isKo }) {
+function ArtFigure({ src, alt, isKo, loading }) {
   const [loaded, setLoaded] = useState(false);
   const credit = src && src.includes('pexels.com') ? 'Pexels'
     : src && src.includes('unsplash.com') ? 'Unsplash'
@@ -1030,6 +1030,7 @@ function ArtFigure({ src, alt, isKo }) {
         {!loaded && <div className="skeleton" style={{ position: 'absolute', inset: 0, height: 280 }} />}
         <img
           src={src} alt={alt}
+          loading={loading || 'lazy'} decoding="async"
           style={{ width: '100%', display: 'block', borderRadius: 'var(--radius)', opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }}
           referrerPolicy="no-referrer"
           onLoad={() => setLoaded(true)}
