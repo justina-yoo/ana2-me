@@ -445,8 +445,10 @@
           )}
           {view === 'landing' && <Landing lang={lang} products={products} setView={setView} setProduct={(p) => { setProductId(p.id); setView('detail'); }} density={density} />}
           {fetchError === 'products' && view === 'feed' && <ErrorCard icon="📡" title={lang === 'ko' ? '제품을 불러올 수 없어요' : 'Couldn\u2019t load products'} message={lang === 'ko' ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />}
-          {!fetchError && view === 'feed' && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} products={products} />}
+          {!fetchError && view === 'feed' && products.length === 0 && <ProductFeedSkeleton />}
+          {!fetchError && view === 'feed' && products.length > 0 && <Feed lang={lang} category={category} setCategory={setCategory} query={query} setView={setView} setProduct={setProduct} density={density} products={products} />}
           {view === 'detail' && product && <Detail product={product} lang={lang} setView={setView} setProduct={setProduct} density={density} />}
+          {view === 'detail' && !product && <ProductDetailSkeleton />}
           {view === 'insights' && (() => {
             const q = (query || '').trim().toLowerCase();
             const matchedProducts = q ? products.filter(p =>
@@ -488,7 +490,8 @@
               </>
             );
           })()}
-          {view === 'brands' && <Brands lang={lang} products={products} setView={setView} setProduct={setProduct} density={density} brandSlug={brandSlug} />}
+          {view === 'brands' && products.length === 0 && <ProductFeedSkeleton />}
+          {view === 'brands' && products.length > 0 && <Brands lang={lang} products={products} setView={setView} setProduct={setProduct} density={density} brandSlug={brandSlug} />}
           {view === 'analyze' && <Try lang={lang} products={products} setView={setView} setProduct={setProduct} />}
           {/* old Analyzer replaced by data-driven Try engine at /analyze */}
           {view === 'about' && <About lang={lang} density={density} />}

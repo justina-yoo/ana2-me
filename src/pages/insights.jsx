@@ -157,8 +157,8 @@ window.Insights = function Insights({ lang, density, query }) {
     });
   }
 
-  // Suppress listing flash while resolving a direct article URL
-  if (urlResolving) return null;
+  // Show article skeleton while resolving a direct article URL
+  if (urlResolving) return <ArticleSkeleton />;
 
   const q = (query || '').trim().toLowerCase();
   let filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;

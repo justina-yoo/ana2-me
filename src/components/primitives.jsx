@@ -137,6 +137,43 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
   );
 };
 
+// Skeleton for product detail page (while product data loads)
+window.ProductDetailSkeleton = function ProductDetailSkeleton() {
+  const bar = (w, h, mb) => React.createElement('div', { className: 'skeleton', style: { width: w, height: h, borderRadius: 6, marginBottom: mb || 0 } });
+  return React.createElement('div', { style: { maxWidth: 780, margin: '0 auto', padding: '40px 28px' } },
+    bar('80px', 14, 16),
+    bar('60%', 28, 8),
+    bar('40%', 28, 20),
+    React.createElement('div', { className: 'skeleton', style: { width: '100%', maxWidth: 320, height: 320, borderRadius: 'var(--radius)', margin: '0 auto 32px' } }),
+    bar('100%', 60, 24),
+    bar('100%', 16, 10),
+    bar('90%', 16, 10),
+    bar('95%', 16, 10),
+    bar('80%', 16, 32),
+    bar('100%', 16, 10),
+    bar('85%', 16, 10),
+    bar('70%', 16, 10)
+  );
+};
+
+// Skeleton for product feed / grid (while products load)
+window.ProductFeedSkeleton = function ProductFeedSkeleton() {
+  var card = function(i) {
+    return React.createElement('div', { key: i, style: { display: 'flex', flexDirection: 'column', gap: 10 } },
+      React.createElement('div', { className: 'skeleton', style: { width: '100%', paddingBottom: '100%', borderRadius: 'var(--radius-sm)' } }),
+      React.createElement('div', { className: 'skeleton', style: { width: '50%', height: 12, borderRadius: 6 } }),
+      React.createElement('div', { className: 'skeleton', style: { width: '80%', height: 16, borderRadius: 6 } }),
+      React.createElement('div', { className: 'skeleton', style: { width: '60%', height: 12, borderRadius: 6 } })
+    );
+  };
+  return React.createElement('div', { style: { maxWidth: 780, margin: '0 auto', padding: '20px 28px' } },
+    React.createElement('div', { className: 'skeleton', style: { width: 120, height: 20, borderRadius: 6, marginBottom: 20 } }),
+    React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 20 } },
+      card(0), card(1), card(2), card(3), card(4), card(5)
+    )
+  );
+};
+
 // Horizontal scroll row with arrow buttons for non-trackpad users
 window.ScrollRow = function ScrollRow({ children }) {
   const rowRef = useRef(null);
