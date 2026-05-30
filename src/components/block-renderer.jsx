@@ -32,7 +32,7 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
           <ArtTlDr key={idx}>
             {items
               ? <><strong>{block.icon || '🧠'} {t('Summary:', '요약:')}</strong> {items}</>
-              : <span dangerouslySetInnerHTML={html({ en: '<strong>' + (block.icon || '🧠') + ' ' + t('Summary:', '요약:') + '</strong> ' + content })} />
+              : <span dangerouslySetInnerHTML={{ __html: purify ? purify.sanitize('<strong>' + (block.icon || '🧠') + ' ' + t('Summary:', '요약:') + '</strong> ' + content, { ALLOWED_TAGS: ['strong', 'em', 'mark', 'br', 'a', 'span', 'sub', 'sup'], ALLOWED_ATTR: ['href', 'target', 'rel', 'style', 'class'] }) : '<strong>' + (block.icon || '🧠') + ' ' + t('Summary:', '요약:') + '</strong> ' + content }} />
             }
           </ArtTlDr>
         );
