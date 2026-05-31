@@ -112,7 +112,7 @@
       datePublished: '2026-05-04',
       dateModified: '2026-05-04',
       image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&q=80&w=1200',
-      imageAlt: 'Laboratory science equipment representing centella asiatica antibacterial research',
+      imageAlt: 'Laboratory science equipment representing centella asiatica clarifying research',
       keywords: 'centella asiatica, cica, madecassic acid, antibiotic resistance, cytochrome bd, K-beauty, superbug',
       category: 'Molecular Insights',
       tag: 'skincare',
@@ -288,7 +288,7 @@
   window.SEO = {
     setHome: function () {
       var title = "ana2me — Know What's In Your Bottle";
-      var desc = 'Deep molecular analysis of skincare, fragrance, and wellness ingredients. Evidence-based editorial for people who read labels.';
+      var desc = 'Skincare, fragrance & wellness — decoded at the molecular level.';
       var url = BASE_URL + '/';
       document.title = title;
       setMeta('meta[name="description"]', desc);
@@ -306,7 +306,7 @@
 
     setAbout: function () {
       var title = 'About | ana2me';
-      var desc = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';
+      var desc = 'Ingredient-first K-beauty platform for skincare, fragrance & wellness.';
       var url = BASE_URL + '/about';
       document.title = title;
       setMeta('meta[name="description"]', desc);
