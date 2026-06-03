@@ -287,8 +287,8 @@
 
   window.SEO = {
     setHome: function () {
-      var title = "ana2me — Know What's In Your Bottle";
-      var desc = 'Skincare, fragrance & wellness — decoded at the molecular level.';
+      var title = "ana2me — Korean Skincare, Fragrance & Wellness Decoded at the Molecular Level";
+      var desc = 'Independent ingredient analysis of Korean skincare, fragrance, and wellness products. Science-backed articles, product breakdowns, and an ingredient analyzer — in English and Korean.';
       var url = BASE_URL + '/';
       document.title = title;
       setMeta('meta[name="description"]', desc);

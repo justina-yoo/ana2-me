@@ -264,8 +264,8 @@ export default async function (request, context) {
       const brands = [...new Set((products || []).map(p => p.brand))].sort();
 
       let html = `<article>`;
-      html += `<h1>ana2me — Know What's In Your Bottle</h1>`;
-      html += `<p>Skincare, fragrance &amp; wellness — decoded at the molecular level. Independent ingredient analysis for people who read labels.</p>`;
+      html += `<h1>ana2me — Korean Skincare, Fragrance &amp; Wellness Decoded at the Molecular Level</h1>`;
+      html += `<p>Independent ingredient analysis of Korean skincare, fragrance, and wellness products. Science-backed articles, product breakdowns, and an ingredient analyzer — in English and Korean. For people who read labels before they buy.</p>`;
       html += `<nav><a href="/insights">Articles</a> · <a href="/products">Products</a> · <a href="/brands">Brands</a> · <a href="/about">About</a> · <a href="/analyzer">Ingredient Analyzer</a></nav>`;
 
       if (articles && articles.length) {
