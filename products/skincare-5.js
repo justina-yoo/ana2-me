@@ -5,7 +5,7 @@ window.__product_skincare_5 = {
     name: "Cicaplast Balm B5",
     nameKo: "시카플라스트 밤 B5",
     brand: "La Roche-Posay",
-    imageUrl: "https://incidecoder-content.storage.googleapis.com/fa651e74-71b9-49bf-a0f4-470b2a7894d1/products/la-roche-posay-cicaplast-baume-b5/la-roche-posay-cicaplast-baume-b5_front_photo_original.jpeg",
+    imageUrl: "/img/products/skincare-5.jpeg",
     summary: {
       tagline: "Multi-purpose soothing balm that calms, moisturizes, and supports stressed skin — for when your skin just needs a break.",
       taglineKo: "진정, 보습, 지친 피부 케어를 한 번에 — 피부가 쉬어야 할 때를 위한 멀티 밤.",

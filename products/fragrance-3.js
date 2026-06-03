@@ -5,7 +5,7 @@ window.__product_fragrance_3 = {
     name: "Philosykos",
     nameKo: "필로시코스",
     brand: "Diptyque",
-    imageUrl: "https://www.diptyqueparis.com/media/catalog/product/d/i/diptyque-philosykos-eau-de-parfum-75ml-philop75-1.jpg",
+    imageUrl: "/img/products/fragrance-3.jpg",
     summary: {
       tagline: "A complete botanical portrait of the fig tree — from green leaf lactones to white cedar bark.",
       taglineKo: "초록 잎 락톤에서 화이트 시더 나무껍질까지, 무화과나무의 완전한 식물학적 초상.",

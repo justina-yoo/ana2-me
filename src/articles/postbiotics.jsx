@@ -48,7 +48,7 @@ window.PostbioticsBody = function PostbioticsBody({ lang }) {
         </ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <ArtCallout icon="🧬" title={isKo ? '장벽 유전자를 직접 활성화' : 'Directly activates barrier genes'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
-            {isKo ? '비피다 발효물(Bifida Ferment Lysate)은 피부의 물리적 장벽 관련 유전자와 항균 펩타이드 유전자 발현을 높인다는 것이 연구로 확인됐어요. 피부가 스스로 더 두꺼운 보호막을 만들도록 신호를 보내는 거예요.' : 'Bifida Ferment Lysate has been shown in studies to upregulate the physical barrier genes and antimicrobial peptide genes in skin cells — essentially signalling skin to build a stronger protective layer on its own.'}
+            {isKo ? '비피다 발효물(Bifida Ferment Lysate)은 피부의 물리적 장벽 관련 유전자와 항균 펩타이드 유전자 발현을 높인다는 것이 연구로 확인됐어요. 피부가 스스로 더 두꺼운 보호막을 만들도록 신호를 보내는 거예요.' : 'Bifida Ferment Lysate has been shown in studies to upregulate the physical barrier genes and clarifying peptide genes in skin cells — essentially signalling skin to build a stronger protective layer on its own.'}
           </ArtCallout>
           <ArtCallout icon="🛡️" title={isKo ? '살아있는 균보다 안전한 이유' : 'Safer than live bacteria for compromised skin'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
             {isKo ? '2026년 임상 스킨케어 트렌드 보고서에 따르면, 살아있는 균은 손상된 피부나 시술 후 피부에 적합하지 않을 수 있어요. 반면 포스트바이오틱스는 면역 조절 효과는 동일하게 가져가면서 균 자체를 도입하지 않기 때문에 훨씬 안전합니다.' : 'A 2026 clinical skincare report notes that live bacteria "are not always appropriate for compromised or post-procedure skin." Postbiotics deliver the same immune-modulating benefits without introducing organisms — making them the safer choice for reactive or damaged skin.'}
@@ -71,7 +71,7 @@ window.PostbioticsBody = function PostbioticsBody({ lang }) {
           ] : [
             { title: 'Bifida Ferment Lysate', body: 'A byproduct of Bifidobacterium fermentation that upregulates skin barrier genes and builds resistance to oxidative stress. A cornerstone of K-beauty fermentation lineups alongside galactomyces.' },
             { title: 'Lactobacillus Ferment Filtrate', body: 'Clinical data shows this postbiotic reduces inflammatory skin lesions by 50–70% and sebum secretion by up to 42%. Particularly effective for acne-prone and congested skin types.' },
-            { title: 'Galactomyces Ferment Filtrate', body: 'Discovered when sake brewery workers had remarkably smooth hands. Rich in vitamins, minerals, and AHAs — brightens skin tone, tightens pores, and accelerates cell turnover.' },
+            { title: 'Galactomyces Ferment Filtrate', body: 'Discovered when sake brewery workers had remarkably smooth hands. Rich in vitamins, minerals, and AHAs — brightens skin tone, tightens pores, and renewing.' },
           ]).map((item, i) => (
             <div key={i}>
               <h4 style={{ fontWeight: 700, color: 'var(--ink)', margin: '0 0 8px', fontSize: 15 }}>{item.title}</h4>

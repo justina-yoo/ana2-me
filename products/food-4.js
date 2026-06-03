@@ -5,12 +5,12 @@ window.__product_food_4 = {
     name: "Olive3 Premium EVOO Capsules",
     nameKo: "올리브3 프리미엄 EVOO 캡슐",
     brand: "Ollocdam",
-    imageUrl: "https://cafe24img.poxo.com/samsin981/web/product/big/202601/834ebec2bf0e04da1190bb2b4b257238.png",
+    imageUrl: "/img/products/food-4.png",
     summary: {
       tagline: "Triple-origin Koroneiki, Picual, and Coratina polyphenols — oleocanthal's ibuprofen-class non-covalent COX inhibition in a daily capsule.",
       taglineKo: "코로네이키, 피쿠알, 코라티나 3원산지 폴리페놀 — 올레오칸탈의 이부프로펜급 비공유결합 COX 억제를 담은 데일리 캡슐.",
       benefits: [
-        "Works as a natural anti-inflammatory — the active compound oleocanthal has been shown to reduce inflammation through the same pathway as ibuprofen, just in a gentler, daily-dose form",
+        "Works as a natural soothing — the active compound oleocanthal has been shown to reduce inflammation through the same pathway as ibuprofen, just in a gentler, daily-dose form",
         "One of the most powerful antioxidants found in food — hydroxytyrosol protects your cells from oxidative stress, which is linked to skin aging, fatigue, and long-term health",
         "The OxuGel™ capsule format is designed to survive your stomach acid intact, so the polyphenols actually reach your bloodstream instead of breaking down before they can work"
       ],

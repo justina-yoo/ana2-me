@@ -97,17 +97,17 @@
 <body>
   <div id="top-anchor" style="height:0;overflow:hidden"></div>
   <div id="root" style="max-width:720px;margin:0 auto"></div>
-  <!-- CDN fallback: shown if React never mounts -->
-  <div id="load-fallback" style="display:none;justify-content:center;align-items:center;min-height:80vh;padding:24px;font-family:system-ui,sans-serif">
-    <div style="max-width:400px;text-align:center;padding:40px 32px;background:#faf9f6;border:1px solid #e8e6e1;border-radius:14px">
-      <div style="font-size:32px;margin-bottom:16px">&#9888;&#65039;</div>
-      <h2 style="font-size:20px;font-weight:500;color:#1a1916;margin:0 0 8px">Page failed to load</h2>
-      <p style="font-size:14px;color:#6b6962;margin:0 0 24px">Please check your connection and try again.</p>
-      <button onclick="window.location.reload()" style="padding:10px 22px;font-size:13px;font-weight:600;border-radius:8px;cursor:pointer;border:none;background:#2d5a3d;color:#fff">Refresh</button>
+  <!-- CDN fallback: created dynamically by JS if React never mounts -->
+  <script>setTimeout(function(){if(!document.getElementById('root').hasChildNodes()){var f=document.createElement('div');f.style.cssText='display:flex;justify-content:center;align-items:center;min-height:80vh;padding:24px;font-family:system-ui,sans-serif';f.innerHTML='<div style="max-width:400px;text-align:center;padding:40px 32px;background:#faf9f6;border:1px solid #e8e6e1;border-radius:14px"><div style="font-size:32px;margin-bottom:16px">&#9888;&#65039;</div><h2 style="font-size:20px;font-weight:500;color:#1a1916;margin:0 0 8px">Page failed to load</h2><p style="font-size:14px;color:#6b6962;margin:0 0 24px">Please check your connection and try again.</p><button onclick="location.reload()" style="padding:10px 22px;font-size:13px;font-weight:600;border-radius:8px;cursor:pointer;border:none;background:#2d5a3d;color:#fff">Refresh</button></div>';document.body.appendChild(f);}},5000);</script>
+  <noscript>
+    <div style="display:flex;justify-content:center;align-items:center;min-height:80vh;padding:24px;font-family:system-ui,sans-serif">
+      <div style="max-width:400px;text-align:center;padding:40px 32px">
+        <h1 style="font-size:24px;font-weight:600;margin:0 0 12px">ana2me</h1>
+        <p style="font-size:15px;color:#6b6962;margin:0 0 20px">Independent ingredient analysis of Korean skincare, fragrance, and wellness products.</p>
+        <p style="font-size:14px;color:#4a4a4a;margin:0"><a href="/insights">Browse articles</a> · <a href="/products">View products</a> · <a href="/analyzer">Try the analyzer</a></p>
+      </div>
     </div>
-  </div>
-  <script>setTimeout(function(){if(!document.getElementById('root').hasChildNodes()){var f=document.getElementById('load-fallback');if(f)f.style.display='flex';}},5000);</script>
-  <noscript><div style="display:flex;justify-content:center;align-items:center;min-height:80vh;padding:24px;font-family:system-ui,sans-serif"><div style="max-width:400px;text-align:center;padding:40px 32px"><h2 style="font-size:20px">JavaScript is required</h2><p style="font-size:14px;color:#6b6962">Please enable JavaScript to use ana2me.</p></div></div></noscript>
+  </noscript>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
@@ -546,8 +546,7 @@
     // Mount
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<ErrorBoundary><App /></ErrorBoundary>);
-    // Hide CDN fallback now that React mounted
-    var lf = document.getElementById('load-fallback'); if (lf) lf.style.display = 'none';
+    // (load-fallback is now created dynamically — no static element to hide)
   </script>
 </body>
 </html>

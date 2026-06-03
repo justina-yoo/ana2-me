@@ -5,7 +5,7 @@ window.__product_food_3 = {
     name: "Supplecare Inositol",
     nameKo: "서플리케어 이노시톨",
     brand: "Medion",
-    imageUrl: "https://themedion.com/web/product/big/202511/8f4a166c3a53b89ff743665de35f4ae9.jpg",
+    imageUrl: "/img/products/food-3.jpg",
     summary: {
       tagline: "The clinically validated 40:1 myo-to-D-chiro-inositol ratio — restoring insulin-ovarian signalling for hormonal homeostasis.",
       taglineKo: "임상적으로 검증된 40:1 미오-D-카이로 이노시톨 비율 — 인슐린-난소 신호를 복원하는 호르몬 항상성 보충제.",

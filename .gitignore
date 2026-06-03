@@ -1,6 +1,50 @@
+# Ignore everything by default
+*
 .DS_Store
-Thumbs.db
-.wrangler/
-node_modules/
-test-*.png
-.claude/settings.local.json
+
+# ── Site files (whitelist) ──
+
+# Root assets
+!.gitignore
+!index.html
+!404.html
+!_redirects
+!CNAME
+!robots.txt
+!sitemap.xml
+!feed.xml
+!favicon.ico
+!favicon.png
+!apple-touch-icon.png
+!ana2me-logo.svg
+!logo-rect.png
+!logo-square.png
+!og-default.png
+
+# Naver verification
+!49988fc1a73f36f47b4095db04032921.txt
+
+# Source code
+!src/
+!src/**
+
+# Images & photos
+!img/
+!img/**
+img/.DS_Store
+!photos/
+!photos/**
+photos/_original_backup/
+photos/.DS_Store
+
+# Product data & images
+!products/
+!products/**
+
+# Netlify edge functions
+!netlify/
+!netlify/**
+
+# Styles
+!src/styles/
+!src/styles/**

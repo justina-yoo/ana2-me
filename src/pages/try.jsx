@@ -405,6 +405,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
   }
 
   // ── MFDS banned-phrase checker ──
+  // mfds-ignore-start
   var BANNED_RE = /\b(heal|healing|heals|treat|treats|cure|cures|regenerate|regenerates|regeneration|anti-inflammatory|antibacterial|antimicrobial|calms?\s+inflammation|reduces?\s+inflammation|accelerates?\s+cell\s+turnover|stimulates?\s+collagen|boosts?\s+collagen|activates?\s+receptor|triggers?\s+\w+\s+process|inhibits?\s+\w+|eczema|psoriasis|rosacea|dermatitis|dermatologist-recommended|derma-grade|clinic-grade|medical-grade|hospital-grade|post-procedure|safe\s+for\s+infants|broken\s+skin|wound\s+healing|allergic\s+reaction)\b/gi;
 
   function mfdsSafe(str) {
@@ -424,6 +425,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       return '';
     });
   }
+  // mfds-ignore-end
 
   // ── Category display names ──
   var CATEGORY_LABELS = {

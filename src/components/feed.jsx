@@ -65,7 +65,7 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
 
   const CONCERN_MAP = {
     'Hydration': ['Dehydration', 'Hydration', 'Dry or very dry skin', 'Post-cleansing dryness', 'Overnight hydration', 'Multi-layer hydration'],
-    'Sensitivity': ['Sensitive skin', 'Sensitive & troubled skin', 'Reactive skin', 'Redness', 'Rosacea', 'Eczema & psoriasis', 'Compromised barrier', 'Chapped or cracked skin', 'Microbiome imbalance'],
+    'Sensitivity': ['Sensitive skin', 'Sensitive & troubled skin', 'Reactive skin', 'Redness', 'Redness-prone skin', 'Itchy or flaky patches', 'Compromised barrier', 'Chapped or cracked skin', 'Microbiome imbalance'],
     'Acne': ['Acne-prone skin', 'Acne & breakouts', 'Blemishes', 'Post-acne marks', 'Post-breakout redness', 'Excess sebum and oiliness', 'Excess oil', 'Oily skin', 'Clogged pores and surface buildup'],
     'Anti-aging': ['Fine lines', 'Loss of elasticity', 'Early signs of aging', 'Pore firming', 'Pore care', 'Enlarged pores'],
     'Brightening': ['Dull skin', 'Dullness', 'Dark spots', 'Uneven tone', 'Uneven skin tone', 'Brightening', 'Rough texture'],

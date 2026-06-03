@@ -5,7 +5,7 @@ window.__product_skincare_3 = {
     name: "Cicapair Intensive Soothing Repair Cream",
     nameKo: "시카페어 인텐시브 수딩 리페어 크림",
     brand: "Dr. Jart+",
-    imageUrl: "https://incidecoder-content.storage.googleapis.com/443bf03a-52ce-40a7-944f-8e421173c655/products/dr-jart-cicapair-intensive-soothing-repair-cream/dr-jart-cicapair-intensive-soothing-repair-cream_front_photo_original.jpeg",
+    imageUrl: "/img/products/skincare-3.jpeg",
     summary: {
       tagline: "Rich soothing cream for stressed, reactive skin — powered by Centella Asiatica.",
       taglineKo: "병풀 추출물을 담은, 민감하고 자극받은 피부를 위한 진정 크림.",

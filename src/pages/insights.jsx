@@ -1085,7 +1085,7 @@ window.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
           ] : [
             { title: 'Madecassoside', desc: 'The most abundant compound in centella. Drives collagen synthesis and barrier recovery.' },
             { title: 'Asiaticoside', desc: 'Activates fibroblasts — the cells that build your skin\'s structural framework — to produce type I collagen.' },
-            { title: 'Madecassic Acid', desc: 'Known for anti-inflammatory effects. Now discovered to have antibacterial powers too.' },
+            { title: 'Madecassic Acid', desc: 'Known for soothing effects. Now discovered to have clarifying powers too.' },
           ]).map((item, i) => <ArtStatCard key={i} {...item} />)}
         </ul>
       </ArtSection>
@@ -1142,7 +1142,7 @@ window.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
           {isKo ? (
             <>항균 연구와 별개로, 센텔라 아시아티카는 피부 진정과 장벽 회복에 여전히 가장 검증된 성분 중 하나예요. 마데카소사이드는 콜라겐 합성을 촉진하고, 아시아티코사이드는 피부 조직 강화를 돕고, 마데카소산은 염증을 줄여줍니다. <mark>세 가지가 함께 작용할 때 가장 효과적이에요</mark>.</>
           ) : (
-            <>Antibacterial research aside, centella asiatica remains one of the most well-validated ingredients for skin calming and barrier repair. Madecassoside drives collagen synthesis. Asiaticoside strengthens skin tissue. Madecassic acid reduces inflammation. <mark>The three work best together</mark> — which is exactly how most K-beauty cica products are formulated.</>
+            <>Clarifying research aside, centella asiatica remains one of the most well-validated ingredients for skin calming and barrier repair. Madecassoside drives collagen synthesis. Asiaticoside strengthens skin tissue. Madecassic acid helps reduce the appearance of redness. <mark>The three work best together</mark> — which is exactly how most K-beauty cica products are formulated.</>
           )}
         </ArtBody>
       </ArtSection>

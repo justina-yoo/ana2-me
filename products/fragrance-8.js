@@ -5,7 +5,7 @@ window.__product_fragrance_8 = {
     name: "Chance Eau Splendide",
     nameKo: "샹스 오 스플랑디드",
     brand: "Chanel",
-    imageUrl: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800",
+    imageUrl: "/img/products/fragrance-8.jpg",
     summary: {
       tagline: "Iris and rose absolute float on a cloud of white musk — Olivier Polge's softest, most luminous Chance yet.",
       taglineKo: "화이트 머스크 위에 떠오르는 아이리스와 로즈 앱솔루트 — 올리비에 폴주가 만든 가장 부드럽고 발광하는 샹스.",

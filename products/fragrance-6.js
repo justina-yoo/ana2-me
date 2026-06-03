@@ -5,7 +5,7 @@ window.__product_fragrance_6 = {
     name: "N°5",
     nameKo: "N°5",
     brand: "Chanel",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/Chanel_No._5_Fragrance_Austin_Calhoon_Photograph.jpg",
+    imageUrl: "/img/products/fragrance-6.jpg",
     summary: {
       tagline: "Aliphatic aldehydes C-11 and C-12 overwrite nature's floral grammar — the first abstract fragrance, still unrepeated.",
       taglineKo: "지방족 알데하이드 C-11, C-12가 자연의 플로럴 문법을 다시 쓴 최초의 추상 향수 — 지금까지도 반복되지 않는.",

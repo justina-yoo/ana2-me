@@ -5,7 +5,7 @@ window.__product_skincare_6 = {
     name: "Tea Tree Trouble Calming Toner Pads",
     nameKo: "티트리 트러블 진정 토너패드",
     brand: "Mediheal",
-    imageUrl: "https://m.medihealshop.com/web/product/big/202511/8a830dfd70b94f28c17f0efcfc08ce71.jpg",
+    imageUrl: "/img/products/skincare-6.jpg",
     summary: {
       tagline: "High-concentration tea tree and probiotic ferments work together to clear breakouts, calm redness, and rebalance your skin.",
       taglineKo: "고농도 티트리와 프로바이오틱 발효물이 시너지를 이뤄 트러블을 없애고 피부 균형을 되찾아줘요.",

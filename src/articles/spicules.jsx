@@ -50,7 +50,7 @@ window.SpiculesBody = function SpiculesBody({ lang }) {
           <ArtCallout icon="🪡" title={isKo ? '1단계: 마이크로 채널 생성' : 'Step 1: Micro-channel creation'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
             {isKo ? <>피부에 마사지하면 미세 바늘이 각질층에 수천 개의 통로를 만들어요. 이 채널을 통해 비타민 C, 레티놀, 나이아신아마이드 같은 활성 성분이 평소보다 <strong>훨씬 깊이 침투</strong>합니다. 성분의 효과가 극대화되는 거예요.</> : <>When massaged in, the micro-needles create thousands of tiny channels in the stratum corneum. Through these channels, actives like vitamin C, retinol, and niacinamide penetrate <strong>far deeper than surface application</strong> — maximizing their effectiveness.</>}
           </ArtCallout>
-          <ArtCallout icon="🔄" title={isKo ? '2단계: 상처 치유 반응 유도' : 'Step 2: Wound-healing response'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
+          <ArtCallout icon="🔄" title={isKo ? '2단계: 상처 치유 반응 유도' : 'Step 2: Wound-soothing response'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">
             {isKo ? <>피부가 미세한 "손상"을 감지하면 즉시 복구 모드에 들어가요. <mark>콜라겐과 엘라스틴 생성이 촉진되고, 세포 재생(턴오버)이 빨라집니다.</mark> 전문 마이크로니들링과 같은 원리인데, 바늘 대신 자연 유래 입자를 사용하는 거예요.</> : <>Your skin detects the micro-injuries and immediately enters repair mode. <mark>Collagen and elastin production ramps up, and cell turnover accelerates.</mark> Same principle as professional microneedling — but using natural particles instead of metal needles.</>}
           </ArtCallout>
           <ArtCallout icon="✨" title={isKo ? '3단계: 자연 탈락' : 'Step 3: Natural shedding'} borderColor="rgba(245,215,110,0.4)" bgColor="rgba(245,215,110,0.08)">
@@ -66,11 +66,11 @@ window.SpiculesBody = function SpiculesBody({ lang }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 22 }}>
           {(isKo ? [
             { title: '깊이의 차이', body: '전문 마이크로니들링은 진피층까지 도달하지만, 스피큘은 표피(각질층~과립층)에 머물러요. 더 얕지만 그만큼 다운타임이 거의 없습니다.' },
-            { title: '누가 쓸 수 있나', body: '민감성 피부, 활성 여드름, 주사비가 있는 분은 주의가 필요해요. 처음 사용 시 따끔거림과 홍조가 있을 수 있고, 이건 정상 반응이에요.' },
+            { title: '누가 쓸 수 있나', body: '민감성 피부, 활성 여드름, 홍조가 잦은 피부에는 주의가 필요해요. 처음 사용 시 따끔거림과 홍조가 있을 수 있고, 이건 정상 반응이에요.' },
             { title: '효과의 한계', body: '깊은 흉터나 심한 주름에는 전문 시술이 더 효과적이에요. 스피큘은 피부결 개선, 톤 균일화, 활성 성분 부스팅에 강점이 있어요.' },
           ] : [
             { title: 'Depth difference', body: "Professional microneedling reaches the dermis. Spicules stay in the epidermis (stratum corneum to granular layer). Shallower, but virtually no downtime." },
-            { title: 'Who should be careful', body: 'Sensitive skin, active acne, and rosacea require caution. Tingling and mild redness after first use are normal — but irritation should be monitored.' },
+            { title: 'Who should be careful', body: 'Sensitive skin, active blemishes, and redness-prone skin require caution. Tingling and mild redness after first use are normal — but irritation should be monitored.' },
             { title: 'What it can\'t do', body: 'Deep scars and severe wrinkles need professional treatments. Spicules excel at texture refinement, tone evening, and boosting active ingredient absorption.' },
           ]).map((item, i) => (
             <div key={i}>

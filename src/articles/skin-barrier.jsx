@@ -81,7 +81,7 @@ window.SkinBarrierBody = function SkinBarrierBody({ lang }) {
           {[
             { brand: 'Dr. Jart+', name: 'Cicapair Intensive Soothing Repair Cream', note: isKo ? '마데카소사이드 + 세라마이드로 장벽 즉시 진정' : 'Madecassoside + ceramide — barrier calming from first application' },
             { brand: 'La Roche-Posay', name: 'Cicaplast Balm B5', note: isKo ? '판테놀 5%로 각질형성세포 이동을 가속하여 미세 손상 봉합' : 'Panthenol 5% accelerates keratinocyte migration to close micro-lesions' },
-            { brand: 'Medicube', name: 'PDRN Pink Collagen Capsule Cream', note: isKo ? 'PDRN이 섬유아세포를 활성화하여 콜라겐 I·III 재생' : 'PDRN activates fibroblasts for collagen I & III regeneration' },
+            { brand: 'Medicube', name: 'PDRN Pink Collagen Capsule Cream', note: isKo ? 'PDRN·콜라겐 포뮬러 — 탄탄하고 회복력 있어 보이는 피부와 연관' : 'PDRN + collagen formula associated with firmer, more resilient-looking skin' },
           ].map((prod, i) => <ArtProdCard key={i} {...prod} accentColor="var(--accent)" />)}
         </div>
       </ArtSection>

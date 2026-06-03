@@ -5,7 +5,7 @@ window.__product_skincare_4 = {
     name: "PDRN Pink Collagen Capsule Cream",
     nameKo: "PDRN 핑크 콜라겐 캡슐 크림",
     brand: "Medicube",
-    imageUrl: "https://cafe24img.poxo.com/medicube0/web/product/big/202602/300c57f2c0c582225afe60b42787ddd9.png",
+    imageUrl: "/img/products/skincare-4.png",
     summary: {
       tagline: "DNA-derived capsule cream for firmer, more radiant-looking skin.",
       taglineKo: "탄력 있고 광채 나는 피부를 위한 DNA 유래 캡슐 크림.",

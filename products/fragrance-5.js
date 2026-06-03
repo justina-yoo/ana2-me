@@ -5,7 +5,7 @@ window.__product_fragrance_5 = {
     name: "Peony & Blush Suede",
     nameKo: "피오니 앤 블러시 스웨이드",
     brand: "Jo Malone London",
-    imageUrl: "https://static.thcdn.com/productimg/original/12079060-1395134378193934.jpg",
+    imageUrl: "/img/products/fragrance-5.jpg",
     summary: {
       tagline: "Red apple malic esters, peony geraniol, and suede ambrettolide — soft femininity constructed at the molecular level.",
       taglineKo: "레드 애플 말산 에스터, 피오니 제라니올, 스웨이드 암브레톨라이드 — 분자 수준에서 설계된 부드러운 페미니니티.",

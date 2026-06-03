@@ -78,7 +78,7 @@ If you don't recognize a product, skip it and work with the ones you do know. Be
     if (!canAnalyze || busy) return;
     setBusy(true); setResult(null); setError(null);
     try {
-      const text = await window.claude.complete(buildPrompt());
+      const text = await window.__ai.complete(buildPrompt());
       if (!text) throw new Error('Empty response.');
       setResult(text);
     } catch (e) {

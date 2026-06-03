@@ -64,7 +64,7 @@ window.PDRNBody = function PDRNBody({ lang }) {
             { title: '⚡ 시술 후 빠른 회복', body: '레이저나 필링 후 피부가 빨개지고 예민해지는 시간을 단축합니다. 한국 클리닉들이 시술 직후 PDRN을 루틴으로 쓰는 이유입니다.' },
           ] : [
             { title: '📉 Dark spots', body: 'A 12-week study found visible reduction in uneven skin tone with consistent PDRN use. It works on two fronts simultaneously — slowing melanin production and speeding up how quickly old skin cells turn over.' },
-            { title: '🔄 Faster wound healing', body: 'The longest-standing clinical application. Post-surgical studies consistently show PDRN-treated tissue heals around 30% faster on average — which is why hospitals adopted it before skincare did.' },
+            { title: '🔄 Faster skin-soothing', body: 'The longest-standing clinical application. Post-surgical studies consistently show PDRN-treated tissue soothes around 30% faster on average — which is why hospitals adopted it before skincare did.' },
             { title: '💧 Moisture retention', body: 'PDRN supports hyaluronic acid production inside the skin, reducing water loss. A study on dry, sensitive skin models found moisture levels up by an average of 23% after 8 weeks.' },
             { title: '⚡ Post-treatment recovery', body: 'Shortens the window of redness and sensitivity after lasers or peels. Korean clinics have made it a standard step right after ablative treatments for this reason.' },
           ]).map((item, i) => (

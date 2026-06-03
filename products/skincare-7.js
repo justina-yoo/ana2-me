@@ -5,7 +5,7 @@ window.__product_skincare_7 = {
     name: "Fresh Green Cleanser Tteok Soap",
     nameKo: "프레시 그린 클렌저 떡솝",
     brand: "Arencia",
-    imageUrl: "https://arenciaofficial.cafe24.com/web/product/big/202507/1ca7aa23b37709dc441570e3f2fd360e.png",
+    imageUrl: "/img/products/skincare-7.png",
     summary: {
       tagline: "Hand-kneaded vegan cleansing bar with 20+ botanicals — 170 hours of artisan craft in every bar.",
       taglineKo: "20가지 이상의 식물 성분을 1,000번 이상 손으로 반죽한 비건 아르티잔 클렌징 바.",

@@ -48,9 +48,9 @@ window.EdibleSkincareBody = function EdibleSkincareBody({ lang }) {
         </ArtSectionHeading>
         <ArtBody>
           {isKo ? (
-            <>장과 피부는 서로 직접 대화해요. 이걸 <strong>장-피부 축(gut-skin axis)</strong>이라고 합니다. 장내 세균이 음식을 분해하면서 만드는 <strong>단쇄지방산(SCFA)</strong>이 혈류를 타고 피부 세포까지 도달해요. <mark>이 물질이 피부의 염증 반응, 피지 분비, 장벽 기능을 직접 조절합니다.</mark> 장이 건강하면 피부도 건강하고, 장에 문제가 생기면 피부에도 나타나요 — 여드름, 주사비, 아토피, 건선 모두 장내 세균 불균형과 연결된다는 연구가 쏟아지고 있어요.</>
+            <>장과 피부는 서로 직접 대화해요. 이걸 <strong>장-피부 축(gut-skin axis)</strong>이라고 합니다. 장내 세균이 음식을 분해하면서 만드는 <strong>단쇄지방산(SCFA)</strong>이 혈류를 타고 피부 세포까지 도달해요. <mark>이 물질이 피부의 염증 반응, 피지 분비, 장벽 기능을 직접 조절합니다.</mark> 장이 건강하면 피부도 건강하고, 장에 문제가 생기면 피부에도 나타나요 — 여드름, 홍조, 민감성·예민성 피부 모두 장내 세균 불균형과 연결된다는 연구가 쏟아지고 있어요.</>
           ) : (
-            <>Your gut and skin talk to each other directly. This communication channel is called the <strong>gut-skin axis</strong>. When gut bacteria break down food, they produce <strong>short-chain fatty acids (SCFAs)</strong> that enter the bloodstream and reach skin cells. <mark>These molecules directly regulate skin inflammation, sebum production, and barrier function.</mark> A healthy gut means healthier skin. A disrupted gut shows up on your face — acne, rosacea, eczema, and psoriasis have all been linked to gut microbiome imbalance in recent studies.</>
+            <>Your gut and skin talk to each other directly. This communication channel is called the <strong>gut-skin axis</strong>. When gut bacteria break down food, they produce <strong>short-chain fatty acids (SCFAs)</strong> that enter the bloodstream and reach skin cells. <mark>These molecules directly regulate skin inflammation, sebum production, and barrier function.</mark> A healthy gut means healthier skin. A disrupted gut shows up on your face — acne, redness-prone skin, and sensitive or reactive skin types have all been linked to gut microbiome imbalance in recent studies.</>
           )}
         </ArtBody>
       </ArtSection>
@@ -60,7 +60,7 @@ window.EdibleSkincareBody = function EdibleSkincareBody({ lang }) {
           {isKo ? '🧬 장에서 피부까지 — 어떤 경로로 연결될까요?' : '🧬 How does your gut actually affect your skin?'}
         </ArtSectionHeading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <ArtCallout icon="🦠" title={isKo ? '단쇄지방산(SCFA) — 장이 만드는 항염 물질' : 'SCFAs — your gut\'s anti-inflammatory output'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
+          <ArtCallout icon="🦠" title={isKo ? '단쇄지방산(SCFA) — 장이 만드는 항염 물질' : 'SCFAs — your gut\'s soothing output'} borderColor="rgba(45,90,61,0.2)" bgColor="rgba(45,90,61,0.04)">
             {isKo ? <>장내 유익균이 식이섬유를 발효하면 부티레이트, 프로피오네이트 같은 단쇄지방산이 만들어져요. 이 물질들이 혈류를 통해 피부에 도달하면 <strong>염증성 사이토카인(IL-6, TNF-α)을 억제</strong>하고 피부 장벽의 세라마이드 생성을 돕습니다. 식이섬유가 부족하면 이 과정이 무너져요.</> : <>When beneficial gut bacteria ferment dietary fiber, they produce SCFAs like butyrate and propionate. These travel through the bloodstream to skin, where they <strong>suppress inflammatory cytokines (IL-6, TNF-α)</strong> and support ceramide production in the skin barrier. Without enough fiber, this entire chain breaks down.</>}
           </ArtCallout>
           <ArtCallout icon="🛡️" title={isKo ? '장벽 투과성 — "새는 장"이 피부를 공격하는 방법' : 'Gut permeability — how a "leaky gut" attacks skin'} borderColor="rgba(107,142,107,0.25)" bgColor="rgba(107,142,107,0.06)">

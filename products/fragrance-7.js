@@ -5,7 +5,7 @@ window.__product_fragrance_7 = {
     name: "Coco Mademoiselle",
     nameKo: "코코 마드모아젤",
     brand: "Chanel",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Coco_mademoiselle.jpg",
+    imageUrl: "/img/products/fragrance-7.jpg",
     summary: {
       tagline: "Patchouli's patchoulol rewrites oriental darkness as radiant, modern femininity — Jacques Polge's sharpest reinvention.",
       taglineKo: "패출리의 패출올이 오리엔탈의 어둠을 빛나는 현대적 페미니니티로 재정의한, 자크 폴주의 가장 예리한 재창조.",
