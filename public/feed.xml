@@ -5,13 +5,49 @@
     <link>https://ana2-me.com</link>
     <description>Deep molecular analysis of skincare, fragrance, and wellness ingredients.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 03 Jun 2026 23:42:33 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2026 07:46:27 GMT</lastBuildDate>
     <atom:link href="https://ana2-me.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://ana2-me.com/og-default.png</url>
       <title>ana2me</title>
       <link>https://ana2-me.com</link>
     </image>
+    <item>
+      <title>Propolis Is K-Beauty's Quiet MVP. Here's Why It's in Everything</title>
+      <link>https://ana2-me.com/article/skincare/2026-06-04/propolis-k-beauty-quiet-mvp-everything</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-06-04/propolis-k-beauty-quiet-mvp-everything</guid>
+      <description>Not as hyped as retinol. Not as trendy as PDRN. But propolis — the resinous substance bees use to protect their hives — quietly shows up in more K-beauty products than almost any other ingredient. The science explains why.</description>
+      <pubDate>Wed, 03 Jun 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.pexels.com/photos/714522/pexels-photo-714522.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Can You Mix Retinol and Vitamin C? The Compatibility Chart Nobody Gave You</title>
+      <link>https://ana2-me.com/article/beauty-science/2026-06-04/mixing-skincare-actives-retinol-vitamin-c-compatibility</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/beauty-science/2026-06-04/mixing-skincare-actives-retinol-vitamin-c-compatibility</guid>
+      <description>Retinol + vitamin C. Niacinamide + AHA. Peptides + exfoliants. The internet says half these combos will ruin your skin. The science says otherwise — mostly. Here's the actual compatibility chart.</description>
+      <pubDate>Wed, 03 Jun 2026 15:00:00 GMT</pubDate>
+      <category>Beauty Science</category>
+      <enclosure url="https://images.pexels.com/photos/8100691/pexels-photo-8100691.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Your Skincare Isn't &quot;Absorbing.&quot; Here's What's Actually Happening at the Molecular Level</title>
+      <link>https://ana2-me.com/article/beauty-science/2026-06-04/skincare-not-absorbing-what-actually-happens</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/beauty-science/2026-06-04/skincare-not-absorbing-what-actually-happens</guid>
+      <description>When your serum &quot;sinks in,&quot; it hasn't been absorbed into your bloodstream. Most skincare works on or just inside the outermost dead-cell layer of your skin — and that's exactly where it should be.</description>
+      <pubDate>Wed, 03 Jun 2026 15:00:00 GMT</pubDate>
+      <category>Beauty Science</category>
+      <enclosure url="https://images.pexels.com/photos/6635929/pexels-photo-6635929.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Why Does Your Skincare Pill? The Molecular Reason Behind Those Annoying Flakes</title>
+      <link>https://ana2-me.com/article/beauty-science/2026-06-04/skincare-pilling-molecular-reason-flakes</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/beauty-science/2026-06-04/skincare-pilling-molecular-reason-flakes</guid>
+      <description>You've layered your serum, moisturizer, and sunscreen — and now tiny balls of product are rolling off your face. It's called pilling, and the cause isn't your skin. It's a chemistry problem between your products.</description>
+      <pubDate>Wed, 03 Jun 2026 15:00:00 GMT</pubDate>
+      <category>Beauty Science</category>
+      <enclosure url="https://images.pexels.com/photos/3762875/pexels-photo-3762875.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
     <item>
       <title>Every K-Beauty Brand Is Adding Peptides. Do They Actually Do Anything?</title>
       <link>https://ana2-me.com/article/beauty-science/2026-06-04/peptides-skincare-overhyped-which-ones-work</link>
@@ -841,6 +877,15 @@
       <enclosure url="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
+      <title>Supplements Are Dead. Korea's Gen Z Is Eating Sleep Gummies Instead.</title>
+      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</guid>
+      <description>Korea's sleep health food market is booming — Olive Young reports 300% YoY growth in sleep supplements. The secret? Repackaging GABA, magnesium, and plant melatonin as gummies, jellies, and flavored sticks that feel like snacks, not medicine.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Wellness</category>
+      <enclosure url="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
       <title>Song Hye-kyo Washes Her Face with Milk. Suzy Does &quot;424.&quot; Which Celebrity Methods Actually Work?</title>
       <link>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</link>
       <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</guid>
@@ -848,6 +893,42 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Skincare</category>
       <enclosure url="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Korea Sleeps Less Than Almost Any Country on Earth. It Built an ₩11 Trillion Industry to Fix It.</title>
+      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</guid>
+      <description>Korea's sleep market exploded from ₩500 billion to ₩11 trillion in a decade. Olive Young's sleep supplement sales are up 300%. Plant-based melatonin, GABA gummies, and sleep-specific skincare — Korea isn't sleeping, so it's buying solutions.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Wellness</category>
+      <enclosure url="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Milk Perfume Is 2026's Defining Scent. Here's the Chemistry Behind &quot;Soft.&quot;</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</guid>
+      <description>Lactonic fragrances don't actually smell like milk. They're built from cyclic ester molecules — gamma-decalactone, delta-decalactone — that your brain reads as 'creamy warmth.' The science of why comfort has a smell.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</guid>
+      <description>Olfactory habituation isn't a flaw — it's an evolutionary survival mechanism. Your brain categorizes familiar scents as 'safe background.' Rotating fragrances resets this filter. The signature scent is dead. The fragrance wardrobe is what works.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Why Your Perfume Smells Different on You Than in the Bottle.</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</guid>
+      <description>The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Sugar Is Aging Your Skin Faster Than the Sun. The Science of Glycation.</title>
@@ -866,6 +947,33 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Skincare</category>
       <enclosure url="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Galactomyces Started in a Sake Brewery. Now It's One of Skincare's Most Studied Actives.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</guid>
+      <description>Galactomyces was discovered by accident. Bifida Ferment Lysate was reverse-engineered from infant skin. Fermentation doesn't just preserve ingredients — it creates entirely new compounds that never existed in the original plant.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</guid>
+      <description>PDRN — Polydeoxyribonucleotide — is a DNA fragment from salmon that activates your skin's A2A adenosine receptors, triggering a collagen repair cascade used in Korean clinics for decades. Topical delivery just caught up.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>&quot;Microneedling in a Bottle&quot; Is K-Beauty's Most Controversial New Ingredient. Here's the Science.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</guid>
+      <description>Spicules are microscopic needles from freshwater sponges that create micro-channels in skin, boosting active ingredient penetration and triggering collagen production. Same principle as professional microneedling — but at home. K-beauty's hottest ingredient of 2026.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Probiotics Were Just the Beginning. Postbiotics Are What Your Skin Barrier Actually Needs.</title>
@@ -965,78 +1073,6 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Skincare</category>
       <enclosure url="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Why Your Perfume Smells Different on You Than in the Bottle.</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</guid>
-      <description>The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Supplements Are Dead. Korea's Gen Z Is Eating Sleep Gummies Instead.</title>
-      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</guid>
-      <description>Korea's sleep health food market is booming — Olive Young reports 300% YoY growth in sleep supplements. The secret? Repackaging GABA, magnesium, and plant melatonin as gummies, jellies, and flavored sticks that feel like snacks, not medicine.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Wellness</category>
-      <enclosure url="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</guid>
-      <description>Olfactory habituation isn't a flaw — it's an evolutionary survival mechanism. Your brain categorizes familiar scents as 'safe background.' Rotating fragrances resets this filter. The signature scent is dead. The fragrance wardrobe is what works.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Milk Perfume Is 2026's Defining Scent. Here's the Chemistry Behind &quot;Soft.&quot;</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</guid>
-      <description>Lactonic fragrances don't actually smell like milk. They're built from cyclic ester molecules — gamma-decalactone, delta-decalactone — that your brain reads as 'creamy warmth.' The science of why comfort has a smell.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Korea Sleeps Less Than Almost Any Country on Earth. It Built an ₩11 Trillion Industry to Fix It.</title>
-      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</guid>
-      <description>Korea's sleep market exploded from ₩500 billion to ₩11 trillion in a decade. Olive Young's sleep supplement sales are up 300%. Plant-based melatonin, GABA gummies, and sleep-specific skincare — Korea isn't sleeping, so it's buying solutions.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Wellness</category>
-      <enclosure url="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Galactomyces Started in a Sake Brewery. Now It's One of Skincare's Most Studied Actives.</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</guid>
-      <description>Galactomyces was discovered by accident. Bifida Ferment Lysate was reverse-engineered from infant skin. Fermentation doesn't just preserve ingredients — it creates entirely new compounds that never existed in the original plant.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>&quot;Microneedling in a Bottle&quot; Is K-Beauty's Most Controversial New Ingredient. Here's the Science.</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</guid>
-      <description>Spicules are microscopic needles from freshwater sponges that create micro-channels in skin, boosting active ingredient penetration and triggering collagen production. Same principle as professional microneedling — but at home. K-beauty's hottest ingredient of 2026.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1695479044464-67299fa84782?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</guid>
-      <description>PDRN — Polydeoxyribonucleotide — is a DNA fragment from salmon that activates your skin's A2A adenosine receptors, triggering a collagen repair cascade used in Korean clinics for decades. Topical delivery just caught up.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Jjimjilbangs Are Going Global. The Science Behind Korea's Oldest Wellness Ritual.</title>
