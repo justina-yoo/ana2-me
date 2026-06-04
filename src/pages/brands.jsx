@@ -1,13 +1,15 @@
 // Brands — browse products grouped by brand
-const { useMemo, useState: _uS2, useRef: _uR2, useEffect: _uE2 } = React;
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { cn, useL, Icon, Sticker, ProductImg, Reveal } from '../components/primitives';
+import { fetchArticles } from '../lib/supabase';
 
 function BrandIngScroll({ children }) {
-  const wrapRef = _uR2(null);
-  const scrollRef = _uR2(null);
+  const wrapRef = useRef(null);
+  const scrollRef = useRef(null);
   const items = React.Children.toArray(children);
   const needsFade = items.length > 4;
 
-  _uE2(() => {
+  useEffect(() => {
     const el = scrollRef.current;
     const wrap = wrapRef.current;
     if (!el || !wrap || !needsFade) return;
@@ -226,15 +228,15 @@ const BRAND_INFO = {
   },
 };
 
-window.Brands = function Brands({ lang, products, setView, setProduct, density, brandSlug }) {
+export default function Brands({ lang, products, setView, setProduct, density, brandSlug }) {
   const t = useL(lang);
-  const [activeCat, setActiveCat] = _uS2(null);
-  const [selIng, setSelIng] = _uS2(null);
-  const [articles, setArticles] = _uS2([]);
+  const [activeCat, setActiveCat] = useState(null);
+  const [selIng, setSelIng] = useState(null);
+  const [articles, setArticles] = useState([]);
 
-  _uE2(() => {
+  useEffect(() => {
     if (brandSlug && articles.length === 0) {
-      window.__supabase.fetchArticles().then(data => setArticles(data)).catch(() => {});
+      fetchArticles().then(data => setArticles(data)).catch(() => {});
     }
   }, [brandSlug]);
 
@@ -583,4 +585,4 @@ window.Brands = function Brands({ lang, products, setView, setProduct, density, 
       </div>
     </div>
   );
-};
+}

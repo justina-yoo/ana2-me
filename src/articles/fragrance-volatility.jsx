@@ -1,5 +1,7 @@
+import React from 'react';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard, ArtProdCard } from '../pages/insights';
 // Article: Fragrance Volatility
-window.FragranceVolatilityBody = function FragranceVolatilityBody({ lang }) {
+export default function FragranceVolatilityBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

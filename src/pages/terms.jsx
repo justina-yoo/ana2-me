@@ -1,5 +1,9 @@
 // Terms of Service page
-window.Terms = function Terms({ lang }) {
+import React from 'react';
+import { cn, useL, Sticker } from '../components/primitives';
+import SEO from '../lib/seo';
+
+export default function Terms({ lang }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
 
@@ -77,7 +81,7 @@ window.Terms = function Terms({ lang }) {
   const goPrivacy = (e) => {
     e.preventDefault();
     history.pushState({}, '', '/privacy');
-    if (window.SEO) window.SEO.setPrivacy();
+    if (SEO) SEO.setPrivacy();
     window.dispatchEvent(new PopStateEvent('popstate'));
     window.scrollTo(0, 0);
   };
@@ -121,4 +125,4 @@ window.Terms = function Terms({ lang }) {
       </section>
     </div>
   );
-};
+}

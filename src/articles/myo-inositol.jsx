@@ -1,5 +1,7 @@
+import React from 'react';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard, ArtProdCard } from '../pages/insights';
 // Article: Myo-Inositol — Women's Hormonal Wellness
-window.MyoInositolBody = function MyoInositolBody({ lang }) {
+export default function MyoInositolBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -1,4 +1,10 @@
 // Insights — editorial feed with full article bodies
+import React, { useState, useEffect, useRef } from 'react';
+import { cn, useL, Icon, Sticker, ProductImg, Reveal, ErrorCard } from '../components/primitives';
+import { fetchArticles } from '../lib/supabase';
+import SEO from '../lib/seo';
+import BlockRenderer from '../components/block-renderer';
+import AnalyzerCTAs from '../components/analyzer-ctas';
 
 // Convert "May 3, 2026" → "2026-05-03"
 function dateToPrefix(dateStr) {
@@ -15,7 +21,7 @@ function postSlug(post) {
 
 const PAGE_SIZE = 10;
 
-window.Insights = function Insights({ lang, density, query }) {
+export default function Insights({ lang, density, query }) {
   // Detect if we're landing on an article URL — suppress listing flash while resolving
   const isArticleUrl = window.location.pathname.replace(/\/$/, '').startsWith('/article/');
   const [selectedPost, setSelectedPost] = useState(null);
@@ -32,7 +38,7 @@ window.Insights = function Insights({ lang, density, query }) {
   // Fetch first page of articles
   useEffect(() => {
     setLoading(true);
-    window.__supabase.fetchArticles(PAGE_SIZE, 0).then(function(data) {
+    fetchArticles(PAGE_SIZE, 0).then(function(data) {
       setPOSTS(data);
       setHasMore(data.length === PAGE_SIZE);
       setLoading(false);
@@ -45,7 +51,7 @@ window.Insights = function Insights({ lang, density, query }) {
   // Fetch all articles when search query is entered
   useEffect(() => {
     if (query && hasMore) {
-      window.__supabase.fetchArticles().then(function(data) {
+      fetchArticles().then(function(data) {
         setPOSTS(data);
         setHasMore(false);
       });
@@ -56,7 +62,7 @@ window.Insights = function Insights({ lang, density, query }) {
   const loadMore = () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    window.__supabase.fetchArticles(PAGE_SIZE, POSTS.length).then(function(data) {
+    fetchArticles(PAGE_SIZE, POSTS.length).then(function(data) {
       setPOSTS(prev => [...prev, ...data]);
       setHasMore(data.length === PAGE_SIZE);
       setLoading(false);
@@ -71,7 +77,7 @@ window.Insights = function Insights({ lang, density, query }) {
       setSelectedPost(null);
       setActiveTag(null);
       setNotFound(false);
-      if (window.SEO) window.SEO.setHome();
+      if (SEO) SEO.setHome();
     };
     // Re-resolve article from URL (triggered by back nav to an article)
     const navArticle = () => {
@@ -106,19 +112,19 @@ window.Insights = function Insights({ lang, density, query }) {
       urlResolved.current = true;
       setSelectedPost(inLoaded);
       setUrlResolving(false);
-      if (window.SEO) window.SEO.setArticle(inLoaded);
+      if (SEO) SEO.setArticle(inLoaded);
       return;
     }
 
     // Slow path: not on the first page — pull the whole archive and search it.
     urlResolved.current = true;
-    window.__supabase.fetchArticles().then(function(all) {
+    fetchArticles().then(function(all) {
       setPOSTS(all);
       setHasMore(false);
       const match = all.find(p => p.id === articleId);
       if (match) {
         setSelectedPost(match);
-        if (window.SEO) window.SEO.setArticle(match);
+        if (SEO) SEO.setArticle(match);
       } else {
         setNotFound(true);
       }
@@ -134,7 +140,7 @@ window.Insights = function Insights({ lang, density, query }) {
     setSelectedPost(p);
     const slug = postSlug(p);
     history.pushState({}, '', '/' + slug);
-    if (window.SEO) window.SEO.setArticle(p);
+    if (SEO) SEO.setArticle(p);
     if (window.gtag) gtag('event', 'page_view', { page_path: '/' + slug, page_title: document.title });
     window.scrollTo(0, 0);
   };
@@ -142,7 +148,7 @@ window.Insights = function Insights({ lang, density, query }) {
   const closePost = () => {
     setSelectedPost(null);
     history.pushState({}, '', '/insights');
-    if (window.SEO) window.SEO.setHome();
+    if (SEO) SEO.setHome();
     if (window.gtag) gtag('event', 'page_view', { page_path: '/insights', page_title: 'ana2me — Insights' });
     window.scrollTo(0, 0);
   };
@@ -198,7 +204,7 @@ window.Insights = function Insights({ lang, density, query }) {
       const newTag = activeTag === tag ? null : tag;
       if (newTag && hasMore) {
         // Fetch ALL articles first, then set the tag filter
-        window.__supabase.fetchArticles().then(function(data) {
+        fetchArticles().then(function(data) {
           setPOSTS(data);
           setHasMore(false);
           setActiveTag(newTag);
@@ -287,7 +293,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
         {posts.length === 0 && loading && !query && <FeedSkeleton />}
         {(() => {
           const cards = [];
-          const CTA = window.AnalyzerCTAs;
+          const CTA = AnalyzerCTAs;
           const goAnalyzer = () => { history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); };
           let ctaCount = 0;
           let i = 0;
@@ -457,6 +463,9 @@ const ARTICLE_BODIES = {
   'fermentation-transformation': 'FermentationBody',
   'pdrn-salmon-dna': 'PDRNBody',
 };
+
+// Registry for legacy article body components (defined later in this file)
+const _articleBodyRegistry = {};
 
 function ShareBar({ post, lang, show, allPosts, onSelectPost }) {
   const isKo = lang === 'ko';
@@ -646,7 +655,7 @@ function FeedSkeleton() {
 
 function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
   const hasBlocks = post.bodyBlocks && post.bodyBlocks.length > 0;
-  const Body = hasBlocks ? null : (window[ARTICLE_BODIES[post.id]] || null);
+  const Body = hasBlocks ? null : (_articleBodyRegistry[ARTICLE_BODIES[post.id]] || null);
   const isKo = lang === 'ko';
   const articleRef = React.useRef(null);
   const [showShareBar, setShowShareBar] = useState(false);
@@ -922,7 +931,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
 
 /* ─── Shared article primitives ─────────────────────────────────────────────── */
 
-function ArtTlDr({ children }) {
+export function ArtTlDr({ children }) {
   return (
     <div data-tldr="true" style={{
       padding: '18px 22px',
@@ -938,7 +947,7 @@ function ArtTlDr({ children }) {
   );
 }
 
-function ArtSectionHeading({ children }) {
+export function ArtSectionHeading({ children }) {
   return (
     <h2 style={{
       fontFamily: 'var(--font-display)', fontWeight: 500,
@@ -950,7 +959,7 @@ function ArtSectionHeading({ children }) {
   );
 }
 
-function ArtCallout({ icon, title, children, borderColor = 'var(--line)', bgColor = 'var(--cream-2)' }) {
+export function ArtCallout({ icon, title, children, borderColor = 'var(--line)', bgColor = 'var(--cream-2)' }) {
   return (
     <div style={{
       display: 'flex', gap: 18, alignItems: 'flex-start',
@@ -976,7 +985,7 @@ function ArtCallout({ icon, title, children, borderColor = 'var(--line)', bgColo
   );
 }
 
-function ArtStatCard({ title, desc }) {
+export function ArtStatCard({ title, desc }) {
   return (
     <li style={{
       padding: '16px 18px',
@@ -991,7 +1000,7 @@ function ArtStatCard({ title, desc }) {
   );
 }
 
-function ArtProdCard({ brand, name, note, accentColor = 'var(--accent)' }) {
+export function ArtProdCard({ brand, name, note, accentColor = 'var(--accent)' }) {
   return (
     <div style={{
       padding: '22px 24px',
@@ -1006,18 +1015,18 @@ function ArtProdCard({ brand, name, note, accentColor = 'var(--accent)' }) {
   );
 }
 
-function ArtSection({ children }) {
+export function ArtSection({ children }) {
   return <section style={{ marginBottom: 40 }}>{children}</section>;
 }
 
-function ArtBody({ children, dangerouslySetInnerHTML }) {
+export function ArtBody({ children, dangerouslySetInnerHTML }) {
   if (dangerouslySetInnerHTML) {
     return <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 16px' }} dangerouslySetInnerHTML={dangerouslySetInnerHTML} />;
   }
   return <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 16px' }}>{children}</p>;
 }
 
-function ArtFigure({ src, alt, isKo, loading }) {
+export function ArtFigure({ src, alt, isKo, loading }) {
   const [loaded, setLoaded] = useState(false);
   const credit = src && src.includes('pexels.com') ? 'Pexels'
     : src && src.includes('unsplash.com') ? 'Unsplash'
@@ -1047,7 +1056,7 @@ function ArtFigure({ src, alt, isKo, loading }) {
 
 /* ─── Article: Centella Superbug Discovery ────────────────────────────────── */
 
-window.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
+_articleBodyRegistry.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1166,7 +1175,7 @@ window.CentellaSuperbugBody = function CentellaSuperbugBody({ lang }) {
 
 /* ─── Article: Creatine for Women ────────────────────────────────────────── */
 
-window.CreatineWomenBody = function CreatineWomenBody({ lang }) {
+_articleBodyRegistry.CreatineWomenBody = function CreatineWomenBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1262,7 +1271,7 @@ window.CreatineWomenBody = function CreatineWomenBody({ lang }) {
 
 /* ─── Article: Milk Perfume ──────────────────────────────────────────────── */
 
-window.MilkPerfumeBody = function MilkPerfumeBody({ lang }) {
+_articleBodyRegistry.MilkPerfumeBody = function MilkPerfumeBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1350,7 +1359,7 @@ window.MilkPerfumeBody = function MilkPerfumeBody({ lang }) {
 
 /* ─── Article: Tropical Fruit Fragrance ──────────────────────────────────── */
 
-window.TropicalFruitBody = function TropicalFruitBody({ lang }) {
+_articleBodyRegistry.TropicalFruitBody = function TropicalFruitBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1446,7 +1455,7 @@ window.TropicalFruitBody = function TropicalFruitBody({ lang }) {
 
 /* ─── Article: 10-Step Routine Is Dead ───────────────────────────────────── */
 
-window.TenStepRoutineBody = function TenStepRoutineBody({ lang }) {
+_articleBodyRegistry.TenStepRoutineBody = function TenStepRoutineBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1532,7 +1541,7 @@ window.TenStepRoutineBody = function TenStepRoutineBody({ lang }) {
 
 /* ─── Article: Celebrity Skincare Methods ────────────────────────────────── */
 
-window.CelebritySkincareBody = function CelebritySkincareBody({ lang }) {
+_articleBodyRegistry.CelebritySkincareBody = function CelebritySkincareBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1618,7 +1627,7 @@ window.CelebritySkincareBody = function CelebritySkincareBody({ lang }) {
 
 /* ─── Article: Jjimjilbang Science ───────────────────────────────────────── */
 
-window.JjimjilbangBody = function JjimjilbangBody({ lang }) {
+_articleBodyRegistry.JjimjilbangBody = function JjimjilbangBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1686,7 +1695,7 @@ window.JjimjilbangBody = function JjimjilbangBody({ lang }) {
 
 /* ─── Article: Korea Sleep Crisis ────────────────────────────────────────── */
 
-window.KoreaSleepBody = function KoreaSleepBody({ lang }) {
+_articleBodyRegistry.KoreaSleepBody = function KoreaSleepBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

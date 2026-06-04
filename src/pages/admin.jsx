@@ -1,5 +1,8 @@
 // Admin — review moderation + featured articles
-window.Admin = function Admin() {
+import React, { useState, useEffect } from 'react';
+import { fetchAllReviews, fetchProducts, fetchArticles, deleteReview, toggleFeatured } from '../lib/supabase';
+
+export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [products, setProducts] = useState({});
@@ -17,9 +20,9 @@ window.Admin = function Admin() {
     if (!authed) return;
     setLoading(true);
     Promise.all([
-      window.__supabase.fetchAllReviews(),
-      window.__supabase.fetchProducts(),
-      window.__supabase.fetchArticles()
+      fetchAllReviews(),
+      fetchProducts(),
+      fetchArticles()
     ]).then(function([revData, prodData, artData]) {
       setReviews(revData);
       const map = {};
@@ -44,7 +47,7 @@ window.Admin = function Admin() {
 
   const handleDelete = (id) => {
     if (!confirm('Delete this review?')) return;
-    window.__supabase.deleteReview(id).then(function() {
+    deleteReview(id).then(function() {
       setReviews(prev => prev.filter(r => r.id !== id));
     });
   };
@@ -68,7 +71,7 @@ window.Admin = function Admin() {
 
   const handleToggleFeatured = (id, current) => {
     const newVal = !current ? 'featured' : false;
-    window.__supabase.toggleFeatured(id, newVal).then(function() {
+    toggleFeatured(id, newVal).then(function() {
       setArticles(prev => prev.map(a => a.id === id ? { ...a, featured: newVal } : a));
     });
   };
@@ -76,14 +79,14 @@ window.Admin = function Admin() {
   const handleSetPin = (id, num) => {
     if (!num) {
       // Unpin
-      window.__supabase.toggleFeatured(id, null).then(function() {
+      toggleFeatured(id, null).then(function() {
         setArticles(prev => prev.map(a => a.id === id ? { ...a, featured: null } : a));
       });
     } else {
       // If another article has this number, swap it out
       const existing = articles.find(a => a.featured === num && a.id !== id);
-      const updates = [window.__supabase.toggleFeatured(id, num)];
-      if (existing) updates.push(window.__supabase.toggleFeatured(existing.id, null));
+      const updates = [toggleFeatured(id, num)];
+      if (existing) updates.push(toggleFeatured(existing.id, null));
       Promise.all(updates).then(function() {
         setArticles(prev => prev.map(a => {
           if (a.id === id) return { ...a, featured: num };
@@ -226,4 +229,4 @@ window.Admin = function Admin() {
       </>}
     </div>
   );
-};
+}

@@ -1,11 +1,15 @@
 // About + FAQ page
-window.About = function About({ lang, density }) {
+import React, { useState, useEffect, useRef } from 'react';
+import { cn, useL, Icon, Sticker, Reveal } from '../components/primitives';
+import SEO from '../lib/seo';
+
+export default function About({ lang, density }) {
   const [openFaq, setOpenFaq] = useState(null);
   const isKo = lang === 'ko';
   const t = useL(lang);
-  const aboutRef = React.useRef(null);
+  const aboutRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const el = aboutRef.current;
     if (!el) return;
 
@@ -79,7 +83,7 @@ window.About = function About({ lang, density }) {
   ];
 
   // Inject FAQPage JSON-LD (always English for SEO)
-  React.useEffect(() => {
+  useEffect(() => {
     const existing = document.getElementById('ld-faq');
     if (existing) existing.parentNode.removeChild(existing);
     const script = document.createElement('script');
@@ -95,7 +99,7 @@ window.About = function About({ lang, density }) {
       })),
     });
     document.head.appendChild(script);
-    if (window.SEO) window.SEO.setAbout();
+    if (SEO) SEO.setAbout();
     return () => {
       const el = document.getElementById('ld-faq');
       if (el) el.parentNode.removeChild(el);
@@ -226,4 +230,4 @@ window.About = function About({ lang, density }) {
 
     </div>
   );
-};
+}

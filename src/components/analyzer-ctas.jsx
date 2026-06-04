@@ -1,7 +1,10 @@
 // Shared analyzer CTA components for landing + insights feeds
 // 3 types cycle: card → compact-right → compact-left → card → ...
 
-window.AnalyzerCTAs = {
+import React from 'react';
+import { Reveal } from './primitives';
+
+const AnalyzerCTAs = {
   // How many articles between each CTA
   INTERVAL: 4,
 
@@ -89,3 +92,5 @@ window.AnalyzerCTAs = {
     );
   }
 };
+
+export default AnalyzerCTAs;

@@ -1,5 +1,7 @@
+import React from 'react';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard, ArtProdCard } from '../pages/insights';
 // Article: Edible Skincare — Gut-Skin Axis
-window.EdibleSkincareBody = function EdibleSkincareBody({ lang }) {
+export default function EdibleSkincareBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -1,5 +1,8 @@
 // Privacy Policy page
-window.Privacy = function Privacy({ lang }) {
+import React from 'react';
+import { cn, useL, Sticker } from '../components/primitives';
+
+export default function Privacy({ lang }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
 
@@ -115,4 +118,4 @@ window.Privacy = function Privacy({ lang }) {
       </section>
     </div>
   );
-};
+}

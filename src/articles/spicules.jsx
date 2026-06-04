@@ -1,5 +1,7 @@
+import React from 'react';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard, ArtProdCard } from '../pages/insights';
 // Article: Spicules — Microneedling in a Bottle
-window.SpiculesBody = function SpiculesBody({ lang }) {
+export default function SpiculesBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

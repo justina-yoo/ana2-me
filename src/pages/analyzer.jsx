@@ -1,6 +1,9 @@
 // Ingredient Analyzer — "Your Ingredient Profile"
 // Compact chip-based input → AI ingredient pattern analysis
-window.Analyzer = function Analyzer({ lang, density }) {
+import React, { useState } from 'react';
+import { cn, useL, Icon, Sticker, ProductImg } from '../components/primitives';
+
+export default function Analyzer({ lang, density }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
 
@@ -12,7 +15,7 @@ window.Analyzer = function Analyzer({ lang, density }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
-  const products = window.PRODUCTS || [];
+  const products = window.PRODUCTS || []; // TODO: replace with proper product state once data layer is migrated
   const allNames = [...works, ...doesnt].map(p => p.name.toLowerCase());
   const canAnalyze = (works.length + doesnt.length) >= 1;
 
@@ -275,4 +278,4 @@ If you don't recognize a product, skip it and work with the ones you do know. Be
       </div>
     </div>
   );
-};
+}

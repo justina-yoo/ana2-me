@@ -1,5 +1,7 @@
+import React from 'react';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard } from '../pages/insights';
 // Article: Fragrance Wardrobing
-window.FragranceWardrobingBody = function FragranceWardrobingBody({ lang }) {
+export default function FragranceWardrobingBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

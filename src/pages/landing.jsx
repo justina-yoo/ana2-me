@@ -1,7 +1,32 @@
 // Landing page — mixed feed with hero + interleaved articles & products
+import React, { useState, useEffect } from 'react';
+import { useL, Sticker, ProductImg, Reveal, ScrollRow } from '../components/primitives';
+import { fetchFeaturedArticles, fetchLatestArticles } from '../lib/supabase';
+import AnalyzerCTAs from '../components/analyzer-ctas';
+
 const LANDING_PAGE_SIZE = 20;
 
-window.Landing = function Landing({ lang, products, setView, setProduct, density }) {
+function FeedSkeleton() {
+  const card = (isHero, i) => isHero ? (
+    <div key={i} style={{ padding: '20px 0', borderBottom: '1px solid var(--line)' }}>
+      <div className="skeleton" style={{ width: '100%', height: 200, borderRadius: 'var(--radius-sm)', marginBottom: 16 }} />
+      <div className="skeleton" style={{ width: '60px', height: 12, borderRadius: 6, marginBottom: 10 }} />
+      <div className="skeleton" style={{ width: '85%', height: 24, borderRadius: 6, marginBottom: 8 }} />
+      <div className="skeleton" style={{ width: '70%', height: 24, borderRadius: 6 }} />
+    </div>
+  ) : (
+    <div key={i} style={{ display: 'flex', gap: 16, padding: '14px 0', borderBottom: '1px solid var(--line)', alignItems: 'center' }}>
+      <div style={{ flex: 1 }}>
+        <div className="skeleton" style={{ width: '90%', height: 16, borderRadius: 6, marginBottom: 8 }} />
+        <div className="skeleton" style={{ width: '60%', height: 16, borderRadius: 6 }} />
+      </div>
+      <div className="skeleton" style={{ width: 88, height: 88, borderRadius: 'var(--radius-sm)', flexShrink: 0 }} />
+    </div>
+  );
+  return <div>{[0,1,2,3,4].map(i => card(i % 4 === 0, i))}</div>;
+}
+
+export default function Landing({ lang, products, setView, setProduct, density }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
   const [hero, setHero] = useState(null);
@@ -13,8 +38,8 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
 
   useEffect(() => {
     Promise.all([
-      window.__supabase.fetchFeaturedArticles(),
-      window.__supabase.fetchLatestArticles(LANDING_PAGE_SIZE)
+      fetchFeaturedArticles(),
+      fetchLatestArticles(LANDING_PAGE_SIZE)
     ]).then(function([feat, recent]) {
       // #1 = hero, #2-4 = featured section
       const sorted = feat.sort((a, b) => parseInt(a.featured) - parseInt(b.featured));
@@ -38,7 +63,7 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
   const loadMore = () => {
     if (loadingMore || !hasMore) return;
     setLoadingMore(true);
-    window.__supabase.fetchLatestArticles(LANDING_PAGE_SIZE, articles.length).then(function(data) {
+    fetchLatestArticles(LANDING_PAGE_SIZE, articles.length).then(function(data) {
       setArticles(prev => [...prev, ...data]);
       setHasMore(data.length === LANDING_PAGE_SIZE);
       setLoadingMore(false);
@@ -261,7 +286,7 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginTop: 24 }}>
         {(() => {
           const items = [];
-          const CTA = window.AnalyzerCTAs;
+          const CTA = AnalyzerCTAs;
           const goAnalyzer = () => { history.pushState({}, '', '/analyzer'); setView('analyze'); window.scrollTo(0,0); };
           let ctaCount = 0;
           let i = 0;
@@ -332,4 +357,4 @@ window.Landing = function Landing({ lang, products, setView, setProduct, density
 
     </div>
   );
-};
+}

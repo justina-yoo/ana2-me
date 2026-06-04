@@ -1,4 +1,9 @@
 
+import React, { useState, useEffect, useRef } from 'react';
+import { cn, useL, Icon, Sticker, ProductImg, useLocalState, Reveal, Tape } from '../components/primitives';
+import { fetchReviews, submitReview, fetchArticles as fetchArticlesForRec } from '../lib/supabase';
+import SEO from '../lib/seo';
+
 // Profanity filter — masks explicit words with ****
 const PROFANITY_LIST = [
   // English
@@ -50,13 +55,13 @@ function IngScrollFade({ children }) {
 }
 
 // Product detail page — editorial long-read
-window.Detail = function Detail({ product, lang, setView, setProduct, density }) {
+export default function Detail({ product, lang, setView, setProduct, density }) {
   const t = useL(lang);
   const [selIng, setSelIng] = useState(null);
   const [selNote, setSelNote] = useState(null);
   const [selBio, setSelBio] = useState(null);
-  const [saved, setSaved] = window.useLocalState('saved', {});
-  const [savedIngs, setSavedIngs] = window.useLocalState('savedIngs', {});
+  const [saved, setSaved] = useLocalState('saved', {});
+  const [savedIngs, setSavedIngs] = useLocalState('savedIngs', {});
   const isSaved = !!saved[product.id];
 
   const isFragrance = product.category === 'fragrance';
@@ -65,7 +70,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
 
   // Set SEO tags for product page
   useEffect(() => {
-    if (window.SEO && window.SEO.setProduct) window.SEO.setProduct(product, lang);
+    if (SEO && SEO.setProduct) SEO.setProduct(product, lang);
   }, [product.id, lang]);
 
   // Floating share bar
@@ -197,7 +202,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
 
   useEffect(() => {
     setReviewLoading(true);
-    window.__supabase.fetchReviews(product.id).then(function(data) {
+    fetchReviews(product.id).then(function(data) {
       setReviews(data);
       setReviewLoading(false);
     }).catch(function() { setReviewLoading(false); });
@@ -219,7 +224,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       return;
     }
     setReviewSubmitting(true);
-    window.__supabase.submitReview({
+    submitReview({
       product_id: product.id,
       author: filterProfanity(reviewAuthor.trim()) || 'Anonymous',
       rating: reviewRating,
@@ -229,7 +234,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       setReviewRating(0); setReviewAuthor(''); setReviewBody('');
       setShowReviewForm(false); setReviewSubmitting(false);
       // Refresh reviews
-      window.__supabase.fetchReviews(product.id).then(setReviews);
+      fetchReviews(product.id).then(setReviews);
     }).catch(function(e) {
       setReviewError(e.message || t('Failed to submit. Please try again.', '제출에 실패했어요. 다시 시도해주세요.'));
       setReviewSubmitting(false);
@@ -723,7 +728,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       <section className="related">
         <h2 className="sec-h">{t('You might also like', '이런 제품도 있어요')}</h2>
         <div className="related-row">
-          {window.PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3).map(p => {
+          {(window.PRODUCTS || []).filter(p => p.category === product.category && p.id !== product.id).slice(0, 3).map(p => {
             const pTag =
               (lang === 'ko' && (p.summary?.taglineKo || p.taglineKo)) ||
               p.summary?.tagline || p.tagline || '';
@@ -742,7 +747,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       )}
 
       {/* ---------- RECOMMENDED ARTICLES ---------- */}
-      {window.__supabase && (() => {
+      {(() => {
         const [recArticles, setRecArticles] = React.useState([]);
         React.useEffect(() => {
           // Build relevance keywords from product data
@@ -753,7 +758,7 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
             ...(product.notes || []).map(n => n.name),
           ].join(' ').toLowerCase().split(/[\s,\-\/]+/).filter(w => w.length > 2);
 
-          window.__supabase.fetchArticles(50, 0).then(articles => {
+          fetchArticlesForRec(50, 0).then(articles => {
             // Score each article by keyword overlap
             const scored = articles.map(a => {
               const haystack = [
@@ -913,4 +918,4 @@ window.Detail = function Detail({ product, lang, setView, setProduct, density })
       </div>
     </div>
   );
-};
+}

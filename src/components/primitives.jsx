@@ -1,8 +1,8 @@
 // UI atoms & primitives
-const { useState, useEffect, useMemo, useRef } = React;
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 
 // Scroll reveal — fade up on viewport enter
-window.Reveal = function Reveal({ children, delay }) {
+export function Reveal({ children, delay }) {
   const ref = useRef(null);
   useEffect(() => {
     const el = ref.current;
@@ -14,25 +14,25 @@ window.Reveal = function Reveal({ children, delay }) {
     return () => obs.disconnect();
   }, []);
   return React.createElement('div', { ref, className: 'reveal', style: delay ? { transitionDelay: delay + 'ms' } : undefined }, children);
-};
+}
 
-window.useLocalState = function useLocalState(key, initial) {
+export function useLocalState(key, initial) {
   const [v, setV] = useState(() => {
     try { const s = localStorage.getItem(key); return s !== null ? JSON.parse(s) : initial; } catch { return initial; }
   });
   useEffect(() => { try { localStorage.setItem(key, JSON.stringify(v)); } catch {} }, [key, v]);
   return [v, setV];
-};
+}
 
-window.cn = (...c) => c.filter(Boolean).join(' ');
+export const cn = (...c) => c.filter(Boolean).join(' ');
 
 // i18n helper
-window.useL = function useL(lang) {
+export function useL(lang) {
   return (en, ko) => (lang === 'ko' ? (ko ?? en) : en);
-};
+}
 
 // Tiny inline icons (stroke, rounded) — we avoid a full icon lib
-window.Icon = function Icon({ name, size = 18, className = '' }) {
+export function Icon({ name, size = 18, className = '' }) {
   const s = { width: size, height: size };
   const paths = {
     search: <><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></>,
@@ -62,10 +62,10 @@ window.Icon = function Icon({ name, size = 18, className = '' }) {
       {paths[name]}
     </svg>
   );
-};
+}
 
 // Sticker — playful rotated badge
-window.Sticker = function Sticker({ children, color = 'accent', rotate = -4, className = '' }) {
+export function Sticker({ children, color = 'accent', rotate = -4, className = '' }) {
   const bg = {
     accent: 'var(--accent)',
     sage: 'var(--sage)',
@@ -83,24 +83,24 @@ window.Sticker = function Sticker({ children, color = 'accent', rotate = -4, cla
       {children}
     </span>
   );
-};
+}
 
 // Category chip — rounded pill
-window.Chip = function Chip({ active, children, onClick, size = 'md' }) {
+export function Chip({ active, children, onClick, size = 'md' }) {
   return (
     <button onClick={onClick} className={cn('chip', active && 'chip-active', size === 'sm' && 'chip-sm')}>
       {children}
     </button>
   );
-};
+}
 
 // Rounded card wrapper
-window.Card = function Card({ children, className = '', as: As = 'div', ...rest }) {
+export function Card({ children, className = '', as: As = 'div', ...rest }) {
   return <As className={cn('card', className)} {...rest}>{children}</As>;
-};
+}
 
 // Placeholder image with skeleton loader and striped fallback
-window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
+export function ProductImg({ src, alt, className = '', style }) {
   const [err, setErr] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -135,10 +135,10 @@ window.ProductImg = function ProductImg({ src, alt, className = '', style }) {
       loading="lazy" decoding="async"
     />
   );
-};
+}
 
 // Skeleton for product detail page (while product data loads)
-window.ProductDetailSkeleton = function ProductDetailSkeleton() {
+export function ProductDetailSkeleton() {
   const bar = (w, h, mb) => React.createElement('div', { className: 'skeleton', style: { width: w, height: h, borderRadius: 6, marginBottom: mb || 0 } });
   return React.createElement('div', { style: { maxWidth: 780, margin: '0 auto', padding: '40px 28px' } },
     bar('80px', 14, 16),
@@ -154,10 +154,10 @@ window.ProductDetailSkeleton = function ProductDetailSkeleton() {
     bar('85%', 16, 10),
     bar('70%', 16, 10)
   );
-};
+}
 
 // Skeleton for product feed / grid (while products load)
-window.ProductFeedSkeleton = function ProductFeedSkeleton() {
+export function ProductFeedSkeleton() {
   var card = function(i) {
     return React.createElement('div', { key: i, style: { display: 'flex', flexDirection: 'column', gap: 10 } },
       React.createElement('div', { className: 'skeleton', style: { width: '100%', paddingBottom: '100%', borderRadius: 'var(--radius-sm)' } }),
@@ -172,10 +172,10 @@ window.ProductFeedSkeleton = function ProductFeedSkeleton() {
       card(0), card(1), card(2), card(3), card(4), card(5)
     )
   );
-};
+}
 
 // Horizontal scroll row with arrow buttons for non-trackpad users
-window.ScrollRow = function ScrollRow({ children }) {
+export function ScrollRow({ children }) {
   const rowRef = useRef(null);
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
@@ -221,15 +221,15 @@ window.ScrollRow = function ScrollRow({ children }) {
       )}
     </div>
   );
-};
+}
 
 // Tape sticker - paper-tape decoration
-window.Tape = function Tape({ className = '', style }) {
+export function Tape({ className = '', style }) {
   return <span className={cn('tape', className)} style={style} aria-hidden="true" />;
-};
+}
 
 // Error card — reusable error UI for fetch failures, 404s, crashes
-window.ErrorCard = function ErrorCard({ icon, title, message, actions, lang }) {
+export function ErrorCard({ icon, title, message, actions, lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{
@@ -267,4 +267,4 @@ window.ErrorCard = function ErrorCard({ icon, title, message, actions, lang }) {
       </div>
     </div>
   );
-};
+}

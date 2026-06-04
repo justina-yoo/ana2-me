@@ -1,144 +1,16 @@
-// ── Hardcoded safety lists for pasted ingredient matching ──
-var EU26_ALLERGENS = new Set([
-  'limonene','linalool','citronellol','geraniol','citral','eugenol','coumarin',
-  'benzyl alcohol','benzyl salicylate','benzyl benzoate','benzyl cinnamate',
-  'cinnamal','cinnamyl alcohol','farnesol','hexyl cinnamal','hydroxycitronellal',
-  'hydroxyisohexyl 3-cyclohexene carboxaldehyde','isoeugenol','butylphenyl methylpropional',
-  'alpha-isomethyl ionone','amyl cinnamal','amylcinnamyl alcohol','anise alcohol',
-  'evernia prunastri extract','evernia furfuracea extract','methyl 2-octynoate'
-].map(function(s) { return s.toLowerCase(); }));
-
-var ESSENTIAL_OILS = new Set([
-  'tea tree oil','melaleuca alternifolia leaf oil','lavender oil','lavandula angustifolia oil',
-  'peppermint oil','mentha piperita oil','eucalyptus oil','eucalyptus globulus leaf oil',
-  'rosemary oil','rosmarinus officinalis leaf oil','lemon oil','citrus limon peel oil',
-  'orange oil','citrus aurantium dulcis peel oil','bergamot oil','citrus aurantium bergamia fruit oil',
-  'ylang ylang oil','cananga odorata flower oil','clove oil','eugenia caryophyllus bud oil',
-  'cinnamon oil','cinnamomum zeylanicum bark oil','thyme oil','thymus vulgaris oil',
-  'geranium oil','pelargonium graveolens oil','chamomile oil','anthemis nobilis flower oil'
-].map(function(s) { return s.toLowerCase(); }));
-
-var KNOWN_SENSITIZERS = new Set([
-  'methylisothiazolinone','methylchloroisothiazolinone','dmdm hydantoin',
-  'imidazolidinyl urea','diazolidinyl urea','quaternium-15','bronopol',
-  'sodium lauryl sulfate','sls','alcohol denat','alcohol denat.',
-  'hydroquinone','benzoyl peroxide','formaldehyde','2-bromo-2-nitropropane-1,3-diol'
-].map(function(s) { return s.toLowerCase(); }));
-
-// ── Build known-ingredient name sets for freeform matching ──
-var _knownNames = null; // sorted longest-first array of { norm, display }
-function getKnownNames(catalogIngredients) {
-  if (_knownNames) return _knownNames;
-  var nameMap = {}; // norm -> display
-  // Hardcoded safety lists
-  [EU26_ALLERGENS, ESSENTIAL_OILS, KNOWN_SENSITIZERS].forEach(function(s) {
-    s.forEach(function(n) { if (!nameMap[n]) nameMap[n] = n; });
-  });
-  // MFDS reference
-  if (_mfdsLookupEn) Object.keys(_mfdsLookupEn).forEach(function(k) {
-    if (!nameMap[k]) nameMap[k] = _mfdsLookupEn[k].inci_name || k;
-  });
-  if (_mfdsLookupKo) Object.keys(_mfdsLookupKo).forEach(function(k) {
-    if (!nameMap[k]) nameMap[k] = _mfdsLookupKo[k].standard_name_ko || k;
-  });
-  // Active catalog
-  if (catalogIngredients) catalogIngredients.forEach(function(ing) {
-    var enNorm = (ing.name || '').toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-    if (enNorm && !nameMap[enNorm]) nameMap[enNorm] = ing.name;
-    var koNorm = (ing.name_ko || '').toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-    if (koNorm && !nameMap[koNorm]) nameMap[koNorm] = ing.name_ko;
-  });
-  // Sort longest-first for greedy matching
-  _knownNames = Object.keys(nameMap).map(function(norm) {
-    return { norm: norm, display: nameMap[norm] };
-  }).sort(function(a, b) { return b.norm.length - a.norm.length; });
-  return _knownNames;
-}
-
-// ── Freeform parser: longest-match-first against known ingredients ──
-function parseFreeformIngredients(text, catalogIngredients) {
-  var known = getKnownNames(catalogIngredients);
-  var input = text.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-  var results = [];
-  var seen = new Set();
-  var pos = 0;
-  while (pos < input.length) {
-    // Skip whitespace
-    if (input[pos] === ' ') { pos++; continue; }
-    var matched = false;
-    for (var i = 0; i < known.length; i++) {
-      var n = known[i].norm;
-      if (input.substring(pos, pos + n.length) === n) {
-        // Ensure word boundary (not mid-word)
-        var afterEnd = pos + n.length;
-        if (afterEnd < input.length && /[a-z0-9]/.test(input[afterEnd])) continue;
-        if (!seen.has(n)) {
-          seen.add(n);
-          results.push({ name: known[i].display, recognized: true });
-        }
-        pos = afterEnd;
-        matched = true;
-        break;
-      }
-    }
-    if (!matched) {
-      // Collect unrecognized chunk until next known match or end
-      var start = pos;
-      pos++;
-      while (pos < input.length) {
-        if (input[pos] === ' ') {
-          // Check if anything starting at next word matches
-          var nextWord = pos + 1;
-          var foundNext = false;
-          for (var j = 0; j < known.length; j++) {
-            if (input.substring(nextWord, nextWord + known[j].norm.length) === known[j].norm) {
-              foundNext = true; break;
-            }
-          }
-          if (foundNext) break;
-        }
-        pos++;
-      }
-      var chunk = text.substring(start, pos).trim();
-      if (chunk && !seen.has(chunk.toLowerCase().replace(/[\s\-]+/g, ' ').trim())) {
-        seen.add(chunk.toLowerCase().replace(/[\s\-]+/g, ' ').trim());
-        results.push({ name: chunk, recognized: false });
-      }
-    }
-  }
-  return results;
-}
-
-// ── Parse pasted ingredient list ──
-function parseIngredientList(text, catalogIngredients) {
-  if (!text || !text.trim()) return [];
-  // Strip leading labels
-  var cleaned = text.replace(/^(전성분\s*[:：]?|ingredients?\s*[:：]?|성분\s*[:：]?|full\s+ingredients?\s*[:：]?)/i, '').trim();
-
-  // Detect if input has standard delimiters
-  var hasDelimiters = /[,\n\u00B7\uFF1B]/.test(cleaned);
-
-  if (hasDelimiters) {
-    // Delimited path — split normally
-    var preserved = cleaned.replace(/(\d),(\d)/g, '$1\u00A7$2');
-    var tokens = preserved.split(/[,\n\u00B7\uFF1B]+/).map(function(t) { return t.replace(/\u00A7/g, ','); });
-    var seen = new Set();
-    return tokens.map(function(tok) {
-      var t = tok.trim();
-      if (!t) return null;
-      t = t.replace(/\s*[\(\[]\s*\d+[\d.]*\s*%?\s*[\)\]]\s*$/, '').trim();
-      t = t.replace(/^\d+[\.\)]\s*/, '').trim();
-      if (!t) return null;
-      var key = t.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-      if (seen.has(key)) return null;
-      seen.add(key);
-      return { name: t, recognized: true };
-    }).filter(Boolean);
-  } else {
-    // Freeform path — longest-match-first
-    return parseFreeformIngredients(cleaned, catalogIngredients);
-  }
-}
+import React, { useState, useEffect, useRef } from 'react';
+import { cn, useL, Icon, Sticker, ProductImg, Reveal } from '../components/primitives';
+import { fetchAnalyzeData } from '../lib/supabase';
+import {
+  EU26_ALLERGENS, ESSENTIAL_OILS, KNOWN_SENSITIZERS, POTENT_ACTIVES,
+  getFlaggedComponent, matchParsedIngredients,
+  resetKnownNames, parseIngredientList,
+  BANNED_RE, mfdsSafe, CATEGORY_LABELS,
+  PREVALENCE_CEILING, MIN_CONFIDENT_PER_SIDE, POSITIVE_LIST_MAX, NEGATIVE_LIST_MAX,
+  SKIP_BASE_NAMES, SKIP_CATS,
+  resolveKoName, enrichIngredient, isFlaggedIng, isEligible, negSortCmp, posSortCmp, enrichForResult,
+  determineConfidenceTier
+} from '../domain/analyzer';
 
 // ── MFDS reference cache (loaded from Supabase on first paste) ──
 var _mfdsCache = null;
@@ -190,80 +62,9 @@ async function loadMfdsCache() {
   }
 }
 
-// ── Match parsed ingredients against catalog + MFDS + hardcoded lists ──
-function matchParsedIngredients(names, catalogIngredients) {
-  // Build lookup maps from active catalog (189 ingredients)
-  var byNameEn = {};
-  var byNameKo = {};
-  catalogIngredients.forEach(function(ing) {
-    byNameEn[ing.name.toLowerCase().replace(/[\s\-]+/g, ' ').trim()] = ing;
-    if (ing.name_ko) byNameKo[ing.name_ko.toLowerCase().replace(/[\s\-]+/g, ' ').trim()] = ing;
-  });
-
-  return names.map(function(rawName, idx) {
-    var norm = rawName.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-
-    // Tier A: Match against active catalog (full metadata)
-    if (byNameEn[norm]) {
-      var ing = byNameEn[norm];
-      return { product_id: '__pasted__', ingredient_id: ing.id, sort_order: idx + 1, is_hero: false,
-        ingredient: ing, matched: true, matchTier: 'catalog' };
-    }
-    if (byNameKo[norm]) {
-      var ing = byNameKo[norm];
-      return { product_id: '__pasted__', ingredient_id: ing.id, sort_order: idx + 1, is_hero: false,
-        ingredient: ing, matched: true, matchTier: 'catalog' };
-    }
-
-    // Tier B: Match against MFDS reference (21K, gives canonical names)
-    var mfdsMatch = (_mfdsLookupEn && _mfdsLookupEn[norm]) || (_mfdsLookupKo && _mfdsLookupKo[norm]);
-    if (mfdsMatch) {
-      var inciName = mfdsMatch.inci_name || rawName;
-      var koName = mfdsMatch.standard_name_ko || rawName;
-      // Check hardcoded lists for flagging even though it's MFDS-recognized
-      var inciNorm = inciName.toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-      var flagType = null, isSensitizer = false, isEu26 = false, isEO = false, irritRisk = 'low';
-      if (EU26_ALLERGENS.has(inciNorm) || EU26_ALLERGENS.has(norm)) { isEu26 = true; flagType = 'eu26'; irritRisk = 'medium'; }
-      else if (ESSENTIAL_OILS.has(inciNorm) || ESSENTIAL_OILS.has(norm)) { isEO = true; flagType = 'essential-oil'; irritRisk = 'medium'; }
-      else if (KNOWN_SENSITIZERS.has(inciNorm) || KNOWN_SENSITIZERS.has(norm)) { isSensitizer = true; flagType = 'sensitizer'; irritRisk = 'high'; }
-
-      return {
-        product_id: '__pasted__', ingredient_id: 'mfds-' + idx, sort_order: idx + 1, is_hero: false,
-        ingredient: {
-          id: 'mfds-' + idx, name: inciName, name_ko: koName,
-          symbol: inciName.substring(0, 2).toUpperCase(),
-          category: flagType ? (isEO ? 'essential-oil' : isEu26 ? 'fragrance-allergen' : 'active') : 'uncategorized',
-          description: null, description_ko: null, science: null, science_ko: null,
-          is_known_sensitizer: isSensitizer, is_eu_26_fragrance_allergen: isEu26,
-          is_essential_oil: isEO, irritation_risk: irritRisk
-        },
-        matched: true, matchTier: 'mfds', mfdsEntry: mfdsMatch
-      };
-    }
-
-    // Tier C: Hardcoded safety lists only
-    var flagType = null, isSensitizer = false, isEu26 = false, isEO = false, irritRisk = 'low';
-    if (EU26_ALLERGENS.has(norm)) { isEu26 = true; flagType = 'eu26'; irritRisk = 'medium'; }
-    else if (ESSENTIAL_OILS.has(norm)) { isEO = true; flagType = 'essential-oil'; irritRisk = 'medium'; }
-    else if (KNOWN_SENSITIZERS.has(norm)) { isSensitizer = true; flagType = 'sensitizer'; irritRisk = 'high'; }
-
-    return {
-      product_id: '__pasted__', ingredient_id: 'pasted-' + idx, sort_order: idx + 1, is_hero: false,
-      ingredient: {
-        id: 'pasted-' + idx, name: rawName, name_ko: rawName, symbol: rawName.substring(0, 2).toUpperCase(),
-        category: flagType ? (isEO ? 'essential-oil' : isEu26 ? 'fragrance-allergen' : 'active') : 'uncategorized',
-        description: null, description_ko: null, science: null, science_ko: null,
-        is_known_sensitizer: isSensitizer, is_eu_26_fragrance_allergen: isEu26,
-        is_essential_oil: isEO, irritation_risk: irritRisk
-      },
-      matched: false, matchTier: flagType ? 'hardcoded' : 'unknown'
-    };
-  });
-}
-
 // Analyze — Ingredient Pattern Analysis (no login, no persistence)
 // Mode 1: single-product breakdown | Mode 2: comparative pattern analysis
-window.Try = function Try({ lang, products, setView, setProduct }) {
+export default function Try({ lang, products, setView, setProduct }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
   const [works, setWorks] = useState([]);     // Array of { id, name, ... } OR { id: 'pasted-X', name, _pasted: true, _rawIngredients: [...] }
@@ -354,8 +155,8 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       catalog = await res.json();
       setCatalogIngs(catalog);
     }
-    _knownNames = null; // Reset so it rebuilds with fresh data
-    var parsed = parseIngredientList(pasteText, catalog);
+    resetKnownNames(); // Reset so it rebuilds with fresh data
+    var parsed = parseIngredientList(pasteText, catalog, _mfdsLookupEn, _mfdsLookupKo);
     if (parsed.length === 0) return;
     setPasteConfirm(parsed);
     setPasteConfirmAdd('');
@@ -404,60 +205,10 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     return 'low';
   }
 
-  // ── MFDS banned-phrase checker ──
-  // mfds-ignore-start
-  var BANNED_RE = /\b(heal|healing|heals|treat|treats|cure|cures|regenerate|regenerates|regeneration|anti-inflammatory|antibacterial|antimicrobial|calms?\s+inflammation|reduces?\s+inflammation|accelerates?\s+cell\s+turnover|stimulates?\s+collagen|boosts?\s+collagen|activates?\s+receptor|triggers?\s+\w+\s+process|inhibits?\s+\w+|eczema|psoriasis|rosacea|dermatitis|dermatologist-recommended|derma-grade|clinic-grade|medical-grade|hospital-grade|post-procedure|safe\s+for\s+infants|broken\s+skin|wound\s+healing|allergic\s+reaction)\b/gi;
-
-  function mfdsSafe(str) {
-    if (!str) return str;
-    return str.replace(BANNED_RE, function(match) {
-      var lower = match.toLowerCase();
-      if (/heal|healing|heals/.test(lower)) return 'soothe';
-      if (/treat|treats/.test(lower)) return 'support';
-      if (/cure|cures/.test(lower)) return 'support';
-      if (/anti-inflammatory/.test(lower)) return 'soothing';
-      if (/antibacterial|antimicrobial/.test(lower)) return 'clarifying';
-      if (/inflammation/.test(lower)) return 'the appearance of redness';
-      if (/allergic reaction/.test(lower)) return 'sensitivity';
-      if (/eczema|psoriasis|rosacea|dermatitis/.test(lower)) return 'sensitive skin';
-      if (/broken skin/.test(lower)) return 'irritated skin';
-      if (/wound healing/.test(lower)) return 'skin comfort';
-      return '';
-    });
-  }
-  // mfds-ignore-end
-
-  // ── Category display names ──
-  var CATEGORY_LABELS = {
-    'soothing-botanical': { en: 'Soothing botanicals', ko: '진정 식물 성분' },
-    'active': { en: 'Active ingredients', ko: '활성 성분' },
-    'humectant': { en: 'Hydrating humectants', ko: '보습 성분' },
-    'emollient': { en: 'Nourishing emollients', ko: '에몰리언트 성분' },
-    'barrier-lipid': { en: 'Barrier-supporting lipids', ko: '장벽 지질' },
-    'ferment': { en: 'Fermented ingredients', ko: '발효 성분' },
-    'peptide': { en: 'Peptides', ko: '펩타이드' },
-    'essential-oil': { en: 'Essential oils', ko: '에센셜 오일' },
-    'fragrance-allergen': { en: 'Fragrance allergens', ko: '향료 알레르겐' },
-    'preservative': { en: 'Preservatives', ko: '방부제' },
-    'surfactant': { en: 'Surfactants', ko: '계면활성제' },
-    'thickener-texture': { en: 'Texture agents', ko: '텍스처 성분' },
-    'antioxidant': { en: 'Antioxidants', ko: '항산화 성분' },
-    'solvent-alcohol': { en: 'Solvent alcohols', ko: '알코올 용매' },
-    'ph-adjuster': { en: 'pH adjusters', ko: 'pH 조절제' },
-    'emulsifier': { en: 'Emulsifiers', ko: '유화제' },
-    'chelator': { en: 'Chelating agents', ko: '킬레이팅제' },
-    'uncategorized': { en: 'Other ingredients', ko: '기타 성분' },
-    'other': { en: 'Other ingredients', ko: '기타 성분' },
-  };
-
   function catLabel(cat) {
     var entry = CATEGORY_LABELS[cat] || CATEGORY_LABELS['other'];
     return isKo ? entry.ko : entry.en;
   }
-
-  // ── Potent actives list (high-strength ingredients that can irritate) ──
-  var POTENT_ACTIVES = new Set(['retinol', 'retinal', 'tretinoin', 'glycolic acid', 'salicylic acid',
-    'lactic acid', 'mandelic acid', 'l-ascorbic acid', 'ascorbic acid', 'benzoyl peroxide', 'hydroquinone']);
 
   // ── Resolve product IDs to display names ──
   function productNamesFromIds(pids) {
@@ -468,23 +219,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       if (entry._pasted) return isKo ? entry.nameKo : entry.name;
       return (entry.brand ? entry.brand + ' ' : '') + (isKo && entry.nameKo ? entry.nameKo : entry.name);
     });
-  }
-
-  // ── Check if ingredient is a compound containing a flagged component ──
-  function getFlaggedComponent(ing) {
-    if (ing.contains_flagged_component && ing.flagged_component_reasons) {
-      var reasons = ing.flagged_component_reasons;
-      if (Array.isArray(reasons) && reasons.length > 0) return reasons[0];
-      if (typeof reasons === 'string') return reasons;
-    }
-    // Heuristic: check if name contains known irritant substrings
-    var n = (ing.name || '').toLowerCase();
-    if (/tea\s*tree|melaleuca/.test(n)) return 'Tea Tree';
-    if (/lavender|lavandula/.test(n)) return 'Lavender';
-    if (/eucalyptus/.test(n)) return 'Eucalyptus';
-    if (/peppermint|mentha/.test(n)) return 'Peppermint';
-    if (/citrus|lemon|orange|bergamot|lime/.test(n) && /oil|peel/.test(n)) return 'Citrus Oil';
-    return null;
   }
 
   // ── Reason templates (MFDS-safe, specific, metadata-driven) ──
@@ -608,39 +342,6 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
     ));
   }
 
-  // ── Resolve Korean name from MFDS reference ──
-  function resolveKoName(ing) {
-    if (ing.name_ko) return ing.name_ko;
-    if (!_mfdsLookupEn) return null;
-    var norm = (ing.name || '').toLowerCase().replace(/[\s\-]+/g, ' ').trim();
-    var entry = _mfdsLookupEn[norm];
-    return entry ? entry.standard_name_ko : null;
-  }
-
-  // ── Enrich ingredient row into display object ──
-  function enrichIngredient(r) {
-    var ing = r.ingredient; if (!ing) return null;
-    var isFlagged = ing.is_known_sensitizer || ing.is_eu_26_fragrance_allergen ||
-                    ing.is_essential_oil || ing.irritation_risk === 'high' || ing.irritation_risk === 'medium';
-    return {
-      id: ing.id,
-      name: ing.name,
-      name_ko: ing.name_ko || resolveKoName(ing),
-      symbol: ing.symbol || (ing.name || '').substring(0, 2).toUpperCase(),
-      category: ing.category || 'uncategorized',
-      description: ing.description,
-      description_ko: ing.description_ko,
-      science: ing.science,
-      science_ko: ing.science_ko,
-      is_hero: r.is_hero,
-      sort_order: r.sort_order,
-      flagged: isFlagged,
-      flag_type: ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil' : ing.is_known_sensitizer ? 'sensitizer' : (ing.irritation_risk === 'high' || ing.irritation_risk === 'medium') ? 'irritant' : null,
-      irritation_risk: ing.irritation_risk,
-      contains_flagged_component: ing.contains_flagged_component,
-      flagged_component_reasons: ing.flagged_component_reasons
-    };
-  }
 
   // ── ENGINE ──
   async function runAnalysis() {
@@ -654,18 +355,18 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
 
       // Fetch catalog data for picked products (if any)
       var data = pickedIds.length > 0
-        ? await window.__supabase.fetchAnalyzeData(pickedIds)
-        : { inputRows: [], allRows: window.__supabase._allRowsCache || [] };
+        ? await fetchAnalyzeData(pickedIds)
+        : { inputRows: [], allRows: [] };
 
       // If allRows not cached yet, fetch it via a dummy product call
       if (!data.allRows || data.allRows.length === 0) {
         if (pickedIds.length > 0) {
-          data.allRows = (await window.__supabase.fetchAnalyzeData(pickedIds)).allRows;
+          data.allRows = (await fetchAnalyzeData(pickedIds)).allRows;
         } else {
           // Force cache load by fetching with first available product
           var firstProd = (products || [])[0];
           if (firstProd) {
-            data.allRows = (await window.__supabase.fetchAnalyzeData([firstProd.id])).allRows;
+            data.allRows = (await fetchAnalyzeData([firstProd.id])).allRows;
           } else {
             data.allRows = [];
           }
@@ -689,7 +390,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       var pasteStats = { total: 0, catalog: 0, mfds: 0, hardcoded: 0, unknown: 0 };
       var mfdsOnlyNames = []; // flywheel: ingredients recognized by MFDS but not in active catalog
       pastedEntries.forEach(function(entry) {
-        var matched = matchParsedIngredients(entry._rawIngredients, catalog || []);
+        var matched = matchParsedIngredients(entry._rawIngredients, catalog || [], _mfdsLookupEn, _mfdsLookupKo);
         matched.forEach(function(row) {
           row.product_id = entry.id;
           inputRows.push(row);
@@ -764,7 +465,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         var rows = byProduct[pid] || [];
 
         // Build full ingredient list with metadata for card rendering
-        var allIngs = rows.map(enrichIngredient).filter(Boolean);
+        var allIngs = rows.map(function(r) { return enrichIngredient(r, _mfdsLookupEn); }).filter(Boolean);
 
         // Group into user-intent sections
         var ACTIVE_CATS = { 'active': true, 'peptide': true, 'antioxidant': true, 'ferment': true };
@@ -916,22 +617,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       // One analysis, two outputs (positive / negative)
       // ═══════════════════════════════════════════
 
-      // ── Tunable constants ──
-      var PREVALENCE_CEILING = 0.8;        // FIX 1b: ingredient in ≥80% of ALL products → excluded
-      var MIN_CONFIDENT_PER_SIDE = 2;      // FIX 2: both sides need ≥2 for confident mode
-      var POSITIVE_LIST_MAX = 10;
-      var NEGATIVE_LIST_MAX = 8;
-
-      // FIX 1a: base/vehicle ingredients that never carry signal
-      var SKIP_BASE_NAMES = new Set([
-        'water', 'aqua', 'glycerin', 'butylene glycol', 'propanediol', '1,2-hexanediol',
-        'dipropylene glycol', 'pentylene glycol', 'caprylyl glycol', 'ethylhexylglycerin',
-        'hexylene glycol', 'propylene glycol', 'methylpropanediol'
-      ]);
-
       // Step 1: Build frequency map for every ingredient across all products
-      var SKIP_CATS = { 'uncategorized': true, 'thickener-texture': true, 'ph-adjuster': true,
-        'emulsifier': true, 'chelator': true, 'solvent-alcohol': true, 'other': true };
       var freqMap = {}; // ingId -> { ing, worksCount, doesntCount }
 
       worksIds.forEach(function(pid) {
@@ -974,73 +660,12 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       });
 
       // Step 3: Determine confidence tier + split into positive / negative
-      // FIX 2 revised: 3-tier confidence
-      //   'cold-start'  — too little data to show anything (1+0, 0+1)
-      //   'early-read'  — both sides have ≥1 but at least one side has only 1 (1+1, 2+1, 1+3)
-      //   'confident'   — both sides ≥2, OR one side ≥2 with other side 0 (C2/D1 one-sided)
-      var hasBothSides = totalW >= 1 && totalD >= 1;
-      var hasOneSideStrong = (totalW >= MIN_CONFIDENT_PER_SIDE || totalD >= MIN_CONFIDENT_PER_SIDE);
-      var confidenceTier =
-        hasBothSides && totalW >= MIN_CONFIDENT_PER_SIDE && totalD >= MIN_CONFIDENT_PER_SIDE ? 'confident'
-        : hasBothSides ? 'early-read'
-        : hasOneSideStrong ? 'confident'  // C2 (3+0) or D1 (0+3) — enough for one-sided analysis
-        : 'cold-start'; // 1+0 or 0+1 — genuinely too little
+      var confidenceTier = determineConfidenceTier(totalW, totalD);
 
       var minWorksThreshold = totalW > 0 ? Math.ceil(totalW / 2) : 1;
       var minDoesntThreshold = totalD > 0 ? Math.ceil(totalD / 2) : 1;
 
-      function isEligible(item) {
-        // FIX 1b: prevalence ceiling — too ubiquitous to discriminate
-        if (item.prevalence >= PREVALENCE_CEILING) return false;
-        // FIX 3: present on both sides above 50% — common/tolerated, not a trigger
-        if (item.worksRate >= 0.5 && item.doesntRate >= 0.5) return false;
-        return true;
-      }
-
-      function isFlaggedIng(ing) {
-        return ing.is_known_sensitizer || ing.is_eu_26_fragrance_allergen ||
-               ing.is_essential_oil || ing.irritation_risk === 'high' || ing.irritation_risk === 'medium' ||
-               POTENT_ACTIVES.has((ing.name || '').toLowerCase());
-      }
-
-      function enrichForResult(item) {
-        var ing = item.ing;
-        var flagType = ing.is_eu_26_fragrance_allergen ? 'eu26' : ing.is_essential_oil ? 'essential-oil'
-                     : ing.is_known_sensitizer ? 'sensitizer'
-                     : POTENT_ACTIVES.has((ing.name || '').toLowerCase()) ? 'potent-active'
-                     : (ing.irritation_risk === 'high' || ing.irritation_risk === 'medium') ? 'irritant' : null;
-        return {
-          ingredient_name_en: ing.name,
-          ingredient_name_ko: ing.name_ko || resolveKoName(ing),
-          symbol: ing.symbol || (ing.name || '').substring(0, 2).toUpperCase(),
-          category: ing.category,
-          description: ing.description, description_ko: ing.description_ko,
-          science: ing.science, science_ko: ing.science_ko,
-          flagged: isFlaggedIng(ing),
-          flag_type: flagType,
-          contains_flagged_component: ing.contains_flagged_component,
-          flagged_component_reasons: ing.flagged_component_reasons,
-          worksCount: item.worksCount,
-          doesntCount: item.doesntCount,
-          signal: item.signal,
-          prevalence: item.prevalence
-        };
-      }
-
-      // FIX 4: negative sort comparator (flagged first → |signal| desc → prevalence asc)
-      function negSortCmp(a, b) {
-        var af = isFlaggedIng(a.ing) ? 1 : 0;
-        var bf = isFlaggedIng(b.ing) ? 1 : 0;
-        if (bf !== af) return bf - af;
-        if (Math.abs(a.signal) !== Math.abs(b.signal)) return Math.abs(b.signal) - Math.abs(a.signal);
-        return a.prevalence - b.prevalence;
-      }
-
-      // FIX 4: positive sort comparator (|signal| desc → prevalence asc, no flag boost)
-      function posSortCmp(a, b) {
-        if (b.signal !== a.signal) return b.signal - a.signal;
-        return a.prevalence - b.prevalence;
-      }
+      var _enrichForResult = function(item) { return enrichForResult(item, _mfdsLookupEn); };
 
       var positiveIngredients, negativeIngredients;
 
@@ -1058,7 +683,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           })
           .sort(posSortCmp)
           .slice(0, POSITIVE_LIST_MAX)
-          .map(enrichForResult);
+          .map(_enrichForResult);
 
         negativeIngredients = scored
           .filter(function(item) {
@@ -1066,7 +691,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           })
           .sort(negSortCmp)
           .slice(0, NEGATIVE_LIST_MAX)
-          .map(enrichForResult);
+          .map(_enrichForResult);
 
       } else {
         // Confident: full frequency-based pipeline with 50% thresholds
@@ -1074,13 +699,13 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           .filter(function(item) { return item.signal > 0 && item.worksCount >= minWorksThreshold && isEligible(item); })
           .sort(posSortCmp)
           .slice(0, POSITIVE_LIST_MAX)
-          .map(enrichForResult);
+          .map(_enrichForResult);
 
         negativeIngredients = scored
           .filter(function(item) { return item.signal < 0 && item.doesntCount >= minDoesntThreshold && isEligible(item); })
           .sort(negSortCmp)
           .slice(0, NEGATIVE_LIST_MAX)
-          .map(enrichForResult);
+          .map(_enrichForResult);
       }
 
       // Backward-compat aliases used by render + recommendations
@@ -1106,7 +731,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
           })
           .sort(function(a, b) { return b.worksCount - a.worksCount; })
           .slice(0, 5)
-          .map(enrichForResult);
+          .map(_enrichForResult);
       }
 
       // ── RECOMMENDATIONS ──
@@ -1154,7 +779,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
         var rows = byProduct[pid] || [];
         var entry = works.find(function(p) { return p.id === pid; }) || doesnt.find(function(p) { return p.id === pid; });
         if (!entry) return null;
-        var allIngs = rows.map(enrichIngredient).filter(Boolean);
+        var allIngs = rows.map(function(r) { return enrichIngredient(r, _mfdsLookupEn); }).filter(Boolean);
         var activeIngs = [], comfortIngs = [];
         allIngs.forEach(function(ing) {
           if (ACTIVE_CATS_BD[ing.category]) activeIngs.push(ing);
@@ -1273,7 +898,7 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       var val = e.target.value;
       // If pasted content has delimiters, auto-parse into chips immediately
       if (/[,\n\u00B7\uFF1B]/.test(val)) {
-        var parsed = parseIngredientList(val, catalogIngs);
+        var parsed = parseIngredientList(val, catalogIngs, _mfdsLookupEn, _mfdsLookupKo);
         if (parsed.length > 0) {
           var newNames = parsed.map(function(c) { return c.name; });
           var existing = new Set(pickerChips.map(function(c) { return c.toLowerCase(); }));
@@ -2308,4 +1933,4 @@ window.Try = function Try({ lang, products, setView, setProduct }) {
       )
     )
   );
-};
+}

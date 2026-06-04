@@ -1,9 +1,11 @@
 // Header / navigation
-const { useState: _uS1, useEffect: _uE1 } = React;
+import React, { useState, useRef } from 'react';
+import { cn, useL, Icon } from './primitives';
+import SEO from '../lib/seo';
 
-window.Header = function Header({ lang, setLang, view, setView, category, setCategory, query, setQuery, density, headerStyle }) {
-  const [searchOpen, setSearchOpen] = _uS1(false);
-  const searchRef = React.useRef(null);
+export default function Header({ lang, setLang, view, setView, category, setCategory, query, setQuery, density, headerStyle }) {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchRef = useRef(null);
   const t = useL(lang);
   const cats = [
     { id: 'skincare', en: 'Skincare', ko: '스킨케어', icon: 'droplet' },
@@ -13,7 +15,7 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
 
   const goHome = () => {
     history.pushState({}, '', '/');
-    if (window.SEO) window.SEO.setHome();
+    if (SEO) SEO.setHome();
     setView('landing');
     setQuery('');
     window.dispatchEvent(new CustomEvent('ana2me:go-home'));
@@ -139,4 +141,4 @@ window.Header = function Header({ lang, setLang, view, setView, category, setCat
       </div>
     </header>
   );
-};
+}

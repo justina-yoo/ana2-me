@@ -1,13 +1,14 @@
 // Feed view — product listing grouped by concern
-const { useMemo: _uM1 } = React;
+import React, { useMemo, useEffect, useRef } from 'react';
+import { useL, cn, Icon, Reveal, Sticker, ProductImg, ScrollRow } from './primitives';
 
-window.Feed = function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
+export default function Feed({ lang, category, setCategory, query, setView, setProduct, density, products }) {
   const t = useL(lang);
-  const tickerRef = React.useRef(null);
-  const rafRef = React.useRef(null);
-  const pausedRef = React.useRef(false);
+  const tickerRef = useRef(null);
+  const rafRef = useRef(null);
+  const pausedRef = useRef(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const el = tickerRef.current;
     if (!el) return;
     let pos = 0;
@@ -73,14 +74,14 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
   const CONCERN_MAP_KO = { 'Acne': '여드름', 'Hydration': '보습', 'Sensitivity': '민감', 'Anti-aging': '안티에이징', 'Brightening': '브라이트닝' };
 
   // Newly added products (same window as "New" badge — 2 days)
-  const newProducts = _uM1(() => {
+  const newProducts = useMemo(() => {
     const cutoff = Date.now() - 2 * 24 * 60 * 60 * 1000;
     return products.filter(p => p.createdAt && new Date(p.createdAt).getTime() > cutoff)
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }, [products]);
 
   // Group products by concern
-  const sections = _uM1(() => {
+  const sections = useMemo(() => {
     const result = [];
     Object.entries(CONCERN_MAP).forEach(([group, labels]) => {
       const matches = products.filter(p => (p.summary?.concerns || []).some(c => labels.includes(c)));
@@ -90,7 +91,7 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
   }, [products]);
 
   // Search filtering
-  const searchResults = _uM1(() => {
+  const searchResults = useMemo(() => {
     if (!query) return null;
     const q = query.toLowerCase();
     return products.filter(p =>
@@ -267,9 +268,9 @@ window.Feed = function Feed({ lang, category, setCategory, query, setView, setPr
 
     </div>
   );
-};
+}
 
-window.ProductCard = function ProductCard({ product, lang, onClick, href, index, isPlaceholder }) {
+export function ProductCard({ product, lang, onClick, href, index, isPlaceholder }) {
   const t = useL(lang);
   const name = lang === 'ko' && product.nameKo ? product.nameKo : product.name;
   const topIng = product.ingredients?.[0];
@@ -302,4 +303,4 @@ window.ProductCard = function ProductCard({ product, lang, onClick, href, index,
       <span className="pcard-arrow"><Icon name="arrow" size={16} /></span>
     </a>
   );
-};
+}

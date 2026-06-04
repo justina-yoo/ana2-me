@@ -1,5 +1,9 @@
 // BlockRenderer — renders structured JSON blocks using existing article primitives
-window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
+import React from 'react';
+import DOMPurify from 'dompurify';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard } from '../pages/insights';
+
+export default function BlockRenderer({ blocks, lang }) {
   if (!blocks || !blocks.length) return null;
   const isKo = lang === 'ko';
   const t = (en, ko) => isKo ? ko : en;
@@ -14,7 +18,7 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
   }
 
   // Render HTML string safely — sanitized with DOMPurify
-  var purify = typeof DOMPurify !== 'undefined' ? DOMPurify : null;
+  var purify = DOMPurify;
   function html(obj) {
     var raw = txt(obj);
     return { __html: purify ? purify.sanitize(raw, { ALLOWED_TAGS: ['strong', 'em', 'mark', 'br', 'a', 'span', 'sub', 'sup'], ALLOWED_ATTR: ['href', 'target', 'rel', 'style', 'class'] }) : raw };
@@ -143,4 +147,4 @@ window.BlockRenderer = function BlockRenderer({ blocks, lang }) {
       </p>
     </div>
   );
-};
+}

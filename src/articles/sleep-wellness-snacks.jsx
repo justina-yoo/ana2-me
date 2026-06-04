@@ -1,5 +1,7 @@
+import React from 'react';
+import { ArtTlDr, ArtFigure, ArtSection, ArtSectionHeading, ArtBody, ArtCallout, ArtStatCard, ArtProdCard } from '../pages/insights';
 // Article: Korea's Sleep-Wellness Snack Boom
-window.KoreaSleepWellnessSnacksBody = function KoreaSleepWellnessSnacksBody({ lang }) {
+export default function KoreaSleepWellnessSnacksBody({ lang }) {
   const isKo = lang === 'ko';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
