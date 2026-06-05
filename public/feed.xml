@@ -5,13 +5,31 @@
     <link>https://ana2-me.com</link>
     <description>Deep molecular analysis of skincare, fragrance, and wellness ingredients.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 05 Jun 2026 06:28:26 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jun 2026 06:36:05 GMT</lastBuildDate>
     <atom:link href="https://ana2-me.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://ana2-me.com/og-default.png</url>
       <title>ana2me</title>
       <link>https://ana2-me.com</link>
     </image>
+    <item>
+      <title>3 Ingredient Combos That Make Each Other Stronger — and 3 That Cancel Each Other Out</title>
+      <link>https://ana2-me.com/article/beauty-science/2026-06-05/3-ingredient-combos-stronger-3-cancel-out</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/beauty-science/2026-06-05/3-ingredient-combos-stronger-3-cancel-out</guid>
+      <description>Some skincare ingredients are better together — their chemistry amplifies each other's effects. Others literally neutralize one another on your face. Here are the 3 best pairings and the 3 worst.</description>
+      <pubDate>Thu, 04 Jun 2026 15:00:00 GMT</pubDate>
+      <category>Beauty Science</category>
+      <enclosure url="https://images.pexels.com/photos/7795879/pexels-photo-7795879.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Does Perfume Expire? The Molecular Clock Inside Every Bottle</title>
+      <link>https://ana2-me.com/article/fragrance/2026-06-05/does-perfume-expire-molecular-clock-every-bottle</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-06-05/does-perfume-expire-molecular-clock-every-bottle</guid>
+      <description>That bottle on your dresser from 3 years ago — is it still good? Perfume doesn't expire like milk, but it does degrade. The speed depends on what's inside and how you've stored it.</description>
+      <pubDate>Thu, 04 Jun 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.pexels.com/photos/264819/pexels-photo-264819.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" type="image/jpeg" />
+    </item>
     <item>
       <title>Ginseng Has Been in Korean Skincare for 2,000 Years. The Molecular Science Finally Caught Up</title>
       <link>https://ana2-me.com/article/skincare/2026-06-05/ginseng-skincare-2000-years-molecular-science</link>
@@ -895,6 +913,15 @@
       <enclosure url="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
+      <title>Supplements Are Dead. Korea's Gen Z Is Eating Sleep Gummies Instead.</title>
+      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</guid>
+      <description>Korea's sleep health food market is booming — Olive Young reports 300% YoY growth in sleep supplements. The secret? Repackaging GABA, magnesium, and plant melatonin as gummies, jellies, and flavored sticks that feel like snacks, not medicine.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Wellness</category>
+      <enclosure url="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
       <title>The &quot;Cica&quot; Ingredient in Every K-Beauty Cream Just Got a Radical New Superpower.</title>
       <link>https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery</link>
       <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery</guid>
@@ -902,6 +929,69 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Skincare</category>
       <enclosure url="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Song Hye-kyo Washes Her Face with Milk. Suzy Does &quot;424.&quot; Which Celebrity Methods Actually Work?</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</guid>
+      <description>Korean celebrity skincare methods go viral every week — milk rinses, heated palm absorption, timed cleansing rituals. We asked dermatologists which ones are backed by science and which are just good PR.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Jjimjilbangs Are Going Global. The Science Behind Korea's Oldest Wellness Ritual.</title>
+      <link>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</guid>
+      <description>Korean bathhouses are driving a global wellness tourism boom — fueled by K-dramas and TikTok. The hot-cold contrast therapy isn't just tradition. Studies show it creates a vascular pump effect, lowers cortisol for up to 3 hours, and boosts growth hormone by up to 24x.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Wellness</category>
+      <enclosure url="https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Korea Sleeps Less Than Almost Any Country on Earth. It Built an ₩11 Trillion Industry to Fix It.</title>
+      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</guid>
+      <description>Korea's sleep market exploded from ₩500 billion to ₩11 trillion in a decade. Olive Young's sleep supplement sales are up 300%. Plant-based melatonin, GABA gummies, and sleep-specific skincare — Korea isn't sleeping, so it's buying solutions.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Wellness</category>
+      <enclosure url="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Milk Perfume Is 2026's Defining Scent. Here's the Chemistry Behind &quot;Soft.&quot;</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</guid>
+      <description>Lactonic fragrances don't actually smell like milk. They're built from cyclic ester molecules — gamma-decalactone, delta-decalactone — that your brain reads as 'creamy warmth.' The science of why comfort has a smell.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</guid>
+      <description>Olfactory habituation isn't a flaw — it's an evolutionary survival mechanism. Your brain categorizes familiar scents as 'safe background.' Rotating fragrances resets this filter. The signature scent is dead. The fragrance wardrobe is what works.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Why Your Perfume Smells Different on You Than in the Bottle.</title>
+      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</guid>
+      <description>The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Fragrance</category>
+      <enclosure url="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Galactomyces Started in a Sake Brewery. Now It's One of Skincare's Most Studied Actives.</title>
+      <link>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</link>
+      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</guid>
+      <description>Galactomyces was discovered by accident. Bifida Ferment Lysate was reverse-engineered from infant skin. Fermentation doesn't just preserve ingredients — it creates entirely new compounds that never existed in the original plant.</description>
+      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
+      <category>Skincare</category>
+      <enclosure url="https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Korean Dermatologists Have Been Injecting Salmon DNA for Decades. Now It's in Your Serum.</title>
@@ -1019,78 +1109,6 @@
       <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
       <category>Skincare</category>
       <enclosure url="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Galactomyces Started in a Sake Brewery. Now It's One of Skincare's Most Studied Actives.</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</guid>
-      <description>Galactomyces was discovered by accident. Bifida Ferment Lysate was reverse-engineered from infant skin. Fermentation doesn't just preserve ingredients — it creates entirely new compounds that never existed in the original plant.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Supplements Are Dead. Korea's Gen Z Is Eating Sleep Gummies Instead.</title>
-      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</guid>
-      <description>Korea's sleep health food market is booming — Olive Young reports 300% YoY growth in sleep supplements. The secret? Repackaging GABA, magnesium, and plant melatonin as gummies, jellies, and flavored sticks that feel like snacks, not medicine.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Wellness</category>
-      <enclosure url="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Why Your Perfume Smells Different on You Than in the Bottle.</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</guid>
-      <description>The same perfume smells different on everyone — and it's not just body chemistry. Molecular weight, vapor pressure, and skin hydration each determine when a note surfaces and how long it stays.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Your Brain Stops Smelling Your Perfume After 20 Minutes. Science Says Stop Fighting It.</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</guid>
-      <description>Olfactory habituation isn't a flaw — it's an evolutionary survival mechanism. Your brain categorizes familiar scents as 'safe background.' Rotating fragrances resets this filter. The signature scent is dead. The fragrance wardrobe is what works.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1615634260830-85d92cd1b769?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Milk Perfume Is 2026's Defining Scent. Here's the Chemistry Behind &quot;Soft.&quot;</title>
-      <link>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</guid>
-      <description>Lactonic fragrances don't actually smell like milk. They're built from cyclic ester molecules — gamma-decalactone, delta-decalactone — that your brain reads as 'creamy warmth.' The science of why comfort has a smell.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Fragrance</category>
-      <enclosure url="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Korea Sleeps Less Than Almost Any Country on Earth. It Built an ₩11 Trillion Industry to Fix It.</title>
-      <link>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</guid>
-      <description>Korea's sleep market exploded from ₩500 billion to ₩11 trillion in a decade. Olive Young's sleep supplement sales are up 300%. Plant-based melatonin, GABA gummies, and sleep-specific skincare — Korea isn't sleeping, so it's buying solutions.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Wellness</category>
-      <enclosure url="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Jjimjilbangs Are Going Global. The Science Behind Korea's Oldest Wellness Ritual.</title>
-      <link>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</guid>
-      <description>Korean bathhouses are driving a global wellness tourism boom — fueled by K-dramas and TikTok. The hot-cold contrast therapy isn't just tradition. Studies show it creates a vascular pump effect, lowers cortisol for up to 3 hours, and boosts growth hormone by up to 24x.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Wellness</category>
-      <enclosure url="https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
-    </item>
-    <item>
-      <title>Song Hye-kyo Washes Her Face with Milk. Suzy Does &quot;424.&quot; Which Celebrity Methods Actually Work?</title>
-      <link>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</link>
-      <guid isPermaLink="true">https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</guid>
-      <description>Korean celebrity skincare methods go viral every week — milk rinses, heated palm absorption, timed cleansing rituals. We asked dermatologists which ones are backed by science and which are just good PR.</description>
-      <pubDate>Tue, 05 May 2026 15:00:00 GMT</pubDate>
-      <category>Skincare</category>
-      <enclosure url="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&amp;fit=crop&amp;q=80&amp;w=800" type="image/jpeg" />
     </item>
     <item>
       <title>Sugar Is Aging Your Skin Faster Than the Sun. The Science of Glycation.</title>

@@ -42,6 +42,18 @@
 
   <!-- Articles -->
   <url>
+    <loc>https://ana2-me.com/article/beauty-science/2026-06-05/3-ingredient-combos-stronger-3-cancel-out</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-06-05/does-perfume-expire-molecular-clock-every-bottle</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/skincare/2026-06-05/ginseng-skincare-2000-years-molecular-science</loc>
     <lastmod>2026-06-05</lastmod>
     <changefreq>monthly</changefreq>
@@ -630,7 +642,55 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -709,54 +769,6 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
