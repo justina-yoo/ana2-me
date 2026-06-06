@@ -187,6 +187,11 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
           {catLabel && (
             <Sticker color="accent" rotate={-3}>{catLabel}</Sticker>
           )}
+          <p style={{ fontSize: 11, color: 'var(--ink-faint)', margin: '12px 0 0', lineHeight: 1.5, fontStyle: 'italic' }}>
+            {lang === 'ko'
+              ? '성분 설명은 ana2me가 독립적으로 작성했습니다. 정보 제공 목적이며, 의료 조언을 대신하지 않습니다.'
+              : 'Independently written by ana2me. For informational purposes only — not medical advice.'}
+          </p>
         </header>
       </Reveal>
 
@@ -420,12 +425,6 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
         </a>
       </Reveal>
 
-      {/* ── DISCLAIMER ── */}
-      <p style={{ fontSize: 11, color: 'var(--ink-faint)', margin: '40px 0 0', lineHeight: 1.6, fontStyle: 'italic' }}>
-        {lang === 'ko'
-          ? '성분 설명은 ana2me가 독립적으로 작성했습니다. 본 페이지는 정보 제공 목적으로만 사용되며, 전문적인 의료 조언을 대신하지 않습니다. 관련 문의는 ana2me2026@gmail.com으로 연락해 주세요.'
-          : 'Ingredient descriptions are independently written by ana2me. This page is for informational purposes only and is not intended as medical or professional advice. For inquiries, contact ana2me2026@gmail.com.'}
-      </p>
     </div>
   );
 }
