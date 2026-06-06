@@ -56,6 +56,15 @@ export default function Header({ lang, setLang, view, setView, category, setCate
     );
   }
 
+  // Track scroll for search bar collapse
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // Friendly (default)
   return (
     <header className="hdr hdr-friendly">
@@ -98,9 +107,11 @@ export default function Header({ lang, setLang, view, setView, category, setCate
           </div>
         ) : (
           <>
-            <button className="hdr-search-icon" onClick={() => setSearchOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 6 }}>
-              <Icon name="search" size={18} />
-            </button>
+            {(scrolled || view !== 'landing') && (
+              <button className="hdr-search-icon" onClick={() => setSearchOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 6 }}>
+                <Icon name="search" size={18} />
+              </button>
+            )}
             <div className="hdr-search hdr-search-desktop" style={{ marginRight: 'auto' }}>
               <Icon name="search" size={15} />
               <input
@@ -130,7 +141,7 @@ export default function Header({ lang, setLang, view, setView, category, setCate
             <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'feed' && 'page-tab-active')}>
               {t('Products', '제품')}
             </a>
-            <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'analyze' && 'page-tab-active')}>
+            <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'analyze' && 'page-tab-active')} style={{ color: view === 'analyze' ? undefined : 'var(--accent)' }}>
               {t('Analyzer', '내 성분패턴 분석하기')}
             </a>
             <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 4, flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 8px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
@@ -139,6 +150,21 @@ export default function Header({ lang, setLang, view, setView, category, setCate
           </div>
         )}
       </div>
+      {/* Second row: full search bar collapses on scroll — landing page only */}
+      {!searchOpen && view === 'landing' && (
+        <div className={cn('hdr-row2', scrolled && 'hdr-row2--hidden')}>
+          <div className="hdr-search hdr-search-row2" onClick={() => setSearchOpen(true)} style={{ cursor: 'text' }}>
+            <Icon name="search" size={15} />
+            <input
+              value={query}
+              readOnly
+              placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
+              onFocus={() => setSearchOpen(true)}
+              style={{ cursor: 'text' }}
+            />
+          </div>
+        </div>
+      )}
     </header>
   );
 }
