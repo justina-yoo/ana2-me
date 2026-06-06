@@ -119,7 +119,7 @@ export default function Header({ lang, setLang, view, setView, category, setCate
             </>
           ) : (
             <>
-              <span style={{ flex: 1, color: 'var(--ink-faint)' }}>{t('Search', '검색')}</span>
+              <span style={{ flex: 1, color: 'var(--ink-faint)' }}>{t('Search ingredients, products...', '성분, 제품 검색...')}</span>
               <Icon name="search" size={14} />
             </>
           )}

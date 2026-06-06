@@ -1698,8 +1698,8 @@ export default function Try({ lang, products, setView, setProduct }) {
           ),
           result.avoid_ingredients.length === 0 && React.createElement('div', { className: 'try-flags-callout try-flags-clear' },
             React.createElement('p', null,
-              t('No commonly flagged sensitizers or allergens found in this product\u2019s ingredient list.',
-                '이 제품의 성분 목록에서 일반적으로 알려진 민감 성분이나 알레르겐이 발견되지 않았습니다.')
+              t('No known irritants or allergens found in this product\u2019s ingredient list.',
+                '\uC774 \uC81C\uD488\uC5D0\uC11C \uC54C\uB824\uC9C4 \uC790\uADF9 \uC131\uBD84\uC774\uB098 \uC54C\uB808\uB974\uAC90\uC774 \uBC1C\uACAC\uB418\uC9C0 \uC54A\uC558\uC5B4\uC694.')
             )
           )
         )
@@ -1876,12 +1876,16 @@ export default function Try({ lang, products, setView, setProduct }) {
               ),
               flagged.length === 0 && React.createElement('div', { style: { padding: '12px 14px', background: 'rgba(45,90,61,0.04)', borderRadius: 'var(--radius-sm)', margin: '0 0 12px', border: '1px solid rgba(45,90,61,0.1)' } },
                 React.createElement('p', { style: { fontSize: 13, color: 'var(--accent)', fontWeight: 600, margin: '0 0 4px' } },
-                  '\u2705 ' + t('No commonly flagged ingredients found.', '\uC77C\uBC18\uC801\uC73C\uB85C \uD50C\uB798\uADF8\uB41C \uC131\uBD84\uC740 \uC5C6\uC5B4\uC694.')
+                  '\u2705 ' + t('No known irritants or allergens found.', '\uC54C\uB824\uC9C4 \uC790\uADF9 \uC131\uBD84\uC774 \uBC1C\uACAC\uB418\uC9C0 \uC54A\uC558\uC5B4\uC694.')
                 ),
-                React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
-                  t('Check each product\u2019s ingredient breakdown below to see what stands out.',
-                    '\uC544\uB798 \uC81C\uD488\uBCC4 \uC131\uBD84\uC744 \uD655\uC778\uD574 \uBCF4\uC138\uC694.')
-                )
+                sharedNonFlagged.length > 0
+                  ? React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
+                      t('Here are the active ingredients shared across your products:', '\uC81C\uD488\uB4E4\uC5D0 \uACF5\uD1B5\uC73C\uB85C \uD3EC\uD568\uB41C \uD65C\uC131 \uC131\uBD84\uC774\uC5D0\uC694:')
+                    )
+                  : React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
+                      t('Check each product\u2019s ingredient breakdown below to see what stands out.',
+                        '\uC544\uB798 \uC81C\uD488\uBCC4 \uC131\uBD84\uC744 \uD655\uC778\uD574 \uBCF4\uC138\uC694.')
+                    )
               ),
               flagged.length > 0 && React.createElement('p', { className: 'try-result-disclaimer' },
                 t('These appeared in your products.', '\uC774 \uC81C\uD488\uB4E4\uC5D0 \uD3EC\uD568\uB41C \uC131\uBD84\uC774\uC5D0\uC694.')
