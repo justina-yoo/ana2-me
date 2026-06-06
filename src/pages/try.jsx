@@ -102,6 +102,14 @@ export default function Try({ lang, products, setView, setProduct }) {
     }
   }, [result]);
 
+  // Lock body scroll when ingredient sheet is open (prevents iOS scroll-to-top)
+  useEffect(function() {
+    if (selIng) {
+      document.body.style.overflow = 'hidden';
+      return function() { document.body.style.overflow = ''; };
+    }
+  }, [selIng]);
+
   useEffect(function() {
     if (autoAnalyze.current && works.length + doesnt.length > 0) {
       autoAnalyze.current = false;
@@ -813,6 +821,7 @@ export default function Try({ lang, products, setView, setProduct }) {
           brand: entry.brand || '',
           isPasted: !!entry._pasted,
           isWorks: worksIds.indexOf(pid) >= 0,
+          allIngs: allIngs,
           activeIngs: activeIngs,
           comfortIngs: comfortIngs,
           totalCount: allIngs.length
@@ -1848,17 +1857,17 @@ export default function Try({ lang, products, setView, setProduct }) {
           var flagged = (result.avoid_ingredients || []).filter(function(item) { return item.flagged; }).map(function(item) {
             return { name: item.ingredient_name_en, name_ko: item.ingredient_name_ko, symbol: item.symbol, category: item.category, flagged: true, flag_type: item.flag_type, description: item.description, description_ko: item.description_ko, science: item.science, science_ko: item.science_ko };
           });
-          // Collect shared non-flagged from product breakdowns
+          // Collect non-flagged actives from product breakdowns
+          var SKIP = new Set(['water','glycerin','butylene glycol','1,2-hexanediol','pentylene glycol','propanediol','ethylhexylglycerin','carbomer','xanthan gum','disodium edta','phenoxyethanol']);
+          var flaggedNames = new Set(flagged.map(function(f) { return (f.name || '').toLowerCase(); }));
           var sharedNonFlagged = [];
+          // First try: shared across all products
           if (result.product_breakdowns && result.product_breakdowns.length >= 2) {
             var allIngSets = result.product_breakdowns.map(function(pb) {
-              var allIngs = (pb.activeIngs || []).concat(pb.comfortIngs || []);
-              return new Set(allIngs.map(function(ing) { return ing.id || ing.name; }));
+              return new Set((pb.allIngs || []).map(function(ing) { return ing.id || ing.name; }));
             });
-            var firstPbIngs = (result.product_breakdowns[0].activeIngs || []).concat(result.product_breakdowns[0].comfortIngs || []);
+            var firstPbIngs = result.product_breakdowns[0].allIngs || [];
             var firstSet = allIngSets[0];
-            var SKIP = new Set(['water','glycerin','butylene glycol','1,2-hexanediol','pentylene glycol','propanediol','ethylhexylglycerin','carbomer','xanthan gum','disodium edta','phenoxyethanol']);
-            var flaggedNames = new Set(flagged.map(function(f) { return (f.name || '').toLowerCase(); }));
             firstSet.forEach(function(ingId) {
               var inAll = allIngSets.every(function(s) { return s.has(ingId); });
               if (inAll) {
@@ -1869,7 +1878,22 @@ export default function Try({ lang, products, setView, setProduct }) {
               }
             });
           }
-          var allItems = flagged.concat(sharedNonFlagged);
+          // Fallback: if no shared found, collect all unique non-flagged actives across products
+          var activeIngredients = [];
+          if (sharedNonFlagged.length === 0 && result.product_breakdowns) {
+            var seen = new Set();
+            result.product_breakdowns.forEach(function(pb) {
+              (pb.allIngs || []).forEach(function(ing) {
+                var key = ing.id || ing.name;
+                if (!seen.has(key) && !SKIP.has((ing.name || '').toLowerCase()) && !ing.flagged && !flaggedNames.has((ing.name || '').toLowerCase())) {
+                  seen.add(key);
+                  activeIngredients.push(ing);
+                }
+              });
+            });
+          }
+          var displayIngs = sharedNonFlagged.length > 0 ? sharedNonFlagged : activeIngredients;
+          var allItems = flagged.concat(displayIngs);
           var SYM_COLORS_D1 = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C'];
           return React.createElement(Reveal, { delay: 50 },
             React.createElement('div', { className: flagged.length > 0 ? 'try-result-card try-card-avoid' : 'try-result-card' },
@@ -1878,45 +1902,41 @@ export default function Try({ lang, products, setView, setProduct }) {
               ),
               flagged.length === 0 && React.createElement('div', { style: { padding: '12px 14px', background: 'rgba(45,90,61,0.04)', borderRadius: 'var(--radius-sm)', margin: '0 0 12px', border: '1px solid rgba(45,90,61,0.1)' } },
                 React.createElement('p', { style: { fontSize: 13, color: 'var(--accent)', fontWeight: 600, margin: '0 0 4px' } },
-                  '\u2705 ' + t('No known irritants or allergens found.', '\uC54C\uB824\uC9C4 \uC790\uADF9 \uC131\uBD84\uC774 \uBC1C\uACAC\uB418\uC9C0 \uC54A\uC558\uC5B4\uC694.')
+                  '\u2705 ' + t('No common irritants detected.', '\uC77C\uBC18\uC801\uC778 \uC790\uADF9 \uC131\uBD84\uC740 \uAC10\uC9C0\uB418\uC9C0 \uC54A\uC558\uC5B4\uC694.')
                 ),
-                sharedNonFlagged.length > 0
-                  ? React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
-                      t('Here are the active ingredients shared across your products:', '\uC81C\uD488\uB4E4\uC5D0 \uACF5\uD1B5\uC73C\uB85C \uD3EC\uD568\uB41C \uD65C\uC131 \uC131\uBD84\uC774\uC5D0\uC694:')
-                    )
-                  : React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
-                      t('Check each product\u2019s ingredient breakdown below to see what stands out.',
-                        '\uC544\uB798 \uC81C\uD488\uBCC4 \uC131\uBD84\uC744 \uD655\uC778\uD574 \uBCF4\uC138\uC694.')
-                    )
+                React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
+                  t('Your sensitivity may be to one of the actives below \u2014 tap any to learn more.', '\uC544\uB798 \uD65C\uC131 \uC131\uBD84 \uC911 \uD558\uB098\uAC00 \uB9DE\uC9C0 \uC54A\uC744 \uC218 \uC788\uC5B4\uC694 \u2014 \uD0ED\uD574\uC11C \uD655\uC778\uD574 \uBCF4\uC138\uC694.')
+                )
               ),
               flagged.length > 0 && React.createElement('p', { className: 'try-result-disclaimer' },
                 t('These appeared in your products.', '\uC774 \uC81C\uD488\uB4E4\uC5D0 \uD3EC\uD568\uB41C \uC131\uBD84\uC774\uC5D0\uC694.')
               ),
-              allItems.map(function(ing, i) {
-                var name = isKo ? (ing.name_ko || ing.name) : ing.name;
-                return React.createElement('div', { key: i, className: 'try-evidence-row' },
-                  React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
-                    name: ing.name, name_ko: ing.name_ko,
-                    symbol: ing.symbol || (name || '').charAt(0).toUpperCase(),
-                    category: ing.category, flagged: ing.flagged, flag_type: ing.flag_type,
-                    description: ing.description, description_ko: ing.description_ko,
-                    science: ing.science, science_ko: ing.science_ko
-                  }); } },
-                    React.createElement('span', { className: 'ing-sym', style: ing.flagged ? { background: '#c0392b' } : { background: SYM_COLORS_D1[i % SYM_COLORS_D1.length] } }, ing.symbol || (name || '').charAt(0).toUpperCase()),
-                    React.createElement('div', { className: 'ing-body' },
-                      React.createElement('p', { className: 'ing-name' }, name),
-                      ing.flagged && ing.flag_type && React.createElement('span', { className: 'try-flag-badge' },
-                        ing.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 \uC54C\uB808\uB974\uAC90')
-                        : ing.flag_type === 'essential-oil' ? t('Essential oil', '\uC5D0\uC13C\uC15C \uC624\uC77C')
-                        : ing.flag_type === 'sensitizer' ? t('Sensitizer', '\uBBFC\uAC10 \uC131\uBD84')
-                        : ing.flag_type === 'potent-active' ? t('Potent active', '\uAC15\uB825 \uD65C\uC131 \uC131\uBD84')
-                        : null
-                      ),
-                      !ing.flagged && ing.category && React.createElement('span', { style: { fontSize: 11, color: 'var(--ink-faint)', textTransform: 'capitalize' } }, catLabel(ing.category))
+              React.createElement(TryIngScroll, null,
+                allItems.map(function(ing, i) {
+                  var name = isKo ? (ing.name_ko || ing.name) : ing.name;
+                  return React.createElement('div', { key: i, className: 'try-evidence-row' },
+                    React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
+                      name: ing.name, name_ko: ing.name_ko,
+                      symbol: ing.symbol || (name || '').charAt(0).toUpperCase(),
+                      category: ing.category, flagged: ing.flagged, flag_type: ing.flag_type,
+                      description: ing.description, description_ko: ing.description_ko,
+                      science: ing.science, science_ko: ing.science_ko
+                    }); } },
+                      React.createElement('span', { className: 'ing-sym', style: ing.flagged ? { background: '#c0392b' } : { background: SYM_COLORS_D1[i % SYM_COLORS_D1.length] } }, ing.symbol || (name || '').charAt(0).toUpperCase()),
+                      React.createElement('div', { className: 'ing-body', style: { display: 'flex', alignItems: 'center' } },
+                        React.createElement('p', { className: 'ing-name', style: { margin: 0 } }, name),
+                        ing.flagged && ing.flag_type && React.createElement('span', { className: 'try-flag-badge' },
+                          ing.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 \uC54C\uB808\uB974\uAC90')
+                          : ing.flag_type === 'essential-oil' ? t('Essential oil', '\uC5D0\uC13C\uC15C \uC624\uC77C')
+                          : ing.flag_type === 'sensitizer' ? t('Sensitizer', '\uBBFC\uAC10 \uC131\uBD84')
+                          : ing.flag_type === 'potent-active' ? t('Potent active', '\uAC15\uB825 \uD65C\uC131 \uC131\uBD84')
+                          : null
+                        )
+                      )
                     )
-                  )
-                );
-              }),
+                  );
+                })
+              ),
             )
           );
         })(),
@@ -2068,88 +2088,13 @@ export default function Try({ lang, products, setView, setProduct }) {
         React.createElement(Reveal, { delay: 200 },
           React.createElement('div', { className: 'try-result-card' },
             React.createElement('h2', { className: 'try-result-title' },
-              t('Ingredients by product', '제품별 성분')
+              t('Your products', '내 제품')
             ),
             React.createElement('p', { className: 'try-result-disclaimer' },
-              t('Tap a product to expand its ingredient list. Tap any ingredient to read what it does.',
-                '제품을 탭하면 성분 목록이 펼쳐져요. 성분을 탭하면 설명을 볼 수 있어요.')
+              t('Tap to see full ingredient details.', '탭하면 전체 성분을 확인할 수 있어요.')
             ),
-            result.product_breakdowns.map(function(pb) {
-              var isExpanded = expandedProducts.indexOf(pb.id) >= 0;
-              var displayName = isKo ? (pb.nameKo || pb.name) : pb.name;
-              var toggleExpand = function() {
-                setExpandedProducts(function(prev) {
-                  return isExpanded
-                    ? prev.filter(function(id) { return id !== pb.id; })
-                    : prev.concat([pb.id]);
-                });
-              };
-              var SYM_COLORS_PB = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
-              var pbColorIdx = 0;
-
-              return React.createElement('div', { key: pb.id, className: 'try-product-breakdown' },
-                React.createElement('button', { className: 'try-product-toggle', onClick: toggleExpand },
-                  React.createElement('div', { className: 'try-product-toggle-left' },
-                    !pb.isPasted && pb.brand && React.createElement('span', { className: 'try-product-brand' }, pb.brand),
-                    React.createElement('span', { className: 'try-product-name' }, displayName),
-                    React.createElement('span', {
-                      className: 'try-product-badge' + (pb.isWorks ? ' try-product-badge--works' : ' try-product-badge--doesnt')
-                    }, pb.isWorks ? '\u2705' : '\uD83D\uDEAB')
-                  ),
-                  React.createElement('div', { className: 'try-product-toggle-right' },
-                    React.createElement('span', { className: 'try-product-count' },
-                      pb.totalCount + ' ' + t('ingredients', '성분')
-                    ),
-                    React.createElement('span', { className: 'try-product-chevron' + (isExpanded ? ' try-product-chevron--open' : '') }, '\u203A')
-                  )
-                ),
-                isExpanded && React.createElement('div', { className: 'try-product-body' },
-                  pb.activeIngs.length > 0 && React.createElement('div', { className: 'try-cat-group' },
-                    React.createElement('h4', { className: 'try-cat-label' },
-                      t('\u2728 Active ingredients', '\u2728 활성 성분')
-                    ),
-                    React.createElement(TryIngScroll, null,
-                      pb.activeIngs.map(function(ing) {
-                        var name = isKo ? (ing.name_ko || ing.name) : ing.name;
-                        var symBg = ing.flagged ? '#c0392b' : SYM_COLORS_PB[pbColorIdx % SYM_COLORS_PB.length];
-                        pbColorIdx++;
-                        return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged') },
-                          React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng(ing); } },
-                            React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, ing.symbol),
-                            React.createElement('div', { className: 'ing-body' },
-                              React.createElement('p', { className: 'ing-name' }, name)
-                            )
-                          )
-                        );
-                      })
-                    )
-                  ),
-                  pb.comfortIngs.length > 0 && React.createElement('div', { className: 'try-cat-group' },
-                    React.createElement('h4', { className: 'try-cat-label' },
-                      t('\uD83E\uDEE7 Comfort & hydration', '\uD83E\uDEE7 보습 & 진정')
-                    ),
-                    React.createElement(TryIngScroll, null,
-                      pb.comfortIngs.map(function(ing) {
-                        var name = isKo ? (ing.name_ko || ing.name) : ing.name;
-                        var symBg = ing.flagged ? '#c0392b' : SYM_COLORS_PB[pbColorIdx % SYM_COLORS_PB.length];
-                        pbColorIdx++;
-                        return React.createElement('div', { key: ing.id, className: cn('ing-card', ing.flagged && 'try-ing-flagged') },
-                          React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng(ing); } },
-                            React.createElement('span', { className: 'ing-sym', style: { background: symBg } }, ing.symbol),
-                            React.createElement('div', { className: 'ing-body' },
-                              React.createElement('p', { className: 'ing-name' }, name)
-                            )
-                          )
-                        );
-                      })
-                    )
-                  ),
-                  pb.activeIngs.length === 0 && pb.comfortIngs.length === 0 &&
-                    React.createElement('p', { className: 'try-result-empty' },
-                      t('Only base/filler ingredients found for this product.', '이 제품은 기본/충전 성분만 확인됐어요.')
-                    )
-                )
-              );
+            result.product_breakdowns.filter(function(pb) { return !pb.isPasted; }).map(function(pb) {
+              return renderProductLink(pb.id);
             })
           )
         ),

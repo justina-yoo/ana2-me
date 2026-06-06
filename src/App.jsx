@@ -226,7 +226,7 @@ class ErrorBoundary extends React.Component {
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "fontPair": "sourceserif-inter",
-  "headerStyle": "friendly",
+
   "density": "cozy",
   "accent": "forest",
   "night": false
@@ -263,14 +263,9 @@ function Tweaks({ tweaks, setTweak, lang, setLang }) {
         </div>
       </div>
 
-      <div className="tweak-row">
+      <div className="tweak-row" style={{display:'none'}}>
         <label>{t('Header style', '헤더 스타일')}</label>
         <div className="tweak-opts">
-          {['friendly', 'editorial'].map(o => (
-            <button key={o} className={cn('tweak-opt', tweaks.headerStyle === o && 'tweak-opt-on')} onClick={() => setTweak('headerStyle', o)}>
-              {o}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -499,7 +494,6 @@ function App() {
         category={category} setCategory={setCategory}
         query={query} setQuery={setQuery}
         density={density}
-        headerStyle={tweaks.headerStyle}
       />
       {view === 'landing' && <Landing lang={lang} products={products} setView={setView} setProduct={(p) => { setProductId(p.id); setView('detail'); }} density={density} />}
       {fetchError === 'products' && view === 'feed' && <ErrorCard icon="📡" title={lang === 'ko' ? '제품을 불러올 수 없어요' : 'Couldn\u2019t load products'} message={lang === 'ko' ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />}
