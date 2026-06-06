@@ -63,10 +63,10 @@ export default function About({ lang, density }) {
       aKo: "광고가 설득력 있어서, 인플루언서가 극찬해서, 패키지가 예뻐서 샀는데 결국 효과가 없었던 경험이 있는 분들을 위한 공간이에요. '이 제품 뭐가 들어있고 내 피부에 맞는 건지' 누군가 솔직하게 알려줬으면 했던 분이라면, 여기가 맞는 곳입니다.",
     },
     {
-      q: "What is the Analyzer?",
-      qKo: "Analyzer가 뭔가요?",
-      a: "The Analyzer is a tool that lets you paste in an ingredient list — from any skincare, supplement, or wellness product — and get a plain-language breakdown of what's actually in it, what it does, and whether the formula makes sense for your concerns. It's currently in development and coming soon.",
-      aKo: "어떤 스킨케어, 보충제, 웰니스 제품이든 성분표를 붙여넣으면 — 각 성분이 뭔지, 어떤 역할을 하는지, 내 피부 고민에 맞는 포뮬러인지 쉬운 언어로 분석해주는 도구예요. 현재 개발 중이며 곧 출시됩니다.",
+      q: "What is the Ingredient Analyzer?",
+      qKo: "성분 분석기가 뭔가요?",
+      a: "The Analyzer lets you search any Korean skincare product and see a full ingredient breakdown in plain language. Add products that work for your skin and ones that don\u2019t \u2014 we\u2019ll compare the ingredients to find the pattern your skin responds to. It\u2019s free, no login required.",
+      aKo: "성분 분석기는 한국 스킨케어 제품을 검색하면 전 성분을 쉬운 언어로 풀어서 보여주는 도구예요. 잘 맞는 제품과 맞지 않는 제품을 추가하면 성분을 비교해서 내 피부가 반응하는 패턴을 찾아줘요. 무료이고 로그인도 필요 없어요.",
     },
     {
       q: "Why do products work differently on different people?",
@@ -113,7 +113,7 @@ export default function About({ lang, density }) {
       <header className="ins-hero">
         <Sticker color="ink" rotate={3}>{t('about', '소개')}</Sticker>
         <h1 className="display">
-          {isKo ? <>보틀 속의<br /><span className="display-accent">진실<span className="display-dot">.</span></span></> : <>Know what's<br /><span className="display-accent">in your bottle<span className="display-dot">.</span></span></>}
+          {isKo ? <>보틀 속의 <span className="display-accent">진실<span className="display-dot">.</span></span></> : <>Know what's <span className="display-accent">in your bottle<span className="display-dot">.</span></span></>}
         </h1>
         <p className="ins-sub" style={{ maxWidth: '54ch' }}>
           {t('And whether it actually belongs in yours.', '유행하는 성분이 아닌, 내 몸에 맞는 성분을 찾으세요.')}

@@ -746,6 +746,44 @@ export default function Detail({ product, lang, setView, setProduct, density }) 
       </section>
       )}
 
+      {/* ---------- ANALYZER CTA ---------- */}
+      <Reveal>
+        <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); window.scrollTo(0,0); }}
+          style={{
+            display: 'flex', flexDirection: 'column', gap: 10,
+            padding: '24px 22px', margin: '24px 0 0',
+            background: 'var(--accent)', color: '#fff',
+            borderRadius: 'var(--radius)', textDecoration: 'none',
+            transition: 'all .15s ease',
+          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 20 }}>🔬</span>
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.7 }}>
+              {t('Ingredient Analyzer', '성분 분석기')}
+            </span>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)', opacity: 0.9 }}>
+              Beta
+            </span>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(245,215,110,0.5)', color: '#fff' }}>
+              {t('Free', '무료')}
+            </span>
+          </div>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+            {t('Find your ingredient pattern', '나에게 맞는 성분 패턴 찾기')}
+          </span>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '10px 20px', marginTop: 4,
+            background: '#fff', color: 'var(--accent)',
+            borderRadius: 'var(--radius-pill)',
+            fontSize: 13, fontWeight: 700,
+            alignSelf: 'flex-start',
+          }} className="cta-shake">
+            {t('Try the analyzer', '내 성분패턴 분석하기')} →
+          </span>
+        </a>
+      </Reveal>
+
       {/* ---------- RECOMMENDED ARTICLES ---------- */}
       {(() => {
         const [recArticles, setRecArticles] = React.useState([]);

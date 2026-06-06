@@ -351,19 +351,63 @@ const SEO = {
   },
 
   setAnalyzer: function () {
-    var title = 'Ingredient Analyzer | ana2me';
-    var desc = 'Paste any skincare, supplement, or wellness ingredient list and get a plain-language breakdown of what works for your body \u2014 powered by molecular data.';
+    var title = 'Korean Skincare Ingredient Analyzer \u2014 Find Your Ingredient Pattern | ana2me';
+    var desc = 'Search any Korean skincare product and get a full ingredient breakdown in plain language. Add products that work and don\u2019t work for you \u2014 we\u2019ll find the ingredient pattern your skin responds to. Free, no login required.';
     var url = BASE_URL + '/analyzer';
     document.title = title;
     setMeta('meta[name="description"]', desc);
     setMeta('link[rel="canonical"]', url);
     setMeta('meta[property="og:type"]', 'website');
-    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:title"]', 'Korean Skincare Ingredient Analyzer | ana2me');
     setMeta('meta[property="og:description"]', desc);
     setMeta('meta[property="og:url"]', url);
-    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:title"]', 'Korean Skincare Ingredient Analyzer | ana2me');
     setMeta('meta[name="twitter:description"]', desc);
-    setArticleJsonLd(null);
+    // JSON-LD: WebApplication + FAQPage
+    setArticleJsonLd({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebApplication',
+          'name': 'ana2me Ingredient Analyzer',
+          'url': url,
+          'applicationCategory': 'HealthApplication',
+          'operatingSystem': 'Web',
+          'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
+          'description': desc,
+          'publisher': { '@id': BASE_URL + '/#organization' }
+        },
+        {
+          '@type': 'FAQPage',
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What does the ana2me ingredient analyzer do?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The ana2me ingredient analyzer lets you search any Korean skincare product and see a full breakdown of its ingredients in plain language. Add products that work for your skin and ones that don\u2019t, and the analyzer finds the ingredient patterns behind both \u2014 helping you identify what your skin responds to.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does the ingredient pattern analysis work?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The analyzer compares the ingredient lists of products you mark as "works for me" and "didn\u2019t suit me." It identifies ingredients that appear more often in one group than the other, flags known sensitizers and allergens (EU-26 list, essential oils), and ranks the results by statistical signal strength. The more products you add, the more accurate the pattern becomes.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is the ingredient analyzer free?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes, the ana2me ingredient analyzer is completely free. No login or account required. Your data stays in your browser and is not stored on our servers.'
+              }
+            }
+          ]
+        }
+      ]
+    });
   },
 
   // Set SEO for an article — accepts either an articleId (legacy lookup)
