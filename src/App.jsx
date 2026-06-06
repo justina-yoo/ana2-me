@@ -15,6 +15,7 @@ import Privacy from './pages/privacy';
 import Terms from './pages/terms';
 import Admin from './pages/admin';
 import Ingredient from './pages/ingredient';
+import IngredientsList from './pages/ingredients-list';
 
 // Ingredient match card for search results
 const SUPA_URL = 'https://hkyfggapijgedsizfqec.supabase.co';
@@ -35,55 +36,135 @@ function IngredientMatch({ query, lang }) {
 
   if (ingredients.length === 0) return null;
 
+  var SYM_COLORS = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 20px' }}>
-      {ingredients.map(ing => {
-        const name = isKo ? (ing.name_ko || ing.name) : ing.name;
-        const description = isKo ? (ing.description_ko || ing.description) : ing.description;
-        const science = isKo ? (ing.science_ko || ing.science) : ing.science;
-        const hasFlags = ing.is_known_sensitizer || ing.contains_flagged_component || (ing.irritation_risk && ing.irritation_risk !== 'low');
-        return (
-          <div key={ing.id} style={{ padding: '20px', marginBottom: 16, background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', background: 'var(--accent)', color: '#fff', fontSize: 14, fontWeight: 700, flexShrink: 0 }}>{ing.symbol || name.charAt(0).toUpperCase()}</span>
-              <div>
-                <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>{isKo ? '성분' : 'Ingredient'}{ing.category && ing.category !== 'uncategorized' ? ' · ' + ing.category : ''}</span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: 0 }}>{name}</h3>
-              </div>
-            </div>
-            {/* Description */}
-            {description && (
-              <div style={{ marginBottom: science ? 12 : 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', margin: '0 0 4px' }}>{isKo ? '이 성분은' : 'What it is'}</p>
-                <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0 }}>{description}</p>
-              </div>
-            )}
-            {/* Science */}
-            {science && (
-              <div style={{ marginBottom: hasFlags ? 12 : 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', margin: '0 0 4px' }}>{isKo ? '과학적 배경' : 'The science'}</p>
-                <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0 }}>{science}</p>
-              </div>
-            )}
-            {/* Safety flags */}
-            {hasFlags && (
-              <div style={{ padding: '10px 12px', background: 'rgba(192,57,44,0.04)', border: '1px solid rgba(192,57,44,0.12)', borderRadius: 'var(--radius-sm)', marginBottom: 12 }}>
-                <p style={{ fontSize: 12, fontWeight: 600, color: '#c0392b', margin: 0 }}>
-                  {ing.is_known_sensitizer && (isKo ? '⚠ 알려진 민감 성분' : '⚠ Known sensitizer')}
-                  {ing.contains_flagged_component && (isKo ? '⚠ EU-26 향료 알레르겐' : '⚠ EU-26 fragrance allergen')}
-                  {!ing.is_known_sensitizer && !ing.contains_flagged_component && ing.irritation_risk && ing.irritation_risk !== 'low' && (isKo ? '⚠ 일부 피부에 자극 가능' : '⚠ May irritate some skin types')}
-                </p>
-              </div>
-            )}
-            {/* Link to hub page */}
-            <a href={'/ingredients/' + ing.id} onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/ingredients/' + ing.id); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
-              style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none' }}>
-              {isKo ? '이 성분이 든 제품 보기 →' : 'See all products with ' + ing.name + ' →'}
+      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
+        {isKo ? '관련 성분' : 'Related ingredients'}
+      </h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {ingredients.map((ing, i) => {
+          const name = isKo ? (ing.name_ko || ing.name) : ing.name;
+          return (
+            <a key={ing.id} href={'/ingredients/' + ing.id}
+              onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/ingredients/' + ing.id); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
+              className="ing-card" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px' }}>
+              <span className="ing-sym" style={{ background: SYM_COLORS[i % SYM_COLORS.length], width: 42, height: 42, borderRadius: 10, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 700, flexShrink: 0 }}>
+                {ing.symbol || name.charAt(0).toUpperCase()}
+              </span>
+              <span style={{ flex: 1, fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, color: 'var(--ink)' }}>{name}</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', flexShrink: 0 }}>
+                {isKo ? '보기 →' : 'View →'}
+              </span>
             </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// Fuzzy match helper (simple edit distance)
+function fuzzyScore(a, b) {
+  a = a.toLowerCase(); b = b.toLowerCase();
+  if (a === b) return 0;
+  if (b.includes(a) || a.includes(b)) return 1;
+  // Simple character overlap score
+  var matches = 0;
+  for (var i = 0; i < a.length; i++) {
+    if (b.includes(a[i])) matches++;
+  }
+  var overlap = matches / Math.max(a.length, b.length);
+  return overlap > 0.6 ? 2 : (overlap > 0.4 ? 3 : 99);
+}
+
+// "Did you mean?" suggestions when search returns no exact results
+function SearchSuggestions({ query, lang, hasResults, setView, setQuery }) {
+  if (hasResults || !query || query.length < 3) return null;
+  const isKo = lang === 'ko';
+  const lower = query.toLowerCase();
+
+  // Fuzzy match ingredients
+  const ingIndex = window.__ingredientIndex || [];
+  const ingMatches = ingIndex
+    .map(ing => ({ ...ing, score: Math.min(fuzzyScore(lower, ing.name), fuzzyScore(lower, ing.name_ko || '')) }))
+    .filter(ing => ing.score <= 2)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+
+  // Fuzzy match brands (skincare only)
+  const prods = (window.PRODUCTS || []).filter(p => p.category === 'skincare');
+  const allBrands = [...new Set(prods.map(p => p.brand).filter(Boolean))];
+  const brandMatches = allBrands
+    .map(b => ({ name: b, score: fuzzyScore(lower, b) }))
+    .filter(b => b.score <= 2)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+
+  // Fuzzy match products
+  const prodMatches = prods
+    .map(p => ({ ...p, score: Math.min(fuzzyScore(lower, p.name), fuzzyScore(lower, p.brand + ' ' + p.name)) }))
+    .filter(p => p.score <= 2)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+
+  if (ingMatches.length === 0 && brandMatches.length === 0 && prodMatches.length === 0) return null;
+
+  return (
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 20px' }}>
+      <p style={{ fontSize: 14, fontWeight: 500, color: 'var(--ink)', margin: '0 0 12px' }}>
+        {isKo ? '혹시 이것을 찾으셨나요?' : 'Did you mean?'}
+      </p>
+      {ingMatches.length > 0 && (
+        <div style={{ marginBottom: brandMatches.length > 0 || prodMatches.length > 0 ? 14 : 0 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)', margin: '0 0 8px' }}>{isKo ? '성분' : 'Ingredients'}</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {ingMatches.map(ing => (
+              <a key={'ing-' + ing.id} href={'/ingredients/' + ing.id}
+                onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/ingredients/' + ing.id); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px 6px 6px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', textDecoration: 'none', color: 'var(--ink)', fontSize: 13, fontWeight: 500 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: '50%', background: 'var(--accent)', color: '#fff', fontSize: 10, fontWeight: 700 }}>{ing.symbol || ing.name.charAt(0)}</span>
+                {isKo ? (ing.name_ko || ing.name) : ing.name}
+              </a>
+            ))}
           </div>
-        );
-      })}
+        </div>
+      )}
+      {brandMatches.length > 0 && (
+        <div style={{ marginBottom: prodMatches.length > 0 ? 14 : 0 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)', margin: '0 0 8px' }}>{isKo ? '브랜드' : 'Brands'}</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {brandMatches.map(b => {
+              const bSlug = b.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+              return (
+                <a key={'br-' + b.name} href={'/brands/' + bSlug}
+                  onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/brands/' + bSlug); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px 6px 6px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', textDecoration: 'none', color: 'var(--ink)', fontSize: 13, fontWeight: 500 }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: '50%', background: 'var(--ink-faint)', color: '#fff', fontSize: 10, fontWeight: 700 }}>{b.name.charAt(0)}</span>
+                  {b.name}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {prodMatches.length > 0 && (
+        <div>
+          <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)', margin: '0 0 8px' }}>{isKo ? '제품' : 'Products'}</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {prodMatches.map(p => {
+              const pSlug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
+              return (
+                <a key={'pr-' + p.id} href={'/products/' + pSlug}
+                  onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products/' + pSlug); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', textDecoration: 'none', color: 'var(--ink)', fontSize: 13, fontWeight: 500 }}>
+                  {p.brand} {isKo && p.nameKo ? p.nameKo : p.name}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -241,6 +322,7 @@ function getInitialView() {
   if (p === '/terms') return 'terms';
   if (p === '/admin') return 'admin';
   if (p === '/analyze' || p === '/analyzer') return 'analyze';
+  if (p === '/ingredients') return 'ingredients-list';
   if (p.startsWith('/ingredients/')) return 'ingredient';
   if (p === '/search') return 'insights';
   try { return JSON.parse(localStorage.getItem('view')) || 'landing'; } catch(e) { return 'landing'; }
@@ -359,6 +441,7 @@ function App() {
       SEO.setHome();
     }
     else if (path === '/admin') { setView('admin'); }
+    else if (path === '/ingredients') { setView('ingredients-list'); setProductId(null); setQuery(''); SEO.setIngredients(); window.scrollTo(0, 0); }
     else if (path.startsWith('/ingredients/')) { setView('ingredient'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/analyze' || path === '/analyzer') { setView('analyze'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); SEO.setAbout(); window.scrollTo(0, 0); }
@@ -445,8 +528,10 @@ function App() {
               </div>
             )}
             {q && <IngredientMatch query={q} lang={lang} />}
+            {q && <SearchSuggestions query={q} lang={lang} hasResults={matchedProducts.length > 0} setView={setView} setQuery={setQuery} />}
+            {q && matchedProducts.length > 0 && <SearchProducts products={matchedProducts} lang={lang} setProduct={setProduct} />}
             {q && (() => {
-              const allBrands = [...new Set((window.PRODUCTS || []).map(p => p.brand).filter(Boolean))];
+              const allBrands = [...new Set(products.map(p => p.brand).filter(Boolean))];
               const matchedBrands = allBrands.filter(b => qWords.some(w => b.toLowerCase().includes(w)));
               if (matchedBrands.length === 0) return null;
               return (
@@ -469,14 +554,15 @@ function App() {
                 </div>
               );
             })()}
-            {q && matchedProducts.length > 0 && <SearchProducts products={matchedProducts} lang={lang} setProduct={setProduct} />}
-            {q && (
-              <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 12px' }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: 0 }}>
-                  {lang === 'ko' ? '관련 아티클' : 'Related articles'}
-                </h3>
-              </div>
-            )}
+            <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 12px' }}>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: 0 }}>
+                {q && matchedProducts.length > 0
+                  ? (lang === 'ko' ? '관련 아티클' : 'Related articles')
+                  : q
+                    ? (lang === 'ko' ? '추천 아티클' : 'Suggested articles')
+                    : (lang === 'ko' ? '최신 아티클' : 'Latest articles')}
+              </h3>
+            </div>
             <Insights lang={lang} density={density} query={query} />
           </>
         );
@@ -487,6 +573,7 @@ function App() {
       {view === 'about' && <About lang={lang} density={density} />}
       {view === 'privacy' && <Privacy lang={lang} />}
       {view === 'terms' && <Terms lang={lang} />}
+      {view === 'ingredients-list' && <IngredientsList lang={lang} setView={setView} />}
       {view === 'ingredient' && <Ingredient lang={lang} products={products} setView={setView} setProduct={setProduct} />}
       {view === 'admin' && <Admin />}
 

@@ -13,6 +13,8 @@
 /brands     /index.html  200
 /brands/    /brands      301
 /brands/:slug  /index.html  200
+/ingredients  /index.html  200
+/ingredients/  /ingredients  301
 /ingredients/:slug  /index.html  200
 /products   /index.html  200
 /products/  /products    301

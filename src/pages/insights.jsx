@@ -169,7 +169,7 @@ export default function Insights({ lang, density, query }) {
   const q = (query || '').trim().toLowerCase();
   let filteredPosts = activeTag ? POSTS.filter(p => p.tag.en === activeTag) : POSTS;
   if (q) {
-    filteredPosts = filteredPosts.filter(p => {
+    var matched = filteredPosts.filter(p => {
       const haystack = [
         p.title.en, p.title.ko,
         p.excerpt.en, p.excerpt.ko,
@@ -177,8 +177,10 @@ export default function Insights({ lang, density, query }) {
         p.category.en, p.category.ko,
         p.keywords || '',
       ].join(' ').toLowerCase();
-      return q.split(/\s+/).every(word => haystack.includes(word));
+      return q.split(/\s+/).some(word => word.length >= 2 && haystack.includes(word));
     });
+    // If no matches, fall back to all posts (suggested/latest)
+    filteredPosts = matched.length > 0 ? matched : POSTS;
   }
 
 

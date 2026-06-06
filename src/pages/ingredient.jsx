@@ -38,7 +38,7 @@ function IngredientSkeleton() {
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '40px 28px' }}>
       {bar('120px', 14, 16)}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-        <div className="skeleton" style={{ width: 64, height: 64, borderRadius: '50%' }} />
+        <div className="skeleton" style={{ width: 64, height: 64, borderRadius: 16 }} />
         <div>
           {bar('200px', 28, 8)}
           {bar('120px', 16, 0)}
@@ -164,7 +164,7 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
         <header className="ins-hero" style={{ paddingBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 16 }}>
             <div style={{
-              width: 64, height: 64, borderRadius: '50%',
+              width: 64, height: 64, borderRadius: 16,
               background: catColor, color: '#fff',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 28, fontWeight: 600, flexShrink: 0,
