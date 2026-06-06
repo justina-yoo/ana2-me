@@ -46,7 +46,7 @@ export default function Header({ lang, setLang, view, setView, category, setCate
             {t('Products', '제품')}
           </a>
           <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'analyze' && 'cat-edit-active')}>
-            {t('Analyzer', '분석기')}
+            {t('Analyzer', '내 성분패턴 분석하기')}
           </a>
           <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 'auto', flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 10px', cursor: 'pointer' }}>
             {lang === 'ko' ? 'EN' : 'KR'}
@@ -131,7 +131,7 @@ export default function Header({ lang, setLang, view, setView, category, setCate
               {t('Products', '제품')}
             </a>
             <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'analyze' && 'page-tab-active')}>
-              {t('Analyzer', '분석기')}
+              {t('Analyzer', '내 성분패턴 분석하기')}
             </a>
             <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 4, flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 8px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
               {lang === 'ko' ? 'EN' : 'KR'}

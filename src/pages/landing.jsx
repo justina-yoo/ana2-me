@@ -112,7 +112,7 @@ export default function Landing({ lang, products, setView, setProduct, density }
       <header className="ins-hero">
         <Sticker color="ink" rotate={-4}>{t('ingredient-first', '성분 중심')}</Sticker>
         <h1 className="display">
-          {t("Know What's In", '당신이 바르는 것의')}<br />
+          {t("Know What's In ", '당신이 바르는 것의 ')}
           <span className="display-accent">{t('Your Bottle', '성분을 알아보세요')}<span className="display-dot">.</span></span>
         </h1>
         <p className="ins-sub">{t(

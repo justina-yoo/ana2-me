@@ -120,7 +120,7 @@ export default function Feed({ lang, category, setCategory, query, setView, setP
         <header className="ins-hero">
           <Sticker color="sage" rotate={-4}>{t('products', '제품')}</Sticker>
           <h1 className="display">
-            {t('The anatomy of', '성분 해부:')} <br/>
+            {t('The anatomy of ', '성분 해부: ')}
             <span className="display-accent">{t(catMeta.en, catMeta.ko)}<span className="display-dot">.</span></span>
           </h1>
           <p className="ins-sub">{t('Every molecule, demystified.', '모든 분자, 쉽게 풀어드려요.')}</p>

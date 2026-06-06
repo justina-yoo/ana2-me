@@ -243,7 +243,7 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
         <header className="ins-hero">
           <Sticker color="sage" rotate={-4}>{t('insights', '인사이트')}</Sticker>
           <h1 className="display">
-            {t('Research &', '성분, 그 이면의')}<br />
+            {t('Research & ', '성분, 그 이면의 ')}
             <span className="display-accent">{t('Analysis', '데이터')}<span className="display-dot">.</span></span>
           </h1>
           <p className="ins-sub">{t(
