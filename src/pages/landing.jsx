@@ -224,12 +224,6 @@ export default function Landing({ lang, products, setView, setProduct, density }
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
             {t('Find your ingredient pattern', '나에게 맞는 성분 패턴 찾기')}
           </span>
-          <span style={{ fontSize: 13, lineHeight: 1.5, opacity: 0.8 }}>
-            {t(
-              "Tell us what works and what doesn't for your skin — we'll find the pattern.",
-              '내 피부에 맞는 것과 안 맞는 것을 알려주세요. 패턴을 찾아드립니다.'
-            )}
-          </span>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '10px 20px', marginTop: 4,

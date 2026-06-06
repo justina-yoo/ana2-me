@@ -69,6 +69,7 @@ export default function Try({ lang, products, setView, setProduct }) {
   const isKo = lang === 'ko';
   const [works, setWorks] = useState([]);     // Array of { id, name, ... } OR { id: 'pasted-X', name, _pasted: true, _rawIngredients: [...] }
   const [doesnt, setDoesnt] = useState([]);
+  const [neutral, setNeutral] = useState([]);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -83,10 +84,12 @@ export default function Try({ lang, products, setView, setProduct }) {
   var pastedCounter = useRef(0);
   var autoAnalyze = useRef(false);
   const resultsRef = useRef(null);
+  const searchRef = useRef(null);
   useEffect(function() {
     if (result && resultsRef.current) {
       setTimeout(function() {
-        resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var y = resultsRef.current.getBoundingClientRect().top + window.scrollY - 20;
+        window.scrollTo({ top: y, behavior: 'smooth' });
       }, 100);
     }
   }, [result]);
@@ -97,6 +100,16 @@ export default function Try({ lang, products, setView, setProduct }) {
       runAnalysis();
     }
   }, [works, doesnt]);
+
+  // Reset analyzer when navigating to it via header nav
+  useEffect(function() {
+    function onReset() {
+      setWorks([]); setDoesnt([]); setNeutral([]);
+      setResult(null); setError(null); setBusy(false);
+    }
+    window.addEventListener('ana2me:reset-analyzer', onReset);
+    return function() { window.removeEventListener('ana2me:reset-analyzer', onReset); };
+  }, []);
 
   // Set global flag so index.html's handleRoute can intercept navigation
   useEffect(function() {
@@ -137,7 +150,7 @@ export default function Try({ lang, products, setView, setProduct }) {
   const [pasteConfirm, setPasteConfirm] = useState(null); // { chips: [{name, recognized}], addText: '' }
   const [pasteConfirmAdd, setPasteConfirmAdd] = useState('');
   const MAX_PER_SIDE = 3;
-  const allSelected = [...works, ...doesnt].map(function(p) { return p.id; });
+  const allSelected = [...works, ...doesnt, ...neutral].map(function(p) { return p.id; });
   const totalCount = works.length + doesnt.length;
   const canAnalyze = totalCount >= 1;
   const isSingleMode = totalCount === 1;
@@ -1152,38 +1165,413 @@ export default function Try({ lang, products, setView, setProduct }) {
     );
   }
 
+  // ── Unified Search Bar (above both cards) ──
+  function UnifiedSearch() {
+    var [q, setQ] = useState('');
+    var [open, setOpen] = useState(false);
+    var [showCount, setShowCount] = useState(8);
+    var [labelVal, setLabelVal] = useState('doesnt');
+    var [labelOpen, setLabelOpen] = useState(false);
+    useEffect(function() {
+      if (!labelOpen) return;
+      var close = function() { setLabelOpen(false); };
+      document.addEventListener('click', close);
+      return function() { document.removeEventListener('click', close); };
+    }, [labelOpen]);
+    var [pickerPaste, setPickerPaste] = useState(false);
+    var [pickerPasteText, setPickerPasteText] = useState('');
+    var [pickerChips, setPickerChips] = useState([]);
+    var inputRef = useRef(null);
+    var pasteRef = useRef(null);
+
+    var handlePasteInput = function(e) {
+      var val = e.target.value;
+      if (/[,\n\u00B7\uFF1B]/.test(val)) {
+        var parsed = parseIngredientList(val, catalogIngs, _mfdsLookupEn, _mfdsLookupKo);
+        if (parsed.length > 0) {
+          var newNames = parsed.map(function(c) { return c.name; });
+          var existing = new Set(pickerChips.map(function(c) { return c.toLowerCase(); }));
+          var unique = newNames.filter(function(n) { return !existing.has(n.toLowerCase()); });
+          setPickerChips(function(prev) { return prev.concat(unique); });
+          setPickerPasteText('');
+          return;
+        }
+      }
+      setPickerPasteText(val);
+    };
+
+    var addChipFromInput = function() {
+      var name = pickerPasteText.trim();
+      if (!name) return;
+      var existing = new Set(pickerChips.map(function(c) { return c.toLowerCase(); }));
+      if (!existing.has(name.toLowerCase())) {
+        setPickerChips(function(prev) { return prev.concat([name]); });
+      }
+      setPickerPasteText('');
+    };
+
+    var removeChip = function(idx) {
+      setPickerChips(function(prev) { return prev.filter(function(_, i) { return i !== idx; }); });
+    };
+
+    var submitPickerPaste = function() {
+      var names = pickerChips;
+      if (names.length === 0) return;
+      pastedCounter.current++;
+      var pastedId = 'pasted-' + pastedCounter.current;
+      var entry = {
+        id: pastedId,
+        name: t('Pasted product \u00B7 ' + names.length + ' ingredients', '\uBD99\uC5EC\uB123\uAE30 \uC81C\uD488 \u00B7 ' + names.length + '\uAC1C \uC131\uBD84'),
+        nameKo: '\uBD99\uC5EC\uB123\uAE30 \uC81C\uD488 \u00B7 ' + names.length + '\uAC1C \uC131\uBD84',
+        brand: '',
+        imageUrl: null,
+        _pasted: true,
+        _rawIngredients: names
+      };
+      var setter = labelVal === 'doesnt' ? setDoesnt : labelVal === 'neutral' ? setNeutral : setWorks;
+      setter(function(prev) { return prev.concat([entry]); });
+      setPickerPasteText('');
+      setPickerChips([]);
+      setPickerPaste(false);
+      setResult(null); setError(null);
+    };
+
+    var openPaste = function() {
+      setPickerPaste(true);
+      setQ(''); setOpen(false);
+      setTimeout(function() { if (pasteRef.current) pasteRef.current.focus(); }, 50);
+    };
+
+    var targetSetter = labelVal === 'doesnt' ? setDoesnt : labelVal === 'neutral' ? setNeutral : setWorks;
+    var targetList = labelVal === 'doesnt' ? doesnt : labelVal === 'neutral' ? neutral : works;
+
+    var filtered = (products || []).filter(function(p) {
+      if (p.category !== 'skincare') return false;
+      if (allSelected.includes(p.id)) return false;
+      if (!q.trim()) return true;
+      var lower = q.toLowerCase();
+      return p.name.toLowerCase().includes(lower) ||
+             (p.nameKo || '').toLowerCase().includes(lower) ||
+             p.brand.toLowerCase().includes(lower);
+    });
+    if (!q.trim()) filtered = filtered.slice().reverse();
+    var visibleFiltered = filtered.slice(0, showCount);
+    var hasMore = filtered.length > showCount;
+
+    var add = function(p) {
+      if (targetList.length >= MAX_PER_SIDE) return;
+      targetSetter(function(prev) { return prev.concat([p]); });
+      setQ(''); setOpen(false);
+      setResult(null); setError(null);
+    };
+
+    return React.createElement('div', { className: 'try-unified-search', style: { marginBottom: 16 }, ref: searchRef },
+      React.createElement('div', { className: 'try-search-wrap', style: { position: 'relative' } },
+        React.createElement('div', { className: 'try-search' },
+          React.createElement(Icon, { name: 'search', size: 14 }),
+          React.createElement('input', {
+            ref: inputRef,
+            value: q,
+            onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
+            onFocus: function() { setOpen(true); },
+            onBlur: function() { setTimeout(function() { setOpen(false); }, 200); },
+            placeholder: t('Search for a product', '\uC81C\uD488\uC744 \uAC80\uC0C9\uD574\uBCF4\uC138\uC694'),
+            className: 'try-search-input'
+          }),
+          React.createElement('div', { className: 'try-label-dropdown', style: { position: 'relative' } },
+            React.createElement('button', {
+              className: 'try-label-trigger',
+              onClick: function(e) { e.stopPropagation(); setLabelOpen(!labelOpen); }
+            },
+              labelVal === 'works' ? '\u2705 ' + t('Works for me', '\uC798 \uB9DE\uC544\uC694')
+                : labelVal === 'neutral' ? '\u2014 ' + t('No effect', '\uD6A8\uACFC \uC5C6\uC74C')
+                : '\uD83D\uDEAB ' + t('Didn\u2019t suit me', '\uB9DE\uC9C0 \uC54A\uC558\uC5B4\uC694'),
+              React.createElement('span', { className: 'try-label-arrow' })
+            ),
+            labelOpen && React.createElement('div', { className: 'try-label-menu' },
+              React.createElement('button', {
+                className: 'try-label-option' + (labelVal === 'doesnt' ? ' try-label-option--active' : ''),
+                onMouseDown: function(e) { e.preventDefault(); },
+                onClick: function() { setLabelVal('doesnt'); setLabelOpen(false); }
+              }, '\uD83D\uDEAB ' + t('Didn\u2019t suit me', '\uB9DE\uC9C0 \uC54A\uC558\uC5B4\uC694')),
+              React.createElement('button', {
+                className: 'try-label-option' + (labelVal === 'works' ? ' try-label-option--active' : ''),
+                onMouseDown: function(e) { e.preventDefault(); },
+                onClick: function() { setLabelVal('works'); setLabelOpen(false); }
+              }, '\u2705 ' + t('Works for me', '\uC798 \uB9DE\uC544\uC694')),
+              React.createElement('button', {
+                className: 'try-label-option' + (labelVal === 'neutral' ? ' try-label-option--active' : ''),
+                onMouseDown: function(e) { e.preventDefault(); },
+                onClick: function() { setLabelVal('neutral'); setLabelOpen(false); }
+              }, '\u2014 ' + t('No effect', '\uD6A8\uACFC \uC5C6\uC74C'))
+            )
+          )
+        ),
+        open && React.createElement('div', {
+          className: 'try-dropdown',
+          onMouseDown: function(e) { e.preventDefault(); }
+        },
+          visibleFiltered.map(function(p) {
+            var name = isKo && p.nameKo ? p.nameKo : p.name;
+            return React.createElement('button', {
+              key: p.id, className: 'try-dropdown-item',
+              onMouseDown: function(e) { e.preventDefault(); },
+              onClick: function() { add(p); setShowCount(8); }
+            },
+              React.createElement('div', { className: 'try-dd-img' },
+                React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
+              ),
+              React.createElement('div', { style: { flex: 1, minWidth: 0 } },
+                React.createElement('span', { className: 'try-dd-brand' }, p.brand),
+                React.createElement('span', { className: 'try-dd-name' }, name)
+              )
+            );
+          }),
+          hasMore && React.createElement('button', {
+            className: 'try-dropdown-more',
+            onMouseDown: function(e) { e.preventDefault(); },
+            onClick: function() { setShowCount(function(c) { return c + 8; }); }
+          }, t('Show more...', '\uB354 \uBCF4\uAE30...')),
+          q.trim().length > 0 && filtered.length === 0 && React.createElement('p', { className: 'try-empty-search-text' },
+            t('No results for \u201C' + q + '\u201D', '\u201C' + q + '\u201D \uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC5B4\uC694')
+          ),
+          React.createElement('button', {
+            className: 'try-empty-search-paste',
+            onMouseDown: function(e) { e.preventDefault(); },
+            onClick: openPaste
+          },
+            '\uD83D\uDCCB ' + t('Paste its ingredient list instead \u2192', '\uC131\uBD84 \uBAA9\uB85D\uC744 \uB300\uC2E0 \uBD99\uC5EC\uB123\uAE30 \u2192')
+          )
+        )
+      ),
+      // Paste input
+      pickerPaste && React.createElement('div', { className: 'try-chip-input-area', style: { marginTop: 8 }, onClick: function(e) { e.stopPropagation(); if (pasteRef.current) pasteRef.current.focus(); } },
+        React.createElement('div', { className: 'try-chip-input-field' },
+          pickerChips.map(function(name, idx) {
+            return React.createElement('span', { key: idx, className: 'try-paste-chip' },
+              React.createElement('span', { className: 'try-paste-chip-name' }, name),
+              React.createElement('button', {
+                className: 'try-paste-chip-x',
+                onClick: function(e) { e.stopPropagation(); removeChip(idx); },
+                'aria-label': 'Remove'
+              }, '\u00D7')
+            );
+          }),
+          React.createElement('input', {
+            ref: pasteRef,
+            className: 'try-chip-input',
+            value: pickerPasteText,
+            onChange: handlePasteInput,
+            onKeyDown: function(e) {
+              if (e.key === 'Enter') { e.preventDefault(); addChipFromInput(); }
+              if (e.key === 'Backspace' && !pickerPasteText && pickerChips.length > 0) { removeChip(pickerChips.length - 1); }
+            },
+            placeholder: pickerChips.length === 0
+              ? t('Paste ingredient list or type one at a time...', '\uC131\uBD84 \uBAA9\uB85D\uC744 \uBD99\uC5EC\uB123\uAC70\uB098 \uD558\uB098\uC529 \uC785\uB825\uD558\uC138\uC694...')
+              : t('Add more...', '\uB354 \uCD94\uAC00...')
+          }),
+          pickerPasteText.trim() && React.createElement('button', {
+            className: 'try-chip-input-add',
+            onClick: function(e) { e.stopPropagation(); addChipFromInput(); }
+          }, '+')
+        ),
+        React.createElement('div', { className: 'try-paste-actions' },
+          React.createElement('button', {
+            className: 'try-paste-cancel',
+            onClick: function() { setPickerPaste(false); setPickerPasteText(''); setPickerChips([]); }
+          }, t('Cancel', '\uCDE8\uC18C')),
+          React.createElement('button', {
+            className: 'try-paste-submit',
+            disabled: pickerChips.length === 0,
+            onClick: submitPickerPaste
+          }, t('Done', '\uC644\uB8CC') + (pickerChips.length > 0 ? ' (' + pickerChips.length + ')' : ''))
+        )
+      ),
+    );
+  }
+
+  // ── Chip Label Dropdown (custom, matches search bar dropdown) ──
+  function ChipLabelDropdown({ label, onChange }) {
+    var [open, setOpen] = useState(false);
+    useEffect(function() {
+      if (!open) return;
+      var close = function() { setOpen(false); };
+      document.addEventListener('click', close);
+      return function() { document.removeEventListener('click', close); };
+    }, [open]);
+
+    var iconFor = function(l) {
+      if (l === 'works') return '\u2705';
+      if (l === 'doesnt') return '\uD83D\uDEAB';
+      return '\u2014';
+    };
+    var textFor = function(l) {
+      if (l === 'works') return t('Works for me', '\uC798 \uB9DE\uC544\uC694');
+      if (l === 'doesnt') return t('Didn\u2019t suit me', '\uB9DE\uC9C0 \uC54A\uC558\uC5B4\uC694');
+      return t('No effect', '\uD6A8\uACFC \uC5C6\uC74C');
+    };
+    var options = ['doesnt', 'works', 'neutral'];
+
+    return React.createElement('div', { className: 'try-label-dropdown', style: { position: 'relative' } },
+      React.createElement('button', {
+        className: 'try-label-trigger',
+        onClick: function(e) { e.stopPropagation(); setOpen(!open); }
+      },
+        iconFor(label) + ' ' + textFor(label),
+        React.createElement('span', { className: 'try-label-arrow' })
+      ),
+      open && React.createElement('div', { className: 'try-label-menu' },
+        options.map(function(opt) {
+          return React.createElement('button', {
+            key: opt,
+            className: 'try-label-option' + (label === opt ? ' try-label-option--active' : ''),
+            onMouseDown: function(e) { e.preventDefault(); },
+            onClick: function() { onChange(opt); setOpen(false); }
+          }, iconFor(opt) + ' ' + textFor(opt));
+        })
+      )
+    );
+  }
+
+  // ── Move product between lists ──
+  function moveProduct(productId, fromSetter, toLabelVal) {
+    var product = null;
+    fromSetter(function(prev) {
+      var found = prev.find(function(p) { return p.id === productId; });
+      if (found) product = found;
+      return prev.filter(function(p) { return p.id !== productId; });
+    });
+    setTimeout(function() {
+      if (!product) return;
+      var toSetter = toLabelVal === 'doesnt' ? setDoesnt : toLabelVal === 'neutral' ? setNeutral : setWorks;
+      toSetter(function(prev) { return prev.concat([product]); });
+      setResult(null); setError(null);
+    }, 0);
+  }
+
+  // ── Unified Product Card (single card, each product has label dropdown) ──
+  function UnifiedProductCard() {
+    var allProducts = [
+      ...works.map(function(p) { return { p: p, label: 'works', setter: setWorks }; }),
+      ...doesnt.map(function(p) { return { p: p, label: 'doesnt', setter: setDoesnt }; }),
+      ...neutral.map(function(p) { return { p: p, label: 'neutral', setter: setNeutral }; })
+    ];
+    if (allProducts.length === 0) return null;
+
+    var labelIcon = function(label) {
+      if (label === 'works') return '\u2705';
+      if (label === 'doesnt') return '\uD83D\uDEAB';
+      return '\u2014';
+    };
+    var labelText = function(label) {
+      if (label === 'works') return t('Works', '\uC798 \uB9DE\uC544\uC694');
+      if (label === 'doesnt') return t('Didn\u2019t suit', '\uB9DE\uC9C0 \uC54A\uC558\uC5B4\uC694');
+      return t('No effect', '\uD6A8\uACFC \uC5C6\uC74C');
+    };
+    var chipBorder = function(label) {
+      if (label === 'works') return 'rgba(45,90,61,0.35)';
+      if (label === 'doesnt') return 'rgba(180,80,70,0.3)';
+      return 'rgba(120,120,110,0.3)';
+    };
+
+    return React.createElement('div', { style: { padding: '0', margin: '0' } },
+      React.createElement('h3', { className: 'try-picker-label' },
+        t('Your products', '\uB0B4 \uC81C\uD488'),
+        React.createElement('span', { style: { fontSize: 12, fontWeight: 400, color: 'var(--ink-faint)', marginLeft: 6 } }, '(' + allProducts.length + ')')
+      ),
+      allProducts.map(function(item) {
+        var p = item.p;
+        var name = isKo && p.nameKo ? p.nameKo : p.name;
+        var isPasted = !!p._pasted;
+        return React.createElement('div', { key: p.id, className: 'try-chip', style: { borderLeftColor: chipBorder(item.label) } },
+          isPasted
+            ? React.createElement('div', { className: 'try-chip-paste-icon' }, '\uD83D\uDCCB')
+            : React.createElement('div', { className: 'try-chip-img' },
+                React.createElement(ProductImg, { src: p.imageUrl, alt: (p.brand || '') + ' ' + name })
+              ),
+          React.createElement('div', { className: 'try-chip-text', style: { flex: 1 } },
+            isPasted
+              ? React.createElement('span', { className: 'try-chip-name' }, name)
+              : [
+                  React.createElement('span', { key: 'b', className: 'try-chip-brand' }, p.brand),
+                  React.createElement('span', { key: 'n', className: 'try-chip-name' }, name)
+                ]
+          ),
+          React.createElement(ChipLabelDropdown, {
+            label: item.label,
+            onChange: function(newLabel) { moveProduct(p.id, item.setter, newLabel); }
+          }),
+          React.createElement('button', {
+            className: 'try-chip-x',
+            onClick: function() {
+              item.setter(function(prev) { return prev.filter(function(x) { return x.id !== p.id; }); });
+              setResult(null); setError(null);
+            },
+            'aria-label': 'Remove'
+          }, React.createElement(Icon, { name: 'x', size: 12 }))
+        );
+      })
+    );
+  }
+
+  // ── Loading text (cycles through messages) ──
+  function LoadingText() {
+    var messages = isKo
+      ? ['\uC131\uBD84 \uB370\uC774\uD130 \uBD88\uB7EC\uC624\uB294 \uC911...', '\uC131\uBD84 \uD328\uD134 \uBD84\uC11D \uC911...', '\uACB0\uACFC \uC900\uBE44 \uC911...']
+      : ['Fetching ingredient data...', 'Analyzing ingredient patterns...', 'Preparing your results...'];
+    var [idx, setIdx] = useState(0);
+    useEffect(function() {
+      var interval = setInterval(function() {
+        setIdx(function(prev) { return (prev + 1) % messages.length; });
+      }, 1800);
+      return function() { clearInterval(interval); };
+    }, []);
+    return React.createElement('span', { className: 'try-btn-loading' },
+      messages[idx],
+      React.createElement('span', { className: 'try-btn-dots' },
+        React.createElement('span', null, '.'),
+        React.createElement('span', null, '.'),
+        React.createElement('span', null, '.')
+      )
+    );
+  }
+
   // ── RENDER ──
   return React.createElement('div', { className: 'try-page' },
-    // Hero
-    React.createElement('header', { className: 'try-hero' },
-      React.createElement(Sticker, { color: 'accent', rotate: -3 }, t('Beta', '베타')),
-      React.createElement(Sticker, { color: 'butter', rotate: 2 }, t('Free', '무료')),
-      React.createElement('h1', { className: 'display' },
-        t('Find your ', '나만의 '),
-        React.createElement('br'),
+    // Hero — scanner style
+    React.createElement('header', { className: 'try-hero try-hero--scan' },
+      React.createElement('div', { style: { display: 'flex', gap: 6, marginBottom: 8 } },
+        React.createElement(Sticker, { color: 'accent', rotate: -3 }, t('Beta', '\uBCA0\uD0C0')),
+        React.createElement(Sticker, { color: 'butter', rotate: 2 }, t('Free', '\uBB34\uB8CC'))
+      ),
+      React.createElement('h1', { className: 'display', style: { margin: '0 0 16px' } },
+        t('Find your ', '\uB098\uB9CC\uC758 \uC131\uBD84 \uD328\uD134\uC744 '),
         React.createElement('span', { className: 'display-accent' },
-          t('ingredient pattern', '성분 패턴'),
+          t('ingredient pattern', '\uBD84\uC11D\uD574\uB4DC\uB824\uC694'),
           React.createElement('span', { className: 'display-dot' }, '.')
         )
       ),
-      React.createElement('p', { className: 'try-subtitle' },
-        t(
-          'Tell us which products work for your skin and which don\u2019t. We\u2019ll find the ingredient patterns behind both.',
-          '어떤 제품이 맞고 안 맞는지 알려주세요. 그 뒤에 숨겨진 성분 패턴을 찾아드려요.'
-        )
+      // Scanner frame + product icon
+      React.createElement('div', { className: 'try-scan-frame' },
+        React.createElement('span', { className: 'try-scan-corner try-scan-tl' }),
+        React.createElement('span', { className: 'try-scan-corner try-scan-tr' }),
+        React.createElement('span', { className: 'try-scan-corner try-scan-bl' }),
+        React.createElement('span', { className: 'try-scan-corner try-scan-br' }),
+        React.createElement('div', { className: 'try-scan-line' }),
+        React.createElement('img', { src: '/img/placeholder-2.png', alt: '', className: 'try-scan-icon' })
       )
     ),
 
-    // Pickers
-    React.createElement('section', { className: 'try-pickers' },
-      React.createElement(ProductPicker, {
-        label: 'Products that suit you', labelKo: '잘 맞는 제품',
-        selected: works, setSelected: setWorks, max: MAX_PER_SIDE, icon: '\u2705', accent: 'green'
-      }),
-      React.createElement(ProductPicker, {
-        label: 'Products that don\u2019t suit you', labelKo: '맞지 않는 제품',
-        selected: doesnt, setSelected: setDoesnt, max: MAX_PER_SIDE, icon: '\uD83D\uDEAB', accent: 'rose'
-      })
+    // Unified search bar with label dropdown
+    React.createElement(UnifiedSearch, null),
+
+    // Unified product card
+    React.createElement(UnifiedProductCard, null),
+
+    // Tip — below product cards
+    React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: '12px 0 0', lineHeight: 1.5 } },
+      React.createElement('span', { style: { display: 'inline-block', background: 'var(--accent)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, marginRight: 6, letterSpacing: '0.04em', verticalAlign: 'middle' } }, 'TIP'),
+      t('The more products you add, the more accurate your ingredient pattern becomes.', '\uC81C\uD488\uC744 \uB354 \uCD94\uAC00\uD558\uBA74 \uBD84\uC11D\uC774 \uC815\uD655\uD574\uC838\uC694.')
     ),
 
     // Sticky analyze bar — hidden when results are showing
@@ -1194,18 +1582,9 @@ export default function Try({ lang, products, setView, setProduct }) {
         onClick: runAnalysis
       },
         busy
-          ? React.createElement('span', { className: 'try-btn-loading' },
-              t('Analyzing', '분석 중'),
-              React.createElement('span', { className: 'try-btn-dots' },
-                React.createElement('span', null, '.'),
-                React.createElement('span', null, '.'),
-                React.createElement('span', null, '.')
-              )
-            )
+          ? React.createElement(LoadingText, null)
           : canAnalyze
-            ? (isSingleMode
-                ? t('\u{1F449} Analyze this product', '\u{1F449} 이 제품 분석하기')
-                : '\u{1F449} ' + t('Analyze', '분석하기') + ' (' + totalCount + ')')
+            ? t('\u{1F449} Analyze my products', '\u{1F449} \uBD84\uC11D\uD574 \uBCF4\uAE30')
             : t('Add a product to begin', '제품을 추가하세요')
       )
     ),
@@ -1226,10 +1605,8 @@ export default function Try({ lang, products, setView, setProduct }) {
             : t('Based on what you told us', '알려주신 내용을 바탕으로')
         ),
         React.createElement('p', { className: 'try-quality-inline' },
-          result.data_quality.confidence_note + ' ' + t(
-            'This analysis is based on ingredient data, not clinical testing. Individual results vary.',
-            '이 분석은 성분 데이터에 기반하며, 임상 테스트 결과가 아닙니다. 개인차가 있습니다.'
-          )
+          t('This analysis is based on ingredient data, not clinical testing. Individual results vary.',
+            '이 분석은 성분 데이터에 기반하며, 임상 테스트 결과가 아닙니다. 개인차가 있습니다.')
         )
       ),
 
@@ -1337,10 +1714,6 @@ export default function Try({ lang, products, setView, setProduct }) {
               React.createElement('h3', { className: 'try-early-section-title try-early-positive' },
                 '\u2713 ' + t('Looks like your skin may respond well to these', '\ud53c\ubd80\uac00 \uc88b\uc544\ud560 \uc218 \uc788\ub294 \uc131\ubd84')
               ),
-              React.createElement('p', { className: 'try-early-section-sub' },
-                t('Early signal \u2014 in your \u201Cworks\u201D product' + ((result.totalWorks || 0) > 1 ? 's' : '') + ' but not the one' + ((result.totalDoesnt || 0) > 1 ? 's' : '') + ' that didn\u2019t suit you.',
-                  '\ucd08\uae30 \uc2e0\ud638 \u2014 \uc798 \ub9de\ub294 \uc81c\ud488\uc5d0\ub294 \uc788\uc9c0\ub9cc \ub9de\uc9c0 \uc54a\ub294 \uc81c\ud488\uc5d0\ub294 \uc5c6\ub294 \uc131\ubd84.')
-              ),
               (function() {
                 var SYM_COLORS = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C','#5A7D7C','#8B6F4E','#6B5B7B','#7A7570'];
                 var items = (result.positive_ingredients || []).map(function(item, i) {
@@ -1368,10 +1741,6 @@ export default function Try({ lang, products, setView, setProduct }) {
             (result.avoid_ingredients || []).length > 0 && React.createElement('div', { className: 'try-early-section' },
               React.createElement('h3', { className: 'try-early-section-title try-early-watch' },
                 '\u26A0 ' + t('Worth keeping an eye on', '\uc8fc\uc758\ud574\uc11c \ubcfc \uc131\ubd84')
-              ),
-              React.createElement('p', { className: 'try-early-section-sub' },
-                t('These show up in the product' + ((result.totalDoesnt || 0) > 1 ? 's' : '') + ' that didn\u2019t suit you but not the one' + ((result.totalWorks || 0) > 1 ? 's' : '') + ' that did \u2014 especially the flagged ones.',
-                  '\ub9de\uc9c0 \uc54a\ub294 \uc81c\ud488\uc5d0\ub294 \uc788\uc9c0\ub9cc \uc798 \ub9de\ub294 \uc81c\ud488\uc5d0\ub294 \uc5c6\ub294 \uc131\ubd84 \u2014 \ud2b9\ud788 \ud50c\ub798\uadf8\ub41c \uc131\ubd84\uc744 \uc8fc\ubaa9\ud558\uc138\uc694.')
               ),
               (result.avoid_ingredients || []).map(function(item, i) {
                 var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
@@ -1452,62 +1821,99 @@ export default function Try({ lang, products, setView, setProduct }) {
           )
         ),
 
-      // ── Comparative mode: D1 — doesn't-only → hedged flagged candidates, no trigger-grade list ──
+      // ── Comparative mode: D1 — "Ingredients worth noting" (merged flagged + shared) ──
       result.mode !== 'single' && result.confidenceTier === 'confident' &&
         (result.totalWorks || 0) === 0 &&
-        React.createElement(Reveal, { delay: 50 },
-          React.createElement('div', { className: 'try-result-card try-card-avoid' },
-            React.createElement('h2', { className: 'try-result-title' },
-              t('Flagged ingredients in the products that didn\u2019t suit you', '\ub9de\uc9c0 \uc54a\uc558\ub358 \uc81c\ud488\uc758 \ud50c\ub798\uadf8 \uc131\ubd84')
-            ),
-            React.createElement('p', { className: 'try-result-disclaimer' },
-              t('These are commonly flagged ingredients that appeared in your didn\u2019t-suit-me products. Without products that work for you to compare against, we can\u2019t confirm whether any of these are actually the factor \u2014 this is a starting point, not a conclusion.',
-                '\ub9de\uc9c0 \uc54a\ub294 \uc81c\ud488\uc5d0\uc11c \ubc1c\uacac\ub41c \uc77c\ubc18\uc801\uc73c\ub85c \ud50c\ub798\uadf8\ub41c \uc131\ubd84\uc774\uc5d0\uc694. \uc798 \ub9de\ub294 \uc81c\ud488\uacfc \ube44\uad50\ud560 \uc218 \uc5c6\uc5b4 \uc2e4\uc81c \uc6d0\uc778\uc778\uc9c0 \ud655\uc778\ud560 \uc218 \uc5c6\uc5b4\uc694 \u2014 \ucd9c\ubc1c\uc810\uc774\uc9c0 \uacb0\ub860\uc740 \uc544\ub2c8\uc5d0\uc694.')
-            ),
-            // Show only flagged ingredients — unflagged are suppressed in D1
-            (function() {
-              var flaggedOnly = (result.avoid_ingredients || []).filter(function(item) { return item.flagged; });
-              return flaggedOnly.length > 0
-                ? flaggedOnly.map(function(item, i) {
-                    var name = isKo ? (item.ingredient_name_ko || item.ingredient_name_en) : item.ingredient_name_en;
-                    return React.createElement('div', { key: i, className: 'try-evidence-row' },
-                      React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
-                        name: item.ingredient_name_en, name_ko: item.ingredient_name_ko,
-                        symbol: item.symbol, category: item.category, flagged: true, flag_type: item.flag_type,
-                        description: item.description, description_ko: item.description_ko,
-                        science: item.science, science_ko: item.science_ko
-                      }); } },
-                        React.createElement('span', { className: 'ing-sym', style: { background: '#c0392b' } }, item.symbol),
-                        React.createElement('div', { className: 'ing-body' },
-                          React.createElement('p', { className: 'ing-name' }, name),
-                          item.flag_type && React.createElement('span', { className: 'try-flag-badge' },
-                            item.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 \uc54c\ub808\ub974\uac90')
-                            : item.flag_type === 'essential-oil' ? t('Essential oil', '\uc5d0\uc13c\uc15c \uc624\uc77c')
-                            : item.flag_type === 'sensitizer' ? t('Sensitizer', '\ubbfc\uac10 \uc131\ubd84')
-                            : item.flag_type === 'potent-active' ? t('Potent active', '\uac15\ub825 \ud65c\uc131 \uc131\ubd84')
-                            : null
-                          )
-                        )
-                      )
-                    );
-                  })
-                : React.createElement('p', { className: 'try-result-empty' },
-                    t('No commonly flagged ingredients found in these products.',
-                      '\uc774 \uc81c\ud488\ub4e4\uc5d0\uc11c \uc77c\ubc18\uc801\uc73c\ub85c \ud50c\ub798\uadf8\ub41c \uc131\ubd84\uc774 \ubc1c\uacac\ub418\uc9c0 \uc54a\uc558\uc5b4\uc694.')
-                  );
-            })(),
-            // Unlock nudge — the real value requires contrast
-            React.createElement('div', { key: 'd1-unlock', className: 'try-unlock-nudge' },
-              React.createElement('strong', null,
-                t('Unlock your full pattern', '\ub098\ub9cc\uc758 \ud328\ud134 \ud655\uc778\ud558\uae30')
+        (function() {
+          // Collect flagged from avoid list
+          var flagged = (result.avoid_ingredients || []).filter(function(item) { return item.flagged; }).map(function(item) {
+            return { name: item.ingredient_name_en, name_ko: item.ingredient_name_ko, symbol: item.symbol, category: item.category, flagged: true, flag_type: item.flag_type, description: item.description, description_ko: item.description_ko, science: item.science, science_ko: item.science_ko };
+          });
+          // Collect shared non-flagged from product breakdowns
+          var sharedNonFlagged = [];
+          if (result.product_breakdowns && result.product_breakdowns.length >= 2) {
+            var allIngSets = result.product_breakdowns.map(function(pb) {
+              return new Set((pb.ingredients || []).map(function(ing) { return ing.id || ing.name; }));
+            });
+            var firstSet = allIngSets[0];
+            var SKIP = new Set(['water','glycerin','butylene glycol','1,2-hexanediol','pentylene glycol','propanediol','ethylhexylglycerin','carbomer','xanthan gum','disodium edta','phenoxyethanol']);
+            var flaggedNames = new Set(flagged.map(function(f) { return (f.name || '').toLowerCase(); }));
+            firstSet.forEach(function(ingId) {
+              var inAll = allIngSets.every(function(s) { return s.has(ingId); });
+              if (inAll) {
+                var ingData = (result.product_breakdowns[0].ingredients || []).find(function(ing) { return (ing.id || ing.name) === ingId; });
+                if (ingData && !SKIP.has((ingData.name || '').toLowerCase()) && !ingData.flagged && !flaggedNames.has((ingData.name || '').toLowerCase())) {
+                  sharedNonFlagged.push(ingData);
+                }
+              }
+            });
+          }
+          var allItems = flagged.concat(sharedNonFlagged);
+          var SYM_COLORS_D1 = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C'];
+          return React.createElement(Reveal, { delay: 50 },
+            React.createElement('div', { className: 'try-result-card try-card-avoid' },
+              React.createElement('h2', { className: 'try-result-title' },
+                t('Ingredients worth noting', '\uC8FC\uBAA9\uD560 \uC131\uBD84')
               ),
-              React.createElement('p', null,
-                t('Add products that work for your skin and we\u2019ll compare both sides \u2014 that\u2019s how we confirm what your skin actually responds to vs. what it doesn\u2019t.',
-                  '\uc798 \ub9de\ub294 \uc81c\ud488\uc744 \ucd94\uac00\ud558\uba74 \uc591\ucabd\uc744 \ube44\uad50\ud560 \uc218 \uc788\uc5b4\uc694 \u2014 \ud53c\ubd80\uac00 \uc2e4\uc81c\ub85c \uc88b\uc544\ud558\ub294 \uac83\uacfc \uadf8\ub807\uc9c0 \uc54a\uc740 \uac83\uc744 \ud655\uc778\ud558\ub294 \ubc29\ubc95\uc774\uc5d0\uc694.')
+              flagged.length === 0 && React.createElement('div', { style: { padding: '12px 14px', background: 'rgba(45,90,61,0.04)', borderRadius: 'var(--radius-sm)', margin: '0 0 12px', border: '1px solid rgba(45,90,61,0.1)' } },
+                React.createElement('p', { style: { fontSize: 13, color: 'var(--accent)', fontWeight: 600, margin: '0 0 4px' } },
+                  '\u2705 ' + t('No commonly flagged ingredients found.', '\uC77C\uBC18\uC801\uC73C\uB85C \uD50C\uB798\uADF8\uB41C \uC131\uBD84\uC740 \uC5C6\uC5B4\uC694.')
+                ),
+                React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: 0, lineHeight: 1.5 } },
+                  t('Check each product\u2019s ingredient breakdown below to see what stands out.',
+                    '\uC544\uB798 \uC81C\uD488\uBCC4 \uC131\uBD84\uC744 \uD655\uC778\uD574 \uBCF4\uC138\uC694.')
+                )
+              ),
+              flagged.length > 0 && React.createElement('p', { className: 'try-result-disclaimer' },
+                t('These appeared in your products.', '\uC774 \uC81C\uD488\uB4E4\uC5D0 \uD3EC\uD568\uB41C \uC131\uBD84\uC774\uC5D0\uC694.')
+              ),
+              allItems.map(function(ing, i) {
+                var name = isKo ? (ing.name_ko || ing.name) : ing.name;
+                return React.createElement('div', { key: i, className: 'try-evidence-row' },
+                  React.createElement('button', { className: 'ing-card-main', onClick: function() { setSelIng({
+                    name: ing.name, name_ko: ing.name_ko,
+                    symbol: ing.symbol || (name || '').charAt(0).toUpperCase(),
+                    category: ing.category, flagged: ing.flagged, flag_type: ing.flag_type,
+                    description: ing.description, description_ko: ing.description_ko,
+                    science: ing.science, science_ko: ing.science_ko
+                  }); } },
+                    React.createElement('span', { className: 'ing-sym', style: ing.flagged ? { background: '#c0392b' } : { background: SYM_COLORS_D1[i % SYM_COLORS_D1.length] } }, ing.symbol || (name || '').charAt(0).toUpperCase()),
+                    React.createElement('div', { className: 'ing-body' },
+                      React.createElement('p', { className: 'ing-name' }, name),
+                      ing.flagged && ing.flag_type && React.createElement('span', { className: 'try-flag-badge' },
+                        ing.flag_type === 'eu26' ? t('EU-26 allergen', 'EU-26 \uC54C\uB808\uB974\uAC90')
+                        : ing.flag_type === 'essential-oil' ? t('Essential oil', '\uC5D0\uC13C\uC15C \uC624\uC77C')
+                        : ing.flag_type === 'sensitizer' ? t('Sensitizer', '\uBBFC\uAC10 \uC131\uBD84')
+                        : ing.flag_type === 'potent-active' ? t('Potent active', '\uAC15\uB825 \uD65C\uC131 \uC131\uBD84')
+                        : null
+                      ),
+                      !ing.flagged && ing.category && React.createElement('span', { style: { fontSize: 11, color: 'var(--ink-faint)', textTransform: 'capitalize' } }, catLabel(ing.category))
+                    )
+                  )
+                );
+              }),
+              // Short unlock nudge with scroll-to-search button
+              React.createElement('div', { key: 'd1-unlock', className: 'try-unlock-nudge' },
+                React.createElement('p', null,
+                  t('\uD83D\uDD13 Add products that work for you to unlock the full pattern.', '\uD83D\uDD13 \uC798 \uB9DE\uB294 \uC81C\uD488\uC744 \uCD94\uAC00\uD558\uBA74 \uC804\uCCB4 \uD328\uD134\uC744 \uD655\uC778\uD560 \uC218 \uC788\uC5B4\uC694.')
+                ),
+                React.createElement('button', {
+                  className: 'try-btn', style: { marginTop: 10, fontSize: 13, padding: '8px 18px', animation: 'none' },
+                  onClick: function() {
+                    if (searchRef.current) {
+                      var y = searchRef.current.getBoundingClientRect().top + window.scrollY - 20;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                      setTimeout(function() {
+                        var input = searchRef.current.querySelector('input');
+                        if (input) input.focus();
+                      }, 500);
+                    }
+                  }
+                }, '\u2705 ' + t('Add a product that works', '\uC798 \uB9DE\uB294 \uC81C\uD488 \uCD94\uAC00\uD558\uAE30'))
               )
             )
-          )
-        ),
+          );
+        })(),
 
       // ── Comparative mode: POSITIVE card ──
       // Renders for: B, C1, C2, D2. Skips for: D1 (no works), E (no signals)
