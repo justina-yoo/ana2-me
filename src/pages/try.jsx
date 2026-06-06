@@ -1852,15 +1852,17 @@ export default function Try({ lang, products, setView, setProduct }) {
           var sharedNonFlagged = [];
           if (result.product_breakdowns && result.product_breakdowns.length >= 2) {
             var allIngSets = result.product_breakdowns.map(function(pb) {
-              return new Set((pb.ingredients || []).map(function(ing) { return ing.id || ing.name; }));
+              var allIngs = (pb.activeIngs || []).concat(pb.comfortIngs || []);
+              return new Set(allIngs.map(function(ing) { return ing.id || ing.name; }));
             });
+            var firstPbIngs = (result.product_breakdowns[0].activeIngs || []).concat(result.product_breakdowns[0].comfortIngs || []);
             var firstSet = allIngSets[0];
             var SKIP = new Set(['water','glycerin','butylene glycol','1,2-hexanediol','pentylene glycol','propanediol','ethylhexylglycerin','carbomer','xanthan gum','disodium edta','phenoxyethanol']);
             var flaggedNames = new Set(flagged.map(function(f) { return (f.name || '').toLowerCase(); }));
             firstSet.forEach(function(ingId) {
               var inAll = allIngSets.every(function(s) { return s.has(ingId); });
               if (inAll) {
-                var ingData = (result.product_breakdowns[0].ingredients || []).find(function(ing) { return (ing.id || ing.name) === ingId; });
+                var ingData = firstPbIngs.find(function(ing) { return (ing.id || ing.name) === ingId; });
                 if (ingData && !SKIP.has((ingData.name || '').toLowerCase()) && !ingData.flagged && !flaggedNames.has((ingData.name || '').toLowerCase())) {
                   sharedNonFlagged.push(ingData);
                 }
@@ -1915,29 +1917,9 @@ export default function Try({ lang, products, setView, setProduct }) {
                   )
                 );
               }),
-              // Short unlock nudge with scroll-to-search button
-              React.createElement('div', { key: 'd1-unlock', className: 'try-unlock-nudge' },
-                React.createElement('p', null,
-                  t('\uD83D\uDD13 Add products that work for you to unlock the full pattern.', '\uD83D\uDD13 \uC798 \uB9DE\uB294 \uC81C\uD488\uC744 \uCD94\uAC00\uD558\uBA74 \uC804\uCCB4 \uD328\uD134\uC744 \uD655\uC778\uD560 \uC218 \uC788\uC5B4\uC694.')
-                ),
-                React.createElement('button', {
-                  className: 'try-btn', style: { marginTop: 10, fontSize: 13, padding: '8px 18px', animation: 'none' },
-                  onClick: function() {
-                    if (searchRef.current) {
-                      var y = searchRef.current.getBoundingClientRect().top + window.scrollY - 20;
-                      window.scrollTo({ top: y, behavior: 'smooth' });
-                      setTimeout(function() {
-                        var input = searchRef.current.querySelector('input');
-                        if (input) input.focus();
-                      }, 500);
-                    }
-                  }
-                }, '\u2705 ' + t('Add a product that works', '\uC798 \uB9DE\uB294 \uC81C\uD488 \uCD94\uAC00\uD558\uAE30'))
-              )
             )
           );
         })(),
-
       // ── Comparative mode: POSITIVE card ──
       // Renders for: B, C1, C2, D2. Skips for: D1 (no works), E (no signals)
       result.mode !== 'single' && result.confidenceTier === 'confident' &&
@@ -2169,6 +2151,30 @@ export default function Try({ lang, products, setView, setProduct }) {
                 )
               );
             })
+          )
+        ),
+
+      // Unlock nudge — below ingredients by product card
+      result.mode !== 'single' && result.confidenceTier === 'confident' &&
+        (result.totalWorks || 0) === 0 &&
+        React.createElement(Reveal, { delay: 220 },
+          React.createElement('div', { key: 'd1-unlock', style: { textAlign: 'center', padding: '16px 0' } },
+            React.createElement('p', { style: { fontSize: 13, color: 'var(--ink-soft)', margin: '0 0 10px' } },
+              t('🔓 Add products that work for you to unlock the full pattern.', '🔓 잘 맞는 제품을 추가하면 전체 패턴을 확인할 수 있어요.')
+            ),
+            React.createElement('button', {
+              style: { fontSize: 13, padding: '8px 18px', border: '1px solid var(--ink-faint)', borderRadius: 20, background: 'transparent', color: 'var(--ink)', cursor: 'pointer' },
+              onClick: function() {
+                if (searchRef.current) {
+                  var y = searchRef.current.getBoundingClientRect().top + window.scrollY - 20;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                  setTimeout(function() {
+                    var input = searchRef.current.querySelector('input');
+                    if (input) input.focus();
+                  }, 500);
+                }
+              }
+            }, '+ ' + t('Add more', '더 추가'))
           )
         ),
 
