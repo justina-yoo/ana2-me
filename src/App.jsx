@@ -16,6 +16,114 @@ import Terms from './pages/terms';
 import Admin from './pages/admin';
 import Ingredient from './pages/ingredient';
 
+// Ingredient match card for search results
+const SUPA_URL = 'https://hkyfggapijgedsizfqec.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhreWZnZ2FwaWpnZWRzaXpmcWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzY5MDksImV4cCI6MjA5MzY1MjkwOX0.huZi2uDRI0EnVWkg6HTo-VK1V3fz3DyR-ZNGpMd0yLQ';
+
+function IngredientMatch({ query, lang }) {
+  const [ingredients, setIngredients] = useState([]);
+  const isKo = lang === 'ko';
+
+  useEffect(() => {
+    if (!query || query.length < 2) { setIngredients([]); return; }
+    fetch(SUPA_URL + '/rest/v1/ingredients?or=(name.ilike.*' + encodeURIComponent(query) + '*,name_ko.ilike.*' + encodeURIComponent(query) + '*)&limit=3&select=id,name,name_ko,symbol,category,description,description_ko,science,science_ko,is_known_sensitizer,irritation_risk,contains_flagged_component', {
+      headers: { apikey: SUPA_KEY }
+    }).then(r => r.json()).then(data => {
+      setIngredients(data || []);
+    }).catch(() => setIngredients([]));
+  }, [query]);
+
+  if (ingredients.length === 0) return null;
+
+  return (
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 20px' }}>
+      {ingredients.map(ing => {
+        const name = isKo ? (ing.name_ko || ing.name) : ing.name;
+        const description = isKo ? (ing.description_ko || ing.description) : ing.description;
+        const science = isKo ? (ing.science_ko || ing.science) : ing.science;
+        const hasFlags = ing.is_known_sensitizer || ing.contains_flagged_component || (ing.irritation_risk && ing.irritation_risk !== 'low');
+        return (
+          <div key={ing.id} style={{ padding: '20px', marginBottom: 16, background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', background: 'var(--accent)', color: '#fff', fontSize: 14, fontWeight: 700, flexShrink: 0 }}>{ing.symbol || name.charAt(0).toUpperCase()}</span>
+              <div>
+                <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>{isKo ? '성분' : 'Ingredient'}{ing.category && ing.category !== 'uncategorized' ? ' · ' + ing.category : ''}</span>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: 0 }}>{name}</h3>
+              </div>
+            </div>
+            {/* Description */}
+            {description && (
+              <div style={{ marginBottom: science ? 12 : 0 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', margin: '0 0 4px' }}>{isKo ? '이 성분은' : 'What it is'}</p>
+                <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0 }}>{description}</p>
+              </div>
+            )}
+            {/* Science */}
+            {science && (
+              <div style={{ marginBottom: hasFlags ? 12 : 0 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', margin: '0 0 4px' }}>{isKo ? '과학적 배경' : 'The science'}</p>
+                <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--ink-soft)', margin: 0 }}>{science}</p>
+              </div>
+            )}
+            {/* Safety flags */}
+            {hasFlags && (
+              <div style={{ padding: '10px 12px', background: 'rgba(192,57,44,0.04)', border: '1px solid rgba(192,57,44,0.12)', borderRadius: 'var(--radius-sm)', marginBottom: 12 }}>
+                <p style={{ fontSize: 12, fontWeight: 600, color: '#c0392b', margin: 0 }}>
+                  {ing.is_known_sensitizer && (isKo ? '⚠ 알려진 민감 성분' : '⚠ Known sensitizer')}
+                  {ing.contains_flagged_component && (isKo ? '⚠ EU-26 향료 알레르겐' : '⚠ EU-26 fragrance allergen')}
+                  {!ing.is_known_sensitizer && !ing.contains_flagged_component && ing.irritation_risk && ing.irritation_risk !== 'low' && (isKo ? '⚠ 일부 피부에 자극 가능' : '⚠ May irritate some skin types')}
+                </p>
+              </div>
+            )}
+            {/* Link to hub page */}
+            <a href={'/ingredients/' + ing.id} onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/ingredients/' + ing.id); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
+              style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none' }}>
+              {isKo ? '이 성분이 든 제품 보기 →' : 'See all products with ' + ing.name + ' →'}
+            </a>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// Search results: products (show 3, expandable)
+function SearchProducts({ products, lang, setProduct }) {
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? products : products.slice(0, 3);
+  return (
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 24px' }}>
+      <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
+        {lang === 'ko' ? '관련 제품' : 'Related products'}
+      </h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        {visible.map(p => {
+          const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+          const name = lang === 'ko' && p.nameKo ? p.nameKo : p.name;
+          return (
+            <a key={p.id} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} style={{
+              display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0',
+              borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
+            }}>
+              <ProductImg src={p.imageUrl} alt={p.brand + ' ' + name} style={{ width: 56, height: 56, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: 4 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{p.brand}</span>
+                <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: '2px 0 0', color: 'var(--ink)' }}>{name}</h4>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+      {!showAll && products.length > 3 && (
+        <button onClick={() => setShowAll(true)} style={{ display: 'block', margin: '12px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
+          {lang === 'ko' ? '더 보기 (' + (products.length - 3) + ')' : 'See more (' + (products.length - 3) + ')'}
+        </button>
+      )}
+    </div>
+  );
+}
+
 // Error Boundary — catches any child component crash
 class ErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { hasError: false }; }
@@ -169,6 +277,11 @@ function App() {
     }).catch(function() {
       setFetchError('products');
     });
+    // Pre-fetch ingredient IDs for instant search matching
+    fetch(SUPA_URL + '/rest/v1/ingredients?select=id,name,name_ko', { headers: { apikey: SUPA_KEY } })
+      .then(r => r.json())
+      .then(data => { window.__ingredientIndex = data || []; })
+      .catch(() => { window.__ingredientIndex = []; });
   }, []);
 
   const product = productId ? products.find(p => p.id === productId) : null;
@@ -312,39 +425,56 @@ function App() {
       {view === 'detail' && !product && <ProductDetailSkeleton />}
       {view === 'insights' && (() => {
         const q = (query || '').trim().toLowerCase();
-        const matchedProducts = q ? products.filter(p =>
-          p.name.toLowerCase().includes(q) ||
-          (p.nameKo || '').toLowerCase().includes(q) ||
-          p.brand.toLowerCase().includes(q) ||
-          (p.ingredients || []).some(ing => ing.name.toLowerCase().includes(q) || (ing.nameKo || '').toLowerCase().includes(q)) ||
-          (p.summary?.tagline || '').toLowerCase().includes(q)
-        ) : [];
+        const qWords = q.split(/\s+/).filter(w => w.length >= 2);
+        const matchedProducts = q ? products.filter(p => {
+          const haystack = [p.name, p.nameKo || '', p.brand, p.summary?.tagline || '', ...(p.ingredients || []).map(ing => ing.name + ' ' + (ing.nameKo || ''))].join(' ').toLowerCase();
+          // Match if ALL words appear somewhere in the product data
+          return qWords.every(w => haystack.includes(w));
+        }) : [];
 
         return (
           <>
-            {q && matchedProducts.length > 0 && (
-              <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 28px 24px' }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
-                  {lang === 'ko' ? '관련 제품' : 'Related products'}
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                  {matchedProducts.map(p => {
-                    const slug = p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
-                    const name = lang === 'ko' && p.nameKo ? p.nameKo : p.name;
-                    return (
-                      <a key={p.id} href={'/products/' + slug} onClick={(e) => { e.preventDefault(); setProduct(p); history.pushState({}, '', '/products/' + slug); window.scrollTo(0,0); }} style={{
-                        display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0',
-                        borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit', cursor: 'pointer',
-                      }}>
-                        <ProductImg src={p.imageUrl} alt={p.brand + ' ' + name} style={{ width: 56, height: 56, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: 4 }} />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink-faint)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{p.brand}</span>
-                          <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 15, lineHeight: 1.25, margin: '2px 0 0', color: 'var(--ink)' }}>{name}</h4>
-                        </div>
-                      </a>
-                    );
-                  })}
+            {q && (
+              <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 0 8px' }}>
+                <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: 0 }}>
+                  {lang === 'ko' ? '검색 결과:' : 'Results for:'}
+                </p>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 22, color: 'var(--ink)', margin: '4px 0 16px' }}>
+                  "{query.trim()}"
+                </h2>
+              </div>
+            )}
+            {q && <IngredientMatch query={q} lang={lang} />}
+            {q && (() => {
+              const allBrands = [...new Set((window.PRODUCTS || []).map(p => p.brand).filter(Boolean))];
+              const matchedBrands = allBrands.filter(b => qWords.some(w => b.toLowerCase().includes(w)));
+              if (matchedBrands.length === 0) return null;
+              return (
+                <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 20px' }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
+                    {lang === 'ko' ? '관련 브랜드' : 'Related brands'}
+                  </h3>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {matchedBrands.map(b => {
+                      const bSlug = b.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+                      return (
+                        <a key={b} href={'/brands/' + bSlug} onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/brands/' + bSlug); setView('brands'); window.scrollTo(0, 0); }}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px 6px 6px', background: 'var(--cream-card)', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', textDecoration: 'none', color: 'var(--ink)', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-text)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: '50%', background: 'var(--ink-faint)', color: '#fff', fontSize: 11, fontWeight: 700 }}>{b.charAt(0).toUpperCase()}</span>
+                          {b.toUpperCase()}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
+              );
+            })()}
+            {q && matchedProducts.length > 0 && <SearchProducts products={matchedProducts} lang={lang} setProduct={setProduct} />}
+            {q && (
+              <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 12px' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: 0 }}>
+                  {lang === 'ko' ? '관련 아티클' : 'Related articles'}
+                </h3>
               </div>
             )}
             <Insights lang={lang} density={density} query={query} />

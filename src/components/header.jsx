@@ -13,6 +13,42 @@ export default function Header({ lang, setLang, view, setView, category, setCate
     { id: 'wellness-food', en: 'Wellness', ko: '웰니스', icon: 'apple' },
   ];
 
+  const submitSearch = (q) => {
+    if (!q) return;
+    const lower = q.toLowerCase().trim();
+    const slug = lower.replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+    // Check ingredients
+    const ingIndex = window.__ingredientIndex || [];
+    const ingMatch = ingIndex.find(ing =>
+      ing.id === slug ||
+      (ing.name || '').toLowerCase() === lower ||
+      (ing.name_ko || '') === q.trim()
+    );
+    if (ingMatch) {
+      history.pushState({}, '', '/ingredients/' + ingMatch.id);
+      setView('ingredient');
+      setQuery('');
+    }
+    // Check brands (also check product names for partial matches)
+    else {
+      const prods = window.PRODUCTS || [];
+      const brands = [...new Set(prods.map(p => p.brand).filter(Boolean))];
+      const brandMatch = brands.find(b => (b || '').toLowerCase() === lower);
+      if (brandMatch) {
+        const brandSlug = brandMatch.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+        history.pushState({}, '', '/brands/' + brandSlug);
+        setView('brands');
+        setQuery('');
+      } else {
+        history.pushState({}, '', '/search?q=' + encodeURIComponent(q));
+        setView('insights');
+      }
+    }
+    setSearchOpen(false);
+    window.scrollTo(0, 0);
+    if (window.gtag) gtag('event', 'search', { search_term: q });
+  };
+
   const goHome = () => {
     history.pushState({}, '', '/');
     if (SEO) SEO.setHome();
@@ -81,27 +117,19 @@ export default function Header({ lang, setLang, view, setView, category, setCate
         </button>
         {searchOpen ? (
           <div className="hdr-search" style={{ flex: 1, marginLeft: 8 }}>
-            <Icon name="search" size={15} />
             <input
               ref={searchRef}
               value={query}
               autoFocus
               onBlur={() => { if (!query) setTimeout(() => setSearchOpen(false), 150); }}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                if (e.target.value.trim()) setView('insights');
-                const q = e.target.value.trim();
-                history.replaceState({}, '', q ? '/search?q=' + encodeURIComponent(q) : '/insights');
-                if (q.length >= 3 && window.gtag) {
-                  clearTimeout(window.__searchDebounce);
-                  window.__searchDebounce = setTimeout(() => {
-                    gtag('event', 'search', { search_term: q });
-                  }, 800);
-                }
-              }}
+              onChange={(e) => { setQuery(e.target.value); }}
+              onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(query.trim()); }}
               placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
             />
-            <button onClick={() => { setQuery(''); setSearchOpen(false); history.replaceState({}, '', '/insights'); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 2 }}>
+            <button onClick={() => submitSearch(query.trim())} style={{ background: 'none', border: 'none', cursor: 'pointer', color: query.trim() ? 'var(--accent)' : 'var(--ink-faint)', padding: 0, display: 'flex' }}>
+              <Icon name="search" size={15} />
+            </button>
+            <button onClick={() => { setQuery(''); setSearchOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 2 }}>
               <Icon name="x" size={14} />
             </button>
           </div>
@@ -112,25 +140,6 @@ export default function Header({ lang, setLang, view, setView, category, setCate
                 <Icon name="search" size={18} />
               </button>
             )}
-            <div className="hdr-search hdr-search-desktop" style={{ marginRight: 'auto' }}>
-              <Icon name="search" size={15} />
-              <input
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  if (e.target.value.trim()) setView('insights');
-                  const q = e.target.value.trim();
-                  history.replaceState({}, '', q ? '/search?q=' + encodeURIComponent(q) : '/insights');
-                  if (q.length >= 3 && window.gtag) {
-                    clearTimeout(window.__searchDebounce);
-                    window.__searchDebounce = setTimeout(() => {
-                      gtag('event', 'search', { search_term: q });
-                    }, 800);
-                  }
-                }}
-                placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
-              />
-            </div>
           </>
         )}
         {!searchOpen && (
@@ -150,18 +159,19 @@ export default function Header({ lang, setLang, view, setView, category, setCate
           </div>
         )}
       </div>
-      {/* Second row: full search bar collapses on scroll — landing page only */}
+      {/* Second row: full search bar on landing, collapses on scroll */}
       {!searchOpen && view === 'landing' && (
         <div className={cn('hdr-row2', scrolled && 'hdr-row2--hidden')}>
-          <div className="hdr-search hdr-search-row2" onClick={() => setSearchOpen(true)} style={{ cursor: 'text' }}>
-            <Icon name="search" size={15} />
+          <div className="hdr-search hdr-search-row2">
             <input
               value={query}
-              readOnly
+              onChange={(e) => { setQuery(e.target.value); }}
+              onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(query.trim()); }}
               placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
-              onFocus={() => setSearchOpen(true)}
-              style={{ cursor: 'text' }}
             />
+            <button onClick={() => submitSearch(query.trim())} style={{ background: 'none', border: 'none', cursor: 'pointer', color: query.trim() ? 'var(--accent)' : 'var(--ink-faint)', padding: 0, display: 'flex' }}>
+              <Icon name="search" size={15} />
+            </button>
           </div>
         </div>
       )}

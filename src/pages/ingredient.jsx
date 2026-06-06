@@ -57,6 +57,8 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
   const [heroProducts, setHeroProducts] = useState([]);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAllProducts, setShowAllProducts] = useState(false);
+  const [showAllArticles, setShowAllArticles] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
   // Extract slug from URL
@@ -270,7 +272,7 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
               gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
               gap: 14,
             }}>
-              {heroProducts.map(p => {
+              {(showAllProducts ? heroProducts : heroProducts.slice(0, 3)).map(p => {
                 const pName = lang === 'ko' && p.name_ko ? p.name_ko : p.name;
                 const pSlug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
                 return (
@@ -311,6 +313,11 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
                 );
               })}
             </div>
+            {!showAllProducts && heroProducts.length > 3 && (
+              <button onClick={() => setShowAllProducts(true)} style={{ display: 'block', margin: '14px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
+                {t('See more (' + (heroProducts.length - 3) + ')', '더 보기 (' + (heroProducts.length - 3) + ')')}
+              </button>
+            )}
           </section>
         </Reveal>
       )}
@@ -323,7 +330,7 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
               {t('Articles about ' + ingredient.name, ingredient.name + ' 관련 아티클')}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {relatedArticles.map(a => {
+              {(showAllArticles ? relatedArticles : relatedArticles.slice(0, 3)).map(a => {
                 const href = '/' + postSlug(a);
                 const d = new Date(a.date);
                 const dateStr = d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
@@ -366,6 +373,11 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
                 );
               })}
             </div>
+            {!showAllArticles && relatedArticles.length > 3 && (
+              <button onClick={() => setShowAllArticles(true)} style={{ display: 'block', margin: '14px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
+                {t('See more (' + (relatedArticles.length - 3) + ')', '더 보기 (' + (relatedArticles.length - 3) + ')')}
+              </button>
+            )}
           </section>
         </Reveal>
       )}
