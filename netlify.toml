@@ -28,6 +28,10 @@
 
 [[edge_functions]]
   function = "og-inject"
+  path = "/ingredients/*"
+
+[[edge_functions]]
+  function = "og-inject"
   path = "/products"
 
 [[edge_functions]]

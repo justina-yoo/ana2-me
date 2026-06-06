@@ -16,16 +16,21 @@ function dateToISO(dateStr) {
 }
 
 async function generate() {
-  const [articlesRes, productsRes] = await Promise.all([
+  const [articlesRes, productsRes, ingredientsRes] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/articles?select=id,date,tag&order=created_at.desc`, {
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
     }),
     fetch(`${SUPABASE_URL}/rest/v1/products?select=id,brand,name,updated_at&order=updated_at.desc`, {
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+    }),
+    fetch(`${SUPABASE_URL}/rest/v1/products_ingredients?is_hero=eq.true&select=ingredient_id`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
     })
   ]);
   const articles = await articlesRes.json();
   const products = await productsRes.json();
+  const heroIngredientRows = await ingredientsRes.json();
+  const heroIngredientIds = [...new Set((heroIngredientRows || []).map(r => r.ingredient_id))].sort();
 
   const today = new Date().toISOString().slice(0, 10);
 
@@ -127,12 +132,28 @@ async function generate() {
   </url>`;
   }
 
+  // Ingredients (those that are hero in at least one product)
+  if (heroIngredientIds.length > 0) {
+    xml += `
+
+  <!-- Ingredients -->`;
+    for (const ingId of heroIngredientIds) {
+      xml += `
+  <url>
+    <loc>${SITE}/ingredients/${ingId}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+    }
+  }
+
   xml += `
 </urlset>
 `;
 
   writeFileSync('sitemap.xml', xml);
-  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${skincareProducts.length} products + ${brands.length} brands + 6 static pages`);
+  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${skincareProducts.length} products + ${brands.length} brands + ${heroIngredientIds.length} ingredients + 6 static pages`);
 }
 
 generate();

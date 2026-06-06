@@ -14,6 +14,7 @@ import About from './pages/about';
 import Privacy from './pages/privacy';
 import Terms from './pages/terms';
 import Admin from './pages/admin';
+import Ingredient from './pages/ingredient';
 
 // Error Boundary — catches any child component crash
 class ErrorBoundary extends React.Component {
@@ -132,6 +133,7 @@ function getInitialView() {
   if (p === '/terms') return 'terms';
   if (p === '/admin') return 'admin';
   if (p === '/analyze' || p === '/analyzer') return 'analyze';
+  if (p.startsWith('/ingredients/')) return 'ingredient';
   if (p === '/search') return 'insights';
   try { return JSON.parse(localStorage.getItem('view')) || 'landing'; } catch(e) { return 'landing'; }
 }
@@ -244,6 +246,7 @@ function App() {
       SEO.setHome();
     }
     else if (path === '/admin') { setView('admin'); }
+    else if (path.startsWith('/ingredients/')) { setView('ingredient'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/analyze' || path === '/analyzer') { setView('analyze'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); SEO.setAbout(); window.scrollTo(0, 0); }
     else if (path === '/privacy') { setView('privacy'); setProductId(null); setQuery(''); SEO.setPrivacy(); window.scrollTo(0, 0); }
@@ -354,6 +357,7 @@ function App() {
       {view === 'about' && <About lang={lang} density={density} />}
       {view === 'privacy' && <Privacy lang={lang} />}
       {view === 'terms' && <Terms lang={lang} />}
+      {view === 'ingredient' && <Ingredient lang={lang} products={products} setView={setView} setProduct={setProduct} />}
       {view === 'admin' && <Admin />}
 
       <footer style={{

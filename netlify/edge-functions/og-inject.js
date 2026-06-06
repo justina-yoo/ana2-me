@@ -23,8 +23,9 @@ export default async function (request, context) {
   const isPrivacy = path === '/privacy' || path === '/privacy/';
   const isBrands = path === '/brands' || path === '/brands/';
   const brandMatch = path.match(/^\/brands\/([^/]+)\/?$/);
+  const ingredientMatch = path.match(/^\/ingredients\/([^/]+)\/?$/);
   const isStaticPage = isAbout || isAnalyzer || isPrivacy || isBrands || !!brandMatch;
-  if (!articleMatch && !productMatch && !isListing && !isProductListing && !isStaticPage) {
+  if (!articleMatch && !productMatch && !ingredientMatch && !isListing && !isProductListing && !isStaticPage) {
     return context.next();
   }
 
@@ -423,6 +424,87 @@ export default async function (request, context) {
         }));
       }
       jsonLd = JSON.stringify(brandLdObj);
+    } else if (ingredientMatch) {
+      const ingSlug = ingredientMatch[1];
+      const ingRes = await fetchWithTimeout(
+        `${SUPABASE_URL}/rest/v1/ingredients?id=eq.${encodeURIComponent(ingSlug)}&select=id,name,name_ko,symbol,category,description,description_ko,science,science_ko,is_known_sensitizer,irritation_risk,contains_flagged_component,flagged_component_reasons`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const ingData = await ingRes.json();
+      if (!ingData || !ingData[0]) return context.next();
+      const ing = ingData[0];
+
+      title = `${ing.name} — What It Does for Your Skin | ana2me`;
+      description = (ing.science || ing.description || '').slice(0, 160);
+      pageUrl = `${SITE}/ingredients/${ingSlug}`;
+      image = `${SITE}/og-default.png`;
+
+      // Fetch products containing this ingredient
+      let ingProducts = [];
+      try {
+        const piRes = await fetchWithTimeout(
+          `${SUPABASE_URL}/rest/v1/products_ingredients?ingredient_id=eq.${encodeURIComponent(ingSlug)}&is_hero=eq.true&select=product_id`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+        );
+        const piData = await piRes.json();
+        if (piData && piData.length > 0) {
+          const pIds = piData.map(r => r.product_id);
+          const prodsRes = await fetchWithTimeout(
+            `${SUPABASE_URL}/rest/v1/products?id=in.(${pIds.join(',')})&select=id,name,brand,summary`,
+            { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+          );
+          ingProducts = await prodsRes.json();
+        }
+      } catch(e) {}
+
+      // Build SSR content
+      let ingHtml = `<article><h1>${escHtml(ing.name)}</h1>`;
+      if (ing.name_ko) ingHtml += `<p lang="ko">${escHtml(ing.name_ko)}</p>`;
+      if (ing.category) ingHtml += `<p>Category: ${escHtml(ing.category)}</p>`;
+      if (ing.description) ingHtml += `<section><h2>What it is</h2><p>${escHtml(ing.description)}</p></section>`;
+      if (ing.science) ingHtml += `<section><h2>The science</h2><p>${escHtml(ing.science)}</p></section>`;
+      if (ing.is_known_sensitizer || ing.irritation_risk || ing.contains_flagged_component) {
+        ingHtml += `<section><h2>Safety notes</h2><ul>`;
+        if (ing.is_known_sensitizer) ingHtml += `<li>Known sensitizer</li>`;
+        if (ing.contains_flagged_component) ingHtml += `<li>EU-26 flagged fragrance allergen</li>`;
+        if (ing.irritation_risk) ingHtml += `<li>May cause irritation for some skin types</li>`;
+        ingHtml += `</ul></section>`;
+      }
+      if (ingProducts.length > 0) {
+        ingHtml += `<section><h2>Products containing ${escHtml(ing.name)}</h2><ul>`;
+        for (const p of ingProducts) {
+          const pSlug = ((p.brand || '').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + (p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
+          ingHtml += `<li><a href="/products/${pSlug}">${escHtml(p.brand)} ${escHtml(p.name)}</a></li>`;
+        }
+        ingHtml += `</ul></section>`;
+      }
+      ingHtml += `<nav><a href="/products">Products</a> · <a href="/insights">Articles</a> · <a href="/analyzer">Ingredient Analyzer</a></nav></article>`;
+      ssrContent = ingHtml;
+
+      // JSON-LD: FAQPage
+      jsonLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': [{
+          '@type': 'Question',
+          'name': `What does ${ing.name} do for skin?`,
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': ing.science || ing.description || ''
+          }
+        }]
+      });
+
+      breadcrumbLd = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE },
+          { "@type": "ListItem", "position": 2, "name": "Ingredients", "item": `${SITE}/ingredients` },
+          { "@type": "ListItem", "position": 3, "name": ing.name, "item": pageUrl }
+        ]
+      });
+
     } else if (isBrands) {
       title = 'Brands | ana2me';
       description = 'Browse skincare, fragrance, and wellness brands with independent ingredient analysis on ana2me.';

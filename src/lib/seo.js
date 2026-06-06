@@ -553,6 +553,36 @@ const SEO = {
     });
   },
 
+  setIngredient: function (ingredient) {
+    var name = ingredient.name || ingredient.id;
+    var title = name + ' \u2014 What It Does for Your Skin | ' + SITE_NAME;
+    var desc = (ingredient.science || ingredient.description || '').slice(0, 160);
+    var url = BASE_URL + '/ingredients/' + ingredient.id;
+    document.title = title;
+    setMeta('meta[name="description"]', desc);
+    setMeta('link[rel="canonical"]', url);
+    setMeta('meta[property="og:type"]', 'website');
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', desc);
+    setMeta('meta[property="og:url"]', url);
+    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:description"]', desc);
+    setArticleJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'What does ' + name + ' do for skin?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': ingredient.science || ingredient.description || ''
+          }
+        }
+      ]
+    });
+  },
+
   setBrand: function (brandName) {
     var slug = brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
     var title = brandName + ' | ana2me';
