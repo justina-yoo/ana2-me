@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { cn, useL, Icon, Sticker, ProductImg, Reveal } from '../components/primitives';
+import { cn, useL, Icon, Sticker, ProductImg, Reveal, ScrollRow } from '../components/primitives';
 import SEO from '../lib/seo';
 
 const SUPABASE_URL = 'https://hkyfggapijgedsizfqec.supabase.co';
@@ -57,8 +57,9 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
   const [heroProducts, setHeroProducts] = useState([]);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showAllProducts, setShowAllProducts] = useState(false);
-  const [showAllArticles, setShowAllArticles] = useState(false);
+  const [prodPage, setProdPage] = useState(1);
+  const [artPage, setArtPage] = useState(1);
+  const PAGE_SIZE = 3;
   const [notFound, setNotFound] = useState(false);
 
   // Extract slug from URL
@@ -147,47 +148,34 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '18px 0 60px' }}>
 
-      {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 500, color: 'var(--ink-faint)', margin: '6px 0 18px' }}>
-        <a href="/" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/'); setView('landing'); window.scrollTo(0, 0); }}
-          style={{ color: 'var(--ink-faint)', textDecoration: 'none', cursor: 'pointer' }}
-          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--ink)'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--ink-faint)'}>{t('Home', '홈')}</a>
-        <span style={{ opacity: 0.35 }}>/</span>
-        <span style={{ color: 'var(--ink-soft)' }}>{t('Ingredients', '성분')}</span>
-        <span style={{ opacity: 0.35 }}>/</span>
-        <span style={{ color: 'var(--ink-soft)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
-      </nav>
 
       {/* ── HERO ── */}
       <Reveal>
-        <header className="ins-hero" style={{ paddingBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 16 }}>
+        <header style={{ paddingBottom: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
             <div style={{
-              width: 64, height: 64, borderRadius: 16,
+              width: 44, height: 44, borderRadius: 12,
               background: catColor, color: '#fff',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 28, fontWeight: 600, flexShrink: 0,
+              fontSize: 18, fontWeight: 600, flexShrink: 0,
             }}>
               {ingredient.symbol || name.charAt(0)}
             </div>
             <div>
               <h1 style={{
                 fontFamily: 'var(--font-display)', fontWeight: 500,
-                fontSize: 'clamp(24px, 3vw, 32px)', lineHeight: 1.1,
+                fontSize: 'clamp(20px, 3vw, 26px)', lineHeight: 1.1,
                 letterSpacing: '-0.015em', color: 'var(--ink)', margin: 0,
               }}>
                 {name}
               </h1>
-              {nameAlt && (
-                <p style={{ fontSize: 14, color: 'var(--ink-faint)', margin: '4px 0 0' }}>{nameAlt}</p>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2 }}>
+                {nameAlt && <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>{nameAlt}</span>}
+                {catLabel && <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--accent)' }}>{catLabel}</span>}
+              </div>
             </div>
           </div>
-          {catLabel && (
-            <Sticker color="accent" rotate={-3}>{catLabel}</Sticker>
-          )}
-          <p style={{ fontSize: 11, color: 'var(--ink-faint)', margin: '12px 0 0', lineHeight: 1.5, fontStyle: 'italic' }}>
+          <p style={{ fontSize: 10, color: 'var(--ink-faint)', margin: '6px 0 0', lineHeight: 1.5, fontStyle: 'italic' }}>
             {lang === 'ko'
               ? '성분 설명은 ana2me가 독립적으로 작성했습니다. 정보 제공 목적이며, 의료 조언을 대신하지 않습니다.'
               : 'Independently written by ana2me. For informational purposes only — not medical advice.'}
@@ -272,19 +260,14 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
             <p style={{ fontSize: 13, color: 'var(--ink-faint)', margin: '0 0 16px' }}>
               {t('Products where ' + ingredient.name + ' is a key ingredient.', ingredient.name + '을(를) 핵심 성분으로 포함한 제품이에요.')}
             </p>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-              gap: 14,
-            }}>
-              {(showAllProducts ? heroProducts : heroProducts.slice(0, 3)).map(p => {
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {heroProducts.slice(0, prodPage * PAGE_SIZE).map(p => {
                 const pName = lang === 'ko' && p.name_ko ? p.name_ko : p.name;
                 const pSlug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
                 return (
                   <a key={p.id} href={'/products/' + pSlug}
                     onClick={(e) => {
                       e.preventDefault();
-                      // Find product in parent products array for full data
                       const fullProduct = (window.PRODUCTS || []).find(x => x.id === p.id);
                       if (fullProduct) {
                         setProduct(fullProduct);
@@ -295,32 +278,25 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
                       }
                     }}
                     style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-                      padding: '18px 14px', background: 'var(--cream-card)',
-                      border: '1px solid var(--line)', borderRadius: 'var(--radius)',
-                      textDecoration: 'none', color: 'inherit',
-                      transition: 'border-color 0.15s',
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent)'}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--line)'}
-                  >
+                      display: 'flex', alignItems: 'center', gap: 14, padding: '14px 0',
+                      borderBottom: '1px solid var(--line)', textDecoration: 'none', color: 'inherit',
+                    }}>
                     <ProductImg src={p.image_url} alt={p.brand + ' ' + pName}
-                      style={{ width: 80, height: 80, objectFit: 'contain' }} />
-                    <div style={{ textAlign: 'center' }}>
-                      <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-faint)', display: 'block' }}>
-                        {p.brand}
-                      </span>
-                      <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 13, margin: '4px 0 0', color: 'var(--ink)', lineHeight: 1.25 }}>
-                        {pName}
-                      </h4>
+                      style={{ width: 56, height: 56, borderRadius: 'var(--radius-sm)', objectFit: 'contain', flexShrink: 0, background: 'var(--cream-card)', padding: 4 }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-faint)' }}>{p.brand}</span>
+                      <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 14, margin: '2px 0 0', color: 'var(--ink)', lineHeight: 1.25 }}>{pName}</h4>
                     </div>
+                    <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--accent)', flexShrink: 0 }}>
+                      {t('See ingredients →', '성분 보기 →')}
+                    </span>
                   </a>
                 );
               })}
             </div>
-            {!showAllProducts && heroProducts.length > 3 && (
-              <button onClick={() => setShowAllProducts(true)} style={{ display: 'block', margin: '14px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
-                {t('See more (' + (heroProducts.length - 3) + ')', '더 보기 (' + (heroProducts.length - 3) + ')')}
+            {heroProducts.length > prodPage * PAGE_SIZE && (
+              <button onClick={() => setProdPage(p => p + 1)} style={{ display: 'block', margin: '14px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
+                {t('Show more', '더 보기')}
               </button>
             )}
           </section>
@@ -335,7 +311,7 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
               {t('Articles about ' + ingredient.name, ingredient.name + ' 관련 아티클')}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {(showAllArticles ? relatedArticles : relatedArticles.slice(0, 3)).map(a => {
+              {relatedArticles.slice(0, artPage * PAGE_SIZE).map(a => {
                 const href = '/' + postSlug(a);
                 const d = new Date(a.date);
                 const dateStr = d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
@@ -378,9 +354,9 @@ export default function Ingredient({ lang, products, setView, setProduct }) {
                 );
               })}
             </div>
-            {!showAllArticles && relatedArticles.length > 3 && (
-              <button onClick={() => setShowAllArticles(true)} style={{ display: 'block', margin: '14px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
-                {t('See more (' + (relatedArticles.length - 3) + ')', '더 보기 (' + (relatedArticles.length - 3) + ')')}
+            {relatedArticles.length > artPage * PAGE_SIZE && (
+              <button onClick={() => setArtPage(p => p + 1)} style={{ display: 'block', margin: '14px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
+                {t('Show more', '더 보기')}
               </button>
             )}
           </section>

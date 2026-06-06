@@ -40,7 +40,7 @@ function IngredientMatch({ query, lang }) {
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 20px' }}>
       <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
-        {isKo ? '관련 성분' : 'Related ingredients'}
+        {isKo ? '성분' : 'Ingredients'}
       </h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {ingredients.map((ing, i) => {
@@ -171,12 +171,13 @@ function SearchSuggestions({ query, lang, hasResults, setView, setQuery }) {
 
 // Search results: products (show 3, expandable)
 function SearchProducts({ products, lang, setProduct }) {
-  const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? products : products.slice(0, 3);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 3;
+  const visible = products.slice(0, page * PAGE_SIZE);
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 24px' }}>
       <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
-        {lang === 'ko' ? '관련 제품' : 'Related products'}
+        {lang === 'ko' ? '제품' : 'Products'}
       </h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         {visible.map(p => {
@@ -196,9 +197,9 @@ function SearchProducts({ products, lang, setProduct }) {
           );
         })}
       </div>
-      {!showAll && products.length > 3 && (
-        <button onClick={() => setShowAll(true)} style={{ display: 'block', margin: '12px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
-          {lang === 'ko' ? '더 보기 (' + (products.length - 3) + ')' : 'See more (' + (products.length - 3) + ')'}
+      {products.length > page * PAGE_SIZE && (
+        <button onClick={() => setPage(p => p + 1)} style={{ display: 'block', margin: '12px auto 0', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }}>
+          {lang === 'ko' ? '더 보기' : 'Show more'}
         </button>
       )}
     </div>
@@ -515,6 +516,10 @@ function App() {
           return qWords.every(w => haystack.includes(w));
         }) : [];
 
+        const allBrandsForSearch = [...new Set(products.map(p => p.brand).filter(Boolean))];
+        const matchedBrands = q ? allBrandsForSearch.filter(b => qWords.some(w => b.toLowerCase().includes(w))) : [];
+        const hasAnyResults = matchedProducts.length > 0 || matchedBrands.length > 0;
+
         return (
           <>
             {q && (
@@ -528,16 +533,13 @@ function App() {
               </div>
             )}
             {q && <IngredientMatch query={q} lang={lang} />}
-            {q && <SearchSuggestions query={q} lang={lang} hasResults={matchedProducts.length > 0} setView={setView} setQuery={setQuery} />}
             {q && matchedProducts.length > 0 && <SearchProducts products={matchedProducts} lang={lang} setProduct={setProduct} />}
             {q && (() => {
-              const allBrands = [...new Set(products.map(p => p.brand).filter(Boolean))];
-              const matchedBrands = allBrands.filter(b => qWords.some(w => b.toLowerCase().includes(w)));
               if (matchedBrands.length === 0) return null;
               return (
                 <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 20px' }}>
                   <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 12px' }}>
-                    {lang === 'ko' ? '관련 브랜드' : 'Related brands'}
+                    {lang === 'ko' ? '브랜드' : 'Brands'}
                   </h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                     {matchedBrands.map(b => {
@@ -554,16 +556,45 @@ function App() {
                 </div>
               );
             })()}
-            <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 12px' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: 0 }}>
-                {q && matchedProducts.length > 0
-                  ? (lang === 'ko' ? '관련 아티클' : 'Related articles')
-                  : q
-                    ? (lang === 'ko' ? '추천 아티클' : 'Suggested articles')
-                    : (lang === 'ko' ? '최신 아티클' : 'Latest articles')}
-              </h3>
-            </div>
+            {q && <SearchSuggestions query={q} lang={lang} hasResults={hasAnyResults} setView={setView} setQuery={setQuery} />}
+            {q && (
+              <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 0 0' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 18, color: 'var(--ink)', margin: '0 0 -8px' }}>
+                  {matchedProducts.length > 0
+                    ? (lang === 'ko' ? '아티클' : 'Articles')
+                    : (lang === 'ko' ? '추천 아티클' : 'Suggested articles')}
+                </h3>
+              </div>
+            )}
             <Insights lang={lang} density={density} query={query} />
+            {q && (
+              <div style={{ maxWidth: 720, margin: '24px auto 0' }}>
+                <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); setQuery(''); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); window.scrollTo(0,0); }}
+                  style={{
+                    display: 'flex', flexDirection: 'column', gap: 10,
+                    padding: '24px 22px',
+                    background: 'var(--accent)', color: '#fff',
+                    borderRadius: 'var(--radius)', textDecoration: 'none',
+                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 20 }}>🔬</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.7 }}>
+                      {lang === 'ko' ? '성분 분석기' : 'Ingredient Analyzer'}
+                    </span>
+                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)' }}>Beta</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(245,215,110,0.5)', color: '#fff' }}>
+                      {lang === 'ko' ? '무료' : 'Free'}
+                    </span>
+                  </div>
+                  <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2 }}>
+                    {lang === 'ko' ? '나에게 맞는 성분 패턴 찾기' : 'Find your ingredient pattern'}
+                  </span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', marginTop: 4, background: '#fff', color: 'var(--accent)', borderRadius: 'var(--radius-pill)', fontSize: 13, fontWeight: 700, alignSelf: 'flex-start' }}>
+                    {lang === 'ko' ? '내 성분패턴 분석하기' : 'Try the analyzer'} →
+                  </span>
+                </a>
+              </div>
+            )}
           </>
         );
       })()}

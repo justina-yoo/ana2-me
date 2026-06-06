@@ -873,6 +873,12 @@ export default function Detail({ product, lang, setView, setProduct, density }) 
                 <p className="sheet-sci">{lang === 'ko' && selIng.scienceKo ? selIng.scienceKo : selIng.science}</p>
               </>
             )}
+            {selIng.id && (
+              <a href={'/ingredients/' + selIng.id} onClick={(e) => { e.preventDefault(); setSelIng(null); history.pushState({}, '', '/ingredients/' + selIng.id); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 16, fontSize: 13, fontWeight: 600, color: 'var(--accent)', textDecoration: 'none' }}>
+                {t('Read more', '더 알아보기')} <Icon name="arrow" size={14} />
+              </a>
+            )}
           </div>
         </div>
       )}

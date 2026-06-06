@@ -225,6 +225,9 @@ export default function Insights({ lang, density, query }) {
 /* ─── Feed ─────────────────────────────────────────────────────────────────── */
 
 function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagClick, onSelectPost, loadMore, hasMore, loading }) {
+  const [showCount, setShowCount] = useState(5);
+  // Reset show count when query changes
+  useEffect(() => { setShowCount(5); }, [query]);
   // Infinite scroll — use a simple scroll listener (more reliable than IntersectionObserver with React state)
   useEffect(() => {
     if (!loadMore || !hasMore || loading || query || activeTag) return;
@@ -298,9 +301,10 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
           const CTA = AnalyzerCTAs;
           const goAnalyzer = () => { history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); };
           let ctaCount = 0;
+          const visiblePosts = query ? posts.slice(0, showCount) : posts;
           let i = 0;
-          while (i < posts.length) {
-            const post = posts[i];
+          while (i < visiblePosts.length) {
+            const post = visiblePosts[i];
             // Pattern: hero (full width) → 2-col grid of 2 cards → compact list of 2 → repeat
             const blockIndex = Math.floor(i / 5);
             const posInBlock = i % 5;
@@ -367,10 +371,10 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
                 </a></Reveal>
               );
               i++;
-            } else if (posInBlock <= 2 && i + 1 < posts.length) {
+            } else if (posInBlock <= 2 && i + 1 < visiblePosts.length) {
               // 2-column image cards
-              const p1 = posts[i];
-              const p2 = posts[i + 1];
+              const p1 = visiblePosts[i];
+              const p2 = visiblePosts[i + 1];
               cards.push(
                 <Reveal key={p1.id + '-grid'}><div className="feed-2col" style={{
                   display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16,
@@ -423,6 +427,14 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
               );
               i++;
             }
+          }
+          if (query && posts.length > showCount) {
+            cards.push(React.createElement('div', { key: 'show-more', style: { textAlign: 'center', padding: '14px 0' } },
+              React.createElement('button', {
+                onClick: function() { setShowCount(function(c) { return c + 5; }); },
+                style: { background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--ink-soft)', cursor: 'pointer', fontFamily: 'var(--font-text)' }
+              }, t('Show more', '더 보기'))
+            ));
           }
           return cards;
         })()}

@@ -14,52 +14,19 @@ export default function Header({ lang, setLang, view, setView, category, setCate
     { id: 'wellness-food', en: 'Wellness', ko: '웰니스', icon: 'apple' },
   ];
 
-  const submitSearch = async (q) => {
+  const submitSearch = (q) => {
     if (!q) return;
     // Clear previous search state so the view refreshes even if same query
     setQuery('');
     setSearchText('');
     setSearchOpen(false);
-    const lower = q.toLowerCase().trim();
-    const slug = lower.replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
-    // Check ingredients
-    const ingIndex = window.__ingredientIndex || [];
-    const ingMatch = ingIndex.find(ing =>
-      ing.id === slug ||
-      (ing.name || '').toLowerCase() === lower ||
-      (ing.name_ko || '') === q.trim()
-    );
-    if (ingMatch) {
-      history.pushState({}, '', '/ingredients/' + ingMatch.id);
-      setQuery('');
-      window.dispatchEvent(new PopStateEvent('popstate'));
+    // Always go to search results page
+    if (window.location.pathname === '/search') {
+      history.replaceState({}, '', '/search?q=' + encodeURIComponent(q));
+    } else {
+      history.pushState({}, '', '/search?q=' + encodeURIComponent(q));
     }
-    // Check brands
-    else {
-      let prods = window.PRODUCTS || [];
-      let brands = [...new Set(prods.map(p => p.brand).filter(Boolean))];
-      let brandMatch = brands.find(b => (b || '').toLowerCase().trim() === lower);
-      // Fallback: if PRODUCTS not loaded yet, check Supabase directly
-      if (!brandMatch && prods.length === 0) {
-        try {
-          const res = await fetch('https://hkyfggapijgedsizfqec.supabase.co/rest/v1/products?select=brand&brand=ilike.' + encodeURIComponent(q.trim()) + '&limit=1', {
-            headers: { apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhreWZnZ2FwaWpnZWRzaXpmcWVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNzY5MDksImV4cCI6MjA5MzY1MjkwOX0.huZi2uDRI0EnVWkg6HTo-VK1V3fz3DyR-ZNGpMd0yLQ' }
-          });
-          const data = await res.json();
-          if (data && data.length > 0) brandMatch = data[0].brand;
-        } catch(e) {}
-      }
-      if (brandMatch) {
-        const brandSlug = (typeof brandMatch === 'string' ? brandMatch : brandMatch).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
-        history.pushState({}, '', '/brands/' + brandSlug);
-        setQuery('');
-        window.dispatchEvent(new PopStateEvent('popstate'));
-      } else {
-        history.pushState({}, '', '/search?q=' + encodeURIComponent(q));
-        // Use setTimeout to ensure the query clear above takes effect first
-        setTimeout(function() { setQuery(q); setView('insights'); }, 0);
-      }
-    }
+    setTimeout(function() { setQuery(q); setView('insights'); }, 0);
     window.scrollTo(0, 0);
     if (window.gtag) gtag('event', 'search', { search_term: q });
   };
@@ -95,9 +62,6 @@ export default function Header({ lang, setLang, view, setView, category, setCate
           <a href="/insights" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/insights'); setView('insights'); setQuery(''); setSearchText(''); setSearchOpen(false); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'insights' && 'cat-edit-active')}>
             {t('Insights', '인사이트')}
           </a>
-          <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setQuery(''); setSearchText(''); setSearchOpen(false); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'feed' && 'cat-edit-active')}>
-            {t('Products', '제품')}
-          </a>
           <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); setQuery(''); setSearchText(''); setSearchOpen(false); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('cat-edit', view === 'analyze' && 'cat-edit-active')}>
             {t('Analyzer', '내 성분패턴 분석하기')}
           </a>
@@ -132,40 +96,38 @@ export default function Header({ lang, setLang, view, setView, category, setCate
             </g>
           </svg>
         </button>
-        {searchOpen ? (
-          <div className="hdr-search" style={{ flex: 1, marginLeft: 8 }}>
-            <input
-              ref={searchRef}
-              value={searchText}
-              autoFocus
-              onBlur={() => { if (!searchText) setTimeout(() => setSearchOpen(false), 150); }}
-              onChange={(e) => { setSearchText(e.target.value); }}
-              onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(searchText.trim()); }}
-              placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
-            />
-            <button onClick={() => submitSearch(searchText.trim())} style={{ background: 'none', border: 'none', cursor: 'pointer', color: searchText.trim() ? 'var(--accent)' : 'var(--ink-faint)', padding: 0, display: 'flex' }}>
-              <Icon name="search" size={15} />
-            </button>
-            <button onClick={() => { setSearchText(''); setSearchOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 2 }}>
-              <Icon name="x" size={14} />
-            </button>
-          </div>
-        ) : (
-          <>
-            {(scrolled || view !== 'landing') && (
-              <button className="hdr-search-icon" onClick={() => { setSearchText(''); setSearchOpen(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 6 }}>
-                <Icon name="search" size={18} />
+        {/* Search pill — same UI on mobile and desktop */}
+        <div className={cn('hdr-search-pill', !scrolled && view === 'landing' && !searchOpen && 'hdr-search-pill--hide-mobile')} onClick={() => { if (!searchOpen) { setSearchText(''); setSearchOpen(true); } }}>
+          {searchOpen ? (
+            <>
+              <input
+                ref={searchRef}
+                value={searchText}
+                autoFocus
+                onBlur={() => { if (!searchText) setTimeout(() => setSearchOpen(false), 150); }}
+                onChange={(e) => { setSearchText(e.target.value); }}
+                onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(searchText.trim()); }}
+                placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
+                style={{ border: 'none', background: 'none', outline: 'none', flex: 1, fontSize: 16, fontFamily: 'var(--font-text)', color: 'var(--ink)', minWidth: 0 }}
+              />
+              <button onClick={() => submitSearch(searchText.trim())} style={{ background: 'none', border: 'none', cursor: 'pointer', color: searchText.trim() ? 'var(--accent)' : 'var(--ink-faint)', padding: 0, display: 'flex', flexShrink: 0 }}>
+                <Icon name="search" size={14} />
               </button>
-            )}
-          </>
-        )}
+              <button onClick={(e) => { e.stopPropagation(); setSearchText(''); setSearchOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 0, display: 'flex', flexShrink: 0 }}>
+                <Icon name="x" size={12} />
+              </button>
+            </>
+          ) : (
+            <>
+              <span style={{ flex: 1, color: 'var(--ink-faint)' }}>{t('Search', '검색')}</span>
+              <Icon name="search" size={14} />
+            </>
+          )}
+        </div>
         {!searchOpen && (
           <div className="hdr-tabs" style={{ display: 'flex', alignItems: 'center', gap: 0, marginLeft: 'auto', flexShrink: 1, minWidth: 0 }}>
             <a href="/insights" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/insights'); setView('insights'); setQuery(''); setSearchText(''); setSearchOpen(false); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'insights' && 'page-tab-active')}>
               {t('Insights', '인사이트')}
-            </a>
-            <a href="/products" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/products'); setView('feed'); setQuery(''); setSearchText(''); setSearchOpen(false); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'feed' && 'page-tab-active')}>
-              {t('Products', '제품')}
             </a>
             <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); setQuery(''); setSearchText(''); setSearchOpen(false); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'analyze' && 'page-tab-active')} style={{ color: view === 'analyze' ? undefined : 'var(--accent)' }}>
               {t('Analyzer', '내 성분패턴 분석하기')}
