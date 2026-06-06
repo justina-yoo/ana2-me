@@ -2213,7 +2213,7 @@ export default function Try({ lang, products, setView, setProduct }) {
           React.createElement('p', { className: 'try-feedback-q' },
             t('Did this tell you something useful about your skin?', '피부에 대해 유용한 정보를 알게 됐나요?')
           ),
-          React.createElement('div', { className: 'try-feedback-btns' },
+          React.createElement('div', { className: 'try-feedback-row' },
             React.createElement('button', {
               className: 'try-feedback-btn',
               style: fbRating === 'helpful' ? { background: 'var(--accent)', color: '#fff', borderColor: 'var(--accent)' } : undefined,
@@ -2223,9 +2223,7 @@ export default function Try({ lang, products, setView, setProduct }) {
               className: 'try-feedback-btn',
               style: fbRating === 'not_helpful' ? { background: 'var(--ink)', color: '#fff', borderColor: 'var(--ink)' } : undefined,
               onClick: function() { setFbRating(fbRating === 'not_helpful' ? null : 'not_helpful'); }
-            }, '\uD83D\uDC4E ' + t('Not really', '별로요'))
-          ),
-          React.createElement('div', { className: 'try-feedback-comment' },
+            }, '\uD83D\uDC4E ' + t('Not really', '별로요')),
             React.createElement('input', {
               className: 'try-feedback-input',
               value: fbComment,
