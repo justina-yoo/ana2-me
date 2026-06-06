@@ -191,7 +191,7 @@ body.night {
   min-width: 0;
 }
 .hdr-search input {
-  flex: 1; border: 0; background: 0; outline: 0; font-size: 13px; color: var(--ink); min-width: 0;
+  flex: 1; border: 0; background: 0; outline: 0; font-size: 16px; color: var(--ink); min-width: 0;
 }
 .hdr-search input::placeholder { color: var(--ink-faint); }
 .icon-btn {
@@ -250,7 +250,7 @@ body.night {
   border-bottom: 1px solid var(--line); padding: 4px 0; min-width: 180px;
   color: var(--ink-faint);
 }
-.hdr-search-mini input { border: 0; background: 0; outline: 0; flex: 1; font-size: 14px; color: var(--ink); }
+.hdr-search-mini input { border: 0; background: 0; outline: 0; flex: 1; font-size: 16px; color: var(--ink); }
 .hdr-catrow {
   display: flex; gap: 22px; justify-content: center; padding: 14px 0 10px; flex-wrap: wrap;
   font-family: var(--font-display); }
@@ -1356,7 +1356,7 @@ body.night {
   .wm-mark { width: 32px; height: 32px; font-size: 20px; border-radius: 10px; }
   .wm-text { font-size: 22px; }
   .hdr-search { order: 0; flex: 1 1 auto; padding: 7px 12px; width: auto; margin-left: auto; }
-  .hdr-search input { font-size: 14px; }
+  .hdr-search input { font-size: 16px; }
   .icon-btn.pill { padding: 7px 10px; }
   .hdr-lang { font-size: 11px; }
 
@@ -1585,7 +1585,7 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-search:focus-within { box-shadow: 0 8px 40px rgba(0,0,0,0.2), 0 2px 12px rgba(0,0,0,0.1); }
 .try-picker--green .try-search:focus-within { border-color: rgba(45,90,61,0.4); }
 .try-picker--rose .try-search:focus-within { border-color: rgba(180,80,70,0.35); }
-.try-search-input { border: none; background: none; outline: none; font-size: 14px; font-family: var(--font-text); color: var(--ink); width: 100%; }
+.try-search-input { border: none; background: none; outline: none; font-size: 16px; font-family: var(--font-text); color: var(--ink); width: 100%; }
 .try-search-input::placeholder { color: var(--ink-faint); }
 .try-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 999; background: var(--cream-card); border: 1px solid var(--line); border-radius: var(--radius-sm); margin-top: 4px; box-shadow: var(--shadow-card); max-height: 320px; overflow-y: auto; }
 .try-dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; width: 100%; border: none; background: none; cursor: pointer; text-align: left; }
@@ -1856,6 +1856,7 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-scan-br { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; border-bottom-right-radius: 6px; }
 .try-scan-line { position: absolute; left: 10px; right: 10px; top: 18px; height: 2px; background: var(--accent); opacity: 0.7; animation: scan-sweep 2.5s ease-in-out infinite; box-shadow: 0 4px 12px 2px rgba(45,90,61,0.35), 0 8px 24px 4px rgba(45,90,61,0.15); }
 @keyframes scan-sweep { 0%, 100% { top: 18px; } 50% { top: 76px; } }
-.try-scan-icon { width: 56px; height: 56px; object-fit: contain; position: relative; z-index: 1; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08)); }
+.try-scan-carousel { position: relative; width: 76px; height: 76px; z-index: 1; }
+.try-scan-icon { width: 76px; height: 76px; object-fit: contain; position: absolute; top: 0; left: 0; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08)); transition: opacity 0.4s ease, transform 0.4s ease; }
 .try-scan-sub { font-size: 13px; color: var(--ink-faint); margin: 0 0 6px; font-family: var(--font-text); }
 .try-scan-headline { font-family: var(--font-display); font-size: clamp(18px, 4vw, 22px); font-weight: 600; color: var(--ink); margin: 0; line-height: 1.3; }

@@ -90,7 +90,7 @@ export default function Header({ lang, setLang, view, setView, category, setCate
                   }, 800);
                 }
               }}
-              placeholder={t('Search', '검색')}
+              placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
             />
             <button onClick={() => { setQuery(''); setSearchOpen(false); history.replaceState({}, '', '/insights'); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', padding: 2 }}>
               <Icon name="x" size={14} />
@@ -117,7 +117,7 @@ export default function Header({ lang, setLang, view, setView, category, setCate
                     }, 800);
                   }
                 }}
-                placeholder={t('Search', '검색')}
+                placeholder={t('Search ingredients, products...', '성분, 제품 검색...')}
               />
             </div>
           </>

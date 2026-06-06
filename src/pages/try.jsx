@@ -81,6 +81,14 @@ export default function Try({ lang, products, setView, setProduct }) {
   const [showFbModal, setShowFbModal] = useState(false);
   const pendingNav = useRef(null);
   const [catalogIngs, setCatalogIngs] = useState(null);
+  const [scanIdx, setScanIdx] = useState(0);
+  const SCAN_IMAGES = ['/img/placeholder-1.png','/img/placeholder-2.png','/img/placeholder-3.png','/img/placeholder-4.png','/img/placeholder-5.png','/img/placeholder-6.png'];
+  useEffect(function() {
+    var interval = setInterval(function() {
+      setScanIdx(function(prev) { return (prev + 1) % 6; });
+    }, 2500);
+    return function() { clearInterval(interval); };
+  }, []);
   var pastedCounter = useRef(0);
   var autoAnalyze = useRef(false);
   const resultsRef = useRef(null);
@@ -1558,7 +1566,18 @@ export default function Try({ lang, products, setView, setProduct }) {
         React.createElement('span', { className: 'try-scan-corner try-scan-bl' }),
         React.createElement('span', { className: 'try-scan-corner try-scan-br' }),
         React.createElement('div', { className: 'try-scan-line' }),
-        React.createElement('img', { src: '/img/placeholder-2.png', alt: '', className: 'try-scan-icon' })
+        React.createElement('div', { className: 'try-scan-carousel' },
+          SCAN_IMAGES.map(function(src, i) {
+            return React.createElement('img', {
+              key: i, src: src, alt: '',
+              className: 'try-scan-icon',
+              style: {
+                opacity: i === scanIdx ? 1 : 0,
+                transform: i === scanIdx ? 'translateX(0)' : (i === (scanIdx - 1 + 6) % 6 ? 'translateX(-30px)' : 'translateX(30px)')
+              }
+            });
+          })
+        )
       )
     ),
 
@@ -1851,7 +1870,7 @@ export default function Try({ lang, products, setView, setProduct }) {
           var allItems = flagged.concat(sharedNonFlagged);
           var SYM_COLORS_D1 = ['#C05A3C','#5F7A8A','#9A7B5B','#1A1916','#7B6180','#D4944C'];
           return React.createElement(Reveal, { delay: 50 },
-            React.createElement('div', { className: 'try-result-card try-card-avoid' },
+            React.createElement('div', { className: flagged.length > 0 ? 'try-result-card try-card-avoid' : 'try-result-card' },
               React.createElement('h2', { className: 'try-result-title' },
                 t('Ingredients worth noting', '\uC8FC\uBAA9\uD560 \uC131\uBD84')
               ),
