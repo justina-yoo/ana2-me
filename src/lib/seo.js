@@ -352,7 +352,7 @@ const SEO = {
 
   setAnalyzer: function () {
     var title = 'Korean Skincare Ingredient Analyzer \u2014 Find Your Ingredient Pattern | ana2me';
-    var desc = 'Search any Korean skincare product and get a full ingredient breakdown in plain language. Add products that work and don\u2019t work for you \u2014 we\u2019ll find the ingredient pattern your skin responds to. Free, no login required.';
+    var desc = 'Search any skincare product and get a full ingredient breakdown in plain language. Add products that work and don\u2019t work for you \u2014 we\u2019ll find the ingredient pattern your skin responds to. Free, no login required.';
     var url = BASE_URL + '/analyzer';
     document.title = title;
     setMeta('meta[name="description"]', desc);
@@ -385,7 +385,7 @@ const SEO = {
               'name': 'What does the ana2me ingredient analyzer do?',
               'acceptedAnswer': {
                 '@type': 'Answer',
-                'text': 'The ana2me ingredient analyzer lets you search any Korean skincare product and see a full breakdown of its ingredients in plain language. Add products that work for your skin and ones that don\u2019t, and the analyzer finds the ingredient patterns behind both \u2014 helping you identify what your skin responds to.'
+                'text': 'The ana2me ingredient analyzer lets you search any skincare product and see a full breakdown of its ingredients in plain language. Add products that work for your skin and ones that don\u2019t, and the analyzer finds the ingredient patterns behind both \u2014 helping you identify what your skin responds to.'
               }
             },
             {

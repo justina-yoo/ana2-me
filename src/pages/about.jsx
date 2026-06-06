@@ -65,7 +65,7 @@ export default function About({ lang, density }) {
     {
       q: "What is the Ingredient Analyzer?",
       qKo: "성분 분석기가 뭔가요?",
-      a: "The Analyzer lets you search any Korean skincare product and see a full ingredient breakdown in plain language. Add products that work for your skin and ones that don\u2019t \u2014 we\u2019ll compare the ingredients to find the pattern your skin responds to. It\u2019s free, no login required.",
+      a: "The Analyzer lets you search any skincare product and see a full ingredient breakdown in plain language. Add products that work for your skin and ones that don\u2019t \u2014 we\u2019ll compare the ingredients to find the pattern your skin responds to. It\u2019s free, no login required.",
       aKo: "성분 분석기는 한국 스킨케어 제품을 검색하면 전 성분을 쉬운 언어로 풀어서 보여주는 도구예요. 잘 맞는 제품과 맞지 않는 제품을 추가하면 성분을 비교해서 내 피부가 반응하는 패턴을 찾아줘요. 무료이고 로그인도 필요 없어요.",
     },
     {
