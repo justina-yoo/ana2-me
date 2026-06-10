@@ -1073,7 +1073,6 @@ export default function Try({ lang, products, setView, setProduct }) {
             value: q,
             onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
             onFocus: function() { setOpen(true); },
-            onBlur: function() { setTimeout(function() { setOpen(false); }, 400); },
             placeholder: t('Add a product...', '제품 추가...'),
             className: 'try-search-input'
           })
@@ -1312,6 +1311,22 @@ export default function Try({ lang, products, setView, setProduct }) {
       setResult(null); setError(null);
     };
 
+    // Close dropdown on outside tap
+    useEffect(function() {
+      if (!open) return;
+      var handleTap = function(e) {
+        if (searchRef.current && !searchRef.current.contains(e.target)) {
+          setOpen(false);
+        }
+      };
+      document.addEventListener('mousedown', handleTap);
+      document.addEventListener('touchstart', handleTap);
+      return function() {
+        document.removeEventListener('mousedown', handleTap);
+        document.removeEventListener('touchstart', handleTap);
+      };
+    }, [open]);
+
     return React.createElement('div', { className: 'try-unified-search', style: { marginBottom: 16 }, ref: searchRef },
       React.createElement('div', { className: 'try-search-wrap', style: { position: 'relative' } },
         React.createElement('div', { className: 'try-search' },
@@ -1320,7 +1335,6 @@ export default function Try({ lang, products, setView, setProduct }) {
             value: q,
             onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
             onFocus: function() { setOpen(true); },
-            onBlur: function() { setTimeout(function() { setOpen(false); }, 400); },
             placeholder: t('Select a product', '\uC81C\uD488\uC744 \uC785\uB825\uD558\uC138\uC694'),
             className: 'try-search-input'
           }),

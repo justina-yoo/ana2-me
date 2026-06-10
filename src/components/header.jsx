@@ -42,10 +42,20 @@ export default function Header({ lang, setLang, view, setView, category, setCate
     setTimeout(() => window.scrollTo(0, 0), 10);
   };
 
-  // Track scroll for search bar collapse
+  // Track scroll for search bar collapse (hysteresis to prevent jitter)
   const [scrolled, setScrolled] = React.useState(false);
+  const scrolledRef = React.useRef(false);
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (!scrolledRef.current && y > 80) {
+        scrolledRef.current = true;
+        setScrolled(true);
+      } else if (scrolledRef.current && y < 30) {
+        scrolledRef.current = false;
+        setScrolled(false);
+      }
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
