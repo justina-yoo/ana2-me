@@ -1229,6 +1229,7 @@ export default function Try({ lang, products, setView, setProduct }) {
     var [pickerChips, setPickerChips] = useState([]);
     var inputRef = useRef(null);
     var pasteRef = useRef(null);
+    var [inputEditable, setInputEditable] = useState(false);
 
     var handlePasteInput = function(e) {
       var val = e.target.value;
@@ -1313,10 +1314,15 @@ export default function Try({ lang, products, setView, setProduct }) {
 
     // Close dropdown on outside tap
     useEffect(function() {
-      if (!open) return;
+      if (!open) {
+        setInputEditable(false);
+        return;
+      }
       var handleTap = function(e) {
         if (searchRef.current && !searchRef.current.contains(e.target)) {
           setOpen(false);
+          setInputEditable(false);
+          if (inputRef.current) inputRef.current.blur();
         }
       };
       document.addEventListener('mousedown', handleTap);
@@ -1333,8 +1339,15 @@ export default function Try({ lang, products, setView, setProduct }) {
           React.createElement('input', {
             ref: inputRef,
             value: q,
+            readOnly: !inputEditable,
             onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
             onFocus: function() { setOpen(true); },
+            onClick: function() {
+              if (!inputEditable && open) {
+                setInputEditable(true);
+                if (inputRef.current) inputRef.current.readOnly = false;
+              }
+            },
             placeholder: t('Select a product', '\uC81C\uD488\uC744 \uC785\uB825\uD558\uC138\uC694'),
             className: 'try-search-input'
           }),
