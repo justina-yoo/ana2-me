@@ -82,6 +82,10 @@ export default function Try({ lang, products, setView, setProduct }) {
   const pendingNav = useRef(null);
   const [catalogIngs, setCatalogIngs] = useState(null);
   const [searchLabelVal, setSearchLabelVal] = useState('doesnt');
+  const [searchQ, setSearchQ] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchShowCount, setSearchShowCount] = useState(8);
+  const [searchEditable, setSearchEditable] = useState(false);
   const [scanIdx, setScanIdx] = useState(0);
   const SCAN_IMAGES = ['/img/placeholder-1.png','/img/placeholder-2.png','/img/placeholder-3.png','/img/placeholder-4.png','/img/placeholder-5.png','/img/placeholder-6.png'];
   const SCAN_INGREDIENTS = [
@@ -1212,9 +1216,10 @@ export default function Try({ lang, products, setView, setProduct }) {
 
   // ── Unified Search Bar (above both cards) ──
   function UnifiedSearch() {
-    var [q, setQ] = useState('');
-    var [open, setOpen] = useState(false);
-    var [showCount, setShowCount] = useState(8);
+    var q = searchQ, setQ = setSearchQ;
+    var open = searchOpen, setOpen = setSearchOpen;
+    var showCount = searchShowCount, setShowCount = setSearchShowCount;
+    var inputEditable = searchEditable, setInputEditable = setSearchEditable;
     var labelVal = searchLabelVal;
     var setLabelVal = setSearchLabelVal;
     var [labelOpen, setLabelOpen] = useState(false);
@@ -1229,7 +1234,6 @@ export default function Try({ lang, products, setView, setProduct }) {
     var [pickerChips, setPickerChips] = useState([]);
     var inputRef = useRef(null);
     var pasteRef = useRef(null);
-    var [inputEditable, setInputEditable] = useState(false);
 
     var handlePasteInput = function(e) {
       var val = e.target.value;

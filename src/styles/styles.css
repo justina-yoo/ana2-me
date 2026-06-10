@@ -1605,7 +1605,7 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-search-input::placeholder { color: var(--ink-faint); }
 .try-search-input--placeholder { color: var(--ink-faint); cursor: pointer; user-select: none; -webkit-user-select: none; line-height: 1.4; }
 .try-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 999; background: var(--cream-card); border: 1px solid var(--line); border-radius: var(--radius-sm); margin-top: 4px; box-shadow: var(--shadow-card); max-height: 320px; display: flex; flex-direction: column; }
-.try-dropdown-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+.try-dropdown-scroll { flex: 1; overflow-y: auto; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .try-dropdown-paste-sticky { position: sticky; bottom: 0; display: block; width: 100%; padding: 10px 14px; border: none; border-top: 1px solid var(--line); background: var(--cream-card); text-align: left; font-size: 13px; font-family: var(--font-text); color: var(--accent); cursor: pointer; flex-shrink: 0; }
 .try-dropdown-paste-sticky:hover { background: var(--cream); }
 @media (max-width: 480px) { .try-dropdown { max-height: 180px; } }
