@@ -566,6 +566,7 @@ export default async function (request, context) {
       title = 'Korean Skincare Ingredient Analyzer — Find Your Ingredient Pattern | ana2me';
       description = 'Search any skincare product and get a full ingredient breakdown in plain language. Add products that work and don\u2019t work for you — we\u2019ll find the ingredient pattern your skin responds to. Free, no login required.';
       pageUrl = `${SITE}/analyzer`;
+      image = `${SITE}/og-default.png`;
       ssrContent = `<article><h1>Korean Skincare Ingredient Analyzer</h1><p>${escHtml(description)}</p><h2>What does the ingredient analyzer do?</h2><p>Search any skincare product and see a full breakdown of its ingredients in plain language. Add products that work for your skin and ones that don't, and the analyzer finds the ingredient patterns behind both.</p><h2>How does ingredient pattern analysis work?</h2><p>The analyzer compares ingredient lists of products you mark as "works for me" and "didn't suit me." It identifies ingredients that appear more often in one group, flags known sensitizers and allergens (EU-26 list, essential oils), and ranks results by signal strength.</p><h2>Is it free?</h2><p>Yes. No login or account required. Your data stays in your browser.</p></article>`;
     } else if (isPrivacy) {
       title = 'Privacy Policy | ana2me';

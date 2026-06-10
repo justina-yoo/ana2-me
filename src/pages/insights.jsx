@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn, useL, Icon, Sticker, ProductImg, Reveal, ErrorCard } from '../components/primitives';
 import { fetchArticles } from '../lib/supabase';
+import { useCached } from '../lib/use-cached';
 import SEO from '../lib/seo';
 import BlockRenderer from '../components/block-renderer';
 import AnalyzerCTAs from '../components/analyzer-ctas';
@@ -35,18 +36,20 @@ export default function Insights({ lang, density, query }) {
   const [urlResolving, setUrlResolving] = useState(isArticleUrl);
   const isKo = lang === 'ko';
 
-  // Fetch first page of articles
+  // Fetch first page of articles (stale-while-revalidate)
+  const { data: initialArticles, loading: initialLoading, error: initialError } = useCached(
+    'insights-page0-v1',
+    () => fetchArticles(PAGE_SIZE, 0)
+  );
   useEffect(() => {
-    setLoading(true);
-    fetchArticles(PAGE_SIZE, 0).then(function(data) {
-      setPOSTS(data);
-      setHasMore(data.length === PAGE_SIZE);
-      setLoading(false);
-    }).catch(function() {
-      setLoading(false);
-      setFetchError(true);
-    });
-  }, []);
+    if (initialArticles) {
+      setPOSTS(initialArticles);
+      setHasMore(initialArticles.length === PAGE_SIZE);
+    }
+  }, [initialArticles]);
+  useEffect(() => {
+    if (initialError) setFetchError(true);
+  }, [initialError]);
 
   // Fetch all articles when search query is entered
   useEffect(() => {
@@ -113,8 +116,33 @@ export default function Insights({ lang, density, query }) {
       setSelectedPost(inLoaded);
       setUrlResolving(false);
       if (SEO) SEO.setArticle(inLoaded);
+      try { localStorage.setItem('article-body-v1-' + articleId, JSON.stringify({ data: inLoaded, ts: Date.now() })); } catch {}
       return;
     }
+
+    // Cache path: check if this article was previously viewed.
+    try {
+      var cachedRaw = localStorage.getItem('article-body-v1-' + articleId);
+      if (cachedRaw) {
+        var cached = JSON.parse(cachedRaw);
+        if (cached && cached.data && Date.now() - cached.ts < 7 * 24 * 60 * 60 * 1000) {
+          urlResolved.current = true;
+          setSelectedPost(cached.data);
+          setUrlResolving(false);
+          if (SEO) SEO.setArticle(cached.data);
+          // Still fetch fresh in background
+          fetchArticles().then(function(all) {
+            setPOSTS(all); setHasMore(false);
+            var fresh = all.find(function(p) { return p.id === articleId; });
+            if (fresh) {
+              setSelectedPost(fresh);
+              try { localStorage.setItem('article-body-v1-' + articleId, JSON.stringify({ data: fresh, ts: Date.now() })); } catch {}
+            }
+          }).catch(function() {});
+          return;
+        }
+      }
+    } catch {}
 
     // Slow path: not on the first page — pull the whole archive and search it.
     urlResolved.current = true;
@@ -125,6 +153,7 @@ export default function Insights({ lang, density, query }) {
       if (match) {
         setSelectedPost(match);
         if (SEO) SEO.setArticle(match);
+        try { localStorage.setItem('article-body-v1-' + articleId, JSON.stringify({ data: match, ts: Date.now() })); } catch {}
       } else {
         setNotFound(true);
       }
@@ -218,7 +247,7 @@ export default function Insights({ lang, density, query }) {
     onSelectPost: openPost,
     loadMore,
     hasMore,
-    loading,
+    loading: loading || (initialLoading && !initialArticles),
   });
 };
 

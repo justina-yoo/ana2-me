@@ -84,6 +84,32 @@ export default function Try({ lang, products, setView, setProduct }) {
   const [searchLabelVal, setSearchLabelVal] = useState('doesnt');
   const [scanIdx, setScanIdx] = useState(0);
   const SCAN_IMAGES = ['/img/placeholder-1.png','/img/placeholder-2.png','/img/placeholder-3.png','/img/placeholder-4.png','/img/placeholder-5.png','/img/placeholder-6.png'];
+  const SCAN_INGREDIENTS = [
+    [
+      { type: 'good', en: 'These ingredients suit you well...', ko: '\uC774\uB7F0 \uC131\uBD84\uC774 \uC798 \uB9DE\uC544\uC694...' },
+      { type: 'bad', en: 'These may be irritating...', ko: '\uC774\uB7F0 \uC131\uBD84\uC740 \uC790\uADF9\uC801\uC77C \uC218 \uC788\uC5B4\uC694...' }
+    ],
+    [
+      { type: 'good', en: 'Your skin likes soothing actives...', ko: '\uC9C4\uC815 \uC131\uBD84\uC774 \uC798 \uB9DE\uB294 \uD53C\uBD80\uC608\uC694...' },
+      { type: 'bad', en: 'Watch out for fragrance...', ko: '\uD5A5\uB8CC \uC131\uBD84\uC740 \uC8FC\uC758\uD574\uC694...' }
+    ],
+    [
+      { type: 'good', en: 'Hydration works great for you...', ko: '\uBCF4\uC2B5 \uC131\uBD84\uC774 \uC798 \uB9DE\uC544\uC694...' },
+      { type: 'bad', en: 'Strong actives may be too much...', ko: '\uAC15\uD55C \uD65C\uC131 \uC131\uBD84\uC740 \uC8FC\uC758\uD574\uC694...' }
+    ],
+    [
+      { type: 'good', en: 'Barrier support suits you...', ko: '\uC7A5\uBCBD \uAC15\uD654 \uC131\uBD84\uC774 \uC798 \uB9DE\uC544\uC694...' },
+      { type: 'bad', en: 'Some preservatives may sensitize...', ko: '\uC77C\uBD80 \uBC29\uBD80\uC81C\uB294 \uBBFC\uAC10\uD560 \uC218 \uC788\uC5B4\uC694...' }
+    ],
+    [
+      { type: 'good', en: 'Calming ingredients work well...', ko: '\uC9C4\uC815 \uC131\uBD84\uACFC \uC798 \uB9DE\uC544\uC694...' },
+      { type: 'bad', en: 'Alcohol-based formulas may dry...', ko: '\uC54C\uCF54\uC62C \uC81C\uD615\uC740 \uAC74\uC870\uD560 \uC218 \uC788\uC5B4\uC694...' }
+    ],
+    [
+      { type: 'good', en: 'Brightening actives suit you...', ko: '\uBE0C\uB77C\uC774\uD2B8\uB2DD \uC131\uBD84\uC774 \uC798 \uB9DE\uC544\uC694...' },
+      { type: 'bad', en: 'Essential oils may trigger...', ko: '\uC5D0\uC13C\uC15C \uC624\uC77C\uC740 \uC8FC\uC758\uD574\uC694...' }
+    ]
+  ];
   var hasProducts = works.length + doesnt.length + neutral.length > 0;
   useEffect(function() {
     if (hasProducts) return; // stop cycling once products are added
@@ -1047,7 +1073,7 @@ export default function Try({ lang, products, setView, setProduct }) {
             value: q,
             onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
             onFocus: function() { setOpen(true); },
-            onBlur: function() { setTimeout(function() { setOpen(false); }, 200); },
+            onBlur: function() { setTimeout(function() { setOpen(false); }, 400); },
             placeholder: t('Add a product...', '제품 추가...'),
             className: 'try-search-input'
           })
@@ -1289,14 +1315,13 @@ export default function Try({ lang, products, setView, setProduct }) {
     return React.createElement('div', { className: 'try-unified-search', style: { marginBottom: 16 }, ref: searchRef },
       React.createElement('div', { className: 'try-search-wrap', style: { position: 'relative' } },
         React.createElement('div', { className: 'try-search' },
-          React.createElement(Icon, { name: 'search', size: 14 }),
           React.createElement('input', {
             ref: inputRef,
             value: q,
             onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
             onFocus: function() { setOpen(true); },
-            onBlur: function() { setTimeout(function() { setOpen(false); }, 200); },
-            placeholder: t('Add a product', '\uC81C\uD488 \uCD94\uAC00'),
+            onBlur: function() { setTimeout(function() { setOpen(false); }, 400); },
+            placeholder: t('Select a product', '\uC81C\uD488\uC744 \uC785\uB825\uD558\uC138\uC694'),
             className: 'try-search-input'
           }),
           React.createElement('div', { className: 'try-label-dropdown', style: { position: 'relative' } },
@@ -1304,9 +1329,9 @@ export default function Try({ lang, products, setView, setProduct }) {
               className: 'try-label-trigger',
               onClick: function(e) { e.stopPropagation(); setLabelOpen(!labelOpen); }
             },
-              labelVal === 'works' ? '\u2705 ' + t('Works for me', '\uC798 \uB9DE\uC544\uC694')
-                : labelVal === 'neutral' ? '\u2014 ' + t('No effect', '\uD6A8\uACFC \uC5C6\uC74C')
-                : '\uD83D\uDEAB ' + t('Didn\u2019t suit me', '\uB9DE\uC9C0 \uC54A\uC558\uC5B4\uC694'),
+              labelVal === 'works' ? '\u2705 ' + t('Works', '\uB9DE\uC544\uC694')
+                : labelVal === 'neutral' ? '\u2014 ' + t('Neutral', '\uBCF4\uD1B5')
+                : '\uD83D\uDEAB ' + t('Doesn\u2019t suit', '\uC548 \uB9DE\uC544\uC694'),
               React.createElement('span', { className: 'try-label-arrow' })
             ),
             labelOpen && React.createElement('div', { className: 'try-label-menu' },
@@ -1332,32 +1357,34 @@ export default function Try({ lang, products, setView, setProduct }) {
           className: 'try-dropdown',
           onMouseDown: function(e) { e.preventDefault(); }
         },
-          visibleFiltered.map(function(p) {
-            var name = isKo && p.nameKo ? p.nameKo : p.name;
-            return React.createElement('button', {
-              key: p.id, className: 'try-dropdown-item',
+          React.createElement('div', { className: 'try-dropdown-scroll' },
+            visibleFiltered.map(function(p) {
+              var name = isKo && p.nameKo ? p.nameKo : p.name;
+              return React.createElement('button', {
+                key: p.id, className: 'try-dropdown-item',
+                onMouseDown: function(e) { e.preventDefault(); },
+                onClick: function() { add(p); setShowCount(8); }
+              },
+                React.createElement('div', { className: 'try-dd-img' },
+                  React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
+                ),
+                React.createElement('div', { style: { flex: 1, minWidth: 0 } },
+                  React.createElement('span', { className: 'try-dd-brand' }, p.brand),
+                  React.createElement('span', { className: 'try-dd-name' }, name)
+                )
+              );
+            }),
+            hasMore && React.createElement('button', {
+              className: 'try-dropdown-more',
               onMouseDown: function(e) { e.preventDefault(); },
-              onClick: function() { add(p); setShowCount(8); }
-            },
-              React.createElement('div', { className: 'try-dd-img' },
-                React.createElement(ProductImg, { src: p.imageUrl, alt: p.brand + ' ' + name })
-              ),
-              React.createElement('div', { style: { flex: 1, minWidth: 0 } },
-                React.createElement('span', { className: 'try-dd-brand' }, p.brand),
-                React.createElement('span', { className: 'try-dd-name' }, name)
-              )
-            );
-          }),
-          hasMore && React.createElement('button', {
-            className: 'try-dropdown-more',
-            onMouseDown: function(e) { e.preventDefault(); },
-            onClick: function() { setShowCount(function(c) { return c + 8; }); }
-          }, t('Show more...', '\uB354 \uBCF4\uAE30...')),
-          q.trim().length > 0 && filtered.length === 0 && React.createElement('p', { className: 'try-empty-search-text' },
-            t('No results for \u201C' + q + '\u201D', '\u201C' + q + '\u201D \uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC5B4\uC694')
+              onClick: function() { setShowCount(function(c) { return c + 8; }); }
+            }, t('Show more...', '\uB354 \uBCF4\uAE30...')),
+            q.trim().length > 0 && filtered.length === 0 && React.createElement('p', { className: 'try-empty-search-text' },
+              t('No results for \u201C' + q + '\u201D', '\u201C' + q + '\u201D \uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC5B4\uC694')
+            )
           ),
           React.createElement('button', {
-            className: 'try-empty-search-paste',
+            className: 'try-dropdown-paste-sticky',
             onMouseDown: function(e) { e.preventDefault(); },
             onClick: openPaste
           },
@@ -1572,12 +1599,23 @@ export default function Try({ lang, products, setView, setProduct }) {
           React.createElement('span', { className: 'display-dot' }, '.')
         )
       ),
-      // Scanner frame + product icon
+    ),
+
+    // Unified search bar with label dropdown
+    React.createElement(UnifiedSearch, null),
+
+    // Unified product card
+    React.createElement(UnifiedProductCard, null),
+
+    // (TIP text moved into preview card label)
+
+    // Preview card — below search, hidden once products added
+    !hasProducts && !result && React.createElement('div', { className: 'try-scan-row' },
+      React.createElement('span', { className: 'try-scan-row-label' },
+        React.createElement('span', { className: 'try-scan-row-label-badge' }, 'TIP'),
+        t('Add multiple products to sharpen results', '\uC81C\uD488\uC744 \uB354 \uCD94\uAC00\uD558\uBA74 \uBD84\uC11D\uC774 \uC815\uD655\uD574\uC838\uC694')
+      ),
       React.createElement('div', { className: 'try-scan-frame' },
-        React.createElement('span', { className: 'try-scan-corner try-scan-tl' }),
-        React.createElement('span', { className: 'try-scan-corner try-scan-tr' }),
-        React.createElement('span', { className: 'try-scan-corner try-scan-bl' }),
-        React.createElement('span', { className: 'try-scan-corner try-scan-br' }),
         React.createElement('div', { className: 'try-scan-line' }),
         React.createElement('div', { className: 'try-scan-carousel' },
           SCAN_IMAGES.map(function(src, i) {
@@ -1591,19 +1629,28 @@ export default function Try({ lang, products, setView, setProduct }) {
             });
           })
         )
+      ),
+      React.createElement('div', { className: 'try-scan-ings' },
+        SCAN_INGREDIENTS.map(function(group, gi) {
+          var isActive = gi === scanIdx;
+          return React.createElement('div', {
+            key: gi,
+            className: 'try-scan-ing-group',
+            style: { opacity: isActive ? 1 : 0, position: isActive ? 'relative' : 'absolute', pointerEvents: 'none' }
+          },
+            group.map(function(ing, ni) {
+              return React.createElement('span', {
+                key: ni,
+                className: 'try-scan-ing-item try-scan-ing--' + ing.type + (isActive ? ' try-scan-ing-typing' : ''),
+                style: isActive ? { animationDelay: (ni * 0.3) + 's' } : {}
+              },
+                React.createElement('span', { className: 'try-scan-ing-dot' }),
+                isKo ? ing.ko : ing.en
+              );
+            })
+          );
+        })
       )
-    ),
-
-    // Unified search bar with label dropdown
-    React.createElement(UnifiedSearch, null),
-
-    // Unified product card
-    React.createElement(UnifiedProductCard, null),
-
-    // Tip — below product cards
-    React.createElement('p', { style: { fontSize: 12, color: 'var(--ink-soft)', margin: '12px 0 0', lineHeight: 1.5 } },
-      React.createElement('span', { style: { display: 'inline-block', background: 'var(--accent)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, marginRight: 6, letterSpacing: '0.04em', verticalAlign: 'middle' } }, 'TIP'),
-      t('The more products you add, the more accurate your ingredient pattern becomes.', '\uC81C\uD488\uC744 \uB354 \uCD94\uAC00\uD558\uBA74 \uBD84\uC11D\uC774 \uC815\uD655\uD574\uC838\uC694.')
     ),
 
     // Sticky analyze bar — hidden when results are showing

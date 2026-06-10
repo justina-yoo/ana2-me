@@ -361,8 +361,13 @@ const SEO = {
     setMeta('meta[property="og:title"]', 'Korean Skincare Ingredient Analyzer | ana2me');
     setMeta('meta[property="og:description"]', desc);
     setMeta('meta[property="og:url"]', url);
+    setMeta('meta[property="og:image"]', DEFAULT_IMAGE);
+    setMeta('meta[property="og:image:alt"]', 'ana2me Ingredient Analyzer');
+    setMeta('meta[name="twitter:card"]', 'summary_large_image');
     setMeta('meta[name="twitter:title"]', 'Korean Skincare Ingredient Analyzer | ana2me');
     setMeta('meta[name="twitter:description"]', desc);
+    setMeta('meta[name="twitter:image"]', DEFAULT_IMAGE);
+    setMeta('meta[name="twitter:image:alt"]', 'ana2me Ingredient Analyzer');
     // JSON-LD: WebApplication + FAQPage
     setArticleJsonLd({
       '@context': 'https://schema.org',

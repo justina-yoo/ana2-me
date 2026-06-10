@@ -1,7 +1,8 @@
 // Landing page — mixed feed with hero + interleaved articles & products
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useL, Sticker, ProductImg, Reveal, ScrollRow } from '../components/primitives';
 import { fetchFeaturedArticles, fetchLatestArticles } from '../lib/supabase';
+import { useCached } from '../lib/use-cached';
 import AnalyzerCTAs from '../components/analyzer-ctas';
 
 const LANDING_PAGE_SIZE = 20;
@@ -29,35 +30,38 @@ function FeedSkeleton() {
 export default function Landing({ lang, products, setView, setProduct, density }) {
   const t = useL(lang);
   const isKo = lang === 'ko';
-  const [hero, setHero] = useState(null);
-  const [featured, setFeatured] = useState([]);
+  const { data: featuredData } = useCached(
+    'landing-featured-v1',
+    () => fetchFeaturedArticles()
+  );
+  const { data: latestData, loading: latestLoading } = useCached(
+    'landing-latest-v1',
+    () => fetchLatestArticles(LANDING_PAGE_SIZE)
+  );
+
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const loading = latestLoading && !latestData;
 
-  useEffect(() => {
-    Promise.all([
-      fetchFeaturedArticles(),
-      fetchLatestArticles(LANDING_PAGE_SIZE)
-    ]).then(function([feat, recent]) {
-      // #1 = hero, #2-4 = featured section
-      const sorted = feat.sort((a, b) => parseInt(a.featured) - parseInt(b.featured));
+  const { hero, featured } = useMemo(() => {
+    if (!featuredData && !latestData) return { hero: null, featured: [] };
+    if (featuredData) {
+      const sorted = featuredData.sort((a, b) => parseInt(a.featured) - parseInt(b.featured));
       const pin1 = sorted.find(a => a.featured === '1');
       const pins234 = sorted.filter(a => ['2','3','4'].includes(a.featured));
-      if (pin1) {
-        setHero(pin1);
-      } else if (sorted.length > 0) {
-        setHero(sorted[0]);
-      } else if (recent.length > 0) {
-        setHero(recent[0]);
-      }
-      setFeatured(pins234);
-      setArticles(recent);
-      setHasMore(recent.length === LANDING_PAGE_SIZE);
-      setLoading(false);
-    });
-  }, []);
+      const h = pin1 || sorted[0] || (latestData ? latestData[0] : null);
+      return { hero: h, featured: pins234 };
+    }
+    return { hero: latestData ? latestData[0] : null, featured: [] };
+  }, [featuredData, latestData]);
+
+  useEffect(() => {
+    if (latestData) {
+      setArticles(latestData);
+      setHasMore(latestData.length === LANDING_PAGE_SIZE);
+    }
+  }, [latestData]);
 
   // Load more articles on scroll
   const loadMore = () => {
