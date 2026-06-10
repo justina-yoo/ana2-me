@@ -1603,6 +1603,7 @@ details[open] .sources-chevron { transform: rotate(90deg); }
 .try-picker--rose .try-search:focus-within { border-color: rgba(180,80,70,0.35); }
 .try-search-input { border: none; background: none; outline: none; font-size: 16px; font-family: var(--font-text); color: var(--ink); width: 100%; }
 .try-search-input::placeholder { color: var(--ink-faint); }
+.try-search-input--placeholder { color: var(--ink-faint); cursor: pointer; user-select: none; -webkit-user-select: none; line-height: 1.4; }
 .try-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 999; background: var(--cream-card); border: 1px solid var(--line); border-radius: var(--radius-sm); margin-top: 4px; box-shadow: var(--shadow-card); max-height: 320px; display: flex; flex-direction: column; }
 .try-dropdown-scroll { flex: 1; overflow-y: auto; min-height: 0; }
 .try-dropdown-paste-sticky { position: sticky; bottom: 0; display: block; width: 100%; padding: 10px 14px; border: none; border-top: 1px solid var(--line); background: var(--cream-card); text-align: left; font-size: 13px; font-family: var(--font-text); color: var(--accent); cursor: pointer; flex-shrink: 0; }

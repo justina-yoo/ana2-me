@@ -1336,21 +1336,26 @@ export default function Try({ lang, products, setView, setProduct }) {
     return React.createElement('div', { className: 'try-unified-search', style: { marginBottom: 16 }, ref: searchRef },
       React.createElement('div', { className: 'try-search-wrap', style: { position: 'relative' } },
         React.createElement('div', { className: 'try-search' },
-          React.createElement('input', {
-            ref: inputRef,
-            value: q,
-            readOnly: !inputEditable,
-            onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
-            onFocus: function() { setOpen(true); },
-            onClick: function() {
-              if (!inputEditable && open) {
-                setInputEditable(true);
-                if (inputRef.current) inputRef.current.readOnly = false;
-              }
-            },
-            placeholder: t('Select a product', '\uC81C\uD488\uC744 \uC785\uB825\uD558\uC138\uC694'),
-            className: 'try-search-input'
-          }),
+          !inputEditable
+            ? React.createElement('div', {
+                className: 'try-search-input try-search-input--placeholder',
+                onClick: function() {
+                  if (open) {
+                    setInputEditable(true);
+                  } else {
+                    setOpen(true);
+                  }
+                },
+              }, q || t('Select a product', '\uC81C\uD488\uC744 \uC785\uB825\uD558\uC138\uC694'))
+            : React.createElement('input', {
+                ref: inputRef,
+                value: q,
+                autoFocus: true,
+                onChange: function(e) { setQ(e.target.value); setOpen(true); setShowCount(8); },
+                onFocus: function() { setOpen(true); },
+                placeholder: t('Select a product', '\uC81C\uD488\uC744 \uC785\uB825\uD558\uC138\uC694'),
+                className: 'try-search-input'
+              }),
           React.createElement('div', { className: 'try-label-dropdown', style: { position: 'relative' } },
             React.createElement('button', {
               className: 'try-label-trigger',
