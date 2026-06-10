@@ -1643,10 +1643,10 @@ export default function Try({ lang, products, setView, setProduct }) {
     ),
 
     // Unified search bar with label dropdown
-    React.createElement(UnifiedSearch, null),
+    UnifiedSearch(),
 
     // Unified product card
-    React.createElement(UnifiedProductCard, null),
+    UnifiedProductCard(),
 
     // (TIP text moved into preview card label)
 
