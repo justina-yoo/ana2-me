@@ -116,12 +116,12 @@ export default function Try({ lang, products, setView, setProduct }) {
   ];
   var hasProducts = works.length + doesnt.length + neutral.length > 0;
   useEffect(function() {
-    if (hasProducts) return; // stop cycling once products are added
+    if (hasProducts || searchOpen) return; // stop cycling when products added or dropdown open
     var interval = setInterval(function() {
       setScanIdx(function(prev) { return (prev + 1) % 6; });
     }, 2500);
     return function() { clearInterval(interval); };
-  }, [hasProducts]);
+  }, [hasProducts, searchOpen]);
   var pastedCounter = useRef(0);
   var autoAnalyze = useRef(false);
   const resultsRef = useRef(null);
