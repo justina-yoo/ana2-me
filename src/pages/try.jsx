@@ -1234,6 +1234,7 @@ export default function Try({ lang, products, setView, setProduct }) {
     var [pickerChips, setPickerChips] = useState([]);
     var inputRef = useRef(null);
     var pasteRef = useRef(null);
+    var dropdownScrollRef = useRef(null);
 
     var handlePasteInput = function(e) {
       var val = e.target.value;
@@ -1393,7 +1394,7 @@ export default function Try({ lang, products, setView, setProduct }) {
           className: 'try-dropdown',
           onMouseDown: function(e) { e.preventDefault(); }
         },
-          React.createElement('div', { className: 'try-dropdown-scroll' },
+          React.createElement('div', { className: 'try-dropdown-scroll', ref: dropdownScrollRef },
             visibleFiltered.map(function(p) {
               var name = isKo && p.nameKo ? p.nameKo : p.name;
               return React.createElement('button', {
@@ -1413,7 +1414,13 @@ export default function Try({ lang, products, setView, setProduct }) {
             hasMore && React.createElement('button', {
               className: 'try-dropdown-more',
               onMouseDown: function(e) { e.preventDefault(); },
-              onClick: function() { setShowCount(function(c) { return c + 8; }); }
+              onClick: function() {
+                var scrollPos = dropdownScrollRef.current ? dropdownScrollRef.current.scrollTop : 0;
+                setShowCount(function(c) { return c + 8; });
+                requestAnimationFrame(function() {
+                  if (dropdownScrollRef.current) dropdownScrollRef.current.scrollTop = scrollPos;
+                });
+              }
             }, t('Show more...', '\uB354 \uBCF4\uAE30...')),
             q.trim().length > 0 && filtered.length === 0 && React.createElement('p', { className: 'try-empty-search-text' },
               t('No results for \u201C' + q + '\u201D', '\u201C' + q + '\u201D \uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC5B4\uC694')
