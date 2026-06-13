@@ -38,7 +38,7 @@ export default function Insights({ lang, density, query }) {
 
   // Fetch first page of articles (stale-while-revalidate)
   const { data: initialArticles, loading: initialLoading, error: initialError } = useCached(
-    'insights-page0-v1',
+    'insights-page0-v2',
     () => fetchArticles(PAGE_SIZE, 0)
   );
   useEffect(() => {
@@ -116,13 +116,13 @@ export default function Insights({ lang, density, query }) {
       setSelectedPost(inLoaded);
       setUrlResolving(false);
       if (SEO) SEO.setArticle(inLoaded);
-      try { localStorage.setItem('article-body-v1-' + articleId, JSON.stringify({ data: inLoaded, ts: Date.now() })); } catch {}
+      try { localStorage.setItem('article-body-v2-' + articleId, JSON.stringify({ data: inLoaded, ts: Date.now() })); } catch {}
       return;
     }
 
     // Cache path: check if this article was previously viewed.
     try {
-      var cachedRaw = localStorage.getItem('article-body-v1-' + articleId);
+      var cachedRaw = localStorage.getItem('article-body-v2-' + articleId);
       if (cachedRaw) {
         var cached = JSON.parse(cachedRaw);
         if (cached && cached.data && Date.now() - cached.ts < 7 * 24 * 60 * 60 * 1000) {
@@ -136,7 +136,7 @@ export default function Insights({ lang, density, query }) {
             var fresh = all.find(function(p) { return p.id === articleId; });
             if (fresh) {
               setSelectedPost(fresh);
-              try { localStorage.setItem('article-body-v1-' + articleId, JSON.stringify({ data: fresh, ts: Date.now() })); } catch {}
+              try { localStorage.setItem('article-body-v2-' + articleId, JSON.stringify({ data: fresh, ts: Date.now() })); } catch {}
             }
           }).catch(function() {});
           return;
@@ -153,7 +153,7 @@ export default function Insights({ lang, density, query }) {
       if (match) {
         setSelectedPost(match);
         if (SEO) SEO.setArticle(match);
-        try { localStorage.setItem('article-body-v1-' + articleId, JSON.stringify({ data: match, ts: Date.now() })); } catch {}
+        try { localStorage.setItem('article-body-v2-' + articleId, JSON.stringify({ data: match, ts: Date.now() })); } catch {}
       } else {
         setNotFound(true);
       }

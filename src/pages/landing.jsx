@@ -31,11 +31,11 @@ export default function Landing({ lang, products, setView, setProduct, density }
   const t = useL(lang);
   const isKo = lang === 'ko';
   const { data: featuredData } = useCached(
-    'landing-featured-v1',
+    'landing-featured-v2',
     () => fetchFeaturedArticles()
   );
   const { data: latestData, loading: latestLoading } = useCached(
-    'landing-latest-v1',
+    'landing-latest-v2',
     () => fetchLatestArticles(LANDING_PAGE_SIZE)
   );
 
