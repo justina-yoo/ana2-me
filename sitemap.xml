@@ -3,13 +3,13 @@
   <!-- Home / Insights -->
   <url>
     <loc>https://ana2-me.com/</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/insights</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,30 +17,42 @@
   <!-- Static pages -->
   <url>
     <loc>https://ana2-me.com/about</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/products</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/privacy</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/terms</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- Articles -->
+  <url>
+    <loc>https://ana2-me.com/article/beauty-science/2026-06-16/lash-serums-replaced-mascara-do-they-work</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-06-16/is-toner-necessary-molecular-answer</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://ana2-me.com/article/beauty-science/2026-06-14/anua-kendall-jenner-500m-ingredient-strategy</loc>
     <lastmod>2026-06-14</lastmod>
@@ -726,31 +738,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/k-fragrance-skin-scents</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/tropical-fruit-fragrance</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -762,7 +750,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -774,7 +762,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -786,19 +774,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -810,19 +786,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -840,13 +804,49 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/skin-barrier-2026</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/skin-barrier-2026</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -859,6 +859,18 @@
   </url>
   <url>
     <loc>https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/k-fragrance-skin-scents</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -1205,235 +1217,235 @@
   <!-- Brands -->
   <url>
     <loc>https://ana2-me.com/brands</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/aestura</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/ap-beauty</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/anua</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/arencia</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/beauty-of-joseon</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/biodance</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/cosrx</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/centellian24</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/chanel</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/diptyque</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/dr-jart</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/dr-g</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/eiom</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/fully</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/isntree</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/jo-malone-london</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/la-roche-posay</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/lavida</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/medicube</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/mediheal</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/medion</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/meditherapy</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/numbuzin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/ollocdam</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/round-lab</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/skin1004</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/standard-seoul</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/sulwhasoo</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/tamburins</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/the-ordinary</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/torriden</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/zeroid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/beplain</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/celimax</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/goodal</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/it-fu</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/mixsoon</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/brands/numbuzin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1441,769 +1453,769 @@
   <!-- Ingredients -->
   <url>
     <loc>https://ana2-me.com/ingredients/17-amino-acid-complex</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/3-o-ethyl-ascorbic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/5-ceramide-complex-np-ns-ap-as-eop</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/8-type-hyaluronic-acid-complex</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/acetyl-glucosamine</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/acetyl-hexapeptide-8</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/adenosine</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/allantoin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/allium-cepa-onion-bulb-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/aloe-barbadensis</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/alpha-arbutin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/amino-acid-complex</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/aoxinol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/arbutin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/ascorbyl-glucoside</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/avobenzone</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/azelaic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/bakuchiol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/beta-glucan</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/betaine</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/betaine-salicylate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/betula-platyphylla-japonica-juice</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/bifida-ferment-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/bifida-ferment-lysate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/caffeine</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/camellia-japonica-seed-oil</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/camellia-sinensis-leaf-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/centella-asiatica</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/centella-asiatica-callus-extracellular-vesicles</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/centella-asiatica-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/centella-asiatica-leaf-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/ceramide</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/ceramide-np</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/cholesterol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/citrus-tangerina-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/copper-tripeptide-1</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/copper–manganese-complex</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/deep-sea-water</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/ectoin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/ethylhexylglycerin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/exoyne</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/fructooligosaccharides</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/fullerene</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/glutathione</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/glycerin</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/glycolic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/glycoproteins</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/green-tea-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/hinoki-water</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/homosalate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/houttuynia-cordata-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/hyaluronic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/hydrolyzed-collagen</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/hydrolyzed-hyaluronic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/hydroxypropyl-bispalmitamide-mea</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/hyssopus-officinalis-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/kaolin-clay</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/kelp-ferment-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/kojic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/korean-herbal-oil-complex</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-centella-asiatica-ferment-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-ferment</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-ferment-lysate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-pear-juice-ferment-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-pomegranate-ferment-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-rice-ferment</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-soybean-ferment-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lactobacillus-tea-tree-leaf-extract-ferment-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/lotus-seed-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/madecassic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/madecassoside</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/malachite-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/mango-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/matrixyl-3000</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/mugwort-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/mung-bean-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/mung-bean-powder</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/myristoyl-palmitoyl-oxostearamide-arachamide-mea</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/niacinamide</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/oryza-sativa-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/oryza-sativa-germ-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/oryza-sativa-rice-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/palmitoyl-pentapeptide-4</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/palmitoyl-tripeptide-8</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/panax-ginseng-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/panthenol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/panthenol-pro-vitamin-b5</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/peptide-complex</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/phytosterols</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/pinus-densiflora-leaf-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/pinus-pinaster-bark-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/polyglutamic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/portulaca-oleracea</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/portulaca-oleracea-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/propolis-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/retinal</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/retinol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/rhodiola-rosea-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/rice-flour</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/rosmarinus-officinalis-rosemary-leaf-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/saccharomyces-barley-seed-ferment-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/salmon-pdrn</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sea-buckthorn-water</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/shea-butter</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/simmondsia-chinensis-jojoba-seed-oil</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/snail-secretion-filtrate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/snail-secretion-filtrate-92%</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-ascorbyl-phosphate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-cocoyl-glycinate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-cocoyl-isethionate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-dna</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-dna-pdrn</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-hyaluronate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sodium-lauroyl-glutamate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/solanum-lycopersicum-tomato-fruit-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/soluble-collagen</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/spirulina-platensis-extract</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/squalane</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/sweet-almond-seed-cake</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/tasmannia-lanceolata</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/tea-tree-leaf-water</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/tocopherol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/tocopheryl-acetate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/tone-reflector</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/tranexamic-acid</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/xylitol</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/zinc-gluconate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/ingredients/zinc-pca</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
