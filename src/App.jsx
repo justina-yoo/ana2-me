@@ -16,6 +16,7 @@ import Terms from './pages/terms';
 import Admin from './pages/admin';
 import Ingredient from './pages/ingredient';
 import IngredientsList from './pages/ingredients-list';
+import Links from './pages/links';
 
 // Ingredient match card for search results
 const SUPA_URL = 'https://hkyfggapijgedsizfqec.supabase.co';
@@ -318,6 +319,7 @@ function getInitialView() {
   if (p === '/terms') return 'terms';
   if (p === '/admin') return 'admin';
   if (p === '/analyze' || p === '/analyzer') return 'analyze';
+  if (p === '/links') return 'links';
   if (p === '/ingredients') return 'ingredients-list';
   if (p.startsWith('/ingredients/')) return 'ingredient';
   if (p === '/search') return 'insights';
@@ -440,6 +442,7 @@ function App() {
     else if (path === '/ingredients') { setView('ingredients-list'); setProductId(null); setQuery(''); SEO.setIngredients(); window.scrollTo(0, 0); }
     else if (path.startsWith('/ingredients/')) { setView('ingredient'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/analyze' || path === '/analyzer') { setView('analyze'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
+    else if (path === '/links') { setView('links'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); SEO.setAbout(); window.scrollTo(0, 0); }
     else if (path === '/privacy') { setView('privacy'); setProductId(null); setQuery(''); SEO.setPrivacy(); window.scrollTo(0, 0); }
     else if (path === '/terms') { setView('terms'); setProductId(null); setQuery(''); SEO.setTerms(); window.scrollTo(0, 0); }
@@ -486,15 +489,19 @@ function App() {
 
   const density = tweaks.density;
 
+  const isLinksView = view === 'links';
+
   return (
     <div className="app" data-screen-label={`${view}`}>
-      <Header
-        lang={lang} setLang={setLang}
-        view={view} setView={setView}
-        category={category} setCategory={setCategory}
-        query={query} setQuery={setQuery}
-        density={density}
-      />
+      {!isLinksView && (
+        <Header
+          lang={lang} setLang={setLang}
+          view={view} setView={setView}
+          category={category} setCategory={setCategory}
+          query={query} setQuery={setQuery}
+          density={density}
+        />
+      )}
       {view === 'landing' && <Landing lang={lang} products={products} setView={setView} setProduct={(p) => { setProductId(p.id); setView('detail'); }} density={density} />}
       {fetchError === 'products' && view === 'feed' && <ErrorCard icon="📡" title={lang === 'ko' ? '제품을 불러올 수 없어요' : 'Couldn\u2019t load products'} message={lang === 'ko' ? '연결을 확인하고 다시 시도해 주세요.' : 'Check your connection and try again.'} lang={lang} />}
       {!fetchError && view === 'feed' && products.length === 0 && <ProductFeedSkeleton />}
@@ -601,8 +608,9 @@ function App() {
       {view === 'ingredients-list' && <IngredientsList lang={lang} setView={setView} />}
       {view === 'ingredient' && <Ingredient lang={lang} products={products} setView={setView} setProduct={setProduct} />}
       {view === 'admin' && <Admin />}
+      {view === 'links' && <Links lang={lang} setView={setView} />}
 
-      <footer style={{
+      {!isLinksView && <footer style={{
         maxWidth: 720, margin: '0 auto', padding: '24px 28px 36px',
         borderTop: '1px solid var(--line)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6
       }}>
@@ -637,7 +645,7 @@ function App() {
           </div>
         </div>
         <span style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.5 }}>© {new Date().getFullYear()} ana2me</span>
-      </footer>
+      </footer>}
 
       {tweaksOpen && <Tweaks tweaks={tweaks} setTweak={setTweak} lang={lang} setLang={setLang} />}
     </div>
