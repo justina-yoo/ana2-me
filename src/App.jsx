@@ -350,6 +350,8 @@ function App() {
   const [products, setProducts] = useState(window.PRODUCTS || []);
   const [fetchError, setFetchError] = useState(null);
   const [brandSlug, setBrandSlug] = useState(null);
+  const [aiNotice, setAiNotice] = useState(() => { try { return !localStorage.getItem('ai-notice-dismissed'); } catch { return true; } });
+  useEffect(() => { if (aiNotice) { const t = setTimeout(() => { setAiNotice(false); try { localStorage.setItem('ai-notice-dismissed', '1'); } catch {} }, 5000); return () => clearTimeout(t); } }, [aiNotice]);
   useEffect(() => {
     fetchProducts().then(function(data) {
       window.PRODUCTS = data;
@@ -493,6 +495,15 @@ function App() {
 
   return (
     <div className="app" data-screen-label={`${view}`}>
+      {aiNotice && !isLinksView && (
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '10px 16px', background: 'var(--ink)', color: 'var(--cream)', fontSize: 12, fontFamily: 'var(--font-body)', lineHeight: 1.4 }}>
+          <span style={{ opacity: 0.85 }}>
+            {lang === 'ko' ? '일부 콘텐츠 생성에 AI가 활용됩니다.' : 'Our content is research-backed and AI-assisted.'}{' '}
+            <a href="/privacy" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/privacy'); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ color: 'var(--cream)', textDecoration: 'underline', textUnderlineOffset: 3, opacity: 0.7 }}>{lang === 'ko' ? '자세히 보기' : 'Learn more'}</a>
+          </span>
+          <button onClick={() => { setAiNotice(false); try { localStorage.setItem('ai-notice-dismissed', '1'); } catch {} }} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: 'var(--cream)', fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 'var(--radius-pill)', cursor: 'pointer', flexShrink: 0 }}>OK</button>
+        </div>
+      )}
       {!isLinksView && (
         <Header
           lang={lang} setLang={setLang}
@@ -645,6 +656,10 @@ function App() {
           </div>
         </div>
         <span style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.5 }}>© {new Date().getFullYear()} ana2me</span>
+        <span style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.5, textAlign: 'center' }}>
+          EU users: This site uses AI to generate ingredient analysis.{' '}
+          <a href="/privacy#ai-policy" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/privacy'); SEO.setPrivacy(); setView('privacy'); setTimeout(() => { document.getElementById('ai-policy')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }} style={{ color: 'var(--ink-faint)', textDecoration: 'underline', textUnderlineOffset: 3 }}>Learn more</a>
+        </span>
       </footer>}
 
       {tweaksOpen && <Tweaks tweaks={tweaks} setTweak={setTweak} lang={lang} setLang={setLang} />}
