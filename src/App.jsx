@@ -311,7 +311,7 @@ function Tweaks({ tweaks, setTweak, lang, setLang }) {
 function getInitialView() {
   const p = window.location.pathname.replace(/\/$/, '');
   if (p === '') return 'landing';
-  if (p === '/insights' || p.startsWith('/article/')) return 'insights';
+  if (p === '/insights' || p.startsWith('/article/') || p.startsWith('/ko/article/')) return 'insights';
   if (p === '/products' || p.startsWith('/products/')) return p === '/products' ? 'feed' : 'detail';
   if (p === '/brands' || p.startsWith('/brands/')) return 'brands';
   if (p === '/about') return 'about';
@@ -417,6 +417,12 @@ function App() {
         else { setView('feed'); setProductId(null); }
       };
       tryOpen();
+      window.scrollTo(0, 0);
+    }
+    else if (path.startsWith('/ko/article/')) {
+      setLang('ko');
+      setView('insights'); setProductId(null); setQuery('');
+      window.dispatchEvent(new CustomEvent('ana2me:navigate-article'));
       window.scrollTo(0, 0);
     }
     else if (path.startsWith('/article/')) {

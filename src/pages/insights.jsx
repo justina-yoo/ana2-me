@@ -6,6 +6,7 @@ import { useCached } from '../lib/use-cached';
 import SEO from '../lib/seo';
 import BlockRenderer from '../components/block-renderer';
 import AnalyzerCTAs from '../components/analyzer-ctas';
+import CoupangProducts from '../components/coupang-products';
 
 // Convert "May 3, 2026" → "2026-05-03"
 function dateToPrefix(dateStr) {
@@ -20,11 +21,17 @@ function postSlug(post) {
   return 'article/' + post.tag.en.toLowerCase().replace(/\s+/g, '-') + '/' + dateToPrefix(post.date) + '/' + post.id;
 }
 
+function articleUrl(post, lang) {
+  const base = postSlug(post);
+  return lang === 'ko' ? '/ko/' + base : '/' + base;
+}
+
 const PAGE_SIZE = 10;
 
 export default function Insights({ lang, density, query }) {
   // Detect if we're landing on an article URL — suppress listing flash while resolving
-  const isArticleUrl = window.location.pathname.replace(/\/$/, '').startsWith('/article/');
+  const isArticlePath = window.location.pathname.replace(/\/$/, '');
+  const isArticleUrl = isArticlePath.startsWith('/article/') || isArticlePath.startsWith('/ko/article/');
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTag, setActiveTag] = useState(null);
   const [POSTS, setPOSTS] = useState([]);
@@ -104,7 +111,8 @@ export default function Insights({ lang, density, query }) {
   const urlResolved = React.useRef(false);
   useEffect(() => {
     if (urlResolved.current) return;
-    const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+    let path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+    if (path.startsWith('ko/')) path = path.slice(3); // strip /ko prefix
     if (!path || path === 'insights' || path === 'search' || path.startsWith('search?')) { urlResolved.current = true; setUrlResolving(false); return; }
     const parts = path.split('/');
     const articleId = parts[parts.length - 1];
@@ -167,10 +175,12 @@ export default function Insights({ lang, density, query }) {
 
   const openPost = (p) => {
     setSelectedPost(p);
-    const slug = postSlug(p);
-    history.pushState({}, '', '/' + slug);
+    const currentPath = window.location.pathname;
+    const isKoUrl = currentPath.startsWith('/ko/');
+    const url = isKoUrl ? articleUrl(p, 'ko') : articleUrl(p, lang);
+    history.pushState({}, '', url);
     if (SEO) SEO.setArticle(p);
-    if (window.gtag) gtag('event', 'page_view', { page_path: '/' + slug, page_title: document.title });
+    if (window.gtag) gtag('event', 'page_view', { page_path: url, page_title: document.title });
     window.scrollTo(0, 0);
   };
 
@@ -804,7 +814,15 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
             </button>
           </div>
         </header>
-        {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : !hasBlocks && !Body ? <ArticleSkeleton /> : null}
+        {(() => {
+          const isKoUrl = window.location.pathname.startsWith('/ko/');
+          const hasKoContent = post.title?.ko && post.bodyBlocks?.some(b => b.text?.ko || b.heading?.ko || (b.children && b.children.some(c => c.text?.ko)));
+          const showKoNotice = isKoUrl && !hasKoContent;
+          return <>
+            {showKoNotice && <div style={{ padding: '10px 16px', background: 'rgba(245,215,110,0.15)', border: '1px solid rgba(245,215,110,0.3)', borderRadius: 'var(--radius)', marginBottom: 20, fontSize: 13, color: 'var(--ink-soft)' }}>한국어 버전 준비 중</div>}
+            {hasBlocks ? <BlockRenderer blocks={post.bodyBlocks} lang={lang} /> : Body ? React.createElement(Body, { lang }) : !hasBlocks && !Body ? <ArticleSkeleton /> : null}
+          </>;
+        })()}
         {!hasBlocks && Body && (
           <p style={{ fontSize: 11, color: 'var(--ink-faint)', opacity: 0.6, margin: '-24px 0 0', lineHeight: 1.5 }}>
             {isKo
@@ -812,6 +830,9 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
               : 'This article is for informational purposes only. Not intended as medical or professional advice.'}
           </p>
         )}
+
+        {/* Coupang product recommendations — silent-fails if no products or not configured */}
+        <CoupangProducts article={post} lang={lang} limit={1} />
 
         {/* Analyzer CTA — contextual */}
         <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
@@ -929,7 +950,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
                 {related.map(r => (
                   <a
                     key={r.id}
-                    href={'/' + postSlug(r)}
+                    href={window.location.pathname.startsWith('/ko/') ? articleUrl(r, 'ko') : '/' + postSlug(r)}
                     onClick={(e) => { e.preventDefault(); onSelectPost(r); window.scrollTo(0, 0); }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 14,

@@ -112,7 +112,24 @@ export default function Header({ lang, setLang, view, setView, category, setCate
             <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); setView('analyze'); setQuery(''); setSearchText(''); setSearchOpen(false); window.dispatchEvent(new CustomEvent('ana2me:reset-analyzer')); setTimeout(() => window.scrollTo(0, 0), 10); }} className={cn('page-tab', view === 'analyze' && 'page-tab-active')} style={{ color: view === 'analyze' ? undefined : 'var(--accent)' }}>
               {t('Analyzer', '분석하기')}
             </a>
-            <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} style={{ marginLeft: 4, flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 8px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            <button onClick={() => {
+              const newLang = lang === 'ko' ? 'en' : 'ko';
+              const path = window.location.pathname;
+              const isArticle = path.includes('/article/');
+              if (isArticle) {
+                let newPath;
+                if (newLang === 'ko' && !path.startsWith('/ko/')) {
+                  newPath = '/ko' + path;
+                } else if (newLang === 'en' && path.startsWith('/ko/')) {
+                  newPath = path.slice(3);
+                } else {
+                  newPath = path;
+                }
+                history.pushState({}, '', newPath);
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }
+              setLang(newLang);
+            }} style={{ marginLeft: 4, flexShrink: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--ink-faint)', background: 'none', border: '1px solid var(--line)', borderRadius: 'var(--radius-pill)', padding: '4px 8px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
               {lang === 'ko' ? 'EN' : 'KR'}
             </button>
           </div>

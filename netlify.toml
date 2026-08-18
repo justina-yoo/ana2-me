@@ -20,6 +20,10 @@
 
 [[edge_functions]]
   function = "og-inject"
+  path = "/ko/article/*"
+
+[[edge_functions]]
+  function = "og-inject"
   path = "/brands"
 
 [[edge_functions]]
@@ -73,6 +77,12 @@
 [[edge_functions]]
   function = "og-inject"
   path = "/terms/"
+
+# Coupang Partners product search — HMAC-signed proxy for the Coupang Open API.
+# Requires env vars COUPANG_ACCESS_KEY and COUPANG_SECRET_KEY (set in Netlify dashboard).
+[[edge_functions]]
+  function = "coupang-search"
+  path = "/api/coupang-search"
 
 [[headers]]
   for = "/src/*"

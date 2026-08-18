@@ -14,7 +14,10 @@ export default async function (request, context) {
   const url = new URL(request.url);
   const path = url.pathname;
 
-  const articleMatch = path.match(/^\/article\/[^/]+\/[^/]+\/([^/]+)\/?$/);
+  const koArticleMatch = path.match(/^\/ko\/article\/[^/]+\/[^/]+\/([^/]+)\/?$/);
+  const enArticleMatch = path.match(/^\/article\/[^/]+\/[^/]+\/([^/]+)\/?$/);
+  const articleMatch = koArticleMatch || enArticleMatch;
+  const isKoArticle = !!koArticleMatch;
   const productMatch = path.match(/^\/products\/([^/]+)\/?$/);
   const isListing = path === '/' || path === '/insights' || path === '/insights/';
   const isProductListing = path === '/products' || path === '/products/';
@@ -29,7 +32,7 @@ export default async function (request, context) {
     return context.next();
   }
 
-  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate, faqLd, summaryText;
+  let title, description, image, pageUrl, jsonLd, breadcrumbLd, ssrContent, publishedDate, faqLd, summaryText, enUrl, koUrl;
 
   try {
     if (articleMatch) {
@@ -41,10 +44,16 @@ export default async function (request, context) {
       const data = await res.json();
       if (!data || !data[0]) return context.next();
       const a = data[0];
-      title = a.title.en + ' | ana2me';
-      description = a.excerpt.en;
+      title = (isKoArticle ? (a.title.ko || a.title.en) : a.title.en) + ' | ana2me';
+      description = isKoArticle ? (a.excerpt.ko || a.excerpt.en) : a.excerpt.en;
       image = (a.image_url || '').replace('w=800', 'w=1200');
       pageUrl = `${SITE}${path}`;
+
+      // Build hreflang alternate URLs
+      const tag = (a.tag?.en || 'skincare').toLowerCase().replace(/\s+/g, '-');
+      const artDate = toISODate(a.date);
+      enUrl = `${SITE}/article/${tag}/${artDate}/${a.id}`;
+      koUrl = `${SITE}/ko/article/${tag}/${artDate}/${a.id}`;
 
       const bodyText = extractBodyText(a.body_blocks);
       const isoDate = toISODate(a.date);
@@ -625,6 +634,17 @@ export default async function (request, context) {
   }
   if (articleMatch && typeof summaryText === 'string' && summaryText) {
     newHtml = newHtml.replace('</head>', `<meta name="summary" content="${escAttr(summaryText.replace(/<[^>]*>/g, ''))}" />\n</head>`);
+  }
+
+  // Inject hreflang alternates for articles
+  if (articleMatch && typeof enUrl !== 'undefined') {
+    const ogLocale = isKoArticle ? 'ko_KR' : 'en_US';
+    const hreflangTags = `<link rel="alternate" hreflang="en" href="${enUrl}" />\n<link rel="alternate" hreflang="ko" href="${koUrl}" />\n<link rel="alternate" hreflang="x-default" href="${enUrl}" />\n`;
+    newHtml = newHtml.replace('</head>', hreflangTags + '</head>');
+    // Set html lang attribute
+    newHtml = newHtml.replace(/<html([^>]*)lang="[^"]*"/, `<html$1lang="${isKoArticle ? 'ko' : 'en'}"`);
+    // Set OG locale
+    newHtml = newHtml.replace('</head>', `<meta property="og:locale" content="${ogLocale}" />\n</head>`);
   }
 
   // Inject JSON-LD before </head>

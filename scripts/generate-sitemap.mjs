@@ -35,7 +35,7 @@ async function generate() {
   const today = new Date().toISOString().slice(0, 10);
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <!-- Home / Insights -->
   <url>
     <loc>${SITE}/</loc>
@@ -81,13 +81,24 @@ async function generate() {
   for (const a of articles) {
     const tag = a.tag.en.toLowerCase().replace(/\s+/g, '-');
     const isoDate = dateToISO(a.date);
-    const loc = `${SITE}/article/${tag}/${isoDate}/${a.id}`;
+    const enLoc = `${SITE}/article/${tag}/${isoDate}/${a.id}`;
+    const koLoc = `${SITE}/ko/article/${tag}/${isoDate}/${a.id}`;
     xml += `
   <url>
-    <loc>${loc}</loc>
+    <loc>${enLoc}</loc>
     <lastmod>${isoDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="${enLoc}"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="${koLoc}"/>
+  </url>
+  <url>
+    <loc>${koLoc}</loc>
+    <lastmod>${isoDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="${enLoc}"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="${koLoc}"/>
   </url>`;
   }
 
