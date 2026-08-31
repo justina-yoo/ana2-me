@@ -610,6 +610,13 @@ export default async function (request, context) {
   const currentUrl = pageUrl || `${SITE}${path}`;
   newHtml = newHtml.replace(/(<link\s+rel="alternate"\s+hreflang="[^"]*"\s+href=")[^"]*"/g, `$1${currentUrl}"`);
 
+  // Noindex thin database-driven pages (individual ingredient/product/brand detail pages)
+  // Keep list pages (/ingredients, /brands, /products) indexed
+  const isThinPage = !!(ingredientMatch || productMatch || brandMatch);
+  if (isThinPage) {
+    newHtml = newHtml.replace('</head>', '<meta name="robots" content="noindex, follow">\n</head>');
+  }
+
   // Inject meta tags (only for article/product detail pages)
   if (title) {
     newHtml = newHtml

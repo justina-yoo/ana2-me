@@ -27,6 +27,16 @@ function setMeta(selector, value) {
   if (el) el.setAttribute(el.hasAttribute('content') ? 'content' : 'href', value);
 }
 
+function setRobots(directive) {
+  var m = document.querySelector('meta[name="robots"]');
+  if (!m) {
+    m = document.createElement('meta');
+    m.setAttribute('name', 'robots');
+    document.head.appendChild(m);
+  }
+  m.setAttribute('content', directive);
+}
+
 function setArticleJsonLd(data) {
   var existing = document.getElementById('ld-article');
   if (existing) existing.parentNode.removeChild(existing);
@@ -44,6 +54,7 @@ function buildArticleUrl(articleId, m) {
 
 const SEO = {
   setHome: function () {
+    setRobots('index, follow');
     var title = "ana2me \u2014 Korean Skincare, Fragrance & Wellness Decoded at the Molecular Level";
     var desc = 'Independent ingredient analysis of Korean skincare, fragrance, and wellness products. Science-backed articles, product breakdowns, and an ingredient analyzer \u2014 in English and Korean.';
     var url = BASE_URL + '/';
@@ -62,6 +73,7 @@ const SEO = {
   },
 
   setAbout: function () {
+    setRobots('index, follow');
     var title = 'About | ana2me';
     var desc = 'Ingredient-first K-beauty platform for skincare, fragrance & wellness.';
     var url = BASE_URL + '/about';
@@ -78,6 +90,7 @@ const SEO = {
   },
 
   setTerms: function () {
+    setRobots('index, follow');
     var title = 'Terms of Service \u2014 ana2me';
     var desc = 'Terms of Service for ana2me, an ingredient-discovery and personalization tool for Korean cosmetic products.';
     var url = BASE_URL + '/terms';
@@ -93,6 +106,7 @@ const SEO = {
     setArticleJsonLd(null);
   },
   setPrivacy: function () {
+    setRobots('index, follow');
     var title = 'Privacy Policy | ana2me';
     var desc = 'ana2me collects no personal data. We use Google Analytics for anonymous usage stats only. Read our full privacy policy.';
     var url = BASE_URL + '/privacy';
@@ -109,6 +123,7 @@ const SEO = {
   },
 
   setAnalyzer: function () {
+    setRobots('index, follow');
     var title = 'Korean Skincare Ingredient Analyzer \u2014 Find Your Ingredient Pattern | ana2me';
     var desc = 'Search any skincare product and get a full ingredient breakdown in plain language. Add products that work and don\u2019t work for you \u2014 we\u2019ll find the ingredient pattern your skin responds to. Free, no login required.';
     var url = BASE_URL + '/analyzer';
@@ -175,6 +190,7 @@ const SEO = {
   // Set SEO for an article — reads from the Supabase article object directly.
   // Falls back to title/excerpt/imageUrl if dedicated SEO columns are empty.
   setArticle: function (article, lang) {
+    setRobots('index, follow');
     if (!article) return;
     var l = lang || (document.documentElement.classList.contains('lang-ko') ? 'ko' : 'en');
     var articleId = article.id;
@@ -252,6 +268,7 @@ const SEO = {
   },
 
   setProduct: function (product, lang) {
+    setRobots('noindex, follow');
     var l = lang || (document.documentElement.classList.contains('lang-ko') ? 'ko' : 'en');
     var name = (l === 'ko' && product.nameKo) ? product.nameKo : product.name;
     var brand = product.brand;
@@ -288,6 +305,7 @@ const SEO = {
   },
 
   setBrands: function () {
+    setRobots('index, follow');
     var title = 'Brands | ana2me';
     var desc = 'Browse skincare, fragrance, and wellness brands with independent ingredient analysis on ana2me.';
     var url = BASE_URL + '/brands';
@@ -310,6 +328,7 @@ const SEO = {
   },
 
   setIngredient: function (ingredient) {
+    setRobots('noindex, follow');
     var name = ingredient.name || ingredient.id;
     var title = name + ' \u2014 What It Does for Your Skin | ' + SITE_NAME;
     var desc = (ingredient.science || ingredient.description || '').slice(0, 160);
@@ -340,6 +359,7 @@ const SEO = {
   },
 
   setIngredients: function () {
+    setRobots('index, follow');
     var title = 'Skincare Ingredients Guide | ana2me';
     var desc = 'Browse 100+ skincare ingredients with plain-language explanations. Understand what each ingredient does, which products contain it, and whether it suits your skin.';
     var url = BASE_URL + '/ingredients';
@@ -362,6 +382,7 @@ const SEO = {
   },
 
   setBrand: function (brandName) {
+    setRobots('noindex, follow');
     var slug = brandName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
     var title = brandName + ' | ana2me';
     var desc = 'Independent ingredient analysis of ' + brandName + ' products on ana2me.';

@@ -104,67 +104,34 @@ async function generate() {
 
 
 
-  // Products
+  // List pages only — individual product/brand/ingredient pages are noindexed (thin content)
   const skincareProducts = products.filter(p => (p.category || 'skincare') === 'skincare');
-  xml += `
-
-  <!-- Products -->`;
-  for (const p of skincareProducts) {
-    const slug = (p.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/-+$/, '');
-    const lastmod = p.updated_at ? p.updated_at.slice(0, 10) : today;
-    xml += `
-  <url>
-    <loc>${SITE}/products/${slug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>`;
-  }
-
-  // Brands
   const brands = [...new Set(skincareProducts.map(p => p.brand))].sort();
+
   xml += `
 
-  <!-- Brands -->
+  <!-- Brands list page -->
   <url>
     <loc>${SITE}/brands</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-  </url>`;
-  for (const brand of brands) {
-    const slug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
-    xml += `
+  </url>
+
+  <!-- Ingredients list page -->
   <url>
-    <loc>${SITE}/brands/${slug}</loc>
+    <loc>${SITE}/ingredients</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>`;
-  }
-
-  // Ingredients (those that are hero in at least one product)
-  if (heroIngredientIds.length > 0) {
-    xml += `
-
-  <!-- Ingredients -->`;
-    for (const ingId of heroIngredientIds) {
-      xml += `
-  <url>
-    <loc>${SITE}/ingredients/${ingId}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>`;
-    }
-  }
 
   xml += `
 </urlset>
 `;
 
   writeFileSync('sitemap.xml', xml);
-  console.log(`✓ sitemap.xml generated with ${articles.length} articles + ${skincareProducts.length} products + ${brands.length} brands + ${heroIngredientIds.length} ingredients + 6 static pages`);
+  console.log(`✓ sitemap.xml generated with ${articles.length} articles + 8 static/list pages (individual product/brand/ingredient pages excluded — noindexed)`);
 }
 
 generate();
