@@ -279,7 +279,14 @@ function InsightsFeed({ posts, allPosts, lang, density, activeTag, query, onTagC
     return () => window.removeEventListener('scroll', onScroll);
   }, [hasMore, loading, query, activeTag, posts.length]);
   const t = useL(lang);
-  const allTags = [...new Map(allPosts.map(p => [p.tag.en, p])).values()].map(p => ({ en: p.tag.en, color: p.tagColor }));
+  const ALL_TAGS = [
+    { en: 'Skincare', color: 'var(--accent)' },
+    { en: 'Fragrance', color: 'var(--sage)' },
+    { en: 'Wellness', color: '#a07850' },
+    { en: 'Hair & Scalp', color: '#6b8f9e' },
+    { en: 'Beauty Science', color: '#7a6f8a' },
+  ];
+  const allTags = ALL_TAGS;
 
   return (
     <div className={cn('insights', `dens-${density}`)}>
@@ -791,6 +798,9 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
           }}>
             {post.title[lang] || post.title.en}
           </h1>
+          <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500, fontFamily: 'var(--font-text)', letterSpacing: '0.01em', display: 'block', marginBottom: 8 }}>
+            {lang === 'ko' ? '글 J. Yoo' : 'By J. Yoo'}
+          </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Icon name="clock" size={13} />
             <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>

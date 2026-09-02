@@ -7,7 +7,7 @@ var ANALYZER_IMAGE = BASE_URL + '/og-analyzer.png';
 
 var AUTHOR = {
   '@type': 'Person',
-  'name': 'Ana',
+  'name': 'J. Yoo',
   'url': BASE_URL + '/about',
 };
 

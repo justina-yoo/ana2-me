@@ -80,7 +80,7 @@ export default async function (request, context) {
         "articleBody": bodyText,
         "wordCount": bodyText.split(/\s+/).length,
         "inLanguage": ["en", "ko"],
-        "author": { "@type": "Person", "name": "Ana", "url": `${SITE}/about` },
+        "author": { "@type": "Person", "name": "J. Yoo", "url": `${SITE}/about` },
         "publisher": {
           "@type": "Organization",
           "@id": `${SITE}/#organization`,
@@ -733,6 +733,7 @@ function renderArticleHTML(a) {
   html += `<header>`;
   html += `<p>${escHtml(category)}</p>`;
   html += `<h1>${escHtml(title)}</h1>`;
+  html += `<p>By J. Yoo</p>`;
   html += `<p>${escHtml(excerpt)}</p>`;
   html += `<p>${escHtml(date)} · ${escHtml(readTime)}</p>`;
   html += `</header>`;
