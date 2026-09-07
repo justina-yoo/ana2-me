@@ -458,7 +458,9 @@ function App() {
   useEffect(() => {
     handleRoute();
     window.addEventListener('popstate', handleRoute);
-    return () => window.removeEventListener('popstate', handleRoute);
+    const clearSearch = () => { setQuery(''); };
+    window.addEventListener('ana2me:clear-search', clearSearch);
+    return () => { window.removeEventListener('popstate', handleRoute); window.removeEventListener('ana2me:clear-search', clearSearch); };
   }, []);
 
   // Update SEO meta on view changes

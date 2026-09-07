@@ -75,7 +75,7 @@ const SEO = {
   setAbout: function () {
     setRobots('index, follow');
     var title = 'About | ana2me';
-    var desc = 'Ingredient-first K-beauty platform for skincare, fragrance & wellness.';
+    var desc = 'ana2me is a Seoul-based, bilingual platform analyzing Korean skincare, fragrance, and wellness products at the molecular level. 155+ articles, 50+ product breakdowns, and a free ingredient analyzer.';
     var url = BASE_URL + '/about';
     document.title = title;
     setMeta('meta[name="description"]', desc);

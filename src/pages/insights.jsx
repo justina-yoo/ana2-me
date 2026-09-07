@@ -179,6 +179,8 @@ export default function Insights({ lang, density, query }) {
     const isKoUrl = currentPath.startsWith('/ko/');
     const url = isKoUrl ? articleUrl(p, 'ko') : articleUrl(p, lang);
     history.pushState({}, '', url);
+    // Clear search query in App.jsx so search results UI disappears
+    window.dispatchEvent(new CustomEvent('ana2me:clear-search'));
     if (SEO) SEO.setArticle(p);
     if (window.gtag) gtag('event', 'page_view', { page_path: url, page_title: document.title });
     window.scrollTo(0, 0);

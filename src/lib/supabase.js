@@ -113,7 +113,7 @@ export function fetchFeaturedArticles() {
         id: r.id, category: r.category, title: r.title, excerpt: r.excerpt,
         summary: r.summary, readTime: r.read_time, date: r.date, tag: r.tag, tagColor: r.tag_color,
         imageUrl: r.image_url, keywords: r.keywords, bodyBlocks: r.body_blocks,
-        featured: r.featured
+        featured: r.featured, coupangProducts: r.coupang_products
       };
     });
   });
@@ -188,7 +188,8 @@ export function fetchArticles(limit, offset) {
         imageUrl: r.image_url,
         keywords: r.keywords,
         bodyBlocks: r.body_blocks,
-        featured: r.featured
+        featured: r.featured,
+        coupangProducts: r.coupang_products
       };
     });
   });

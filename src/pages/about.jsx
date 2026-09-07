@@ -1,7 +1,9 @@
-// About + FAQ page
+// About page — SEO/AEO/GEO optimized with Organization + Person + FAQPage + WebSite schema
 import React, { useState, useEffect, useRef } from 'react';
 import { cn, useL, Icon, Sticker, Reveal } from '../components/primitives';
 import SEO from '../lib/seo';
+
+const BASE_URL = 'https://ana2-me.com';
 
 export default function About({ lang, density }) {
   const [openFaq, setOpenFaq] = useState(null);
@@ -80,9 +82,29 @@ export default function About({ lang, density }) {
       a: "Yes — we're building toward a platform where you can explore products by ingredient, track what works for your body over time, and get recommendations grounded in molecular data rather than marketing spend. We're moving deliberately, not fast.",
       aKo: "네 — 성분별로 제품을 탐색하고, 내 몸에 맞는 걸 기록하면서 추적하고, 광고비가 아니라 분자 데이터로 추천받을 수 있는 플랫폼을 만들고 있어요. 빠르게보다는 제대로, 하나씩 만들어가고 있습니다.",
     },
+    {
+      q: "Is ana2me affiliated with any brand?",
+      qKo: "ana2me는 특정 브랜드와 제휴하고 있나요?",
+      a: "No. ana2me is editorially independent. We are not affiliated with, sponsored by, or financially tied to any skincare, fragrance, or wellness brand. Product analyses are based on publicly available ingredient lists and published research.",
+      aKo: "아니요. ana2me는 편집적으로 독립적이에요. 어떤 스킨케어, 향수, 웰니스 브랜드와도 제휴하거나 후원받거나 재정적으로 연결되어 있지 않습니다. 제품 분석은 공개된 성분 목록과 발표된 연구를 기반으로 합니다.",
+    },
+    {
+      q: "Why are articles published in both English and Korean?",
+      qKo: "왜 영어와 한국어 두 언어로 발행하나요?",
+      a: "Because K-beauty originates in Korea but its audience is global. Korean-language sources often contain ingredient data and clinical context that never makes it into English marketing. We write natively in both languages — not translated — so each version reads naturally.",
+      aKo: "K-뷰티는 한국에서 시작되지만 독자는 전 세계에 있으니까요. 한국어 자료에는 영어 마케팅에 포함되지 않는 성분 데이터와 임상 맥락이 있어요. 번역이 아니라 각 언어로 독립적으로 작성하기 때문에 두 버전 모두 자연스럽게 읽혀요.",
+    },
   ];
 
-  // Inject FAQPage JSON-LD (always English for SEO)
+  const categories = [
+    { en: 'Skincare', ko: '스킨케어', desc: { en: 'Ingredient science, K-beauty trends, barrier health, and body skincare.', ko: '성분 과학, K-뷰티 트렌드, 피부 장벽, 바디 스킨케어.' }, color: 'var(--accent)' },
+    { en: 'Fragrance', ko: '향수', desc: { en: 'Molecular scent science, K-fragrance, and olfactory psychology.', ko: '분자 향기 과학, K-프래그런스, 후각 심리학.' }, color: 'var(--sage)' },
+    { en: 'Wellness', ko: '웰니스', desc: { en: 'Bioactive ingredients, gut-skin axis, and Korean functional food.', ko: '생리활성 성분, 장-피부 축, 한국 기능성 식품.' }, color: '#a07850' },
+    { en: 'Hair & Scalp', ko: '헤어 & 두피', desc: { en: 'Scalp microbiome, thinning ingredients, and K-hair trends.', ko: '두피 마이크로바이옴, 탈모 케어 성분, K-헤어 트렌드.' }, color: '#6b8f9e' },
+    { en: 'Beauty Science', ko: '뷰티 사이언스', desc: { en: 'Makeup chemistry, beauty tech, neurocosmetics, and industry analysis.', ko: '메이크업 화학, 뷰티 테크, 뉴로코스메틱, 업계 분석.' }, color: '#7a6f8a' },
+  ];
+
+  // Inject combined JSON-LD graph (Organization + Person + FAQPage + WebSite)
   useEffect(() => {
     const existing = document.getElementById('ld-faq');
     if (existing) existing.parentNode.removeChild(existing);
@@ -91,12 +113,59 @@ export default function About({ lang, density }) {
     script.id = 'ld-faq';
     script.textContent = JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      'mainEntity': faqs.map(f => ({
-        '@type': 'Question',
-        'name': f.q,
-        'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
-      })),
+      '@graph': [
+        {
+          '@type': 'Organization',
+          '@id': BASE_URL + '/#organization',
+          'name': 'ana2me',
+          'url': BASE_URL,
+          'logo': { '@type': 'ImageObject', 'url': BASE_URL + '/og-default.png' },
+          'description': 'Independent, bilingual platform analyzing Korean skincare, fragrance, and wellness products at the molecular level.',
+          'founder': { '@id': BASE_URL + '/about#founder' },
+          'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': 'Seoul',
+            'addressCountry': 'KR',
+          },
+          'sameAs': [
+            'https://x.com/ana2me_official',
+            'https://www.instagram.com/ana2me.official/',
+            'https://medium.com/@ana2me',
+            'https://www.tiktok.com/@ana2me.official',
+          ],
+        },
+        {
+          '@type': 'Person',
+          '@id': BASE_URL + '/about#founder',
+          'name': 'J. Yoo',
+          'url': BASE_URL + '/about',
+          'jobTitle': 'Founder & Editor',
+        },
+        {
+          '@type': 'WebSite',
+          '@id': BASE_URL + '/#website',
+          'name': 'ana2me',
+          'url': BASE_URL,
+          'description': 'Korean skincare, fragrance, and wellness decoded at the molecular level.',
+          'inLanguage': ['en', 'ko'],
+          'publisher': { '@id': BASE_URL + '/#organization' },
+        },
+        {
+          '@type': 'AboutPage',
+          'url': BASE_URL + '/about',
+          'name': 'About ana2me',
+          'description': 'ana2me is a Seoul-based, bilingual platform analyzing Korean skincare, fragrance, and wellness products at the molecular level.',
+          'isPartOf': { '@id': BASE_URL + '/#website' },
+        },
+        {
+          '@type': 'FAQPage',
+          'mainEntity': faqs.map(f => ({
+            '@type': 'Question',
+            'name': f.q,
+            'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+          })),
+        },
+      ],
     });
     document.head.appendChild(script);
     if (SEO) SEO.setAbout();
@@ -121,7 +190,7 @@ export default function About({ lang, density }) {
       </header>
 
       {/* Mission */}
-      <section style={{ maxWidth: 780, margin: '0 auto 72px' }}>
+      <section style={{ maxWidth: 780, margin: '0 auto 48px' }}>
         <div>
           <p style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(20px, 2.4vw, 26px)', lineHeight: 1.45, color: 'var(--ink)', margin: '0 0 24px', letterSpacing: '-0.01em' }}>
             {t(
@@ -161,13 +230,97 @@ export default function About({ lang, density }) {
             )}
           </p>
         </div>
+      </section>
 
-        {/* Analyzer CTA */}
+      {/* Who runs ana2me */}
+      <section style={{ maxWidth: 780, margin: '0 auto 48px' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.2vw, 22px)', color: 'var(--ink)', margin: '0 0 14px', letterSpacing: '-0.01em' }}>
+          {t('Who runs ana2me', 'ana2me를 만드는 사람')}
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 12px' }}>
+          {isKo ? (
+            <>ana2me는 서울에 기반을 둔 J. Yoo가 운영하는 독립 플랫폼이에요. 모든 기사는 공개된 성분 데이터와 발표된 연구를 바탕으로 작성되며, 한국어와 영어 두 언어로 독립적으로 집필됩니다 — 번역이 아니에요. 어떤 브랜드와도 제휴하지 않고, 편집 방향은 오직 성분 과학에 기반합니다.</>
+          ) : (
+            <>ana2me is an independent platform run by J. Yoo, based in Seoul, South Korea. Every article is written from publicly available ingredient data and published research, in both English and Korean — written natively, not translated. We are not affiliated with any brand. Editorial direction is grounded in ingredient science, not sponsorship.</>
+          )}
+        </p>
+      </section>
+
+      {/* What we cover */}
+      <section style={{ maxWidth: 780, margin: '0 auto 48px' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.2vw, 22px)', color: 'var(--ink)', margin: '0 0 18px', letterSpacing: '-0.01em' }}>
+          {t('What we cover', '다루는 분야')}
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+          {categories.map((cat) => (
+            <div key={cat.en} style={{
+              padding: '16px 18px',
+              background: 'var(--cream-card)',
+              border: '1px solid var(--line)',
+              borderRadius: 'var(--radius)',
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: cat.color, marginBottom: 6 }}>
+                {isKo ? cat.ko : cat.en}
+              </div>
+              <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-soft)', margin: 0 }}>
+                {isKo ? cat.desc.ko : cat.desc.en}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* By the numbers */}
+      <section style={{ maxWidth: 780, margin: '0 auto 48px' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.2vw, 22px)', color: 'var(--ink)', margin: '0 0 18px', letterSpacing: '-0.01em' }}>
+          {t('By the numbers', '숫자로 보는 ana2me')}
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 14 }}>
+          {[
+            { num: '155+', en: 'Articles published', ko: '발행된 기사' },
+            { num: '50+', en: 'Products analyzed', ko: '분석된 제품' },
+            { num: '120+', en: 'Ingredients indexed', ko: '등록된 성분' },
+            { num: '2', en: 'Languages (EN/KO)', ko: '언어 (EN/KO)' },
+          ].map((stat) => (
+            <div key={stat.en} style={{
+              padding: '18px 16px',
+              background: 'var(--cream-card)',
+              border: '1px solid var(--line)',
+              borderRadius: 'var(--radius)',
+              textAlign: 'center',
+            }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', letterSpacing: '-0.02em', marginBottom: 4 }}>
+                {stat.num}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>
+                {isKo ? stat.ko : stat.en}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section style={{ maxWidth: 780, margin: '0 auto 48px' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.2vw, 22px)', color: 'var(--ink)', margin: '0 0 14px', letterSpacing: '-0.01em' }}>
+          {t('Contact', '연락처')}
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: 0 }}>
+          {isKo ? (
+            <>문의 사항은 <a href="mailto:ana2me2026@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>ana2me2026@gmail.com</a>으로 보내주세요. 서울, 대한민국에서 운영하고 있습니다.</>
+          ) : (
+            <>Reach us at <a href="mailto:ana2me2026@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>ana2me2026@gmail.com</a>. Based in Seoul, South Korea.</>
+          )}
+        </p>
+      </section>
+
+      {/* Analyzer CTA */}
+      <section style={{ maxWidth: 780, margin: '0 auto 48px' }}>
         <Reveal>
           <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
             style={{
               display: 'flex', flexDirection: 'column', gap: 10,
-              padding: '24px 22px', marginTop: 20,
+              padding: '24px 22px',
               background: 'var(--accent)', color: '#fff',
               borderRadius: 'var(--radius)', textDecoration: 'none',
               transition: 'all .15s ease',

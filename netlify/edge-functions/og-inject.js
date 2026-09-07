@@ -528,30 +528,88 @@ export default async function (request, context) {
       });
     } else if (isAbout) {
       title = 'About | ana2me';
-      description = 'ana2me is an ingredient-first platform covering Korean beauty, skincare, fragrance, and wellness — built for people who want to understand what they\'re putting in and on their body.';
+      description = 'ana2me is a Seoul-based, bilingual platform analyzing Korean skincare, fragrance, and wellness products at the molecular level. 155+ articles, 50+ product breakdowns, and a free ingredient analyzer.';
       pageUrl = `${SITE}/about`;
 
-      // Rich SSR with FAQ
+      // Rich SSR with structured entity info for crawlers
       let aboutHtml = `<article><h1>About ana2me</h1>`;
       aboutHtml += `<p>${escHtml(description)}</p>`;
-      aboutHtml += `<p>We break down ingredients using molecular data so you can make informed decisions about skincare, fragrance, and wellness products.</p>`;
-      aboutHtml += `<section><h2>Frequently Asked Questions</h2>`;
+      aboutHtml += `<section><h2>Who runs ana2me</h2><p>ana2me is an independent platform run by J. Yoo, based in Seoul, South Korea. Every article is written from publicly available ingredient data and published research, in both English and Korean — written natively, not translated. We are not affiliated with any brand.</p></section>`;
+      aboutHtml += `<section><h2>What we cover</h2><ul>`;
+      aboutHtml += `<li><strong>Skincare</strong> — Ingredient science, K-beauty trends, barrier health, and body skincare.</li>`;
+      aboutHtml += `<li><strong>Fragrance</strong> — Molecular scent science, K-fragrance, and olfactory psychology.</li>`;
+      aboutHtml += `<li><strong>Wellness</strong> — Bioactive ingredients, gut-skin axis, and Korean functional food.</li>`;
+      aboutHtml += `<li><strong>Hair &amp; Scalp</strong> — Scalp microbiome, thinning ingredients, and K-hair trends.</li>`;
+      aboutHtml += `<li><strong>Beauty Science</strong> — Makeup chemistry, beauty tech, neurocosmetics, and industry analysis.</li>`;
+      aboutHtml += `</ul></section>`;
+      aboutHtml += `<section><h2>By the numbers</h2><ul><li>155+ articles published</li><li>50+ products analyzed</li><li>120+ ingredients indexed</li><li>2 languages (English &amp; Korean)</li></ul></section>`;
+      aboutHtml += `<section><h2>Contact</h2><p>Email: ana2me2026@gmail.com. Based in Seoul, South Korea.</p></section>`;
+
       const faqs = [
         { q: "What does 'ana2me' mean?", a: "It's a play on three words: anatomy, analyze, and 'to me'. Understanding what's inside a product is half the equation — understanding your own body is the other half." },
         { q: "Who is this for?", a: "For anyone who has bought something because an ad was convincing or an influencer raved about it — and then it didn't work. We cut through the noise and tell you what's actually in the bottle." },
-        { q: "What is the Analyzer?", a: "A tool that lets you paste any ingredient list and get a plain-language breakdown of what's in it, what it does, and whether the formula makes sense for your concerns." },
+        { q: "What is the Ingredient Analyzer?", a: "The Analyzer lets you search any skincare product and see a full ingredient breakdown in plain language. Add products that work for your skin and ones that don't — we'll compare the ingredients to find the pattern your skin responds to. It's free, no login required." },
         { q: "Why do products work differently on different people?", a: "Because your skin microbiome, pH, sebum production, hormones, and diet are unique. A product for combination skin in humid weather behaves differently on dry skin in cold weather." },
         { q: "Will there be more features?", a: "Yes — we're building toward exploring products by ingredient, tracking what works for your body over time, and getting recommendations grounded in molecular data rather than marketing." },
+        { q: "Is ana2me affiliated with any brand?", a: "No. ana2me is editorially independent. We are not affiliated with, sponsored by, or financially tied to any skincare, fragrance, or wellness brand." },
+        { q: "Why are articles published in both English and Korean?", a: "Because K-beauty originates in Korea but its audience is global. Korean-language sources often contain ingredient data and clinical context that never makes it into English marketing. We write natively in both languages — not translated." },
       ];
+      aboutHtml += `<section><h2>Frequently Asked Questions</h2>`;
       for (const f of faqs) {
         aboutHtml += `<h3>${escHtml(f.q)}</h3><p>${escHtml(f.a)}</p>`;
       }
       aboutHtml += `</section>`;
-      aboutHtml += `<nav><a href="/insights">Read our articles</a> · <a href="/products">Browse products</a> · <a href="/brands">Browse brands</a></nav>`;
+      aboutHtml += `<nav><a href="/insights">Read our articles</a> · <a href="/products">Browse products</a> · <a href="/brands">Browse brands</a> · <a href="/analyzer">Ingredient Analyzer</a></nav>`;
       aboutHtml += `</article>`;
       ssrContent = aboutHtml;
 
-      // FAQ JSON-LD
+      // Combined JSON-LD graph: Organization + Person + WebSite + AboutPage + FAQPage
+      jsonLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Organization',
+            '@id': `${SITE}/#organization`,
+            'name': 'ana2me',
+            'url': SITE,
+            'logo': { '@type': 'ImageObject', 'url': `${SITE}/og-default.png` },
+            'description': 'Independent, bilingual platform analyzing Korean skincare, fragrance, and wellness products at the molecular level.',
+            'founder': { '@id': `${SITE}/about#founder` },
+            'address': { '@type': 'PostalAddress', 'addressLocality': 'Seoul', 'addressCountry': 'KR' },
+            'sameAs': [
+              'https://x.com/ana2me_official',
+              'https://www.instagram.com/ana2me.official/',
+              'https://medium.com/@ana2me',
+              'https://www.tiktok.com/@ana2me.official'
+            ]
+          },
+          {
+            '@type': 'Person',
+            '@id': `${SITE}/about#founder`,
+            'name': 'J. Yoo',
+            'url': `${SITE}/about`,
+            'jobTitle': 'Founder & Editor'
+          },
+          {
+            '@type': 'WebSite',
+            '@id': `${SITE}/#website`,
+            'name': 'ana2me',
+            'url': SITE,
+            'description': 'Korean skincare, fragrance, and wellness decoded at the molecular level.',
+            'inLanguage': ['en', 'ko'],
+            'publisher': { '@id': `${SITE}/#organization` }
+          },
+          {
+            '@type': 'AboutPage',
+            'url': pageUrl,
+            'name': title,
+            'description': description,
+            'isPartOf': { '@id': `${SITE}/#website` }
+          }
+        ]
+      });
+
+      // FAQ JSON-LD (separate block)
       faqLd = JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -560,16 +618,6 @@ export default async function (request, context) {
           'name': f.q,
           'acceptedAnswer': { '@type': 'Answer', 'text': f.a }
         }))
-      });
-
-      // AboutPage JSON-LD
-      jsonLd = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'AboutPage',
-        'name': title,
-        'description': description,
-        'url': pageUrl,
-        'isPartOf': { '@type': 'WebSite', 'name': 'ana2me', 'url': SITE },
       });
     } else if (isAnalyzer) {
       title = 'Korean Skincare Ingredient Analyzer — Find Your Ingredient Pattern | ana2me';
