@@ -6,7 +6,6 @@ import { useCached } from '../lib/use-cached';
 import SEO from '../lib/seo';
 import BlockRenderer from '../components/block-renderer';
 import AnalyzerCTAs from '../components/analyzer-ctas';
-import CoupangProducts from '../components/coupang-products';
 
 // Convert "May 3, 2026" → "2026-05-03"
 function dateToPrefix(dateStr) {
@@ -843,8 +842,6 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
           </p>
         )}
 
-        {/* Coupang product recommendations — silent-fails if no products or not configured */}
-        <CoupangProducts article={post} lang={lang} limit={1} />
 
         {/* Analyzer CTA — contextual */}
         <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
