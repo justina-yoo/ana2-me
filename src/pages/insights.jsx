@@ -843,6 +843,26 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
         )}
 
 
+        {/* Coupang — hardcoded pilot for Korean articles */}
+        {isKo && post.id === 'vegan-pdrn-lab-grown-plant-based-salmon-dna' && (
+          <div style={{ margin: '40px 0' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(20px, 2.4vw, 24px)', color: 'var(--ink)', marginBottom: 14, letterSpacing: '-0.01em' }}>
+              관련 제품을 찾아봤어요.
+            </h2>
+            <div style={{ padding: 20, background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
+              <div style={{ background: 'var(--cream-card)', border: '1px solid var(--line)', borderLeft: '4px solid #A96E38', padding: '12px 16px', borderRadius: '0 8px 8px 0', marginBottom: 16, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: '50%', background: '#A96E38', color: '#fff', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>i</span>
+                <p style={{ fontFamily: 'var(--font-text)', fontSize: 12, lineHeight: 1.55, color: 'var(--ink)', margin: 0, fontWeight: 500, wordBreak: 'keep-all' }}>
+                  본 제품 추천은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+                </p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <iframe src="https://coupa.ng/cpiN4R" width="100%" height="360" frameBorder="0" scrolling="no" referrerPolicy="unsafe-url" title="쿠팡 VT PDRN 에센스" style={{ maxWidth: 680, border: 'none' }} />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Analyzer CTA — contextual */}
         <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
           style={{
