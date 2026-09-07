@@ -859,31 +859,9 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
                   본 제품 추천은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
                 </p>
               </div>
-              <a
-                href="https://link.coupang.com/a/gRapvYPW68"
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                style={{
-                  display: 'flex', gap: 16, padding: 14,
-                  background: 'var(--cream-card)', border: '1px solid var(--line)',
-                  borderRadius: 'var(--radius-sm)', textDecoration: 'none',
-                  color: 'inherit', alignItems: 'center', transition: 'border-color 0.15s',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#A96E38'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--line)'; }}
-              >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: 'var(--font-text)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#FF3B30', marginBottom: 4 }}>
-                    COUPANG
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 14, lineHeight: 1.35, color: 'var(--ink)', marginBottom: 4, wordBreak: 'keep-all' }}>
-                    VT 코스메틱 리들샷 PDRN 에센스 100
-                  </div>
-                </div>
-                <span style={{ padding: '8px 16px', background: 'var(--accent)', color: '#fff', borderRadius: 'var(--radius-pill)', fontFamily: 'var(--font-text)', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
-                  보러가기 →
-                </span>
-              </a>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <iframe src="https://coupa.ng/cpi2yw" width="120" height="240" frameBorder="0" scrolling="no" referrerPolicy="unsafe-url" title="쿠팡 VT PDRN 에센스" />
+              </div>
             </div>
           </div>
         )}
