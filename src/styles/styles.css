@@ -113,6 +113,7 @@ body.night {
   letter-spacing: -0.02em;
   margin: 0;
   }
+.lang-ko { --font-display: 'Noto Serif KR', Georgia, serif; --font-text: 'Noto Sans KR', system-ui, sans-serif; }
 .lang-ko .display { line-height: 1.15; }
 .display-accent {
   color: var(--accent);
