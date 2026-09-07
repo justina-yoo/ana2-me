@@ -23,3 +23,7 @@
 /article/:a/:b  /index.html  200
 /article/:a/:b/:c  /index.html  200
 /article/:a/:b/:c/  /article/:a/:b/:c  301
+/ko/article/:a  /index.html  200
+/ko/article/:a/:b  /index.html  200
+/ko/article/:a/:b/:c  /index.html  200
+/ko/article/:a/:b/:c/  /ko/article/:a/:b/:c  301
