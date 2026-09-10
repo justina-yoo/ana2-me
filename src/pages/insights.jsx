@@ -860,7 +860,7 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
                 </p>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <iframe src="https://coupa.ng/cpi2yw" width="120" height="240" frameBorder="0" scrolling="no" referrerPolicy="unsafe-url" title="쿠팡 VT PDRN 에센스" />
+                <iframe src="https://coupa.ng/cpi3uh" width="120" height="240" frameBorder="0" scrolling="no" referrerPolicy="unsafe-url" title="쿠팡 VT PDRN 에센스" />
               </div>
             </div>
           </div>
