@@ -846,9 +846,9 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
         )}
 
 
-        {/* Coupang — hardcoded pilot for Korean articles */}
-        {isKo && (post.id === 'vegan-pdrn-lab-grown-plant-based-salmon-dna' || post.id === '7-korean-supplements-outselling-skincare-olive-young') && (
-          <div style={{ margin: '40px 0' }}>
+        {/* Coupang — hardcoded pilot for Korean articles (a+img format) */}
+        {isKo && ['vegan-pdrn-lab-grown-plant-based-salmon-dna','7-korean-supplements-outselling-skincare-olive-young','menstrual-cycle-skincare-hormone-phases','dasima-kelp-scalp-serum-korea','snow-mushroom-tremella-vegan-hyaluronic-acid','skin-barrier-damaged-cleanser-switch-fix'].includes(post.id) && (
+          <div style={{ margin: '40px 0' }} ref={(el) => { if (el) el.dataset.coupangWrapper = 'true'; }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(20px, 2.4vw, 24px)', color: 'var(--ink)', marginBottom: 14, letterSpacing: '-0.01em' }}>
               관련 제품을 찾아봤어요.
             </h2>
@@ -860,76 +860,42 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
                 </p>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <iframe src={post.id === '7-korean-supplements-outselling-skincare-olive-young' ? 'https://coupa.ng/cpozEM' : 'https://coupa.ng/cpozzh'} width="120" height="240" frameBorder="0" scrolling="no" referrerPolicy="unsafe-url" title="쿠팡 추천 제품" />
+                {post.id === 'vegan-pdrn-lab-grown-plant-based-salmon-dna' && (
+                  <a href="https://link.coupang.com/a/gV86R8py2K" target="_blank" rel="sponsored noopener noreferrer" referrerPolicy="unsafe-url">
+                    <img src="https://image12.coupangcdn.com/image/affiliate/banner/bdab0c0b8cec8e9b21346dd728ac5d80@2x.jpg" alt="프레티 PDRN+ 리페어 글로우 앰플, 6개, 30ml" width="120" height="240" onError={(e) => { const w = e.target.closest('[data-coupang-wrapper]'); if (w) w.style.display = 'none'; }} />
+                  </a>
+                )}
+                {post.id === '7-korean-supplements-outselling-skincare-olive-young' && (
+                  <a href="https://link.coupang.com/a/gV9dznzFwi" target="_blank" rel="sponsored noopener noreferrer" referrerPolicy="unsafe-url">
+                    <img src="https://img2c.coupangcdn.com/image/affiliate/banner/cca43bfaafc74c7cfbe0f222ddb13a67@2x.jpg" alt="락토핏 정품 골드 80포, 160g, 1개" width="120" height="240" onError={(e) => { const w = e.target.closest('[data-coupang-wrapper]'); if (w) w.style.display = 'none'; }} />
+                  </a>
+                )}
+                {post.id === 'menstrual-cycle-skincare-hormone-phases' && (
+                  <a href="https://link.coupang.com/a/gV9ff13lm0" target="_blank" rel="sponsored noopener noreferrer" referrerPolicy="unsafe-url">
+                    <img src="https://image14.coupangcdn.com/image/affiliate/banner/6717c57b37b838980e5e2659759a29a7@2x.jpg" alt="달바 워터풀 에센스 선크림 SPF50+ PA++++, 50ml, 1개" width="120" height="240" onError={(e) => { const w = e.target.closest('[data-coupang-wrapper]'); if (w) w.style.display = 'none'; }} />
+                  </a>
+                )}
+                {post.id === 'dasima-kelp-scalp-serum-korea' && (
+                  <a href="https://link.coupang.com/a/gV9mDZRX3Y" target="_blank" rel="sponsored noopener noreferrer" referrerPolicy="unsafe-url">
+                    <img src="https://image12.coupangcdn.com/image/affiliate/banner/62ce47d5fc46c89c3a427aaf569ba188@2x.jpg" alt="띵코 TC-7 다시마 씨위드 허브 두피 클리닉 샴푸, 500ml, 1개" width="120" height="240" onError={(e) => { const w = e.target.closest('[data-coupang-wrapper]'); if (w) w.style.display = 'none'; }} />
+                  </a>
+                )}
+                {post.id === 'snow-mushroom-tremella-vegan-hyaluronic-acid' && (
+                  <a href="https://link.coupang.com/a/gV9nT3VPUG" target="_blank" rel="sponsored noopener noreferrer" referrerPolicy="unsafe-url">
+                    <img src="https://image11.coupangcdn.com/image/affiliate/banner/258e9fc4bf7c4ff3e7b0a12f878ce35b@2x.jpg" alt="믹순 영지버섯 에센스, 100ml, 1개" width="120" height="240" onError={(e) => { const w = e.target.closest('[data-coupang-wrapper]'); if (w) w.style.display = 'none'; }} />
+                  </a>
+                )}
+                {post.id === 'skin-barrier-damaged-cleanser-switch-fix' && (
+                  <a href="https://link.coupang.com/a/gV9pcyPi0q" target="_blank" rel="sponsored noopener noreferrer" referrerPolicy="unsafe-url">
+                    <img src="https://img1a.coupangcdn.com/image/affiliate/banner/308701310eed6521f4a4211fc89c9518@2x.jpg" alt="라운드랩 1025 독도 클렌저 클렌징 폼, 150ml, 1개" width="120" height="240" onError={(e) => { const w = e.target.closest('[data-coupang-wrapper]'); if (w) w.style.display = 'none'; }} />
+                  </a>
+                )}
               </div>
             </div>
           </div>
         )}
 
-        {/* Coupang carousel — menstrual cycle article */}
-        {isKo && post.id === 'menstrual-cycle-skincare-hormone-phases' && (
-          <div style={{ margin: '40px 0' }}>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(20px, 2.4vw, 24px)', color: 'var(--ink)', marginBottom: 14, letterSpacing: '-0.01em' }}>
-              관련 제품을 찾아봤어요.
-            </h2>
-            <div style={{ padding: 20, background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
-              <div style={{ background: 'var(--cream-card)', border: '1px solid var(--line)', borderLeft: '4px solid #A96E38', padding: '12px 16px', borderRadius: '0 8px 8px 0', marginBottom: 16, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: '50%', background: '#A96E38', color: '#fff', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>i</span>
-                <p style={{ fontFamily: 'var(--font-text)', fontSize: 12, lineHeight: 1.55, color: 'var(--ink)', margin: 0, fontWeight: 500, wordBreak: 'keep-all' }}>
-                  본 제품 추천은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-                </p>
-              </div>
-              <div ref={(el) => {
-                if (!el || el.dataset.loaded) return;
-                el.dataset.loaded = 'true';
-                const script = document.createElement('script');
-                script.src = 'https://ads-partners.coupang.com/g.js';
-                script.onload = () => {
-                  try { new window.PartnersCoupang.G({ id: 1028190, template: 'carousel', trackingCode: 'AF3626307', width: '680', height: '140', tsource: '' }); } catch(e) {}
-                };
-                el.appendChild(script);
-              }} />
-            </div>
-          </div>
-        )}
-
-        {/* Analyzer CTA — contextual */}
-        <a href="/analyzer" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/analyzer'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0,0); }}
-          style={{
-            display: 'flex', flexDirection: 'column', gap: 10,
-            padding: '24px 22px', margin: '32px 0',
-            background: 'var(--accent)', color: '#fff',
-            borderRadius: 'var(--radius)', textDecoration: 'none',
-            transition: 'all .15s ease',
-          }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 20 }}>🔬</span>
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.7 }}>
-              {isKo ? '성분 분석기' : 'Ingredient Analyzer'}
-            </span>
-            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(255,255,255,0.2)', opacity: 0.9 }}>
-              Beta
-            </span>
-            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', borderRadius: 'var(--radius-pill)', background: 'rgba(245,215,110,0.5)', color: '#fff' }}>
-              {isKo ? '무료' : 'Free'}
-            </span>
-          </div>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(18px, 2.4vw, 22px)', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
-            {isKo ? '나에게 맞는 성분 패턴 찾기' : 'Find your ingredient pattern'}
-          </span>
-          <span style={{ fontSize: 13, lineHeight: 1.5, opacity: 0.8 }}>
-            {isKo ? '내 피부에 맞는 것과 안 맞는 것을 알려주세요. 패턴을 찾아드립니다.' : "Tell us what works and what doesn't for your skin — we'll find the pattern."}
-          </span>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            padding: '10px 20px', marginTop: 4,
-            background: '#fff', color: 'var(--accent)',
-            borderRadius: 'var(--radius-pill)',
-            fontSize: 13, fontWeight: 700, alignSelf: 'flex-start',
-          }} className="cta-shake">
-            {isKo ? '분석기 사용하기' : 'Try the analyzer'} →
-          </span>
-        </a>
+        {/* Analyzer CTA — hidden for now */}
 
         {/* Related products — matched by content overlap */}
         {window.PRODUCTS && (() => {
