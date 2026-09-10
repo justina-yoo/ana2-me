@@ -113,7 +113,9 @@ body.night {
   letter-spacing: -0.02em;
   margin: 0;
   }
-:root.lang-ko { --font-display: 'Noto Serif KR', Georgia, serif; --font-text: 'Noto Sans KR', system-ui, sans-serif; }
+:root.lang-ko { --font-display: 'Noto Serif KR', Georgia, serif !important; --font-text: 'Noto Sans KR', system-ui, sans-serif !important; }
+.lang-ko h1, .lang-ko h2, .lang-ko h3, .lang-ko .display { font-family: 'Noto Serif KR', Georgia, serif !important; }
+.lang-ko p, .lang-ko span, .lang-ko div, .lang-ko li, .lang-ko button, .lang-ko a { font-family: 'Noto Sans KR', system-ui, sans-serif; }
 .lang-ko .display { line-height: 1.15; }
 .display-accent {
   color: var(--accent);
