@@ -4,6 +4,12 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const SITE = 'https://ana2-me.com';
 const FETCH_TIMEOUT = 4000; // 4s timeout for Supabase calls
 
+// Articles too thin for indexing — noindex but keep accessible
+const NOINDEX_ARTICLE_SLUGS = new Set([
+  '3-korean-methods-reapply-sunscreen-over-makeup',
+  'skincare-shelf-life-pao-cheat-sheet-every-product',
+]);
+
 function fetchWithTimeout(url, opts = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
@@ -687,7 +693,8 @@ export default async function (request, context) {
   // Noindex thin database-driven pages (individual ingredient/product/brand detail pages)
   // Keep list pages (/ingredients, /brands, /products) indexed
   const isThinPage = !!(ingredientMatch || productMatch || brandMatch);
-  if (isThinPage) {
+  const isNoindexArticle = articleMatch && NOINDEX_ARTICLE_SLUGS.has(articleMatch[1]);
+  if (isThinPage || isNoindexArticle) {
     newHtml = newHtml.replace('</head>', '<meta name="robots" content="noindex, follow">\n</head>');
   }
 

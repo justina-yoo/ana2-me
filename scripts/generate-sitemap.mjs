@@ -78,7 +78,13 @@ async function generate() {
 
   <!-- Articles -->`;
 
+  const NOINDEX_SLUGS = new Set([
+    '3-korean-methods-reapply-sunscreen-over-makeup',
+    'skincare-shelf-life-pao-cheat-sheet-every-product',
+  ]);
+
   for (const a of articles) {
+    if (NOINDEX_SLUGS.has(a.id)) continue;
     const tag = a.tag.en.toLowerCase().replace(/\s+/g, '-');
     const isoDate = dateToISO(a.date);
     const enLoc = `${SITE}/article/${tag}/${isoDate}/${a.id}`;
@@ -131,7 +137,8 @@ async function generate() {
 `;
 
   writeFileSync('sitemap.xml', xml);
-  console.log(`✓ sitemap.xml generated with ${articles.length} articles + 8 static/list pages (individual product/brand/ingredient pages excluded — noindexed)`);
+  const indexedCount = articles.filter(a => !NOINDEX_SLUGS.has(a.id)).length;
+  console.log(`✓ sitemap.xml generated with ${indexedCount} articles (${articles.length - indexedCount} noindexed) + 8 static/list pages`);
 }
 
 generate();
