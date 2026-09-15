@@ -8,6 +8,8 @@ const FETCH_TIMEOUT = 4000; // 4s timeout for Supabase calls
 const NOINDEX_ARTICLE_SLUGS = new Set([
   '3-korean-methods-reapply-sunscreen-over-makeup',
   'skincare-shelf-life-pao-cheat-sheet-every-product',
+  'water-based-vs-oil-based-moisturizer-3-ways-pick',
+  'slugging-vaseline-good-for-skin-98-percent-tewl',
 ]);
 
 function fetchWithTimeout(url, opts = {}) {

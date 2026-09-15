@@ -81,6 +81,8 @@ async function generate() {
   const NOINDEX_SLUGS = new Set([
     '3-korean-methods-reapply-sunscreen-over-makeup',
     'skincare-shelf-life-pao-cheat-sheet-every-product',
+    'water-based-vs-oil-based-moisturizer-3-ways-pick',
+    'slugging-vaseline-good-for-skin-98-percent-tewl',
   ]);
 
   for (const a of articles) {

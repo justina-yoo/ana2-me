@@ -27,6 +27,8 @@
 /ko/article/:a/:b  /index.html  200
 /ko/article/:a/:b/:c  /index.html  200
 /ko/article/:a/:b/:c/  /ko/article/:a/:b/:c  301
-/article/skincare/2026-07-06/silicone-scar-tape-viral-does-it-work  /article/beauty-science/2026-06-14/silicone-scar-tape-viral-does-it-work  301!
+/article/beauty-science/2026-07-06/silicone-scar-tape-viral-does-it-work  /article/skincare/2026-06-14/silicone-scar-tape-viral-does-it-work  301!
+/article/beauty-science/2026-06-14/silicone-scar-tape-viral-does-it-work  /article/skincare/2026-06-14/silicone-scar-tape-viral-does-it-work  301!
+/article/skincare/2026-07-06/silicone-scar-tape-viral-does-it-work  /article/skincare/2026-06-14/silicone-scar-tape-viral-does-it-work  301!
 /author/:slug  /index.html  200
 /author/:slug/  /author/:slug  301
