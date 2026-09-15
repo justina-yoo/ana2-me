@@ -799,12 +799,12 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
           }}>
             {post.title[lang] || post.title.en}
           </h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <a href="/author/j-yoo" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/author/j-yoo'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, textDecoration: 'none', color: 'inherit' }}>
             <span style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--ink)', color: '#fff', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>J</span>
             <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500, fontFamily: 'var(--font-text)', letterSpacing: '0.01em' }}>
-              {lang === 'ko' ? 'J. Yoo' : 'J. Yoo'}
+              J. Yoo
             </span>
-          </div>
+          </a>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Icon name="clock" size={13} />
             <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 500 }}>

@@ -16,6 +16,7 @@ import Terms from './pages/terms';
 import Admin from './pages/admin';
 import Ingredient from './pages/ingredient';
 import IngredientsList from './pages/ingredients-list';
+import Author from './pages/author';
 import Links from './pages/links';
 
 // Ingredient match card for search results
@@ -322,6 +323,7 @@ function getInitialView() {
   if (p === '/links') return 'links';
   if (p === '/ingredients') return 'ingredients-list';
   if (p.startsWith('/ingredients/')) return 'ingredient';
+  if (p.startsWith('/author/')) return 'author';
   if (p === '/search') return 'insights';
   try { return JSON.parse(localStorage.getItem('view')) || 'landing'; } catch(e) { return 'landing'; }
 }
@@ -450,6 +452,7 @@ function App() {
     else if (path === '/ingredients') { setView('ingredients-list'); setProductId(null); setQuery(''); SEO.setIngredients(); window.scrollTo(0, 0); }
     else if (path.startsWith('/ingredients/')) { setView('ingredient'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/analyze' || path === '/analyzer') { setView('analyze'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
+    else if (path.startsWith('/author/')) { setView('author'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/links') { setView('links'); setProductId(null); setQuery(''); window.scrollTo(0, 0); }
     else if (path === '/about') { setView('about'); setProductId(null); setQuery(''); SEO.setAbout(); window.scrollTo(0, 0); }
     else if (path === '/privacy') { setView('privacy'); setProductId(null); setQuery(''); SEO.setPrivacy(); window.scrollTo(0, 0); }
@@ -626,6 +629,7 @@ function App() {
       {view === 'terms' && <Terms lang={lang} />}
       {view === 'ingredients-list' && <IngredientsList lang={lang} setView={setView} />}
       {view === 'ingredient' && <Ingredient lang={lang} products={products} setView={setView} setProduct={setProduct} />}
+      {view === 'author' && <Author lang={lang} />}
       {view === 'admin' && <Admin />}
       {view === 'links' && <Links lang={lang} setView={setView} />}
 

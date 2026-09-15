@@ -27,7 +27,8 @@ export default async function (request, context) {
   const isBrands = path === '/brands' || path === '/brands/';
   const brandMatch = path.match(/^\/brands\/([^/]+)\/?$/);
   const ingredientMatch = path.match(/^\/ingredients\/([^/]+)\/?$/);
-  const isStaticPage = isAbout || isAnalyzer || isPrivacy || isBrands || !!brandMatch;
+  const isAuthor = path.startsWith('/author/');
+  const isStaticPage = isAbout || isAnalyzer || isPrivacy || isBrands || !!brandMatch || isAuthor;
   if (!articleMatch && !productMatch && !ingredientMatch && !isListing && !isProductListing && !isStaticPage) {
     return context.next();
   }
@@ -80,7 +81,7 @@ export default async function (request, context) {
         "articleBody": bodyText,
         "wordCount": bodyText.split(/\s+/).length,
         "inLanguage": ["en", "ko"],
-        "author": { "@type": "Person", "name": "J. Yoo", "url": `${SITE}/about` },
+        "author": { "@type": "Person", "name": "J. Yoo", "url": `${SITE}/author/j-yoo`, "@id": `${SITE}/author/j-yoo` },
         "publisher": {
           "@type": "Organization",
           "@id": `${SITE}/#organization`,
@@ -630,6 +631,31 @@ export default async function (request, context) {
       description = 'ana2me collects no personal data. We use Google Analytics for anonymous usage stats only.';
       pageUrl = `${SITE}/privacy`;
       ssrContent = `<article><h1>Privacy Policy</h1><p>${escHtml(description)}</p></article>`;
+    } else if (isAuthor) {
+      title = 'J. Yoo — Editor, ana2me';
+      description = 'J. Yoo is the editor of ana2me, an independent bilingual publication analyzing Korean cosmetic ingredients from primary research and regulatory sources.';
+      pageUrl = `${SITE}/author/j-yoo`;
+
+      let authorHtml = `<article><h1>About J. Yoo</h1>`;
+      authorHtml += `<p>J. Yoo started ana2me to answer a simple question: what's actually in the bottle? Korean beauty brands often make claims — "activates the skin's regeneration cycle", "reverses aging at the cellular level" — that a shopper has no easy way to verify. ana2me is the result of trying to.</p>`;
+      authorHtml += `<p>The work starts with ingredient lists, moves through the peer-reviewed research behind those ingredients, and cross-checks against the Korean regulatory filings that go with them. Every article is published in both English and Korean natively, because English K-beauty coverage often misses the nuance that lives in the original Korean sources.</p>`;
+      authorHtml += `<p>J. Yoo isn't a dermatologist or a chemist — just someone who cares enough to read past the marketing and check the sources. Every article is written from primary references: peer-reviewed studies, INCI lists, regulatory records. When something isn't clear, the article says so.</p>`;
+      authorHtml += `<p>ana2me is independent. No paid brand partnerships, no sponsorships. If a product link ever earns a commission, it's disclosed inline.</p>`;
+      authorHtml += `<p>Contact: ana2me2026@gmail.com</p>`;
+      authorHtml += `<nav><a href="/insights">Articles</a> · <a href="/about">About ana2me</a></nav></article>`;
+      ssrContent = authorHtml;
+
+      jsonLd = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        '@id': `${SITE}/author/j-yoo`,
+        'name': 'J. Yoo',
+        'url': `${SITE}/author/j-yoo`,
+        'jobTitle': 'Editor',
+        'worksFor': { '@id': `${SITE}/#organization` },
+        'email': 'ana2me2026@gmail.com',
+        'description': 'Editor of ana2me, an independent bilingual publication analyzing Korean cosmetic ingredients.'
+      });
     }
   } catch (e) {
     // Don't let Supabase failures become 5xx — fall through to SPA with a
@@ -781,7 +807,7 @@ function renderArticleHTML(a) {
   html += `<header>`;
   html += `<p>${escHtml(category)}</p>`;
   html += `<h1>${escHtml(title)}</h1>`;
-  html += `<p>By J. Yoo</p>`;
+  html += `<p>By <a href="${SITE}/author/j-yoo">J. Yoo</a></p>`;
   html += `<p>${escHtml(excerpt)}</p>`;
   html += `<p>${escHtml(date)} · ${escHtml(readTime)}</p>`;
   html += `</header>`;

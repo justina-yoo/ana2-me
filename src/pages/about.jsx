@@ -239,9 +239,9 @@ export default function About({ lang, density }) {
         </h2>
         <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-soft)', margin: '0 0 12px' }}>
           {isKo ? (
-            <>ana2me는 서울에 기반을 둔 J. Yoo가 운영하는 독립 플랫폼이에요. 모든 기사는 공개된 성분 데이터와 발표된 연구를 바탕으로 작성되며, 한국어와 영어 두 언어로 독립적으로 집필됩니다 — 번역이 아니에요. 어떤 브랜드와도 제휴하지 않고, 편집 방향은 오직 성분 과학에 기반합니다.</>
+            <>글쓰고 편집하는 사람: <a href="/author/j-yoo" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/author/j-yoo'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }} style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }}>J. Yoo</a>.</>
           ) : (
-            <>ana2me is an independent platform run by J. Yoo, based in Seoul, South Korea. Every article is written from publicly available ingredient data and published research, in both English and Korean — written natively, not translated. We are not affiliated with any brand. Editorial direction is grounded in ingredient science, not sponsorship.</>
+            <>Written and edited by <a href="/author/j-yoo" onClick={(e) => { e.preventDefault(); history.pushState({}, '', '/author/j-yoo'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo(0, 0); }} style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }}>J. Yoo</a>.</>
           )}
         </p>
       </section>

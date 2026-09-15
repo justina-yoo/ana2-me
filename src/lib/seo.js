@@ -8,7 +8,7 @@ var ANALYZER_IMAGE = BASE_URL + '/og-analyzer.png';
 var AUTHOR = {
   '@type': 'Person',
   'name': 'J. Yoo',
-  'url': BASE_URL + '/about',
+  'url': BASE_URL + '/author/j-yoo',
 };
 
 var PUBLISHER = {

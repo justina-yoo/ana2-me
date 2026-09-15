@@ -48,6 +48,10 @@
 
 [[edge_functions]]
   function = "og-inject"
+  path = "/author/*"
+
+[[edge_functions]]
+  function = "og-inject"
   path = "/about"
 
 [[edge_functions]]

@@ -27,3 +27,5 @@
 /ko/article/:a/:b  /index.html  200
 /ko/article/:a/:b/:c  /index.html  200
 /ko/article/:a/:b/:c/  /ko/article/:a/:b/:c  301
+/author/:slug  /index.html  200
+/author/:slug/  /author/:slug  301
