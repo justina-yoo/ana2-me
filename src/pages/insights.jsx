@@ -827,6 +827,13 @@ function PostDetail({ post, lang, onBack, allPosts, onSelectPost }) {
               <Icon name="share" size={15} />
             </button>
           </div>
+          {(() => {
+            const reviewed = post.updatedAt ? new Date(post.updatedAt) : new Date(post.date);
+            const formatted = isKo
+              ? `최근 검토: ${reviewed.getFullYear()}년 ${reviewed.getMonth() + 1}월 ${reviewed.getDate()}일`
+              : `Last reviewed: ${reviewed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+            return <span style={{ fontSize: 11, color: 'var(--ink-faint)', display: 'block', marginTop: 4, opacity: 0.7 }}>{formatted}</span>;
+          })()}
         </header>
         {(() => {
           const isKoUrl = window.location.pathname.startsWith('/ko/');

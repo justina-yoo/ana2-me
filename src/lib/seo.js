@@ -210,7 +210,7 @@ const SEO = {
     var tag         = (article.tag && article.tag.en || 'skincare').toLowerCase().replace(/\s+/g, '-');
     var wordCount   = article.word_count       || 1000;
     var datePub     = article.date_published   || isoDate;
-    var dateMod     = article.date_modified    || datePub;
+    var dateMod     = article.date_modified    || (article.updatedAt ? article.updatedAt.slice(0, 10) : datePub);
 
     var m = { title: seoTitle, description: description, datePublished: datePub, dateModified: dateMod, image: image, imageAlt: imageAlt, keywords: keywords, category: category, tag: tag, wordCount: wordCount };
 

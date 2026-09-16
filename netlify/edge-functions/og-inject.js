@@ -47,7 +47,7 @@ export default async function (request, context) {
     if (articleMatch) {
       const articleId = articleMatch[1];
       const res = await fetchWithTimeout(
-        `${SUPABASE_URL}/rest/v1/articles?id=eq.${articleId}&select=id,title,excerpt,summary,tag,category,date,image_url,keywords,body_blocks,read_time`,
+        `${SUPABASE_URL}/rest/v1/articles?id=eq.${articleId}&select=id,title,excerpt,summary,tag,category,date,updated_at,image_url,keywords,body_blocks,read_time`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       const data = await res.json();
@@ -66,6 +66,7 @@ export default async function (request, context) {
 
       const bodyText = extractBodyText(a.body_blocks);
       const isoDate = toISODate(a.date);
+      const isoDateModified = a.updated_at ? a.updated_at.slice(0, 10) : isoDate;
       publishedDate = isoDate;
       const categoryName = a.tag?.en || a.category?.en || 'Insights';
 
@@ -82,7 +83,7 @@ export default async function (request, context) {
         "description": a.excerpt.en,
         "url": pageUrl,
         "datePublished": isoDate,
-        "dateModified": isoDate,
+        "dateModified": isoDateModified,
         "image": { "@type": "ImageObject", "url": image, "width": 1200, "height": 630 },
         "keywords": typeof a.keywords === 'string' ? a.keywords : '',
         "articleSection": categoryName,
@@ -810,6 +811,7 @@ function renderArticleHTML(a) {
   const category = a.category?.en || '';
   const date = a.date || '';
   const readTime = a.read_time?.en || '';
+  const reviewedDate = a.updated_at ? new Date(a.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : date;
   const blocks = a.body_blocks || [];
 
   let html = `<article>`;
@@ -819,6 +821,7 @@ function renderArticleHTML(a) {
   html += `<p>By <a href="${SITE}/author/j-yoo">J. Yoo</a></p>`;
   html += `<p>${escHtml(excerpt)}</p>`;
   html += `<p>${escHtml(date)} · ${escHtml(readTime)}</p>`;
+  html += `<p>Last reviewed: ${escHtml(reviewedDate)}</p>`;
   html += `</header>`;
 
   for (const block of blocks) {
