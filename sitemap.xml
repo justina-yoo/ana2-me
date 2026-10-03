@@ -3,13 +3,13 @@
   <!-- Home / Insights -->
   <url>
     <loc>https://ana2-me.com/</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/insights</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,30 +17,46 @@
   <!-- Static pages -->
   <url>
     <loc>https://ana2-me.com/about</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/products</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/privacy</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://ana2-me.com/terms</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- Articles -->
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-09-22/collagen-loss-1-percent-per-year-what-actually-works</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-09-22/collagen-loss-1-percent-per-year-what-actually-works"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-09-22/collagen-loss-1-percent-per-year-what-actually-works"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-09-22/collagen-loss-1-percent-per-year-what-actually-works</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-09-22/collagen-loss-1-percent-per-year-what-actually-works"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-09-22/collagen-loss-1-percent-per-year-what-actually-works"/>
+  </url>
   <url>
     <loc>https://ana2-me.com/article/wellness/2026-09-10/7-korean-supplements-outselling-skincare-olive-young</loc>
     <lastmod>2026-09-10</lastmod>
@@ -2106,84 +2122,68 @@
     <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/hypochlorous-acid-skincare"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/creatine-women-brain"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/ten-step-routine-dead"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/ten-step-routine-dead</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/creatine-women-brain"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/ten-step-routine-dead"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</loc>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/spicules-microneedling"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-wardrobing"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/spicules-microneedling</loc>
+    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/spicules-microneedling"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-wardrobing"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</loc>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-crisis"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-crisis</loc>
+    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-crisis"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/celebrity-skincare-methods"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/celebrity-skincare-methods"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/centella-superbug-discovery"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/centella-superbug-discovery</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/centella-superbug-discovery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
   </url>
   <url>
     <loc>https://ana2-me.com/article/skincare/2026-05-06/sugar-glycation-skin-aging</loc>
@@ -2202,20 +2202,196 @@
     <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/sugar-glycation-skin-aging"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/centella-superbug-discovery"/>
   </url>
   <url>
-    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/jjimjilbang-wellness-science</loc>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/centella-superbug-discovery</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/jjimjilbang-wellness-science"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/centella-superbug-discovery"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/centella-superbug-discovery"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/celebrity-skincare-methods"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/celebrity-skincare-methods</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/celebrity-skincare-methods"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/celebrity-skincare-methods"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-crisis"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-crisis</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-crisis"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-crisis"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/creatine-women-brain"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/creatine-women-brain</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/creatine-women-brain"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/creatine-women-brain"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/myo-inositol-hormonal-health</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/pdrn-salmon-dna"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/pdrn-salmon-dna"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-volatility"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-volatility</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-volatility"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/fermentation-transformation"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/fermentation-transformation</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/fermentation-transformation"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/pistachio-fragrance-note</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/adaptogens-bioavailability"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/adaptogens-bioavailability"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/spicules-microneedling"/>
+  </url>
+  <url>
+    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/spicules-microneedling</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/spicules-microneedling"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/spicules-microneedling"/>
   </url>
   <url>
     <loc>https://ana2-me.com/article/wellness/2026-05-06/postbiotics-skin-barrier</loc>
@@ -2313,171 +2489,11 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/korea-sleep-wellness-snacks"/>
     <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/korea-sleep-wellness-snacks"/>
   </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/ten-step-routine-dead"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/ten-step-routine-dead</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/ten-step-routine-dead"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/ten-step-routine-dead"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/milk-perfume-lactonic</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/milk-perfume-lactonic"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/fermentation-transformation"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/fermentation-transformation</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/fermentation-transformation"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/fermentation-transformation"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-wardrobing"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-wardrobing</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-wardrobing"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-wardrobing"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/edible-skincare-gut-skin</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/edible-skincare-gut-skin"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/pistachio-fragrance-note</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/pistachio-fragrance-note"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/adaptogens-bioavailability"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/adaptogens-bioavailability</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/adaptogens-bioavailability"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/adaptogens-bioavailability"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-volatility"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-volatility</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/fragrance/2026-05-06/fragrance-volatility"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/fragrance/2026-05-06/fragrance-volatility"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/pdrn-salmon-dna"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/skincare/2026-05-06/pdrn-salmon-dna</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/skincare/2026-05-06/pdrn-salmon-dna"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/skincare/2026-05-06/pdrn-salmon-dna"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
-  </url>
-  <url>
-    <loc>https://ana2-me.com/ko/article/wellness/2026-05-06/myo-inositol-hormonal-health</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ana2-me.com/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://ana2-me.com/ko/article/wellness/2026-05-06/myo-inositol-hormonal-health"/>
-  </url>
 
   <!-- Brands list page -->
   <url>
     <loc>https://ana2-me.com/brands</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -2485,7 +2501,7 @@
   <!-- Ingredients list page -->
   <url>
     <loc>https://ana2-me.com/ingredients</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
